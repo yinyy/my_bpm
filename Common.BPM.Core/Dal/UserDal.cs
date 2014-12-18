@@ -134,6 +134,7 @@ namespace BPM.Core.Dal
             {
                 list.Add(PublicMethod.GetInt(dr[0]));
             }
+            dr.Close();//放置数据库连接过多的问题
             return list;
         }
 
