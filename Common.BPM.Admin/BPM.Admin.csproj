@@ -2834,6 +2834,12 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="qqloading.html" />
+    <Content Include="Sanitation\html\SanitationDriver.html" />
+    <Content Include="Sanitation\html\SanitationTrunk.html" />
+    <Content Include="Sanitation\js\SanitationDriver.js" />
+    <Content Include="Sanitation\js\SanitationTrunk.js" />
+    <Content Include="Sanitation\SanitationDriver.aspx" />
+    <Content Include="Sanitation\SanitationTrunk.aspx" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
     <Content Include="scripts\alertify\alertify.core.css" />
     <Content Include="scripts\alertify\alertify.default.css" />
@@ -3326,6 +3332,8 @@
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
     <None Include="Properties\PublishProfiles\bpm.pubxml" />
+    <Content Include="Sanitation\ashx\SanitationDriverHandler.ashx" />
+    <Content Include="Sanitation\ashx\SanitationTrunkHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3566,6 +3574,26 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sanitation\ashx\SanitationDriverHandler.ashx.cs">
+      <DependentUpon>SanitationDriverHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\ashx\SanitationTrunkHandler.ashx.cs">
+      <DependentUpon>SanitationTrunkHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\SanitationDriver.aspx.cs">
+      <DependentUpon>SanitationDriver.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sanitation\SanitationDriver.aspx.designer.cs">
+      <DependentUpon>SanitationDriver.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\SanitationTrunk.aspx.cs">
+      <DependentUpon>SanitationTrunk.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sanitation\SanitationTrunk.aspx.designer.cs">
+      <DependentUpon>SanitationTrunk.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3686,6 +3714,10 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.Sanitation\BPM.Sanitation.csproj">
+      <Project>{30a2e13c-c984-4d93-aae3-2916e8dec635}</Project>
+      <Name>BPM.Sanitation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>

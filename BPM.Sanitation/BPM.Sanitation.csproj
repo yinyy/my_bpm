@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BPM.Sanitation</RootNamespace>
     <AssemblyName>BPM.Sanitation</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,12 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bll\SanitationDriverBll.cs" />
+    <Compile Include="bll\SanitationTrunkBll.cs" />
+    <Compile Include="dal\SanitationDriverDal.cs" />
+    <Compile Include="dal\SanitationTrunkDal.cs" />
+    <Compile Include="model\SanitationDriverModel.cs" />
+    <Compile Include="model\SanitationTrunkModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bll\" />
-    <Folder Include="dal\" />
-    <Folder Include="model\" />
+    <ProjectReference Include="..\Common\BPM.Common.csproj">
+      <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
+      <Name>BPM.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
