@@ -101,6 +101,10 @@ namespace BPM.Admin.sys.ashx
                     context.Response.Write(new JsonMessage { Success = k==1, Data = k.ToString(), Message = msg}.ToString());
 
                     break;
+                case "code":
+                    var category = DicCategoryDal.Instance.GetWhere(new { Code=rpm.Request("code")}).FirstOrDefault();
+                    context.Response.Write(DicBll.Instance.GetDicListBy(category == null ? 0 : category.KeyId));
+                    break;
                 default: //字典列表
                     var categoryId = PublicMethod.GetInt(rpm.Request("categoryId"));
                     string dicJson = DicBll.Instance.GetDicListBy(categoryId);
