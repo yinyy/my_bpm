@@ -7,9 +7,9 @@ using BPM.Common.Data;
 
 namespace Sanitation.Model
 {
-	[TableName("Sanitation_Driver")]
-	[Description("司机表")]
-	public class SanitationDriverModel
+	[TableName("Sanitation_Dispatch")]
+	[Description("调度单")]
+	public class SanitationDispatchModel
 	{
 		/// <summary>
 		/// 主键
@@ -18,32 +18,38 @@ namespace Sanitation.Model
 		public int KeyId { get; set; }
       
 		/// <summary>
+		/// 日期
+		/// </summary>
+		[Description("日期")]
+		public DateTime Time { get; set; }
+      
+		/// <summary>
 		/// 姓名
 		/// </summary>
 		[Description("姓名")]
-		public string Name { get; set; }
-
-        [Description("司机编号")]
-        public string Code { get; set; }
-		/// <summary>
-		/// 性别
-		/// </summary>
-		[Description("性别")]
-		public string Gender { get; set; }
+		public int DriverId { get; set; }
       
 		/// <summary>
-		/// 电话
+		/// 车辆
 		/// </summary>
-		[Description("电话")]
-		public string Telphone { get; set; }
+		[Description("车辆")]
+		public int TrunkId { get; set; }
+      
+		/// <summary>
+		/// 次数
+		/// </summary>
+		[Description("次数")]
+		public int Workload { get; set; }
       
 		/// <summary>
 		/// 备注
 		/// </summary>
 		[Description("备注")]
 		public string Memo { get; set; }
-      
-				
+
+        [Description("是否生效")]
+        public string Enabled { get; set; }	
+
 		public override string ToString()
 		{
 			return JSONhelper.ToJson(this);

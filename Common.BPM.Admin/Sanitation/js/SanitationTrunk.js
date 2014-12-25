@@ -30,9 +30,9 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-		    {title:'品牌',field:'Brand',width:120},
+		    { title: '车牌号', field: 'Plate', width: 120, align: 'center' },
+		    { title: '品牌', field: 'Brand', width: 120 },
 		    {title:'型号',field:'Model',width:200},
-		    {title: '车牌号', field: 'Plate', width: 120, align: 'center'},
 		    {
 		        title: '体积', field: 'Volumn', width: 120, align: 'right', formatter: function (v, r, i) {
 		            return v + ' m³';
@@ -42,7 +42,9 @@ var grid = {
             ]],
             pagination: true,
             pageSize: PAGESIZE,
-            pageList: [20, 40, 50]
+            pageList: [20, 40, 50],
+            sortName: 'Plate',
+            sortOrder: 'asc'
         });
     },
     getSelectedRow: function () {
@@ -67,7 +69,7 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 400, height: 318, href:formurl, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 450, height: 318, href:formurl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {

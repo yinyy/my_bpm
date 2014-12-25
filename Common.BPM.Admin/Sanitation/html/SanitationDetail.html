@@ -1,0 +1,44 @@
+<form id="uiform">
+    <div>
+        <fieldset>
+            <legend>时间</legend>
+            <table>
+                <tr height="30">
+                    <td align="center"><input type="radio" id="rbDay" name="g1" checked="checked" /></td>
+                    <td>天</td>
+                    <td><input type="text" id="txt_day" class="txt03 easyui-datebox" data-options="editable:false,onSelect: function(){top.$('#rbDay').attr('checked', 'checked')}" /></td>
+                    <td align="center"><input type="radio" id="rbMonth" name="g1" /></td>
+                    <td>月</td>
+                    <td><input type="text" id="txt_month" class="txt03 easyui-combobox" data-options="editable:false,textField:'text',valueField:'value',url:'/Sanitation/ashx/SanitationDetailHandler.ashx?json={action:\'month\'}',onSelect: function(){top.$('#rbMonth').attr('checked', 'checked')}" /></td>
+                </tr>
+                <tr height="30">
+                    <td align="center"><input type="radio" id="rbQuarter" name="g1" /></td>
+                    <td>季度</td>
+                    <td><input type="text" id="txt_quarter" class="txt03 easyui-combobox" data-options="editable:false,textField:'text',valueField:'value',url:'/Sanitation/ashx/SanitationDetailHandler.ashx?json={action:\'quarter\'}',onSelect: function(){top.$('#rbQuarter').attr('checked', 'checked')}" /></td>
+                    <td align="center"><input type="radio" id="rbYear" name="g1" /></td>
+                    <td>年</td>
+                    <td><input type="text" id="txt_year" class="txt03 easyui-combobox" data-options="editable:false,textField:'text',valueField:'value',url:'/Sanitation/ashx/SanitationDetailHandler.ashx?json={action:\'year\'}',onSelect: function(){top.$('#rbYear').attr('checked', 'checked')}" /></td>
+                </tr>
+            </table>
+        </fieldset>
+        <br/>
+        <fieldset>
+            <legend>筛选</legend>
+            <table>
+                <tr height="30">
+                    <td>车辆</td>
+                    <td><input type="text" id="txt_trunk" class="txt03 easyui-combobox" style="width: 374px;" data-options="editable:false,textField:'Title',valueField:'KeyId',multiple:true,url:'/Sanitation/ashx/SanitationTrunkHandler.ashx?json={action:\'combobox\'}'" /></td>
+                </tr>
+                <tr height="30">
+                    <td>人员</td>
+                    <td><input type="text" id="txt_driver" class="txt03 easyui-combobox" style="width: 374px;" data-options="editable:false,textField:'Title',valueField:'KeyId',multiple:true,url:'/Sanitation/ashx/SanitationDriverHandler.ashx?json={action:\'combobox\'}'" /></td>
+                </tr>
+                <tr height="30">
+                    <td>地点</td>
+                    <td><input type="text" id="txt_address" class="txt03 easyui-combobox" style="width: 374px;" data-options="editable:false,textField:'Title',valueField:'Code',multiple:true,url:'/Sanitation/ashx/SanitationDetailHandler.ashx?json={action:\'address\'}'" /></td>
+                </tr>
+            </table>
+        </fieldset>
+</div>
+    <div style="clear:both"></div>
+</form>

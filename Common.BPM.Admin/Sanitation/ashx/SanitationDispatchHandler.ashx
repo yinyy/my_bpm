@@ -1,0 +1,1 @@
+<%@ WebHandler Language="C#" CodeBehind="SanitationDispatchHandler.ashx.cs" Class="BPM.Admin.Sanitation.ashx.SanitationDispatchHandler" %>

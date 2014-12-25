@@ -47,6 +47,10 @@ namespace BPM.Admin.Sanitation.ashx
                 case "delete":
                     context.Response.Write(SanitationDriverBll.Instance.Delete(rpm.KeyId));
                     break;
+                case "combobox":
+                    context.Response.Write(JSONhelper.ToJson(SanitationDriverBll.Instance.GetAll().Select(ad => new { KeyId = ad.KeyId, Title = ad.Name }).OrderBy(ad=>ad.Title)));
+                    break;
+                
                 default:
                     context.Response.Write(SanitationDriverBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     break;

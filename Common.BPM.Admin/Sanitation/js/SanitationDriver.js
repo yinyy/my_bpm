@@ -30,15 +30,16 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-				{title:'主键',field:'KeyId',width:120},
-		    {title:'姓名',field:'Name',width:120},
-		    {title:'性别',field:'Gender',width:120},
+		    { title: '姓名', field: 'Name', width: 200 },
+		    { title: '编号', field: 'Code', width: 100, align:'center' },
+		    { title: '性别', field: 'Gender', width: 80, align: 'center' },
 		    {title:'电话',field:'Telphone',width:120},
-		    {title:'备注',field:'Memo',width:120}               
+		    {title:'备注',field:'Memo',width:400}               
             ]],
             pagination: true,
             pageSize: PAGESIZE,
-            pageList: [20, 40, 50]
+            pageList: [20, 40, 50],
+            sortName: 'Name'
         });
     },
     getSelectedRow: function () {
@@ -63,7 +64,7 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 400, height: 282, href:formurl, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 400, height: 318, href:formurl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
@@ -79,9 +80,9 @@ var CRUD = {
                 return false;
             }, onLoad: function () {
                 top.$('#txt_Gender').combobox({
-                    url: 'combobox_data.json',
-                    valueField: 'text',
-                    textField: 'text',
+                    url: '/sys/ashx/DicHandler.ashx?action=code&code=gender',
+                    valueField: 'Title',
+                    textField: 'Title',
                     required: true,
                     editable: false,
                     missingMessage: '请选择性别。'
@@ -95,11 +96,22 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '编辑', width: 400, height: 282, href: formurl, iconCls: 'icon-save',
+                title: '编辑', width: 400, height: 318, href: formurl, iconCls: 'icon-save',
                 onLoad: function () {
                     top.$('#txt_KeyId').val(row.KeyId);
                     top.$('#txt_Name').val(row.Name);
-                    top.$('#txt_Gender').val(row.Gender);
+                    top.$('#txt_Code').val(row.Code);
+
+                    top.$('#txt_Gender').combobox({
+                        url: '/sys/ashx/DicHandler.ashx?action=code&code=gender',
+                        valueField: 'Title',
+                        textField: 'Title',
+                        required: true,
+                        editable: false,
+                        missingMessage: '请选择性别。'
+                    });
+                    top.$('#txt_Gender').combobox('setValue', row.Gender);
+
                     top.$('#txt_Telphone').val(row.Telphone);
                     top.$('#txt_Memo').val(row.Memo);
                 },

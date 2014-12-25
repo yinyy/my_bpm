@@ -30,6 +30,11 @@ namespace Sanitation.Bll
             return SanitationTrunkDal.Instance.Delete(keyid);
         }
 
+        public IEnumerable<SanitationTrunkModel> GetAll()
+        {
+            return SanitationTrunkDal.Instance.GetAll();
+        }
+
         public string GetJson(int pageindex, int pagesize, string filterJson, string sort = "Keyid", string order = "asc")
         {
             return SanitationTrunkDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);

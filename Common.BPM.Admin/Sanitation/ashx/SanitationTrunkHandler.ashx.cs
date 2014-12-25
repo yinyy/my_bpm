@@ -36,17 +36,27 @@ namespace BPM.Admin.Sanitation.ashx
             switch (rpm.Action)
             {
                 case "add":
-                    context.Response.Write(SanitationTrunkBll.Instance.Add(rpm.Entity));
-                    break;
-                case "edit":
                     SanitationTrunkModel d = new SanitationTrunkModel();
                     d.InjectFrom(rpm.Entity);
+                    d.Plate = d.Plate.ToUpper();
+
+                    context.Response.Write(SanitationTrunkBll.Instance.Add(d));
+                    break;
+                case "edit":
+                    d = new SanitationTrunkModel();
+                    d.InjectFrom(rpm.Entity);
                     d.KeyId = rpm.KeyId;
+                    d.Plate = d.Plate.ToUpper();
+
                     context.Response.Write(SanitationTrunkBll.Instance.Update(d));
                     break;
                 case "delete":
                     context.Response.Write(SanitationTrunkBll.Instance.Delete(rpm.KeyId));
                     break;
+                case "combobox":
+                    context.Response.Write(JSONhelper.ToJson(SanitationTrunkBll.Instance.GetAll().Select(ad => new { KeyId = ad.KeyId, Title = ad.Plate }).OrderBy(ad=>ad.Title)));
+                    break;
+                
                 default:
                     context.Response.Write(SanitationTrunkBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     break;

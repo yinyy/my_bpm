@@ -79,6 +79,7 @@
     <Compile Include="Data\sqlFilter.cs" />
     <Compile Include="Data\TableNameAttribute.cs" />
     <Compile Include="Data\TableConvention.cs" />
+    <Compile Include="DateTimeExt.cs" />
     <Compile Include="DynamicQueryable.cs" />
     <Compile Include="FTP.cs" />
     <Compile Include="GridViewExportUtil.cs" />

@@ -31,6 +31,11 @@ namespace Sanitation.Bll
             return SanitationDriverDal.Instance.Delete(keyid);
         }
 
+        public IEnumerable<SanitationDriverModel> GetAll()
+        {
+            return SanitationDriverDal.Instance.GetAll();
+        }
+
         public string GetJson(int pageindex, int pagesize, string filterJson, string sort = "Keyid", string order = "asc")
         {
             return SanitationDriverDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);

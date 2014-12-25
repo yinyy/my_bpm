@@ -61,6 +61,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\DotNet\数据访问\ValueInjecter\Omu.ValueInjecter.dll</HintPath>
@@ -2834,10 +2838,16 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="qqloading.html" />
+    <Content Include="Sanitation\html\SanitationDetail.html" />
+    <Content Include="Sanitation\html\SanitationDispatch.html" />
     <Content Include="Sanitation\html\SanitationDriver.html" />
     <Content Include="Sanitation\html\SanitationTrunk.html" />
+    <Content Include="Sanitation\js\SanitationDetail.js" />
+    <Content Include="Sanitation\js\SanitationDispatch.js" />
     <Content Include="Sanitation\js\SanitationDriver.js" />
     <Content Include="Sanitation\js\SanitationTrunk.js" />
+    <Content Include="Sanitation\SanitationDetail.aspx" />
+    <Content Include="Sanitation\SanitationDispatch.aspx" />
     <Content Include="Sanitation\SanitationDriver.aspx" />
     <Content Include="Sanitation\SanitationTrunk.aspx" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
@@ -3334,6 +3344,10 @@
     <None Include="Properties\PublishProfiles\bpm.pubxml" />
     <Content Include="Sanitation\ashx\SanitationDriverHandler.ashx" />
     <Content Include="Sanitation\ashx\SanitationTrunkHandler.ashx" />
+    <Content Include="Sanitation\ashx\SanitationDispatchHandler.ashx" />
+    <Content Include="Sanitation\ashx\SanitationHandler.ashx" />
+    <Content Include="Sanitation\ashx\SanitationDetailHandler.ashx" />
+    <None Include="Properties\PublishProfiles\Sanitation.BPM.pubxml" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3574,11 +3588,34 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sanitation\ashx\SanitationDetailHandler.ashx.cs">
+      <DependentUpon>SanitationDetailHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\ashx\SanitationDispatchHandler.ashx.cs">
+      <DependentUpon>SanitationDispatchHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Sanitation\ashx\SanitationDriverHandler.ashx.cs">
       <DependentUpon>SanitationDriverHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Sanitation\ashx\SanitationHandler.ashx.cs">
+      <DependentUpon>SanitationHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Sanitation\ashx\SanitationTrunkHandler.ashx.cs">
       <DependentUpon>SanitationTrunkHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\SanitationDetail.aspx.cs">
+      <DependentUpon>SanitationDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sanitation\SanitationDetail.aspx.designer.cs">
+      <DependentUpon>SanitationDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\SanitationDispatch.aspx.cs">
+      <DependentUpon>SanitationDispatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sanitation\SanitationDispatch.aspx.designer.cs">
+      <DependentUpon>SanitationDispatch.aspx</DependentUpon>
     </Compile>
     <Compile Include="Sanitation\SanitationDriver.aspx.cs">
       <DependentUpon>SanitationDriver.aspx</DependentUpon>
@@ -3714,25 +3751,25 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BPM.Sanitation\BPM.Sanitation.csproj">
-      <Project>{30a2e13c-c984-4d93-aae3-2916e8dec635}</Project>
-      <Name>BPM.Sanitation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common\BPM.Common.csproj">
-      <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
-      <Name>BPM.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
-      <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
-      <Name>BPM.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="sys\ashx\ButtonHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\easyui\themes\default\images\Thumbs.db" />
     <Content Include="scripts\easyui\themes\gray\images\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BPM.Sanitation\BPM.Sanitation.csproj">
+      <Project>{30a2e13c-c984-4d93-aae3-2916e8dec635}</Project>
+      <Name>BPM.Sanitation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
+      <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
+      <Name>BPM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\BPM.Common.csproj">
+      <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
+      <Name>BPM.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
