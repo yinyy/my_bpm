@@ -204,7 +204,45 @@ var CRUD = {
         if (row) {
             if (row.Enabled == '是') {
                 if (confirm('请将磁卡放在设备上，并点击确定写卡。')) {
-                    alert('写卡成功。' + row.Time.substring(0, 10) + ',' + row.KeyId + ',' + row.DriverId + '[' + row.Code + '],' + row.TrunkId + '[' + row.Plate.substring(1) + '],' + row.Workload);
+                    var wsUri = "ws://localhost:8123";
+                    window.WebSocket = window.WebSocket || window.MozWebSocket;
+                    if (!window.WebSocket) {
+                        alert("你的浏览器不支持WebSocket关键技术。");
+                        return;
+                    }
+
+                    var websocket = new WebSocket(wsUri);
+                    websocket.onopen = function (evt) {
+                        var command = 'write,' + row.Time.substring(0, 10) + ',' + row.KeyId + ',' + row.DriverId + '[' + row.Code + '],' + row.TrunkId + '[' + row.Plate.substring(1) + '],' + row.Workload;
+                        websocket.send(command);
+                    };
+                    websocket.onclose = function (evt) {
+                        
+                    };
+                    websocket.onmessage = function (evt) {
+                        var msg = evt.data.toString();
+
+                        if (msg.indexOf('write')!=-1) {
+                            alert('写卡成功。卡号：' + msg.substring(msg.indexOf('_') + 1) + '。');
+                        } else if (msg == 'read') {
+                            alert('读卡成功。内容：' + msg.substring(msg.indexOf('_') + 1) + "。");
+                        } else if (msg == 'error_connect') {
+                            alert('请选连接读写设备。');
+                        }else if (msg == 'error_recognize') {
+                            alert('识别卡错误。');
+                        } else if (evt.data == 'error_write') {
+                            alert('写卡错误。');
+                        } else if (evt.data == 'error_read') {
+                            alert('读卡错误。');
+                        } else {
+                            alert('其它错误：' + msg);
+                        }
+                    };
+                    websocket.onerror = function (evt) {
+                        alert('WebSocket错误：' + evt.data);
+                    };
+
+                    //alert('写卡成功。' + row.Time.substring(0, 10) + ',' + row.KeyId + ',' + row.DriverId + '[' + row.Code + '],' + row.TrunkId + '[' + row.Plate.substring(1) + '],' + row.Workload);
                 } 
             } else {
                 msg.warning('该行还未生效，不能执行写卡操作。');
@@ -214,4 +252,3 @@ var CRUD = {
         }
     }
 };
-

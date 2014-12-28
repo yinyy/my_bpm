@@ -1,6 +1,6 @@
 <form id="uiform"><table class="grid">
 <tr><td>姓名：</td><td><input type="text" id="txt_Name" name="Name" class="txt03 easyui-validatebox" data-options="required:true,missingMessage:'请输入姓名。'" style="width:180px;" /></td></tr>
-<tr><td>编号：</td><td><input type="text" id="txt_Code" name="Code" class="txt03 easyui-validatebox" style="width:180px;" data-options="required:true"/></td></tr>
+<tr><td>编号：</td><td><input type="text" id="txt_Code" name="Code" class="txt03 easyui-validatebox" style="width:180px;" data-options="required:true,validType:'length[3,5]',invalidMessage:'编号最短为3位，最长为5位。'" /></td></tr>
 <tr><td>性别：</td><td><input type="text" id="txt_Gender" name="Gender" class="txt03" style="width:186px;" /></td></tr>
 <tr><td>电话：</td><td><input type="text" id="txt_Telphone" name="Telphone" class="txt03 easyui-validatebox"  data-options="required:true,missingMessage:'请输入电话。'" style="width:180px;" /></td></tr>
 <tr><td>备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width:310px; height: 80px;"/></td></tr>
