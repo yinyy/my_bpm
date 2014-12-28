@@ -222,18 +222,18 @@ var CRUD = {
                     websocket.onmessage = function (evt) {
                         var msg = evt.data.toString();
 
-                        if (msg.indexOf('write')!=-1) {
-                            alert('写卡成功。卡号：' + msg.substring(msg.indexOf('_') + 1) + '。');
-                        } else if (msg == 'read') {
-                            alert('读卡成功。内容：' + msg.substring(msg.indexOf('_') + 1) + "。");
-                        } else if (msg == 'error_connect') {
+                        if (msg == 'error_connect') {
                             alert('请选连接读写设备。');
-                        }else if (msg == 'error_recognize') {
+                        } else if (msg == 'error_recognize') {
                             alert('识别卡错误。');
                         } else if (evt.data == 'error_write') {
                             alert('写卡错误。');
                         } else if (evt.data == 'error_read') {
                             alert('读卡错误。');
+                        } else if (msg.indexOf('write') != -1) {
+                            alert('写卡成功。卡号：' + msg.substring(msg.indexOf('_') + 1) + '。');
+                        } else if (msg.indexOf('read') != -1) {
+                            alert('读卡成功。内容：' + msg.substring(msg.indexOf('_') + 1) + "。");
                         } else {
                             alert('其它错误：' + msg);
                         }
