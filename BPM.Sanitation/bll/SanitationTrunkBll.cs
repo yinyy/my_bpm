@@ -39,5 +39,10 @@ namespace Sanitation.Bll
         {
             return SanitationTrunkDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);
         }
+
+        public SanitationTrunkModel GetById(int trunkId)
+        {
+            return SanitationTrunkDal.Instance.Get(trunkId);
+        }
     }
 }

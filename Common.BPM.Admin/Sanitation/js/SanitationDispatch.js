@@ -9,7 +9,8 @@ $(function () {
     $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
     $('#a_enabled').click(CRUD.enable);
-    $('#a_card').click(CRUD.card);
+    $('#a_write_card').click(CRUD.write_card);
+    $('#a_read_card').click(CRUD.read_card);
     //高级查询
    $('#a_search').click(function () {
         search.go('list');
@@ -199,7 +200,7 @@ var CRUD = {
             msg.warning('请选择行。');
         }
     },
-    card: function () {
+    write_card: function () {
         var row = grid.getSelectedRow();
         if (row) {
             if (row.Enabled == '是') {
@@ -213,7 +214,17 @@ var CRUD = {
 
                     var websocket = new WebSocket(wsUri);
                     websocket.onopen = function (evt) {
-                        var command = 'write,' + row.Time.substring(0, 10) + ',' + row.KeyId + ',' + row.DriverId + '[' + row.Code + '],' + row.TrunkId + '[' + row.Plate.substring(1) + '],' + row.Workload;
+                        var command = 'write,' + row.Time.substring(0, 10) + ',' +
+                            row.KeyId + ',' +
+                            row.DriverId + '[' + row.Code + '],' +
+                            row.TrunkId + '[' + row.Plate.substring(1) + '],' +
+                            row.Workload +
+                            '{' +
+                            row.Time.substring(0, 10) + ',' +
+                            row.Name + '[' + row.Code + '],' +
+                            row.Plate + ',' +
+                            row.Workload +
+                            '}';
                         websocket.send(command);
                     };
                     websocket.onclose = function (evt) {
@@ -228,12 +239,8 @@ var CRUD = {
                             alert('识别卡错误。');
                         } else if (evt.data == 'error_write') {
                             alert('写卡错误。');
-                        } else if (evt.data == 'error_read') {
-                            alert('读卡错误。');
                         } else if (msg.indexOf('write') != -1) {
                             alert('写卡成功。卡号：' + msg.substring(msg.indexOf('_') + 1) + '。');
-                        } else if (msg.indexOf('read') != -1) {
-                            alert('读卡成功。内容：' + msg.substring(msg.indexOf('_') + 1) + "。");
                         } else {
                             alert('其它错误：' + msg);
                         }
@@ -241,14 +248,58 @@ var CRUD = {
                     websocket.onerror = function (evt) {
                         alert('WebSocket错误：' + evt.data);
                     };
-
-                    //alert('写卡成功。' + row.Time.substring(0, 10) + ',' + row.KeyId + ',' + row.DriverId + '[' + row.Code + '],' + row.TrunkId + '[' + row.Plate.substring(1) + '],' + row.Workload);
-                } 
+                }
             } else {
                 msg.warning('该行还未生效，不能执行写卡操作。');
             }
         } else {
             msg.warning("请选择行。");
+        }
+    },
+    read_card: function () {
+        if (confirm('请将磁卡放在设备上，并点击确定读卡。')) {
+            var wsUri = "ws://localhost:8123";
+            window.WebSocket = window.WebSocket || window.MozWebSocket;
+            if (!window.WebSocket) {
+                alert("你的浏览器不支持WebSocket关键技术。");
+                return;
+            }
+
+            var websocket = new WebSocket(wsUri);
+            websocket.onopen = function (evt) {
+                var command = 'read,card';
+                websocket.send(command);
+            };
+            websocket.onclose = function (evt) {
+
+            };
+            websocket.onmessage = function (evt) {
+                var msg = evt.data.toString();
+
+                if (msg == 'error_connect') {
+                    alert('请选连接读写设备。');
+                } else if (msg == 'error_recognize') {
+                    alert('识别卡错误。');
+                } else if (evt.data == 'error_read') {
+                    alert('读卡错误。');
+                } else if (evt.data == 'error_length') {
+                    alert('数据错误。');
+                } else if (msg.indexOf('read') != -1) {
+                    var d = msg.substring(msg.indexOf('_') + 1);
+                    $.getJSON(actionURL, { json: JSON.stringify({ action: 'analyse_card' }), data: d }, function (dd) {
+                        var s = '时间：' + dd.Time + '\n' +
+                            '姓名：' + dd.Name + '[' + dd.Code + ']\n' +
+                            '车牌号：' + dd.Plate + '\n' +
+                            '加注量：' + dd.Workload;
+                        alert(s);
+                    });
+                } else {
+                    alert('其它错误：' + msg);
+                }
+            };
+            websocket.onerror = function (evt) {
+                alert('WebSocket错误：' + evt.data);
+            };
         }
     }
 };

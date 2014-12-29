@@ -18,7 +18,7 @@ namespace CardReaderWriter
     public partial class Form1 : Form
     {
         private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
-        delegate void DisplayOperationCallBack(string message);   
+        delegate void DisplayOperationCallBack(string status, string epc, string data,string code);   
  
         public Form1()
         {
@@ -28,7 +28,11 @@ namespace CardReaderWriter
 
             cbVersion.SelectedIndex = 1;
             cbBaud.SelectedIndex = 3;
-            cbPort.SelectedIndex = 0;
+
+            if (cbBaud.Items.Count > 0)
+            {
+                cbPort.SelectedIndex = 0;
+            }
         }
 
         private void FetchSerialPorts()
@@ -47,6 +51,10 @@ namespace CardReaderWriter
                 //处理写卡流程
                 message = message.Substring(message.IndexOf(',') + 1);
 
+                string cardmessage = message.Substring(0, message.IndexOf('{'));
+                string displaymessage = message.Substring(message.IndexOf('{') + 1);
+                displaymessage = displaymessage.Substring(0, displaymessage.Length - 1);
+
                 string epcString;
                 string tagString = RecognizeCard(out epcString);
                 if (tagString.StartsWith("error"))
@@ -59,7 +67,7 @@ namespace CardReaderWriter
                 {
                     //把message编程16进制字符串
                     StringBuilder sb = new StringBuilder();
-                    foreach (char c in message.ToCharArray())
+                    foreach (char c in cardmessage.ToCharArray())
                     {
                         sb.Append(Convert.ToString((byte)c, 16));
                     }
@@ -67,20 +75,20 @@ namespace CardReaderWriter
                     string data = sb.ToString().ToUpper();
 
                     string value = WriteData(epcString, data);
-
                     if (value.StartsWith("error"))
                     {
-                        log.Debug("写卡错误。");
+                        log.Debug(string.Format("写卡失败，卡号：{0}，代码：{1}。",epcString, value));
+                        DisplayOperation("写卡失败",epcString, displaymessage,value);
 
                         socket.Send(value);
                     }
                     else
                     {
-                        log.Debug("写卡，" + message);
-                        DisplayOperation("写卡，" + message);
+                        log.Debug(string.Format("写卡成功，卡号：{0}，数据：{1}。", epcString, cardmessage));
+                        DisplayOperation("写卡成功",epcString, displaymessage,"");
 
-                        socket.Send("write_"+epcString);
-                    }                    
+                        socket.Send("write_" + epcString);
+                    }
                 }
             }
             else if (message.StartsWith("read,"))
@@ -99,14 +107,15 @@ namespace CardReaderWriter
                     string value = ReadData(epcString);
                     if (value.StartsWith("error"))
                     {
-                        log.Debug("读卡错误。");
+                        log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
+                        DisplayOperation("读卡失败", epcString,"",value);
 
                         socket.Send(value);
                     }
                     else
                     {
-                        log.Debug("读卡，" + value);
-                        DisplayOperation("读卡，" + value);
+                        log.Debug(string.Format("读卡成功，卡号：{0}，数据：{1}。", epcString, value));
+                        DisplayOperation("读卡成功", epcString, value, "");
 
                         socket.Send("read_" + value);
                     }
@@ -115,7 +124,9 @@ namespace CardReaderWriter
             else
             {
                 //处理其它流程
-                DisplayOperation(message);
+                log.Debug(string.Format("其它操作，{0}。", message));
+                DisplayOperation("其它操作", "", message, "");
+
                 socket.Send(message);
             }
         }
@@ -292,16 +303,23 @@ namespace CardReaderWriter
             }
         }
 
-        private void DisplayOperation(string operation)
+        private void DisplayOperation(string status,string epc, string data, string code)
         {
-            if (this.txtOperation.InvokeRequired)
+            if (this.lvOperation.InvokeRequired)
             {
                 DisplayOperationCallBack docb = new DisplayOperationCallBack(DisplayOperation);
-                this.Invoke(docb, new object[] { operation });
+                this.Invoke(docb, new object[] { status,epc,data,code});
             }
             else
             {
-                txtOperation.Text = string.Format("[{0:yyyy-MM-dd HH:mm:ss}]{1}{2}{3}", DateTime.Now, operation, Environment.NewLine, txtOperation.Text);
+                //txtOperation.Text = string.Format("[{0:yyyy-MM-dd HH:mm:ss}]{1}，{2}。{3}{4}", DateTime.Now, operation,message, Environment.NewLine, txtOperation.Text);
+                ListViewItem lvi = new ListViewItem(string.Format("{0:yyyy年MM月dd日 HH:mm:ss}", DateTime.Now));
+                lvi.SubItems.Add(status);
+                lvi.SubItems.Add(epc);
+                lvi.SubItems.Add(data);
+                lvi.SubItems.Add(code);
+
+                lvOperation.Items.Insert(0, lvi);
             }
         }
 
@@ -315,12 +333,12 @@ namespace CardReaderWriter
                 return "error_connect";
             }
 
-            //在非“单步识别”的情况下，每次点击“识别标签”按钮时，标签数量置零并且清空数据窗口；
-            //在“单步识别”的情况下，如果识别不是“单步识别”则将标签数量置零并且清空数据窗口，否则标签数量不置零并且数据窗口不清空。
-            if (DemoPublic.OldInventoryFlg == false)
-            {
-                DemoPublic.TagNum = 0;
-            }
+            ////在非“单步识别”的情况下，每次点击“识别标签”按钮时，标签数量置零并且清空数据窗口；
+            ////在“单步识别”的情况下，如果识别不是“单步识别”则将标签数量置零并且清空数据窗口，否则标签数量不置零并且数据窗口不清空。
+            //if (DemoPublic.OldInventoryFlg == false)
+            //{
+            //    DemoPublic.TagNum = 0;
+            //}
 
             int startAddress = 0x01;
             int readLength = 6;
@@ -435,7 +453,7 @@ namespace CardReaderWriter
                 int aaag = PublicFunction.JRMWriteDataByxzEPC(epc, DemoPublic.sPwd, DemoPublic.bBank, DemoPublic.sAddress, byte.Parse(DemoPublic.sCnt), aWriteData, cuowu);
                 if (aaag != 0)
                 {
-                    return "success_" + epc;
+                    return epc;
                 }
                 else
                 {
@@ -502,7 +520,13 @@ namespace CardReaderWriter
                     sb.Append((char)x);
                 }
 
-                return "success_" + sb.ToString();
+                string s = sb.ToString().Trim();
+                if (s.Length == 0)
+                {
+                    return "error_length";
+                }
+
+                return sb.ToString();
             }
             catch(Exception e)
             {

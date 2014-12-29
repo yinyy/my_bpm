@@ -100,6 +100,23 @@ namespace BPM.Admin.Sanitation.ashx
                         context.Response.Write("0");
                     }
                     break;
+                case "analyse_card":
+                    string data = context.Request.Params["data"];
+                    string[] ds = data.Split(',');
+                    int driverId = Convert.ToInt32(ds[2].Substring(0, ds[2].IndexOf('[')));
+                    int trunkId = Convert.ToInt32(ds[3].Substring(0, ds[3].IndexOf('[')));
+
+                    var obj = new
+                    {
+                        Name = SanitationDriverBll.Instance.GetById(driverId).Name,
+                        Code = ds[2].Substring(ds[2].IndexOf('[')+1, ds[2].IndexOf(']') - ds[2].IndexOf('[') - 1),
+                        Plate = SanitationTrunkBll.Instance.GetById(trunkId).Plate,
+                        Workload = ds[4],
+                        Time = ds[0]
+                    };
+
+                    context.Response.Write(JSONhelper.ToJson(obj));
+                    break;
                 default:
                     context.Response.Write(SanitationDispatchBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     break;

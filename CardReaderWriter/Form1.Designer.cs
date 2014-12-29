@@ -45,7 +45,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txtOperation = new System.Windows.Forms.TextBox();
+            this.lvOperation = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.slConnection = new System.Windows.Forms.ToolStripStatusLabel();
             this.slWebSocket = new System.Windows.Forms.ToolStripStatusLabel();
@@ -56,6 +60,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btnLogger = new System.Windows.Forms.Button();
             this.btnRead = new System.Windows.Forms.Button();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -78,14 +83,14 @@
             this.groupBox1.Controls.Add(this.cbPort);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(235, 182);
+            this.groupBox1.Size = new System.Drawing.Size(419, 182);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "读写器";
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(73, 147);
+            this.btnConnect.Location = new System.Drawing.Point(257, 147);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 19;
@@ -96,7 +101,7 @@
             // btnDisconnect
             // 
             this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Location = new System.Drawing.Point(154, 147);
+            this.btnDisconnect.Location = new System.Drawing.Point(338, 147);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
             this.btnDisconnect.TabIndex = 18;
@@ -117,14 +122,14 @@
             // 
             this.tbAddress.Location = new System.Drawing.Point(65, 98);
             this.tbAddress.Name = "tbAddress";
-            this.tbAddress.Size = new System.Drawing.Size(164, 21);
+            this.tbAddress.Size = new System.Drawing.Size(348, 21);
             this.tbAddress.TabIndex = 16;
             this.tbAddress.Text = "FF";
             // 
             // cbCRC
             // 
             this.cbCRC.AutoSize = true;
-            this.cbCRC.Location = new System.Drawing.Point(139, 125);
+            this.cbCRC.Location = new System.Drawing.Point(323, 125);
             this.cbCRC.Name = "cbCRC";
             this.cbCRC.Size = new System.Drawing.Size(90, 16);
             this.cbCRC.TabIndex = 15;
@@ -150,7 +155,7 @@
             "JRM2030"});
             this.cbVersion.Location = new System.Drawing.Point(65, 20);
             this.cbVersion.Name = "cbVersion";
-            this.cbVersion.Size = new System.Drawing.Size(164, 20);
+            this.cbVersion.Size = new System.Drawing.Size(348, 20);
             this.cbVersion.TabIndex = 13;
             // 
             // label2
@@ -173,7 +178,7 @@
             "115200"});
             this.cbBaud.Location = new System.Drawing.Point(65, 72);
             this.cbBaud.Name = "cbBaud";
-            this.cbBaud.Size = new System.Drawing.Size(164, 20);
+            this.cbBaud.Size = new System.Drawing.Size(348, 20);
             this.cbBaud.TabIndex = 11;
             // 
             // label1
@@ -190,7 +195,7 @@
             this.cbPort.FormattingEnabled = true;
             this.cbPort.Location = new System.Drawing.Point(65, 46);
             this.cbPort.Name = "cbPort";
-            this.cbPort.Size = new System.Drawing.Size(164, 20);
+            this.cbPort.Size = new System.Drawing.Size(348, 20);
             this.cbPort.TabIndex = 9;
             // 
             // groupBox2
@@ -198,16 +203,16 @@
             this.groupBox2.Controls.Add(this.btnStart);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.txtPort);
-            this.groupBox2.Location = new System.Drawing.Point(12, 200);
+            this.groupBox2.Location = new System.Drawing.Point(437, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(235, 81);
+            this.groupBox2.Size = new System.Drawing.Size(288, 76);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "WebSocket服务器";
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(154, 47);
+            this.btnStart.Location = new System.Drawing.Point(207, 47);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 2;
@@ -228,43 +233,74 @@
             // 
             this.txtPort.Location = new System.Drawing.Point(65, 20);
             this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(164, 21);
+            this.txtPort.Size = new System.Drawing.Size(217, 21);
             this.txtPort.TabIndex = 0;
             this.txtPort.Text = "8123";
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.txtOperation);
-            this.groupBox3.Location = new System.Drawing.Point(459, 12);
+            this.groupBox3.Controls.Add(this.lvOperation);
+            this.groupBox3.Location = new System.Drawing.Point(12, 200);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(474, 269);
+            this.groupBox3.Size = new System.Drawing.Size(713, 320);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "操作记录";
             // 
-            // txtOperation
+            // lvOperation
             // 
-            this.txtOperation.Location = new System.Drawing.Point(6, 20);
-            this.txtOperation.Multiline = true;
-            this.txtOperation.Name = "txtOperation";
-            this.txtOperation.Size = new System.Drawing.Size(462, 243);
-            this.txtOperation.TabIndex = 0;
+            this.lvOperation.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.lvOperation.FullRowSelect = true;
+            this.lvOperation.GridLines = true;
+            this.lvOperation.Location = new System.Drawing.Point(6, 20);
+            this.lvOperation.MultiSelect = false;
+            this.lvOperation.Name = "lvOperation";
+            this.lvOperation.Size = new System.Drawing.Size(701, 294);
+            this.lvOperation.TabIndex = 0;
+            this.lvOperation.UseCompatibleStateImageBehavior = false;
+            this.lvOperation.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "操作状态";
+            this.columnHeader1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "卡号";
+            this.columnHeader2.Width = 160;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "数据";
+            this.columnHeader3.Width = 220;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "代码";
+            this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader4.Width = 100;
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.slConnection,
             this.slWebSocket});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 287);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 523);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(944, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(739, 22);
             this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // slConnection
             // 
             this.slConnection.Name = "slConnection";
-            this.slConnection.Size = new System.Drawing.Size(795, 17);
+            this.slConnection.Size = new System.Drawing.Size(590, 17);
             this.slConnection.Spring = true;
             this.slConnection.Text = "设备已经断开连接。";
             this.slConnection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -281,9 +317,9 @@
             this.groupBox4.Controls.Add(this.label7);
             this.groupBox4.Controls.Add(this.lblRate);
             this.groupBox4.Controls.Add(this.label6);
-            this.groupBox4.Location = new System.Drawing.Point(253, 12);
+            this.groupBox4.Location = new System.Drawing.Point(437, 94);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 229);
+            this.groupBox4.Size = new System.Drawing.Size(207, 100);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "设备状态";
@@ -324,7 +360,7 @@
             // 
             // btnLogger
             // 
-            this.btnLogger.Location = new System.Drawing.Point(378, 247);
+            this.btnLogger.Location = new System.Drawing.Point(650, 171);
             this.btnLogger.Name = "btnLogger";
             this.btnLogger.Size = new System.Drawing.Size(75, 23);
             this.btnLogger.TabIndex = 16;
@@ -334,19 +370,25 @@
             // 
             // btnRead
             // 
-            this.btnRead.Location = new System.Drawing.Point(297, 247);
+            this.btnRead.Location = new System.Drawing.Point(650, 143);
             this.btnRead.Name = "btnRead";
             this.btnRead.Size = new System.Drawing.Size(75, 23);
             this.btnRead.TabIndex = 17;
             this.btnRead.Text = "测试读卡";
             this.btnRead.UseVisualStyleBackColor = true;
+            this.btnRead.Visible = false;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "时间";
+            this.columnHeader5.Width = 150;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(944, 309);
+            this.ClientSize = new System.Drawing.Size(739, 545);
             this.Controls.Add(this.btnRead);
             this.Controls.Add(this.btnLogger);
             this.Controls.Add(this.groupBox4);
@@ -365,7 +407,6 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -394,7 +435,6 @@
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox txtOperation;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel slWebSocket;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -405,6 +445,12 @@
         private System.Windows.Forms.ToolStripStatusLabel slConnection;
         private System.Windows.Forms.Button btnLogger;
         private System.Windows.Forms.Button btnRead;
+        private System.Windows.Forms.ListView lvOperation;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 

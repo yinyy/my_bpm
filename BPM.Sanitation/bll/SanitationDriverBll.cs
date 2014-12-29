@@ -40,5 +40,10 @@ namespace Sanitation.Bll
         {
             return SanitationDriverDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);
         }
+
+        public SanitationDriverModel GetById(int driverId)
+        {
+            return SanitationDriverDal.Instance.Get(driverId);
+        }
     }
 }
