@@ -65,15 +65,18 @@ namespace CardReaderWriter
                 }
                 else
                 {
+                    string tmp = cardmessage.Length % 2 == 0 ? cardmessage : cardmessage + " ";
                     //把message编程16进制字符串
                     StringBuilder sb = new StringBuilder();
-                    foreach (char c in cardmessage.ToCharArray())
+                    sb.Append(Convert.ToString(tmp.Length / 2, 16));//加入tmp的长度，也就是将来要读取的字的个数
+                    sb.Append(Convert.ToString(' ', 16));//加入一个空格
+                    //下面把每一个字符转化成16进制
+                    foreach (char c in tmp.ToCharArray())
                     {
                         sb.Append(Convert.ToString((byte)c, 16));
                     }
 
                     string data = sb.ToString().ToUpper();
-
                     string value = WriteData(epcString, data);
                     if (value.StartsWith("error"))
                     {
@@ -104,20 +107,32 @@ namespace CardReaderWriter
                 }
                 else
                 {
-                    string value = ReadData(epcString);
+                    int len = 0;
+                    string value = ReadDataLength(epcString, out len);
                     if (value.StartsWith("error"))
                     {
                         log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
-                        DisplayOperation("读卡失败", epcString,"",value);
+                        DisplayOperation("读卡失败", epcString, "", value);
 
                         socket.Send(value);
                     }
                     else
                     {
-                        log.Debug(string.Format("读卡成功，卡号：{0}，数据：{1}。", epcString, value));
-                        DisplayOperation("读卡成功", epcString, value, "");
+                        value = ReadData(epcString, len);
+                        if (value.StartsWith("error"))
+                        {
+                            log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
+                            DisplayOperation("读卡失败", epcString, "", value);
 
-                        socket.Send("read_" + value);
+                            socket.Send(value);
+                        }
+                        else
+                        {
+                            log.Debug(string.Format("读卡成功，卡号：{0}，数据：{1}。", epcString, value));
+                            DisplayOperation("读卡成功", epcString, value, "");
+
+                            socket.Send("read_" + value);
+                        }
                     }
                 }
             }
@@ -398,34 +413,33 @@ namespace CardReaderWriter
                 return "error_connect";
             }
 
+            //string tmpdata = data;
+            //if (tmpdata.Length % 4 != 0)
+            //{
+            //    tmpdata += "00";
+            //}
+
             DemoPublic.sPwd = "00000000";
             DemoPublic.sTag = epc;
             DemoPublic.sAddress = "0000";
-            DemoPublic.sCnt = "32";
+            DemoPublic.sCnt = Convert.ToString(data.Length / 4);
 
-            string tmpdata = data;
-            //如果data的长度小于64，则后面用0补全
-            for (int i = 128 - data.Length; i > 0; i -= 2)
-            {
-                tmpdata += "00";
-            }
+            ////写入的数据要被2和4同时整除
+            //if (tmpdata.Length % 2 != 0)
+            //{
+            //    return "error_data";
+            //}
+            //if (tmpdata.Length % 4 != 0)
+            //{
+            //    return "error_data";
+            //}
+            DemoPublic.sData = data;
 
-            //写入的数据要被2和4同时整除
-            if (tmpdata.Length % 2 != 0)
-            {
-                return "error_data";
-            }
-            if (tmpdata.Length % 4 != 0)
-            {
-                return "error_data";
-            }
-            DemoPublic.sData = tmpdata;
-
-            if (DemoPublic.sData.Length / 4 != int.Parse(DemoPublic.sCnt))
-            {
-                //MessageBox.Show("“长度(Word)”和要写入的数据长度不一致，请重新修改！");
-                return "error_data";
-            }
+            //if (DemoPublic.sData.Length / 4 != int.Parse(DemoPublic.sCnt))
+            //{
+            //    //MessageBox.Show("“长度(Word)”和要写入的数据长度不一致，请重新修改！");
+            //    return "error_data";
+            //}
 
             DemoPublic.bBank = 3;
 
@@ -446,7 +460,7 @@ namespace CardReaderWriter
             Pc_len += (byte)(DemoPublic.sData.Length / 2 + 9);
             byte cuowu = new byte();
             byte[] aWriteData = new byte[255];
-            aWriteData = HexStringToByteArray(tmpdata);
+            aWriteData = HexStringToByteArray(data);
 
             try
             {
@@ -466,8 +480,10 @@ namespace CardReaderWriter
             }
         }
 
-        private string ReadData(string epc)
+        private string ReadDataLength(string epc, out int len)
         {
+            len = 0;
+
             if (!DemoPublic.Enabel_flg)
             {
                 //MessageBox.Show("请先进行连接");
@@ -476,13 +492,65 @@ namespace CardReaderWriter
 
             DemoPublic.sPwd = "00000000";
             PublicFunction.addr = Convert.ToByte("00");
-            PublicFunction.len = Convert.ToByte("32");
+            PublicFunction.len = Convert.ToByte("1");
 
             DemoPublic.TagNum = 0;
 
             DemoPublic.sTag = epc;
             DemoPublic.sAddress = "00";
-            DemoPublic.sCnt = "32";
+            DemoPublic.sCnt = "1";
+            DemoPublic.bBank = 3;
+
+            byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
+            byte[] bAdd = new byte[2];
+            byte[] readersj = new byte[255];
+            byte cuowu = 0;
+
+            if (Convert.ToUInt16(DemoPublic.sAddress, 10) > 127)
+            {
+                bAdd[0] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) | 0x80);
+                bAdd[1] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) & 0x7F);
+                Pc_len = (byte)(Pc_len + 1);
+            }
+            else
+            {
+                bAdd[0] = (byte)(Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7);
+            }
+
+            try
+            {
+                int aaag = PublicFunction.ReadxzData(epc, DemoPublic.sPwd, DemoPublic.bBank, int.Parse(DemoPublic.sAddress), int.Parse(DemoPublic.sCnt), readersj, cuowu);
+                if (readersj[1] != ' ')
+                {
+                    return "error_length";
+                }
+
+                len = readersj[0];
+                return "success";
+            }
+            catch (Exception e)
+            {
+                return "error_" + e.Message;
+            }
+        }
+
+        private string ReadData(string epc, int len)
+        {
+            if (!DemoPublic.Enabel_flg)
+            {
+                //MessageBox.Show("请先进行连接");
+                return "error_connect";
+            }
+
+            DemoPublic.sPwd = "00000000";
+            PublicFunction.addr = Convert.ToByte("01");
+            PublicFunction.len = Convert.ToByte(len);
+
+            DemoPublic.TagNum = 0;
+
+            DemoPublic.sTag = epc;
+            DemoPublic.sAddress = "01";
+            DemoPublic.sCnt = Convert.ToString(len);
             DemoPublic.bBank = 3;
 
             byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
@@ -526,7 +594,7 @@ namespace CardReaderWriter
                     return "error_length";
                 }
 
-                return sb.ToString();
+                return sb.ToString().Trim();
             }
             catch(Exception e)
             {
@@ -559,8 +627,8 @@ namespace CardReaderWriter
             }
             else
             {
-                string value = ReadData(epcString);
-                MessageBox.Show(value.Substring(value.IndexOf('_') + 1));
+                //string value = ReadData(epcString);
+                //MessageBox.Show(value.Substring(value.IndexOf('_') + 1));
             }
         }
     }

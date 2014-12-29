@@ -47,7 +47,7 @@
       <AdditionalIncludeDirectories>G:\Arduino\arduino-1.0.6\hardware\arduino\cores\arduino;G:\Arduino\arduino-1.0.6\hardware\arduino\variants\mega;F:\MyDocuments\Documents\Arduino\libraries\SIM900A;F:\MyDocuments\Documents\Arduino\libraries\SIM900A\utility;F:\MyDocuments\Documents\Arduino\libraries\LED;F:\MyDocuments\Documents\Arduino\libraries\LED\utility;G:\Arduino\arduino-1.0.6\libraries;G:\Arduino\arduino-1.0.6\hardware\arduino\libraries;D:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;F:\MyDocuments\Documents\Arduino\libraries;g:\arduino\arduino-1.0.6\hardware\tools\avr\avr\include\;g:\arduino\arduino-1.0.6\hardware\tools\avr\avr\include\avr\;g:\arduino\arduino-1.0.6\hardware\tools\avr\avr\;g:\arduino\arduino-1.0.6\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>G:\Working\Sanitation.BPM\sprinkler\Visual Micro\.sprinkler.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;_VMDEBUG=1;ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

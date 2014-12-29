@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprinkler", "sprinkler\spri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardReaderWriter", "CardReaderWriter\CardReaderWriter.csproj", "{5D2D1FD6-4EA9-4718-A572-E6C47585BA44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "校验码生成器", "校验码生成器\校验码生成器.csproj", "{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,16 @@ Global
 		{5D2D1FD6-4EA9-4718-A572-E6C47585BA44}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5D2D1FD6-4EA9-4718-A572-E6C47585BA44}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5D2D1FD6-4EA9-4718-A572-E6C47585BA44}.Release|Win32.ActiveCfg = Release|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
