@@ -1007,7 +1007,7 @@ namespace RFID.Public
         {
             byte code = new byte();
             //int Writa = DemoPublic.UhfWriteDataByXZEPC(DemoPublic.hCom,epcxz, Pwd, bank, ptr, cnt, writedata, DemoPublic.flag);
-            int Writa = DemoPublic.UhfWriteDataByXZEPC(DemoPublic.hCom, epcxz, Pwd, bank, ptr, cnt, writedata,code,  DemoPublic.flag);
+            int Writa = DemoPublic.UhfWriteDataByXZEPC(DemoPublic.hCom, epcxz, Pwd, bank, ptr, cnt, writedata, code, DemoPublic.flag);
             if (Writa != 0)
             {
 

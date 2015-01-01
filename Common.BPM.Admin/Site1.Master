@@ -15,6 +15,11 @@
     <%=WebExtensions.CombresLink("siteJs") %>
 
     
+    <script type="text/javascript">
+        function padLeft(num, n){
+            return (Array(n).join(0)+num).slice(-n);
+        }
+    </script>
     
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>

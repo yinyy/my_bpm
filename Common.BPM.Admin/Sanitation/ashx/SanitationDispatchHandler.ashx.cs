@@ -101,21 +101,29 @@ namespace BPM.Admin.Sanitation.ashx
                     }
                     break;
                 case "analyse_card":
-                    string data = context.Request.Params["data"];
-                    string[] ds = data.Split(',');
-                    int driverId = Convert.ToInt32(ds[2].Substring(0, ds[2].IndexOf('[')));
-                    int trunkId = Convert.ToInt32(ds[3].Substring(0, ds[3].IndexOf('[')));
+                    d = SanitationDispatchBll.Instance.GetById(rpm.KeyId);
 
-                    var obj = new
+                    if (d != null)
                     {
-                        Name = SanitationDriverBll.Instance.GetById(driverId).Name,
-                        Code = ds[2].Substring(ds[2].IndexOf('[')+1, ds[2].IndexOf(']') - ds[2].IndexOf('[') - 1),
-                        Plate = SanitationTrunkBll.Instance.GetById(trunkId).Plate,
-                        Workload = ds[4],
-                        Time = ds[0]
-                    };
+                        SanitationDriverModel dm = SanitationDriverBll.Instance.GetById(d.DriverId);
+                        SanitationTrunkModel tm = SanitationTrunkBll.Instance.GetById(d.TrunkId);
 
-                    context.Response.Write(JSONhelper.ToJson(obj));
+                        var obj = new
+                        {
+                            Name = dm.Name,
+                            Code = dm.Code,
+                            Plate = tm.Plate,
+                            Workload = d.Workload,
+                            Time = d.Time.ToString("yyyy年MM月dd日"),
+                            Finished = SanitationDetailBll.Instance.Get(d.Time, d.KeyId).Count()
+                        };
+
+                        context.Response.Write(JSONhelper.ToJson(obj));
+                    }
+                    else
+                    {
+                        context.Response.Write(JSONhelper.ToJson(d));
+                    }
                     break;
                 default:
                     context.Response.Write(SanitationDispatchBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));

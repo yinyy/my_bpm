@@ -50,7 +50,10 @@ namespace BPM.Admin.Sanitation.ashx
                 case "combobox":
                     context.Response.Write(JSONhelper.ToJson(SanitationDriverBll.Instance.GetAll().Select(ad => new { KeyId = ad.KeyId, Title = ad.Name }).OrderBy(ad=>ad.Title)));
                     break;
-                
+                case "get":
+                    d = SanitationDriverBll.Instance.GetById(rpm.KeyId);
+                    context.Response.Write(d);
+                    break;
                 default:
                     context.Response.Write(SanitationDriverBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     break;

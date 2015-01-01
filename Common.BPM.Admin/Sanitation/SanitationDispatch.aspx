@@ -24,6 +24,7 @@
     <script src="../../scripts/Business/Search.js"></script>
 
     <!-- 引入js文件 -->
+    <script src="js/card.js?d=<%=DateTime.Now%>"></script>
       <script src="js/SanitationDispatch.js?d=<%=DateTime.Now%>"></script>
 </asp:Content>
 

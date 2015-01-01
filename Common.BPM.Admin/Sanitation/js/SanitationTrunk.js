@@ -8,6 +8,9 @@ $(function () {
     $('#a_add').click(CRUD.add);
     $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
+    $('#a_read_card').click(CARD.read);
+    $('#a_write_card').click(CARD.write);
+
 //高级查询
    $('#a_search').click(function () {
         search.go('list');
@@ -145,3 +148,39 @@ var CRUD = {
     }
 };
 
+var CARD = {
+    write: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            var epc = CARDClass.makeTrunkCard(row.KeyId);
+            CARDClass.writeEPC(epc, function (cardno) {
+                alert('写卡成功。卡号：' + cardno.substring(0, 16) + '。');
+            });
+        } else {
+            msg.warning("请选择行。");
+        }
+    },
+
+    read: function () {
+        CARDClass.readEPC(function (data) {
+            var cardno = data.substring(0, 16);
+
+            if (!CARDClass.isTrunkCard(cardno)) {
+                alert('卡片错误。请使用车辆卡。');
+                return;
+            }
+            
+            $.getJSON(actionURL, { json: JSON.stringify({ action: 'get', keyid: CARDClass.parseTrunkId(cardno) }) }, function (d) {
+                if (d == null) {
+                    alert('查无此车。');
+                } else {
+                    var s = '卡号：' + cardno + '\n' +
+                   '车牌号：' + d.Plate
+
+                    alert(s);
+                }
+            });
+
+        }, null);
+    }
+};

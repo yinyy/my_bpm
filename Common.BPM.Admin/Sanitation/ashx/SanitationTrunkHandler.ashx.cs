@@ -50,6 +50,10 @@ namespace BPM.Admin.Sanitation.ashx
 
                     context.Response.Write(SanitationTrunkBll.Instance.Update(d));
                     break;
+                case "get":
+                    d = SanitationTrunkBll.Instance.GetById(rpm.KeyId);
+                    context.Response.Write(JSONhelper.ToJson(d));
+                    break;
                 case "delete":
                     context.Response.Write(SanitationTrunkBll.Instance.Delete(rpm.KeyId));
                     break;

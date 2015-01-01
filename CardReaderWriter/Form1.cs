@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace CardReaderWriter
 {
@@ -46,55 +48,50 @@ namespace CardReaderWriter
 
         private void OnMessage(IWebSocketConnection socket, string message)
         {
-            if (message.StartsWith("write,"))
+            JObject jobj = JObject.Parse(message);
+            if (jobj["action"].ToString()=="write")
             {
                 //处理写卡流程
-                message = message.Substring(message.IndexOf(',') + 1);
-
-                string cardmessage = message.Substring(0, message.IndexOf('{'));
-                string displaymessage = message.Substring(message.IndexOf('{') + 1);
-                displaymessage = displaymessage.Substring(0, displaymessage.Length - 1);
+                string data = jobj["data"].ToString().Trim();
+                string start = jobj["start"].ToString().Trim();
+                int men = Convert.ToInt32(jobj["mem"].ToString().Trim());
 
                 string epcString;
-                string tagString = RecognizeCard(out epcString);
-                if (tagString.StartsWith("error"))
+                string value = RecognizeCard(out epcString);
+                if (value.StartsWith("error"))
                 {
-                    log.Debug(tagString);
+                    log.Debug(value);
 
-                    socket.Send(tagString);
+                    socket.Send(value);
                 }
                 else
                 {
-                    string tmp = cardmessage.Length % 2 == 0 ? cardmessage : cardmessage + " ";
                     //把message编程16进制字符串
                     StringBuilder sb = new StringBuilder();
-                    sb.Append(Convert.ToString(tmp.Length / 2, 16));//加入tmp的长度，也就是将来要读取的字的个数
-                    sb.Append(Convert.ToString(' ', 16));//加入一个空格
-                    //下面把每一个字符转化成16进制
-                    foreach (char c in tmp.ToCharArray())
+                    foreach (char c in data.ToCharArray())
                     {
-                        sb.Append(Convert.ToString((byte)c, 16));
+                        sb.Append(Convert.ToString((byte)c, 16).PadLeft(2, '0'));
                     }
 
-                    string data = sb.ToString().ToUpper();
-                    string value = WriteData(epcString, data);
+                    string hexdata = sb.ToString().ToUpper();
+                    value = WriteData(epcString, men, start, hexdata);
                     if (value.StartsWith("error"))
                     {
-                        log.Debug(string.Format("写卡失败，卡号：{0}，代码：{1}。",epcString, value));
-                        DisplayOperation("写卡失败",epcString, displaymessage,value);
+                        log.Debug(string.Format("写卡失败，卡号：{0}，代码：{1}。", epcString, value));
+                        DisplayOperation("写卡失败", epcString, "写卡失败", value);
 
                         socket.Send(value);
                     }
                     else
                     {
-                        log.Debug(string.Format("写卡成功，卡号：{0}，数据：{1}。", epcString, cardmessage));
-                        DisplayOperation("写卡成功",epcString, displaymessage,"");
+                        log.Debug(string.Format("写卡成功，卡号：{0}，数据：{1}。", epcString, hexdata));
+                        DisplayOperation("写卡成功", epcString, hexdata, "");
 
-                        socket.Send("write_" + epcString);
+                        socket.Send("success_" + hexdata);
                     }
                 }
             }
-            else if (message.StartsWith("read,"))
+            else if (jobj["action"].ToString()=="read")
             {
                 //处理读卡流程
                 string epcString;
@@ -107,33 +104,38 @@ namespace CardReaderWriter
                 }
                 else
                 {
-                    int len = 0;
-                    string value = ReadDataLength(epcString, out len);
-                    if (value.StartsWith("error"))
-                    {
-                        log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
-                        DisplayOperation("读卡失败", epcString, "", value);
+                    log.Debug(string.Format("读卡成功，卡号：{0}，数据：{1}。", epcString, epcString));
+                    DisplayOperation("读卡成功", epcString, epcString, "");
 
-                        socket.Send(value);
-                    }
-                    else
-                    {
-                        value = ReadData(epcString, len);
-                        if (value.StartsWith("error"))
-                        {
-                            log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
-                            DisplayOperation("读卡失败", epcString, "", value);
+                    socket.Send("success_" + epcString);
 
-                            socket.Send(value);
-                        }
-                        else
-                        {
-                            log.Debug(string.Format("读卡成功，卡号：{0}，数据：{1}。", epcString, value));
-                            DisplayOperation("读卡成功", epcString, value, "");
+                    //int len = 0;
+                    //string value = ReadDataLength(epcString, out len);
+                    //if (value.StartsWith("error"))
+                    //{
+                    //    log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
+                    //    DisplayOperation("读卡失败", epcString, "", value);
 
-                            socket.Send("read_" + value);
-                        }
-                    }
+                    //    socket.Send(value);
+                    //}
+                    //else
+                    //{
+                    //    value = ReadData(epcString, len);
+                    //    if (value.StartsWith("error"))
+                    //    {
+                    //        log.Debug(string.Format("读卡失败，卡号：{0}，代码：{1}。", epcString, value));
+                    //        DisplayOperation("读卡失败", epcString, "", value);
+
+                    //        socket.Send(value);
+                    //    }
+                    //    else
+                    //    {
+                    //        log.Debug(string.Format("读卡成功，卡号：{0}，数据：{1}。", epcString, value));
+                    //        DisplayOperation("读卡成功", epcString, value, "");
+
+                    //        socket.Send("read_" + value);
+                    //    }
+                    //}
                 }
             }
             else
@@ -405,7 +407,7 @@ namespace CardReaderWriter
         }
 
 
-        private string WriteData(string epc, string data)
+        private string WriteData(string epc,int mem, string start, string data)
         {
             if (!DemoPublic.Enabel_flg)
             {
@@ -413,35 +415,20 @@ namespace CardReaderWriter
                 return "error_connect";
             }
 
-            //string tmpdata = data;
-            //if (tmpdata.Length % 4 != 0)
-            //{
-            //    tmpdata += "00";
-            //}
+            string hexdata = data;
+            if (hexdata.Length % 4 != 0)
+            {
+                hexdata += "00";
+            }
 
             DemoPublic.sPwd = "00000000";
             DemoPublic.sTag = epc;
-            DemoPublic.sAddress = "0000";
-            DemoPublic.sCnt = Convert.ToString(data.Length / 4);
+            DemoPublic.sAddress = start;
+            DemoPublic.sCnt = Convert.ToString(hexdata.Length / 4);
 
-            ////写入的数据要被2和4同时整除
-            //if (tmpdata.Length % 2 != 0)
-            //{
-            //    return "error_data";
-            //}
-            //if (tmpdata.Length % 4 != 0)
-            //{
-            //    return "error_data";
-            //}
-            DemoPublic.sData = data;
+            DemoPublic.sData = hexdata;
 
-            //if (DemoPublic.sData.Length / 4 != int.Parse(DemoPublic.sCnt))
-            //{
-            //    //MessageBox.Show("“长度(Word)”和要写入的数据长度不一致，请重新修改！");
-            //    return "error_data";
-            //}
-
-            DemoPublic.bBank = 3;
+            DemoPublic.bBank =(byte) mem;
 
             byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
             byte[] bAdd = new byte[2];
@@ -460,7 +447,7 @@ namespace CardReaderWriter
             Pc_len += (byte)(DemoPublic.sData.Length / 2 + 9);
             byte cuowu = new byte();
             byte[] aWriteData = new byte[255];
-            aWriteData = HexStringToByteArray(data);
+            aWriteData = HexStringToByteArray(hexdata);
 
             try
             {
@@ -480,127 +467,127 @@ namespace CardReaderWriter
             }
         }
 
-        private string ReadDataLength(string epc, out int len)
-        {
-            len = 0;
+        //private string ReadDataLength(string epc, out int len)
+        //{
+        //    len = 0;
 
-            if (!DemoPublic.Enabel_flg)
-            {
-                //MessageBox.Show("请先进行连接");
-                return "error_connect";
-            }
+        //    if (!DemoPublic.Enabel_flg)
+        //    {
+        //        //MessageBox.Show("请先进行连接");
+        //        return "error_connect";
+        //    }
 
-            DemoPublic.sPwd = "00000000";
-            PublicFunction.addr = Convert.ToByte("00");
-            PublicFunction.len = Convert.ToByte("1");
+        //    DemoPublic.sPwd = "00000000";
+        //    PublicFunction.addr = Convert.ToByte("00");
+        //    PublicFunction.len = Convert.ToByte("1");
 
-            DemoPublic.TagNum = 0;
+        //    DemoPublic.TagNum = 0;
 
-            DemoPublic.sTag = epc;
-            DemoPublic.sAddress = "00";
-            DemoPublic.sCnt = "1";
-            DemoPublic.bBank = 3;
+        //    DemoPublic.sTag = epc;
+        //    DemoPublic.sAddress = "00";
+        //    DemoPublic.sCnt = "1";
+        //    DemoPublic.bBank = 3;
 
-            byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
-            byte[] bAdd = new byte[2];
-            byte[] readersj = new byte[255];
-            byte cuowu = 0;
+        //    byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
+        //    byte[] bAdd = new byte[2];
+        //    byte[] readersj = new byte[255];
+        //    byte cuowu = 0;
 
-            if (Convert.ToUInt16(DemoPublic.sAddress, 10) > 127)
-            {
-                bAdd[0] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) | 0x80);
-                bAdd[1] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) & 0x7F);
-                Pc_len = (byte)(Pc_len + 1);
-            }
-            else
-            {
-                bAdd[0] = (byte)(Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7);
-            }
+        //    if (Convert.ToUInt16(DemoPublic.sAddress, 10) > 127)
+        //    {
+        //        bAdd[0] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) | 0x80);
+        //        bAdd[1] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) & 0x7F);
+        //        Pc_len = (byte)(Pc_len + 1);
+        //    }
+        //    else
+        //    {
+        //        bAdd[0] = (byte)(Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7);
+        //    }
 
-            try
-            {
-                int aaag = PublicFunction.ReadxzData(epc, DemoPublic.sPwd, DemoPublic.bBank, int.Parse(DemoPublic.sAddress), int.Parse(DemoPublic.sCnt), readersj, cuowu);
-                if (readersj[1] != ' ')
-                {
-                    return "error_length";
-                }
+        //    try
+        //    {
+        //        int aaag = PublicFunction.ReadxzData(epc, DemoPublic.sPwd, DemoPublic.bBank, int.Parse(DemoPublic.sAddress), int.Parse(DemoPublic.sCnt), readersj, cuowu);
+        //        if (readersj[1] != 0x00)
+        //        {
+        //            return "error_length";
+        //        }
 
-                len = readersj[0];
-                return "success";
-            }
-            catch (Exception e)
-            {
-                return "error_" + e.Message;
-            }
-        }
+        //        len = readersj[0];
+        //        return "success";
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return "error_" + e.Message;
+        //    }
+        //}
 
-        private string ReadData(string epc, int len)
-        {
-            if (!DemoPublic.Enabel_flg)
-            {
-                //MessageBox.Show("请先进行连接");
-                return "error_connect";
-            }
+        //private string ReadData(string epc, int len)
+        //{
+        //    if (!DemoPublic.Enabel_flg)
+        //    {
+        //        //MessageBox.Show("请先进行连接");
+        //        return "error_connect";
+        //    }
 
-            DemoPublic.sPwd = "00000000";
-            PublicFunction.addr = Convert.ToByte("01");
-            PublicFunction.len = Convert.ToByte(len);
+        //    DemoPublic.sPwd = "00000000";
+        //    PublicFunction.addr = Convert.ToByte("01");
+        //    PublicFunction.len = Convert.ToByte(len);
 
-            DemoPublic.TagNum = 0;
+        //    DemoPublic.TagNum = 0;
 
-            DemoPublic.sTag = epc;
-            DemoPublic.sAddress = "01";
-            DemoPublic.sCnt = Convert.ToString(len);
-            DemoPublic.bBank = 3;
+        //    DemoPublic.sTag = epc;
+        //    DemoPublic.sAddress = "01";
+        //    DemoPublic.sCnt = Convert.ToString(len);
+        //    DemoPublic.bBank = 3;
 
-            byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
-            byte[] bAdd = new byte[2];
-            byte[] readersj = new byte[255];
-            byte cuowu = 0;
+        //    byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
+        //    byte[] bAdd = new byte[2];
+        //    byte[] readersj = new byte[255];
+        //    byte cuowu = 0;
 
-            if (Convert.ToUInt16(DemoPublic.sAddress, 10) > 127)
-            {
-                bAdd[0] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) | 0x80);
-                bAdd[1] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) & 0x7F);
-                Pc_len = (byte)(Pc_len + 1);
-            }
-            else
-            {
-                bAdd[0] = (byte)(Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7);
-            }
+        //    if (Convert.ToUInt16(DemoPublic.sAddress, 10) > 127)
+        //    {
+        //        bAdd[0] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) | 0x80);
+        //        bAdd[1] = (byte)((Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7) & 0x7F);
+        //        Pc_len = (byte)(Pc_len + 1);
+        //    }
+        //    else
+        //    {
+        //        bAdd[0] = (byte)(Convert.ToUInt16(DemoPublic.sAddress, 10) >> 7);
+        //    }
 
-            try
-            {
-                int aaag = PublicFunction.ReadxzData(epc, DemoPublic.sPwd, DemoPublic.bBank, int.Parse(DemoPublic.sAddress), int.Parse(DemoPublic.sCnt), readersj, cuowu);
-                int rfdi2 = aaag * 2;
-                string uii_str = PublicFunction.ByteArrayToHexString(readersj);
-                uii_str = uii_str.Substring(0, rfdi2);
+        //    try
+        //    {
+        //        int aaag = PublicFunction.ReadxzData(epc, DemoPublic.sPwd, DemoPublic.bBank, int.Parse(DemoPublic.sAddress), int.Parse(DemoPublic.sCnt), readersj, cuowu);
+        //        int rfdi2 = aaag * 2;
+        //        string uii_str = PublicFunction.ByteArrayToHexString(readersj);
+        //        uii_str = uii_str.Substring(0, rfdi2);
 
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < uii_str.Length; i += 2)
-                {
-                    int x = Convert.ToInt16(uii_str.Substring(i, 2), 16);
-                    if (x == 0)
-                    {
-                        break;
-                    }
+        //        StringBuilder sb = new StringBuilder();
+        //        for (int i = 0; i < uii_str.Length; i += 2)
+        //        {
+        //            int x = Convert.ToInt16(uii_str.Substring(i, 2), 16);
+        //            if (x == 0)
+        //            {
+        //                break;
+        //            }
 
-                    sb.Append((char)x);
-                }
+        //            sb.Append((char)x);
+        //        }
 
-                string s = sb.ToString().Trim();
-                if (s.Length == 0)
-                {
-                    return "error_length";
-                }
+        //        string s = sb.ToString().Trim();
+        //        if (s.Length == 0)
+        //        {
+        //            return "error_length";
+        //        }
 
-                return sb.ToString().Trim();
-            }
-            catch(Exception e)
-            {
-                return "error_" + e.Message;
-            }
-        }
+        //        return sb.ToString().Trim();
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        return "error_" + e.Message;
+        //    }
+        //}
 
         private byte[] HexStringToByteArray(string s)
         {

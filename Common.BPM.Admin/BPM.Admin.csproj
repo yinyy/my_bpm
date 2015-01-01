@@ -2842,6 +2842,7 @@
     <Content Include="Sanitation\html\SanitationDispatch.html" />
     <Content Include="Sanitation\html\SanitationDriver.html" />
     <Content Include="Sanitation\html\SanitationTrunk.html" />
+    <Content Include="Sanitation\js\card.js" />
     <Content Include="Sanitation\js\SanitationDetail.js" />
     <Content Include="Sanitation\js\SanitationDispatch.js" />
     <Content Include="Sanitation\js\SanitationDriver.js" />

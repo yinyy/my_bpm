@@ -9,8 +9,9 @@ $(function () {
     $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
     $('#a_enabled').click(CRUD.enable);
-    $('#a_write_card').click(CRUD.write_card);
-    $('#a_read_card').click(CRUD.read_card);
+    $('#a_write_card').click(CARD.write);
+    $('#a_read_card').click(CARD.read);
+
     //高级查询
    $('#a_search').click(function () {
         search.go('list');
@@ -199,56 +200,32 @@ var CRUD = {
         } else {
             msg.warning('请选择行。');
         }
-    },
-    write_card: function () {
+    }
+}
+
+var CARD = {
+    write: function () {
         var row = grid.getSelectedRow();
         if (row) {
             if (row.Enabled == '是') {
-                if (confirm('请将磁卡放在设备上，并点击确定写卡。')) {
-                    var wsUri = "ws://localhost:8123";
-                    window.WebSocket = window.WebSocket || window.MozWebSocket;
-                    if (!window.WebSocket) {
-                        alert("你的浏览器不支持WebSocket关键技术。");
+                CARDClass.readEPC(function (cardno) {
+                    if (!CARDClass.isDriverCard(cardno)) {
+                        alert('卡片错误。请使用人员卡。');
                         return;
                     }
 
-                    var websocket = new WebSocket(wsUri);
-                    websocket.onopen = function (evt) {
-                        var command = 'write,' + row.Time.substring(0, 10) + ',' +
-                            row.KeyId + ',' +
-                            row.DriverId + '[' + row.Code + '],' +
-                            row.TrunkId + '[' + row.Plate.substring(1) + '],' +
-                            row.Workload +
-                            '{' +
-                            row.Time.substring(0, 10) + ',' +
-                            row.Name + '[' + row.Code + '],' +
-                            row.Plate + ',' +
-                            row.Workload +
-                            '}';
-                        websocket.send(command);
-                    };
-                    websocket.onclose = function (evt) {
-                        
-                    };
-                    websocket.onmessage = function (evt) {
-                        var msg = evt.data.toString();
+                    //验证当前这张卡片的持有人和当前这条记录的司机是否是一个人
+                    var driverid = CARDClass.parseDriverId(cardno);
+                    if (row.DriverId != driverid) {
+                        alert('请使用 ' + row.Name + '[' + row.Code + '] 的磁卡。');
+                        return;
+                    }
 
-                        if (msg == 'error_connect') {
-                            alert('请选连接读写设备。');
-                        } else if (msg == 'error_recognize') {
-                            alert('识别卡错误。');
-                        } else if (evt.data == 'error_write') {
-                            alert('写卡错误。');
-                        } else if (msg.indexOf('write') != -1) {
-                            alert('写卡成功。卡号：' + msg.substring(msg.indexOf('_') + 1) + '。');
-                        } else {
-                            alert('其它错误：' + msg);
-                        }
-                    };
-                    websocket.onerror = function (evt) {
-                        alert('WebSocket错误：' + evt.data);
-                    };
-                }
+                    var epc = CARDClass.makeDispatchCard(row.DriverId, row.KeyId);
+                    CARDClass.writeEPCWithoutTips(epc, function (msg) {
+                        alert('写卡成功。');
+                    }, null);
+                }, null);
             } else {
                 msg.warning('该行还未生效，不能执行写卡操作。');
             }
@@ -256,50 +233,27 @@ var CRUD = {
             msg.warning("请选择行。");
         }
     },
-    read_card: function () {
-        if (confirm('请将磁卡放在设备上，并点击确定读卡。')) {
-            var wsUri = "ws://localhost:8123";
-            window.WebSocket = window.WebSocket || window.MozWebSocket;
-            if (!window.WebSocket) {
-                alert("你的浏览器不支持WebSocket关键技术。");
+
+    read: function () {
+        CARDClass.readEPC(function (cardno) {
+            if (!CARDClass.isDriverCard(cardno)) {
+                alert('卡片错误。请使用人员卡。');
                 return;
             }
 
-            var websocket = new WebSocket(wsUri);
-            websocket.onopen = function (evt) {
-                var command = 'read,card';
-                websocket.send(command);
-            };
-            websocket.onclose = function (evt) {
-
-            };
-            websocket.onmessage = function (evt) {
-                var msg = evt.data.toString();
-
-                if (msg == 'error_connect') {
-                    alert('请选连接读写设备。');
-                } else if (msg == 'error_recognize') {
-                    alert('识别卡错误。');
-                } else if (evt.data == 'error_read') {
-                    alert('读卡错误。');
-                } else if (evt.data == 'error_length') {
-                    alert('数据错误。');
-                } else if (msg.indexOf('read') != -1) {
-                    var d = msg.substring(msg.indexOf('_') + 1);
-                    $.getJSON(actionURL, { json: JSON.stringify({ action: 'analyse_card' }), data: d }, function (dd) {
-                        var s = '时间：' + dd.Time + '\n' +
-                            '姓名：' + dd.Name + '[' + dd.Code + ']\n' +
-                            '车牌号：' + dd.Plate + '\n' +
-                            '加注量：' + dd.Workload;
-                        alert(s);
-                    });
+            var kid = CARDClass.parseDispatchId(cardno);
+            $.getJSON(actionURL, { json: JSON.stringify({ action: 'analyse_card', keyid: kid }) }, function (d) {
+                if (d == null) {
+                    alert('没有任务。');
                 } else {
-                    alert('其它错误：' + msg);
+                    var s = '时间：' + d.Time + '\n' +
+                        '姓名：' + d.Name + '[' + d.Code + ']\n' +
+                        '车牌号：' + d.Plate + '\n' +
+                        '加注量：' + d.Workload + '\n' +
+                        '已完成：' + d.Finished;
+                    alert(s);
                 }
-            };
-            websocket.onerror = function (evt) {
-                alert('WebSocket错误：' + evt.data);
-            };
-        }
+            });
+        }, null);
     }
 };
