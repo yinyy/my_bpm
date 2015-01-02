@@ -358,7 +358,7 @@ namespace CardReaderWriter
             //}
 
             int startAddress = 0x01;
-            int readLength = 6;
+            int readLength = 7;
 
             PublicFunction.addr = Convert.ToByte(startAddress);
             PublicFunction.len = Convert.ToByte(readLength);

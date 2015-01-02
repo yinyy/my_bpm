@@ -162,7 +162,7 @@ var CARD = {
     write: function () {
         var row = grid.getSelectedRow();
         if (row) {
-            var epc = CARDClass.makeDriverCard(row.KeyId);
+            var epc = CARDClass.makeDriverCard(row.KeyId, row.Code.length > 4 ? row.Code(0, 4) : row.Code);
             CARDClass.writeEPC(epc, function (cardno) {
                 alert('写卡成功。卡号：' + cardno.substring(0, 16) + '。');
             });

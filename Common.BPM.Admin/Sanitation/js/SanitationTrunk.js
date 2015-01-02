@@ -152,9 +152,9 @@ var CARD = {
     write: function () {
         var row = grid.getSelectedRow();
         if (row) {
-            var epc = CARDClass.makeTrunkCard(row.KeyId);
+            var epc = CARDClass.makeTrunkCard(row.KeyId, row.Plate.substring(1));
             CARDClass.writeEPC(epc, function (cardno) {
-                alert('写卡成功。卡号：' + cardno.substring(0, 16) + '。');
+                alert('写卡成功。卡号：' + cardno.substring(0, 20) + '。');
             });
         } else {
             msg.warning("请选择行。");
@@ -163,7 +163,7 @@ var CARD = {
 
     read: function () {
         CARDClass.readEPC(function (data) {
-            var cardno = data.substring(0, 16);
+            var cardno = data.substring(0, 20);
 
             if (!CARDClass.isTrunkCard(cardno)) {
                 alert('卡片错误。请使用车辆卡。');

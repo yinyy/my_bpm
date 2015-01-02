@@ -1,4 +1,5 @@
 ﻿var CARDClass = {
+    //写入EPC号的时候，是从0002开始写入的。
     writeEPC: function (data, success_handler, error_handler) {
         var o = { action: 'write', mem: 1, start: '0002', data: data };
         var command = JSON.stringify(o);
@@ -14,42 +15,36 @@
     },
 
     readEPC: function (success_handler, error_handler) {
-        var o = { action: 'read', mem: 1, words: 6, start: '0002'};
+        var o = { action: 'read', mem: 1, start: '0002'};
         var command = JSON.stringify(o);
 
         invockWebSocket(command, success_handler, error_handler);
     },
 
+    prefix:function(card){
+        return String.fromCharCode(parseInt(card.substring(0, 2), 16)) + String.fromCharCode(parseInt(card.substring(2, 4), 16));
+    },
+
     isTrunkCard: function (card) {
-        var pre = String.fromCharCode(parseInt(card.substring(0, 2), 16)) + String.fromCharCode(parseInt(card.substring(2, 4), 16)) + String.fromCharCode(parseInt(card.substring(4, 6), 16));
-        return pre == 'car';
+        return CARDClass.prefix(card) == 'TK';
     },
 
     isDriverCard: function (card) {
-        var pre = String.fromCharCode(parseInt(card.substring(0, 2), 16)) + String.fromCharCode(parseInt(card.substring(2, 4), 16)) + String.fromCharCode(parseInt(card.substring(4, 6), 16));
-        return pre == 'drv';
+        return CARDClass.prefix(card) == 'PP';
     },
 
     parseTrunkId: function (card) {
-        var b3 = parseInt(card.substring(8, 10), 16);
-        var b2 = parseInt(card.substring(10, 12), 16);
-        var b1 = parseInt(card.substring(12, 14), 16);
-        var b0 = parseInt(card.substring(14, 16), 16);
+        var b1 = parseInt(card.substring(4, 6), 16);
+        var b0 = parseInt(card.substring(6, 8), 16);
 
-        var keyid = (b3 << 24) + (b2 << 16) + (b1 << 8) + b0;
-
-        return keyid;
+        return keyid = (b1 << 8) + b0;
     },
 
     parseDriverId: function (card) {
-        var b3 = parseInt(card.substring(8, 10), 16);
-        var b2 = parseInt(card.substring(10, 12), 16);
-        var b1 = parseInt(card.substring(12, 14), 16);
-        var b0 = parseInt(card.substring(14, 16), 16);
+        var b1 = parseInt(card.substring(4, 6), 16);
+        var b0 = parseInt(card.substring(6, 8), 16);
 
-        var keyid = (b3 << 24) + (b2 << 16) + (b1 << 8) + b0;
-
-        return keyid;
+        return (b1 << 8) + b0;
     },
 
     parseDispatchId:function(card){
@@ -58,51 +53,44 @@
         var b1 = parseInt(card.substring(20, 22), 16);
         var b0 = parseInt(card.substring(22, 24), 16);
 
-        var keyid = (b3 << 24) + (b2 << 16) + (b1 << 8) + b0;
-
-        return keyid;
+        return (b3 << 24) + (b2 << 16) + (b1 << 8) + b0;
     },
 
-    makeDriverCard: function (rid) {
-        var data = 'drv\0';
+    //人员前缀为PP（第1字），后面跟着KeyId（第2Word，最大表示65535左右），再接上人员编号D001（第3、4字），再接上任务KeyId（第5、6字）。
+    makeDriverCard: function (rid, code) {
+        var data = 'PP';
         var b0 = rid & 0xFF;
         var b1 = (rid >> 8) & 0xFF;
-        var b2 = (rid >> 16) & 0xFF;
-        var b3 = (rid >> 24) & 0xFF;
 
-        data += String.fromCharCode(b3) + String.fromCharCode(b2) + String.fromCharCode(b1) + String.fromCharCode(b0) + '\0\0\0\0';
+        data += String.fromCharCode(b1) + String.fromCharCode(b0);
+        data += code;
+        data += '\0\0\0\0';
 
         return data;
     },
 
-    makeTrunkCard: function (rid) {
-        var data = 'car\0';
+    //车辆前缀为TK（第1字），后面跟着KeyId（第2Word，最大表示65535左右），再接上车牌号E12345（第3、4、5字）。
+    makeTrunkCard: function (rid, plate) {
+        var data = 'TK';
         var b0 = rid & 0xFF;
         var b1 = (rid >> 8) & 0xFF;
-        var b2 = (rid >> 16) & 0xFF;
-        var b3 = (rid >> 24) & 0xFF;
 
-        data += String.fromCharCode(b3) + String.fromCharCode(b2) + String.fromCharCode(b1) + String.fromCharCode(b0) + '\0\0\0\0';
+        data += String.fromCharCode(b1) + String.fromCharCode(b0);
+        data += plate;
+        data += '\0\0';
 
         return data;
     },
 
-    makeDispatchCard: function (did, rid) {
-        var data = 'drv\0';
+    makeDispatchCard: function (driverCard, did) {
+        var data = driverCard.substring(0, 8);
         var b0 = did & 0xFF;
         var b1 = (did >> 8) & 0xFF;
         var b2 = (did >> 16) & 0xFF;
         var b3 = (did >> 24) & 0xFF;
 
         data += String.fromCharCode(b3) + String.fromCharCode(b2) + String.fromCharCode(b1) + String.fromCharCode(b0);
-
-        b0 = rid & 0xFF;
-        b1 = (rid >> 8) & 0xFF;
-        b2 = (rid >> 16) & 0xFF;
-        b3 = (rid >> 24) & 0xFF;
-
-        data += String.fromCharCode(b3) + String.fromCharCode(b2) + String.fromCharCode(b1) + String.fromCharCode(b0);
-
+        
         return data;
     }
 };
