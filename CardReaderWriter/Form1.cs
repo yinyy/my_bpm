@@ -20,8 +20,8 @@ namespace CardReaderWriter
     public partial class Form1 : Form
     {
         private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
-        delegate void DisplayOperationCallBack(string status, string epc, string data,string code);   
- 
+        delegate void DisplayOperationCallBack(string status, string epc, string data, string code);
+
         public Form1()
         {
             InitializeComponent();
@@ -49,7 +49,7 @@ namespace CardReaderWriter
         private void OnMessage(IWebSocketConnection socket, string message)
         {
             JObject jobj = JObject.Parse(message);
-            if (jobj["action"].ToString()=="write")
+            if (jobj["action"].ToString() == "write")
             {
                 //处理写卡流程
                 string data = jobj["data"].ToString().Trim();
@@ -91,7 +91,7 @@ namespace CardReaderWriter
                     }
                 }
             }
-            else if (jobj["action"].ToString()=="read")
+            else if (jobj["action"].ToString() == "read")
             {
                 //处理读卡流程
                 string epcString;
@@ -265,7 +265,7 @@ namespace CardReaderWriter
             if (RFID.Public.PublicFunction.ConnectJRM())
             {
                 Cursor.Current = Cursors.Default;
-                
+
                 System.Threading.Thread.Sleep(30);
 
                 if (RFID.Public.PublicFunction.GetPower())
@@ -320,12 +320,12 @@ namespace CardReaderWriter
             }
         }
 
-        private void DisplayOperation(string status,string epc, string data, string code)
+        private void DisplayOperation(string status, string epc, string data, string code)
         {
             if (this.lvOperation.InvokeRequired)
             {
                 DisplayOperationCallBack docb = new DisplayOperationCallBack(DisplayOperation);
-                this.Invoke(docb, new object[] { status,epc,data,code});
+                this.Invoke(docb, new object[] { status, epc, data, code });
             }
             else
             {
@@ -382,14 +382,14 @@ namespace CardReaderWriter
                 tagString = tagString.Substring(0, aaa);
 
                 pcString = tagString.Substring(0, 4);
-                
+
                 try { epcString = tagString.Substring(4, Convert.ToInt32(PublicFunction.len) * 4); }
                 catch { epcString = tagString.Substring(4, tagString.Length - 6); }
 
                 epc = epcString;
 
                 rssi = Convert.ToInt16(tagString.Substring(tagString.Length - 2, 2), 16);
-                if(rssi>127)
+                if (rssi > 127)
                 {
                     rssi = -((-rssi) & 0xff);
                 }
@@ -402,12 +402,12 @@ namespace CardReaderWriter
 
                 return "error_recognize";
             }
-            
+
             return tagString;
         }
 
 
-        private string WriteData(string epc,int mem, string start, string data)
+        private string WriteData(string epc, int mem, string start, string data)
         {
             if (!DemoPublic.Enabel_flg)
             {
@@ -428,7 +428,7 @@ namespace CardReaderWriter
 
             DemoPublic.sData = hexdata;
 
-            DemoPublic.bBank =(byte) mem;
+            DemoPublic.bBank = (byte)mem;
 
             byte Pc_len = (byte)(DemoPublic.sTag.Length / 2);
             byte[] bAdd = new byte[2];
@@ -461,7 +461,7 @@ namespace CardReaderWriter
                     return "error_write";
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return "error_" + e.Message;
             }
@@ -597,7 +597,7 @@ namespace CardReaderWriter
                 buffer[i / 2] = (byte)Convert.ToByte(s.Substring(i, 2), 16);
             return buffer;
         }
-        
+
         private void btnLogger_Click(object sender, EventArgs e)
         {
             string logfile = Environment.CurrentDirectory + "\\log4netfile.txt";
@@ -616,6 +616,47 @@ namespace CardReaderWriter
             {
                 //string value = ReadData(epcString);
                 //MessageBox.Show(value.Substring(value.IndexOf('_') + 1));
+            }
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+                notifyIcon1.Visible = true;
+            }
+            else
+            {
+                notifyIcon1.Visible = false;
+            }
+        }
+
+        private void tsmiShow_Click(object sender, EventArgs e)
+        {
+            Visible = true;
+            WindowState = FormWindowState.Normal;
+        }
+
+        private void tsmiClose_Click(object sender, EventArgs e)
+        {
+            btnDisconnect_Click(null, null);
+            Close();
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(MousePosition.X, MousePosition.Y);
+            }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                tsmiShow_Click(null, null);
             }
         }
     }
