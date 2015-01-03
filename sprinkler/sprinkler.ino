@@ -170,7 +170,7 @@ void loop()
 			String driverCode = cardHelper.parseDriverCode(driverCard);
 			String trunkPlate = cardHelper.parseTrunkPlate(trunkCard);
 
-			String url = SERVER_URL + "action=get&dispatchId=" + dispatchId;
+			String url = SERVER_URL + "action=get&timespan=" + String(millis(), HEX) + "&dispatchId=" + dispatchId;//加入时间戳，避免缓存
 			CONSOLE.println("Accessing " + url);
 
 			String value = sim.sendHttpRequest(1, url);
@@ -232,7 +232,7 @@ void loop()
 			String trunkId = msg.substring(index + 1, (index = msg.indexOf(',', index + 1)));
 			String volumn = msg.substring(index + 1);
 
-			String url = SERVER_URL + "action=save&dispatchId=" + dispatchId + "&driverId=" + driverId + "&trunkId=" + trunkId + "&address=" + DEVICE_CODE + "&volumn=" + volumn;
+			String url = SERVER_URL + "action=save&timespan=" + String(millis(), HEX) + "&dispatchId=" + dispatchId + "&driverId=" + driverId + "&trunkId=" + trunkId + "&address=" + DEVICE_CODE + "&volumn=" + volumn;
 			CONSOLE.println("Accessing " + url);
 
 			String value = sim.sendHttpRequest(1, url);
