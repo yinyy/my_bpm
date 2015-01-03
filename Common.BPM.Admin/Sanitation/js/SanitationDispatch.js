@@ -241,7 +241,6 @@ var CARD = {
                 return;
             }
 
-            alert(cardno);
             var kid = CARDClass.parseDispatchId(cardno);
             $.getJSON(actionURL, { json: JSON.stringify({ action: 'analyse_card', keyid: kid }) }, function (d) {
                 if (d == null) {

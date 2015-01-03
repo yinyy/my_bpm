@@ -25,26 +25,25 @@ namespace BPM.Admin.Sanitation.ashx
             switch (action)
             {
                 case "get":
-                    string time = context.Request.Params["time"];
                     dispatchId= Convert.ToInt32(context.Request.Params["dispatchId"]);
-                    
-                    DateTime st = DateTime.Parse(time);
-                    if (DateTime.Now.Date != st.Date)
+
+                    SanitationDispatchModel dispatchModel = SanitationDispatchBll.Instance.GetById(dispatchId);
+                    if (dispatchModel == null)
                     {
-                        context.Response.Write("error_date");//加水时间不对
+                        context.Response.Write("error_dispatch");//没有本次任务，提示数据错误
+                    }
+                    else if (DateTime.Now.Date != dispatchModel.Time.Date)
+                    {
+                        context.Response.Write("error_date");//加水的时间不对。
                     }
                     else
                     {
-                        //检查是否有本次调度任务
-                        if (SanitationDispatchBll.Instance.GetById(dispatchId) == null)
-                        {
-                            context.Response.Write("error_dispatch");
-                        }
-                        else
-                        {
-                            context.Response.Write("success_" + SanitationDetailBll.Instance.Get(st, dispatchId).Count());//如果正确，则查询今天已经加注的次数
-                        }
+                        int finished = SanitationDetailBll.Instance.Get(DateTime.Now, dispatchId).Count();//获取今天、当前任务的完成次数
+                        SanitationTrunkModel trunkModel = SanitationTrunkBll.Instance.GetById(dispatchModel.TrunkId);
+                        context.Response.Write(
+                            string.Format("success_{0},{1},{2},{3},{4}", dispatchModel.DriverId, dispatchModel.TrunkId, trunkModel.Volumn, dispatchModel.Workload, finished));//如果正确，则返回当前任务的司机编号、车辆编号、任务次数、已完成次数
                     }
+
                     break;
                 case "save":
                     dispatchId = Convert.ToInt32(context.Request.Params["dispatchId"]);
@@ -64,12 +63,13 @@ namespace BPM.Admin.Sanitation.ashx
                     dispatchId = SanitationDetailBll.Instance.Add(m);
                     if (dispatchId >= 0)
                     {
-                        context.Response.Write("success_saved_" + dispatchId);
+                        context.Response.Write("success_save_" + dispatchId);
                     }
                     else
                     {
-                        context.Response.Write("error_saved");
+                        context.Response.Write("error_save");
                     }
+
                     break;
                 default:
                     break;

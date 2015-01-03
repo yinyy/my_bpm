@@ -11,7 +11,6 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define _VMDEBUG 1
 #define ARDUINO 106
 #define ARDUINO_MAIN
 #define __AVR__
@@ -40,6 +39,7 @@ typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
 //
+bool allowReadCard();
 //
 
 #include "G:\Arduino\arduino-1.0.6\hardware\arduino\cores\arduino\arduino.h"
