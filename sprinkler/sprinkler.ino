@@ -12,16 +12,21 @@ PLC							m		n
 #include <SIM900A.h>
 #include <Led.h>
 
+
+//定义系统准备就绪
+#define SYSTEM_READY					"SYSTEM_READY"
+//定义系统错误
+#define SYSTEM_ERROR					"SYSTEM_ERROR"
 //SIM900A错误
-#define SIM900A_ERROR					"info_SIM900A_Error"
+#define SIM900A_ERROR					"SIM900A_Error"
 //SIM900AIP设置错误	
-#define SIM900A_IP_ERROR				"info_SIM900A_IP_Error"
+#define SIM900A_IP_ERROR				"SIM900A_IP_Error"
 //SIM900A连网网络
-#define SIM900A_CONNECTING_NETWORK		"info_SIM900A_Connecting_Network"
+#define SIM900A_CONNECTING_NETWORK		"SIM900A_Connecting_Network"
 //SIM900A信号不好
-#define SIM900A_SINGAL_QUALITY_WEAK		"info_SIM900A_SINGAL_WEAK"
+#define SIM900A_SINGAL_QUALITY_WEAK		"SIM900A_SINGAL_WEAK"
 //SIM900A装备就绪
-#define SIM900A_READY					"info_SIM900A_Ready"
+#define SIM900A_READY					"SIM900A_Ready"
 //定义任务日期错误
 #define ERROR_DATE						"error_date"
 //定义任务编号错误
@@ -47,10 +52,10 @@ PLC							m		n
 #define DEFAULT_BAUD					115200
 //定义循环读卡的时间间隔，默认5秒读一次卡
 #define DEFAULT_READ_INTERVAL			5000
-
-
 //定义PLC的是否可以接收数据的管脚
 #define PLC_ALLOW_DATA_PIN				35
+//定义SIM900A的PWR_KEY
+#define SIM900A_PWR_KEY_PIN				49
 
 
 //记录上一次读卡的时间
@@ -69,15 +74,19 @@ String DEVICE_CODE = "A002";
 String SERVER_URL = "http://221.2.232.82:8766/Sanitation/ashx/SanitationHandler.ashx?";
 //是否允许读卡，低电平有效
 int bAllowReadCard;
-
 //定义CardHelper对象
 CardHelperClass cardHelper;
 
 void setup()
 {
-	/*先执行高电平的操作，使得SIM900A模块启动，现在不能保证模块成功启动*/
-	//延迟
-	delay(0);
+	//等待SIM900A加电
+	pinMode(SIM900A_PWR_KEY_PIN, OUTPUT);
+	digitalWrite(SIM900A_PWR_KEY_PIN, HIGH);
+	delay(500);
+
+	//延迟5秒，模拟按键，启动SIM900A模块
+	digitalWrite(SIM900A_PWR_KEY_PIN, LOW);
+	delay(5000);
 
 	//Arduino准备
 	CONSOLE.begin(DEFAULT_BAUD);
@@ -97,7 +106,7 @@ void setup()
 
 	//判断SIM900A是否准备就绪
 	if (!sim.isReady()){
-		PLC.println(SIM900A_ERROR);
+		PLC.println(SYSTEM_ERROR);
 		CONSOLE.println(SIM900A_ERROR);
 
 		//SIM900A模块无法启动，程序停止
@@ -107,19 +116,19 @@ void setup()
 
 	//检查信号状态
 	uint8_t sq = sim.checkSignal();
+	CONSOLE.println("SIM900A Singal Regular:" + String(sq));
 	//如果信号质量小于n，即判断无法获得信号
 	if (sq < 5 || sq == 99){
-		PLC.println(SIM900A_SINGAL_QUALITY_WEAK);
-		CONSOLE.println("SIM900A Singal Quality:" + String(sq));
-
+		PLC.println(SYSTEM_ERROR);
+		
 		//SIM900A信号太弱，无法连接网络
 		while (true);
 	}
-	CONSOLE.println("SIM900A Singal Regular:" + String(sq));
 	
 	//打开IP应用
 	do{
-		PLC.println(SIM900A_CONNECTING_NETWORK);
+		CONSOLE.println(SIM900A_CONNECTING_NETWORK);
+
 		int cs = sim.checkContextStatus(1);
 		if (cs == Context_Status_Connected){
 			break;
@@ -128,15 +137,14 @@ void setup()
 			sim.openContext(1);
 		}
 		else{
-			//Context_Status_Closing或者Context_Status_Connecting时，等待即可。
-			;
+			;//Context_Status_Closing或者Context_Status_Connecting时，等待即可。
 		}
 
 		delay(1000);
 	} while (1);
 	 
 	//SIM900A进入工作状态
-	PLC.println(SIM900A_READY);
+	PLC.println(SYSTEM_READY);
 	CONSOLE.println("SIM900A IP Context 1 Ready.");
 
 	pinMode(PLC_ALLOW_DATA_PIN, INPUT);
