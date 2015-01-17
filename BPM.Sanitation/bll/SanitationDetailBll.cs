@@ -35,9 +35,9 @@ namespace Sanitation.Bll
             return SanitationDetailDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);
         }
 
-        public IEnumerable<SanitationDetailModel>  Get(DateTime time, int dispatchId)
+        public IEnumerable<SanitationDetailModel> Get(int dispatchId)
         {
-            return SanitationDetailDal.Instance.GetWhere(new { ReferDispatchId = dispatchId }).Where(a => a.Time.Date == time.Date);
+            return SanitationDetailDal.Instance.GetWhere(new { DispatchId = dispatchId });
         }
     }
 }

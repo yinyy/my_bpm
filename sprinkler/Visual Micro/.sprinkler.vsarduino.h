@@ -45,4 +45,6 @@ bool allowReadCard();
 #include "G:\Arduino\arduino-1.0.6\hardware\arduino\cores\arduino\arduino.h"
 #include "G:\Arduino\arduino-1.0.6\hardware\arduino\variants\mega\pins_arduino.h" 
 #include "G:\Working\Sanitation.BPM\sprinkler\sprinkler.ino"
+#include "G:\Working\Sanitation.BPM\sprinkler\Plc.cpp"
+#include "G:\Working\Sanitation.BPM\sprinkler\Plc.h"
 #endif

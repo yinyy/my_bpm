@@ -18,20 +18,8 @@ namespace Sanitation.Model
 		public int KeyId { get; set; }
 
         [Description("参考SanitationDispatch的KeyId")]
-        public int ReferDispatchId { get; set; }
+        public int DispatchId { get; set; }
 
-		/// <summary>
-		/// 姓名
-		/// </summary>
-		[Description("姓名")]
-		public int DriverId { get; set; }
-      
-		/// <summary>
-		/// 车牌号
-		/// </summary>
-		[Description("车牌号")]
-		public int TrunkId { get; set; }
-      
 		/// <summary>
 		/// 时间
 		/// </summary>

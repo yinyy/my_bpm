@@ -7,45 +7,14 @@ PLC							m		n
 
 /*定义系统常量*/
 //SIM900A发生错误
+#include "Plc.h"
 #include <JR5815.h>
 #include <CardHelper.h>
 #include <SIM900A.h>
 #include <Led.h>
 
-
-//定义系统准备就绪
-#define SYSTEM_READY					"SYSTEM_READY"
-//定义系统错误
-#define SYSTEM_ERROR					"SYSTEM_ERROR"
-//SIM900A错误
-#define SIM900A_ERROR					"SIM900A_Error"
-//SIM900AIP设置错误	
-#define SIM900A_IP_ERROR				"SIM900A_IP_Error"
-//SIM900A连网网络
-#define SIM900A_CONNECTING_NETWORK		"SIM900A_Connecting_Network"
-//SIM900A信号不好
-#define SIM900A_SINGAL_QUALITY_WEAK		"SIM900A_SINGAL_WEAK"
-//SIM900A装备就绪
-#define SIM900A_READY					"SIM900A_Ready"
-//定义任务日期错误
-#define ERROR_DATE						"error_date"
-//定义任务编号错误
-#define ERROR_DISPATCH					"error_dispatch"
-//定义其它错误
-#define ERROR_OTHER						"error_other"
-//定义车辆错误
-#define ERROR_TRUNK						"error_trunk"
-//定义人员错误
-#define ERROR_DRIVER					"error_driver"
-//定义保存操作成功
-#define SUCCESS_SAVE					"success_save"
-
-
-
 //信号质量的最小值
 #define SINGAL_QUALITY					5
-//定义PLC使用的串口
-#define PLC								Serial3
 //定义调试使用的端口
 #define CONSOLE							Serial
 //定义默认的波特率
@@ -55,7 +24,7 @@ PLC							m		n
 //定义PLC的是否可以接收数据的管脚
 #define PLC_ALLOW_DATA_PIN				35
 //定义SIM900A的PWR_KEY
-#define SIM900A_PWR_KEY_PIN				49
+#define SIM900A_PWR_KEY_PIN				36
 
 
 //记录上一次读卡的时间
@@ -68,6 +37,8 @@ String driverCard;
 JR5815Class reader;
 //SIM900A
 SIM900AClass sim;
+//定义PLC设备
+PlcClass plc;
 //设备编号
 String DEVICE_CODE = "A002";
 //服务器地址
@@ -76,6 +47,7 @@ String SERVER_URL = "http://221.2.232.82:8766/Sanitation/ashx/SanitationHandler.
 int bAllowReadCard;
 //定义CardHelper对象
 CardHelperClass cardHelper;
+
 
 void setup()
 {
@@ -90,24 +62,26 @@ void setup()
 
 	//Arduino准备
 	CONSOLE.begin(DEFAULT_BAUD);
-	PLC.begin(DEFAULT_BAUD);
 	Serial1.begin(DEFAULT_BAUD);//SIM900A
 	Serial2.begin(DEFAULT_BAUD);//JR5815
-	
+	Serial3.begin(DEFAULT_BAUD);//PLC
+
 	while (!Serial1);
 	while (!Serial2);
+	while (!Serial3); 
 	while (!CONSOLE);
-	while (!PLC);
 	
 	//用Serial1控制SIM900A
 	sim.init(&Serial1, true);
 	//用Serial2控制玖锐5815
 	reader.init(&Serial2, true);
+	//用Serial3控制PLC
+	plc.init(&Serial3);
 
 	//判断SIM900A是否准备就绪
 	if (!sim.isReady()){
-		PLC.println(SYSTEM_ERROR);
-		CONSOLE.println(SIM900A_ERROR);
+		plc.send(PlcInfoType_error);
+		CONSOLE.println("SIM900A_ERROR");
 
 		//SIM900A模块无法启动，程序停止
 		while (true);
@@ -119,7 +93,7 @@ void setup()
 	CONSOLE.println("SIM900A Singal Regular:" + String(sq));
 	//如果信号质量小于n，即判断无法获得信号
 	if (sq < 5 || sq == 99){
-		PLC.println(SYSTEM_ERROR);
+		plc.send(PlcInfoType_date);
 		
 		//SIM900A信号太弱，无法连接网络
 		while (true);
@@ -127,7 +101,7 @@ void setup()
 	
 	//打开IP应用
 	do{
-		CONSOLE.println(SIM900A_CONNECTING_NETWORK);
+		CONSOLE.println("SIM900A_CONNECTING_NETWORK");
 
 		int cs = sim.checkContextStatus(1);
 		if (cs == Context_Status_Connected){
@@ -144,7 +118,7 @@ void setup()
 	} while (1);
 	 
 	//SIM900A进入工作状态
-	PLC.println(SYSTEM_READY);
+	plc.send(PlcInfoType_ready);
 	CONSOLE.println("SIM900A IP Context 1 Ready.");
 
 	pinMode(PLC_ALLOW_DATA_PIN, INPUT);
@@ -177,6 +151,8 @@ void loop()
 			unsigned long dispatchId = cardHelper.parseDispatchId(driverCard);
 			String driverCode = cardHelper.parseDriverCode(driverCard);
 			String trunkPlate = cardHelper.parseTrunkPlate(trunkCard);
+			trunkPlate = trunkPlate.substring(1);
+
 
 			String url = SERVER_URL + "action=get&timespan=" + String(millis(), HEX) + "&dispatchId=" + dispatchId;//加入时间戳，避免缓存
 			CONSOLE.println("Accessing " + url);
@@ -185,76 +161,73 @@ void loop()
 			CONSOLE.println(value);
 			if (value.startsWith("success_")){
 				//获取足够的信息进行验证
-				//"success_{0},{1},{2},{3},{4}", dispatchModel.DriverId, dispatchModel.TrunkId, trunkModel.Volumn, dispatchModel.Workload, finished
+				//"success_{0},{1},{2},{3},{4},{5},{6}", dispatchModel.DriverId, dispatchModel.TrunkId, trunkModel.Volumn, dispatchModel.Workload, finished, potenct, kind
 				value = value.substring(value.indexOf('_') + 1);
 				value.trim();
 
 				int index;
-				String sDriverId= value.substring(0, (index = value.indexOf(',')));
-				String sTrunkId = value.substring(index + 1, (index = value.indexOf(',', index+1)));
+				String sDriverId = value.substring(0, (index = value.indexOf(',')));
+				String sTrunkId = value.substring(index + 1, (index = value.indexOf(',', index + 1)));
 				String sVolumn = value.substring(index + 1, (index = value.indexOf(',', index + 1)));
 				String sWorkload = value.substring(index + 1, (index = value.indexOf(',', index + 1)));
-				String sFinished = value.substring(index + 1);
+				String sFinished = value.substring(index + 1, (index = value.indexOf(',', index + 1)));
+				String sPotency = value.substring(index + 1, (index = value.indexOf(',', index + 1)));
+				String sKind = value.substring(index + 1);
 
 				if (String(driverId) != sDriverId){
 					//任务定义的人员与读卡得到的人员不一致
-					PLC.println(ERROR_DRIVER);
+					plc.send(PlcInfoType_driver);
 				}
 				else if (String(trunkId) != sTrunkId){
 					//任务定义的车辆与读卡得到的车辆不一致
-					PLC.println(ERROR_TRUNK);
+					plc.send(PlcInfoType_trunk);
 				}
 				else{
 					//通过了验证，将必要的信息发送给PLC
-					String msg = "work_" + sDriverId + "," + driverCode + "," + sTrunkId + "," + trunkPlate + "," + sVolumn + "," + sWorkload + "," + sFinished;
-					PLC.println(msg);
+					plc.send(dispatchId, driverCode, trunkPlate, int(sVolumn.toFloat() * 10), sWorkload.toInt(), sFinished.toInt(), sPotency.toFloat(), sKind);
 				}
 			}
 			else if (value == "error_date"){
 				//不是当前日期
-				PLC.println(ERROR_DATE);
+				plc.send(PlcInfoType_date);
 			}
 			else if (value == "error_dispatch"){
 				//没有相应的调度任务
-				PLC.println(ERROR_DISPATCH);
+				plc.send(PlcInfoType_dispatch);
 			}
 			else{
 				//其它错误
-				PLC.println(ERROR_OTHER);
+				plc.send(PlcInfoType_unknow);
 			}
 		}
 	}
-	else if (PLC.available() > 0){
-		//返回的数据格式应用为：
-		//save,dispatchId,driverId,trunkId,volumn
-		//save,25,4,9,13.8
-		String msg = PLC.readString();
-		msg.trim();
 
-		if (msg.startsWith("save,")){
-			msg = msg.substring(5);
+	//处理PLC返回的数据
+	String msg = plc.read();
+	if (msg != "" && msg.startsWith("010306")){
+		//完成操作
+		char cs[9];
+		msg.substring(6, 14).toCharArray(cs, 9, 0);
+		String dispatchId = String(strtol(cs, NULL, 16), DEC);
+		
+		msg.substring(14, 18).toCharArray(cs, 5, 0);
+		uint16_t v = (uint16_t)strtol(cs, NULL, 16);
+		String volumn = String(v*1.0 / 10);
 
-			int index;
-			String dispatchId = msg.substring(0, (index = msg.indexOf(',')));
-			String driverId = msg.substring(index + 1, (index = msg.indexOf(',', index + 1)));
-			String trunkId = msg.substring(index + 1, (index = msg.indexOf(',', index + 1)));
-			String volumn = msg.substring(index + 1);
+		String url = SERVER_URL + "action=save&timespan=" + String(millis(), HEX) + "&dispatchId=" + dispatchId + "&address=" + DEVICE_CODE + "&volumn=" + volumn;
+		CONSOLE.println("Accessing " + url);
 
-			String url = SERVER_URL + "action=save&timespan=" + String(millis(), HEX) + "&dispatchId=" + dispatchId + "&driverId=" + driverId + "&trunkId=" + trunkId + "&address=" + DEVICE_CODE + "&volumn=" + volumn;
-			CONSOLE.println("Accessing " + url);
-
-			String value = sim.sendHttpRequest(1, url);
-			CONSOLE.println(value);
-			if (value.startsWith("success_save")){
-				//成功保存工作量，通知PLC
-				PLC.println(SUCCESS_SAVE);
-				CONSOLE.println(SUCCESS_SAVE);
-			}
-			else{
-				//其它错误
-				PLC.println(ERROR_OTHER);
-				CONSOLE.println(ERROR_OTHER);
-			}
+		String value = sim.sendHttpRequest(1, url);
+		CONSOLE.println(value);
+		if (value.startsWith("success_save")){
+			//成功保存工作量，通知PLC
+			plc.send(PlcInfoType_uploaded);
+			CONSOLE.println("SUCCESS_SAVE");
+		}
+		else{
+			//其它错误
+			plc.send(PlcInfoType_unknow);
+			CONSOLE.println("ERROR_OTHER");
 		}
 	}
 }

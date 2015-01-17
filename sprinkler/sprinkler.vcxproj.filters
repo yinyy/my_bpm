@@ -16,13 +16,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="sprinkler.ino" />
+    <None Include="F:\MyDocuments\Desktop\协议.docx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.sprinkler.vsarduino.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Plc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Plc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

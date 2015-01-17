@@ -115,7 +115,7 @@ namespace BPM.Admin.Sanitation.ashx
                             Plate = tm.Plate,
                             Workload = d.Workload,
                             Time = d.Time.ToString("yyyy年MM月dd日"),
-                            Finished = SanitationDetailBll.Instance.Get(d.Time, d.KeyId).Count()
+                            Finished = SanitationDetailBll.Instance.Get(d.KeyId).Count()
                         };
 
                         context.Response.Write(JSONhelper.ToJson(obj));

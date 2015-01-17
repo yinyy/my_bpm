@@ -38,27 +38,23 @@ namespace BPM.Admin.Sanitation.ashx
                     }
                     else
                     {
-                        int finished = SanitationDetailBll.Instance.Get(DateTime.Now, dispatchId).Count();//获取今天、当前任务的完成次数
+                        int finished = SanitationDetailBll.Instance.Get(dispatchId).Count();//获取今天、当前任务的完成次数
                         SanitationTrunkModel trunkModel = SanitationTrunkBll.Instance.GetById(dispatchModel.TrunkId);
                         context.Response.Write(
-                            string.Format("success_{0},{1},{2},{3},{4}", dispatchModel.DriverId, dispatchModel.TrunkId, trunkModel.Volumn, dispatchModel.Workload, finished));//如果正确，则返回当前任务的司机编号、车辆编号、任务次数、已完成次数
+                            string.Format("success_{0},{1},{2},{3},{4},{5},{6}", dispatchModel.DriverId, dispatchModel.TrunkId, trunkModel.Volumn, dispatchModel.Workload, finished, 2, "KIND"));//如果正确，则返回当前任务的司机编号、车辆编号、任务次数、已完成次数
                     }
 
                     break;
                 case "save":
                     dispatchId = Convert.ToInt32(context.Request.Params["dispatchId"]);
-                    int  driverId =Convert.ToInt32( context.Request.Params["driverId"]);
-                    int trunkId= Convert.ToInt32(context.Request.Params["trunkId"]);
                     decimal volumn = Convert.ToDecimal(context.Request.Params["volumn"]);
                     string address = context.Request.Params["address"];
 
                     SanitationDetailModel m = new SanitationDetailModel();
                     m.Address = address;
-                    m.DriverId = driverId;
                     m.Time = DateTime.Now;
-                    m.TrunkId = trunkId;
                     m.Volumn = volumn;
-                    m.ReferDispatchId = dispatchId;
+                    m.DispatchId = dispatchId;
 
                     dispatchId = SanitationDetailBll.Instance.Add(m);
                     if (dispatchId >= 0)
