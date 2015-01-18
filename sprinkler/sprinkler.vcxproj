@@ -73,10 +73,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="F:\MyDocuments\Desktop\协议.docx" />
     <None Include="sprinkler.ino">
       <FileType>CppCode</FileType>
     </None>
+    <None Include="protocal.docx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Plc.h" />

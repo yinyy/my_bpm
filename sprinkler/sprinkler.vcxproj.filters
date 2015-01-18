@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="sprinkler.ino" />
-    <None Include="F:\MyDocuments\Desktop\协议.docx" />
+    <None Include="protocal.docx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.sprinkler.vsarduino.h">
