@@ -99,6 +99,10 @@ void PlcClass::send(unsigned long keyid, String code, String plate, uint16_t vol
 	this->write(bs, 25);
 }
 
+void PlcClass::send(byte* bs, int len){
+	this->write(bs, len);
+}
+
 void PlcClass::write(byte* bs, uint8_t len){
 	word value = this->crc(bs, len);
 	char crc1 = value & 0xff;
@@ -134,8 +138,14 @@ word PlcClass::crc(byte* bs, uint8_t len){
 
 String PlcClass::read(){
 	if (xStream->available() > 0){
-		char bs[1024];
-		int len = xStream->readBytes(bs, 1024);
+		String msg = xStream->readString();
+		msg.trim();
+		byte bs[1024];
+		int len = msg.length();
+		for (int i = 0; i < len; i++){
+			bs[i] = msg.charAt(i);
+		}
+
 		if (this->isValidData(bs, len)){
 			String data = "";
 
@@ -157,7 +167,7 @@ String PlcClass::read(){
 	return "";
 }
 
-bool PlcClass::isValidData(char* bs, int len){
+bool PlcClass::isValidData(byte* bs, int len){
 	if (checkCrc(bs, len) && checkLength(bs, len)){
 		return true;
 	}
@@ -165,27 +175,11 @@ bool PlcClass::isValidData(char* bs, int len){
 	return false;
 }
 
-bool PlcClass::checkCrc(char* bs, int len){
-	word value = 0xffff;
+bool PlcClass::checkCrc(byte* bs, int len){
+	word value = this->crc(bs, len - 2);
 
-	for (int i = 0; i < len - 2; i++){
-		char c = bs[i];
-
-		value = value^ c;
-
-		for (int i = 0; i < 8; i++){
-			if (value & 0x0001 == 0x0001){
-				value = value >> 1;
-				value = value ^ 0xa001;
-			}
-			else{
-				value = value >> 1;
-			}
-		}
-	}
-
-	char crc1 = value & 0xff;
-	char crc2 = (value & 0xff00) >> 8;
+	byte crc1 = value & 0xff;
+	byte crc2 = (value & 0xff00) >> 8;
 
 	if ((crc1 == bs[len - 2]) && (crc2 == bs[len - 1])){
 		return true;
@@ -194,7 +188,7 @@ bool PlcClass::checkCrc(char* bs, int len){
 	return false;
 }
 
-bool PlcClass::checkLength(char* bs, int len){
+bool PlcClass::checkLength(byte* bs, int len){
 	int l = bs[2];
 	if (len == l + 5){//2个字节的CRC校验，1个字节的目标地址，1个字节的命令码，1个字节的数据长度
 		return true;

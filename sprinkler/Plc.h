@@ -32,15 +32,16 @@ private:
 	void write(byte* bs, uint8_t len);
 	word crc(byte* bs, uint8_t len);
 	Stream* xStream;
-	bool checkCrc(char* bs, int len);
-	bool checkLength(char* bs, int len);
+	bool checkCrc(byte* bs, int len);
+	bool checkLength(byte* bs, int len);
 
 public:
 	void init(Stream* xStream);
 	void send(PlcInfoType type);
 	void send(unsigned long keyid, String code, String plate, uint16_t volumn, uint16_t planed, uint16_t finished, uint16_t potency, String kind);
+	void send(byte* bs, int len);
 	String read();
-	bool isValidData(char* bs, int len);
+	bool isValidData(byte* bs, int len);
 };
 
 extern PlcClass Plc;

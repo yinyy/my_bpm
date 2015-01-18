@@ -19,6 +19,8 @@ PLC							m		n
 #define CONSOLE							Serial
 //定义默认的波特率
 #define DEFAULT_BAUD					115200
+//定义PLC默认的波特率
+#define DEFAULT_BAUD_PLC				9600
 //定义循环读卡的时间间隔，默认5秒读一次卡
 #define DEFAULT_READ_INTERVAL			5000
 //定义PLC的是否可以接收数据的管脚
@@ -66,7 +68,7 @@ void setup()
 	CONSOLE.begin(DEFAULT_BAUD);
 	Serial1.begin(DEFAULT_BAUD);//SIM900A
 	Serial2.begin(DEFAULT_BAUD);//JR5815
-	Serial3.begin(9600);//PLC
+	Serial3.begin(DEFAULT_BAUD_PLC);//PLC
 
 	while (!Serial1);
 	while (!Serial2);
