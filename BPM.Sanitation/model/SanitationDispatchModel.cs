@@ -40,7 +40,11 @@ namespace Sanitation.Model
 		/// </summary>
 		[Description("次数")]
 		public int Workload { get; set; }
-      
+
+        [Description("加注类型")]
+        public int KindId { get; set; }
+        [Description("浓度")]
+        public int Potency { get; set; }
 		/// <summary>
 		/// 备注
 		/// </summary>

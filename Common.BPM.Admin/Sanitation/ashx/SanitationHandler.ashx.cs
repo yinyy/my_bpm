@@ -5,6 +5,9 @@ using System.Web;
 
 using Sanitation.Bll;
 using Sanitation.Model;
+using BPM.Core.Model;
+using BPM.Core.Bll;
+using BPM.Core.Dal;
 
 namespace BPM.Admin.Sanitation.ashx
 {
@@ -41,7 +44,12 @@ namespace BPM.Admin.Sanitation.ashx
                         int finished = SanitationDetailBll.Instance.Get(dispatchId).Count();//获取今天、当前任务的完成次数
                         SanitationTrunkModel trunkModel = SanitationTrunkBll.Instance.GetById(dispatchModel.TrunkId);
                         context.Response.Write(
-                            string.Format("success_{0},{1},{2},{3},{4},{5},{6}", dispatchModel.DriverId, dispatchModel.TrunkId, trunkModel.Volumn, dispatchModel.Workload, finished, 2, "KIND"));//如果正确，则返回当前任务的司机编号、车辆编号、任务次数、已完成次数
+                            string.Format("success_{0},{1},{2},{3},{4},{5},{6}",
+                            dispatchModel.DriverId, 
+                            dispatchModel.TrunkId,
+                            trunkModel.Volumn, 
+                            dispatchModel.Workload,
+                            finished, dispatchModel.Potency, DicDal.Instance.Get(dispatchModel.KindId).Code));//如果正确，则返回当前任务的司机编号、车辆编号、任务次数、已完成次数
                     }
 
                     break;

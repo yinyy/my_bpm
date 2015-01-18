@@ -1,8 +1,10 @@
 <form id="uiform"><table class="grid">
-<tr><td>日期：</td><td><input type="text" id="txt_Time" name="Time" class="easyui-datebox" style="width: 186px;" data-options="required:true, editable:false" /></td></tr>
-<tr><td>姓名：</td><td><input type="text" id="txt_DriverId" name="DriverId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationDriverHandler.ashx?json={action:\'combobox\'}'" style="width: 186px;" /></td></tr>
-<tr><td>车辆：</td><td><input type="text" id="txt_TrunkId" name="TrunkId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationtrunkHandler.ashx?json={action:\'combobox\'}'" style="width:186px;" /></td></tr>
-<tr><td>次数：</td><td><input type="text" id="txt_Workload" name="Workload" class="easyui-numberbox" data-options="required:true, min:0, precision:0" style="width: 182px;"/></td></tr>
-<tr><td>生效：</td><td><input type="checkbox" id="txt_Enabled" name="Enabled" value="是" />&nbsp;（<font color="red">生效后不能修改、不能删除!</font>）</td></tr>
-<tr><td>备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 310px; height: 80px;"></textarea></td></tr>
+    <tr><td>日期：</td><td><input type="text" id="txt_Time" name="Time" class="easyui-datebox" style="width: 186px;" data-options="required:true, editable:false" /></td></tr>
+    <tr><td>姓名：</td><td><input type="text" id="txt_DriverId" name="DriverId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationDriverHandler.ashx?json={action:\'combobox\'}'" style="width: 186px;" /></td></tr>
+    <tr><td>车辆：</td><td><input type="text" id="txt_TrunkId" name="TrunkId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationtrunkHandler.ashx?json={action:\'combobox\'}'" style="width:186px;" /></td></tr>
+    <tr><td>次数：</td><td><input type="text" id="txt_Workload" name="Workload" class="easyui-numberbox" data-options="required:true, min:0, precision:0" style="width: 182px;" /></td></tr>
+    <tr><td>类型：</td><td><input type="text" id="txt_KindId" name="KindId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/sys/ashx/DicHandler.ashx?action=code&code=trunk_kind'" style="width:186px;" /></td></tr>
+    <tr><td>浓度：</td><td><input type="text" id="txt_Potency" name="Potency" class="easyui-numberbox" data-options="required:true, min:0, max:1000, precision:0" style="width: 170px;" />‰</td></tr>
+    <tr><td>生效：</td><td><input type="checkbox" id="txt_Enabled" name="Enabled" value="是" />&nbsp;（<font color="red">生效后不能修改、不能删除!</font>）</td></tr>
+    <tr><td>备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 310px; height: 80px;"></textarea></td></tr>
 </table></form>

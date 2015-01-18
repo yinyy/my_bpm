@@ -44,8 +44,13 @@ var grid = {
 		            return v + '[' + r.Code + ']';
 		        }
 		    },
-		    {title:'车辆',field:'Plate',width:120, align:'center'},
+		    { title: '车辆', field: 'Plate', width: 120, align: 'center' },
 		    { title: '次数', field: 'Workload', width: 80, align: 'right' },
+		    { title: '车载类型', field: 'Kind', width: 120, align: 'center' },
+		    {
+		        title: '加注浓度', field: 'Potency', width: 120, align: 'right', formatter: function (v, r, i) {
+		            return v + '‰';
+		        }},
             {
                 title: '是否生效', field: 'Enabled', width: 80, align: 'center', formatter: function (v, r, i) {
                     if (v=='是') {
@@ -84,7 +89,7 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 400, height: 353, href:formurl, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 400, height: 423, href:formurl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {

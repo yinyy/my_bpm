@@ -41,11 +41,17 @@ var grid = {
                 }
             },
 		    { title: '车牌号', field: 'Plate', width: 120, align: 'center' },
+		    { title: '车载类型', field: 'Kind', width: 120, align: 'center' },
 		    {
 		        title: '加注量', field: 'Volumn', width: 120, align: 'right', formatter: function (v, r, i) {
 		            return v + ' m³';
 		        }
-		    }
+		    },
+            {
+                title: '加注浓度', field: 'Potency', width: 120, align: 'right', formatter: function (v, r, i) {
+                    return v+' ‰';
+                }
+            }
             ]],
             pagination: true,
             pageSize: PAGESIZE,

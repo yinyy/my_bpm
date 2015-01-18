@@ -39,14 +39,16 @@ JR5815Class reader;
 SIM900AClass sim;
 //定义PLC设备
 PlcClass plc;
-//设备编号
-String DEVICE_CODE = "A002";
 //服务器地址
 String SERVER_URL = "http://221.2.232.82:8766/Sanitation/ashx/SanitationHandler.ashx?";
 //是否允许读卡，低电平有效
 int bAllowReadCard;
 //定义CardHelper对象
 CardHelperClass cardHelper;
+
+
+//设备编号
+String DEVICE_CODE = "A002";
 
 
 void setup()
@@ -64,7 +66,7 @@ void setup()
 	CONSOLE.begin(DEFAULT_BAUD);
 	Serial1.begin(DEFAULT_BAUD);//SIM900A
 	Serial2.begin(DEFAULT_BAUD);//JR5815
-	Serial3.begin(DEFAULT_BAUD);//PLC
+	Serial3.begin(9600);//PLC
 
 	while (!Serial1);
 	while (!Serial2);
@@ -153,7 +155,6 @@ void loop()
 			String trunkPlate = cardHelper.parseTrunkPlate(trunkCard);
 			trunkPlate = trunkPlate.substring(1);
 
-
 			String url = SERVER_URL + "action=get&timespan=" + String(millis(), HEX) + "&dispatchId=" + dispatchId;//加入时间戳，避免缓存
 			CONSOLE.println("Accessing " + url);
 
@@ -184,7 +185,7 @@ void loop()
 				}
 				else{
 					//通过了验证，将必要的信息发送给PLC
-					plc.send(dispatchId, driverCode, trunkPlate, int(sVolumn.toFloat() * 10), sWorkload.toInt(), sFinished.toInt(), sPotency.toFloat(), sKind);
+					plc.send(dispatchId, driverCode, trunkPlate, int(sVolumn.toFloat() * 10), sWorkload.toInt(), sFinished.toInt(), sPotency.toFloat(), "lhs");
 				}
 			}
 			else if (value == "error_date"){
@@ -200,11 +201,13 @@ void loop()
 				plc.send(PlcInfoType_unknow);
 			}
 		}
+
+		lastReadMillis = millis();
 	}
 
 	//处理PLC返回的数据
 	String msg = plc.read();
-	if (msg != "" && msg.startsWith("010306")){
+	if (msg != "" && msg.startsWith("020306")){
 		//完成操作
 		char cs[9];
 		msg.substring(6, 14).toCharArray(cs, 9, 0);

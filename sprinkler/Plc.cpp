@@ -10,7 +10,7 @@ void PlcClass::init(Stream* xStream)
 }
 
 void PlcClass::send(PlcInfoType type){
-	byte bs[5]={ 0x01, 0x06, 0x02, 0x00, 0x00 };
+	byte bs[5]={ 0x02, 0x06, 0x02, 0x00, 0x00 };
 
 	if (type == PlcInfoType_error){
 		bs[4] = 0x00;
@@ -45,7 +45,7 @@ void PlcClass::send(PlcInfoType type){
 
 void PlcClass::send(unsigned long keyid, String code, String plate, uint16_t volumn, uint16_t planed, uint16_t finished, uint16_t potency, String kind){
 	//				4字节				 4字节		  5字节			2字节			 2字节			  2字节				 2字节			   1字节
-	byte bs[25] = {0x01, 0x10, 0x16};
+	byte bs[25] = {0x02, 0x08, 0x16};
 
 	//任务编号keyid
 	bs[3] = (keyid & 0xff000000)>>24;
@@ -83,11 +83,17 @@ void PlcClass::send(unsigned long keyid, String code, String plate, uint16_t vol
 	bs[23] = potency & 0xff;
 
 	//车载类型
-	if (kind == ""){
+	if (kind == "lhs"){
 		bs[24] = 0x01;
 	}
-	else{
+	else if(kind=="nys"){
 		bs[24] = 0x02;
+	}
+	else if (kind == "fls"){
+		bs[24] = 0x03;
+	}
+	else{
+		bs[24] = 0x01;
 	}
 
 	this->write(bs, 25);
@@ -107,7 +113,7 @@ void PlcClass::write(byte* bs, uint8_t len){
 word PlcClass::crc(byte* bs, uint8_t len){
 	word value = 0xffff;
 
-	for (int j = 0; j < 5; j++){
+	for (int j = 0; j < len; j++){
 		value = value^ bs[j];
 
 		for (int i = 0; i < 8; i++){
