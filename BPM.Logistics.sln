@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.Admin", "Common.BPM.Adm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.Core", "Common.BPM.Core\BPM.Core.csproj", "{A2EE0C6C-76C5-49C5-BCA6-0BC862ECA195}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailScanner", "EmailScanner\EmailScanner.csproj", "{DF98D603-FD09-486A-B6EE-4138608805BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.Logistics", "BPM.Logistics\BPM.Logistics.csproj", "{8ECC21F8-31D6-4CEE-98E6-36F1EAFF4087}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{A2EE0C6C-76C5-49C5-BCA6-0BC862ECA195}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2EE0C6C-76C5-49C5-BCA6-0BC862ECA195}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2EE0C6C-76C5-49C5-BCA6-0BC862ECA195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF98D603-FD09-486A-B6EE-4138608805BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF98D603-FD09-486A-B6EE-4138608805BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF98D603-FD09-486A-B6EE-4138608805BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF98D603-FD09-486A-B6EE-4138608805BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ECC21F8-31D6-4CEE-98E6-36F1EAFF4087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ECC21F8-31D6-4CEE-98E6-36F1EAFF4087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ECC21F8-31D6-4CEE-98E6-36F1EAFF4087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ECC21F8-31D6-4CEE-98E6-36F1EAFF4087}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

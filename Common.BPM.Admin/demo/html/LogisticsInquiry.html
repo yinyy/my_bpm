@@ -1,0 +1,12 @@
+<form id="uiform"><input type="hidden" id="txt_Status" name="Status"/><table class="grid">
+<tr><td>询价人：</td><td><input type="text" id="txt_Inquirer" name="Inquirer" class="txt03"/></td><td>询价时间：</td><td><input type="text" id="txt_Published" name="Published" class="txt03" readonly="readonly" /></td></tr>
+<tr><td>货物名称：</td><td colspan="3"><input type="text" id="txt_Cargo" name="Cargo" class="txt03" style="width: 479px;"/></td></tr>
+<tr><td>柜数：</td><td><input type="text" id="txt_Amount" name="Amount" class="txt03" style="width:153px"/></td><td>单柜毛重：</td><td><input type="text" id="txt_Weight" name="Weight" class="txt03" />KG</td></tr>
+<tr><td>类型：</td><td><input type="text" id="txt_Kind" name="Kind" class="txt03" /></td><td>包装：</td><td><input type="text" id="txt_Packing" name="Packing" class="txt03" /></td></tr>
+<tr><td>目的港：</td><td><input type="text" id="txt_Port" name="Port" class="txt03" /></td><td>免费箱使：</td><td><input type="text" id="txt_Freebox" name="Freebox" class="txt03" style="width:153px" />天</td></tr>
+<tr><td>ETD：</td><td><input type="text" id="txt_Etd" name="Etd" class="txt03" /></td><td>ETA：</td><td><input type="text" id="txt_Eta" name="Eta" class="txt03" /></td></tr>
+<tr><td>报价截止日期：</td><td colspan="3"><input type="text" id="txt_Ended" name="Ended" class="txt03" /></td></tr>
+<tr><td>备注：</td><td colspan="3"><textarea id="txt_Memo" name="Memo" class="txt03" rows="10" style="height:100px; width: 474px;" /></td></tr>
+<tr><td>附件：</td><td colspan="3"><input type="hidden" id="txt_Attachment" name="Attachment" class="txt03" /><input type="file" id="fileToUpload"/>&nbsp;<a id="uploadButton" href="#">上传</a>&nbsp;&nbsp;<span id="span_Attachment"></span>&nbsp;<a id="deleteAttachmentButton" href="#">删除</a></td></tr>
+<tr style="height: 70px;"><td>发送给：</td><td colspan="3"><input type="hidden" id="txt_SupplyIds" name="SupplyIds" /><input type="hidden" id="txt_SupplyNames" name="SupplyNames"/><span id="span_SupplyNames"></span>&nbsp;<a href="#" id="sendto">设置</a></td></tr>
+</table></form>

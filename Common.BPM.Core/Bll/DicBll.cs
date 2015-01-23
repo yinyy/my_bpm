@@ -142,5 +142,16 @@ namespace BPM.Core.Bll
             }
             return 0; //参数错误
         }
+
+        public string DicJson(string categoryCode)
+        {
+            return JSONhelper.ToJson(DicBll.Instance.GetListBy(categoryCode).ToList().OrderBy(d => d.Sortnum).Select(n => new
+            {
+                id = n.KeyId,
+                text = n.Title,
+                iconCls = "icon-bullet_green",
+                attributes = new { n.Sortnum, n.Remark, n.Code }
+            }));
+        }
     }
 }

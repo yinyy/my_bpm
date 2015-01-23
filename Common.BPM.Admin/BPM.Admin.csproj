@@ -54,16 +54,17 @@
       <HintPath>..\packages\fasterflect.2.1.0\lib\net40\Fasterflect.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\dll\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\DotNet\数据访问\ValueInjecter\Omu.ValueInjecter.dll</HintPath>
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -2513,6 +2514,23 @@
     <Content Include="css\radio.png" />
     <Content Include="css\userInputBg.jpg" />
     <Content Include="Default.aspx" />
+    <Content Include="demo\html\form.html" />
+    <Content Include="demo\html\LogisticsInquiry.html" />
+    <Content Include="demo\html\LogisticsInquiryDetail.html" />
+    <Content Include="demo\html\LogisticsInquiryView.html" />
+    <Content Include="demo\html\LogisticsQuoted.html" />
+    <Content Include="demo\js\datatest.js" />
+    <Content Include="demo\js\LogisticsFreightGroup.js" />
+    <Content Include="demo\js\LogisticsInquiry.js" />
+    <Content Include="demo\js\LogisticsQuotedAll.js" />
+    <Content Include="demo\js\LogisticsQuotedAnalyse.js" />
+    <Content Include="demo\js\LogisticsQuotedCurrent.js" />
+    <Content Include="demo\LogisticsFreightGroup.aspx" />
+    <Content Include="demo\LogisticsInquiry.aspx" />
+    <Content Include="demo\LogisticsQuotedAll.aspx" />
+    <Content Include="demo\LogisticsQuotedAnalyse.aspx" />
+    <Content Include="demo\LogisticsQuotedCurrent.aspx" />
+    <Content Include="demo\UrlTest.aspx" />
     <Content Include="Editor\xhEditor\xheditor-1.2.1.min.js" />
     <Content Include="Editor\xhEditor\xheditor_emot\default\angry.gif" />
     <Content Include="Editor\xhEditor\xheditor_emot\default\awkward.gif" />
@@ -3325,6 +3343,10 @@
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
+    <Content Include="demo\ashx\LogisticsFreightGroupHandler.ashx" />
+    <Content Include="demo\ashx\LogisticsInquiryHandler.ashx" />
+    <Content Include="demo\ashx\LogisticsQuotedAnalyseHandler.ashx" />
+    <Content Include="demo\ashx\LogisticsQuotedHandler.ashx" />
     <None Include="Properties\PublishProfiles\bpm.pubxml" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
@@ -3527,6 +3549,7 @@
     <Content Include="sys\ashx\DicHandler.ashx" />
     <Content Include="sys\ashx\LogHandler.ashx" />
     <Content Include="sys\ashx\DataBaseHandler.ashx" />
+    <Content Include="sys\ashx\UploadHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\ExportExcel.aspx.cs">
@@ -3562,6 +3585,60 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="demo\ashx\LogisticsFreightGroupHandler.ashx.cs">
+      <DependentUpon>LogisticsFreightGroupHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\ashx\LogisticsInquiryHandler.ashx.cs">
+      <DependentUpon>LogisticsInquiryHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\ashx\LogisticsQuotedAnalyseHandler.ashx.cs">
+      <DependentUpon>LogisticsQuotedAnalyseHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\ashx\LogisticsQuotedHandler.ashx.cs">
+      <DependentUpon>LogisticsQuotedHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\LogisticsFreightGroup.aspx.cs">
+      <DependentUpon>LogisticsFreightGroup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo\LogisticsFreightGroup.aspx.designer.cs">
+      <DependentUpon>LogisticsFreightGroup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\LogisticsInquiry.aspx.cs">
+      <DependentUpon>LogisticsInquiry.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo\LogisticsInquiry.aspx.designer.cs">
+      <DependentUpon>LogisticsInquiry.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\LogisticsQuotedAll.aspx.cs">
+      <DependentUpon>LogisticsQuotedAll.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo\LogisticsQuotedAll.aspx.designer.cs">
+      <DependentUpon>LogisticsQuotedAll.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\LogisticsQuotedAnalyse.aspx.cs">
+      <DependentUpon>LogisticsQuotedAnalyse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo\LogisticsQuotedAnalyse.aspx.designer.cs">
+      <DependentUpon>LogisticsQuotedAnalyse.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\LogisticsQuotedCurrent.aspx.cs">
+      <DependentUpon>LogisticsQuotedCurrent.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo\LogisticsQuotedCurrent.aspx.designer.cs">
+      <DependentUpon>LogisticsQuotedCurrent.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="demo\UrlTest.aspx.cs">
+      <DependentUpon>UrlTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo\UrlTest.aspx.designer.cs">
+      <DependentUpon>UrlTest.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3596,6 +3673,9 @@
     </Compile>
     <Compile Include="sys\ashx\RoleHandler.ashx.cs">
       <DependentUpon>RoleHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="sys\ashx\UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="sys\ashx\UserHandler.ashx.cs">
       <DependentUpon>UserHandler.ashx</DependentUpon>
@@ -3686,6 +3766,10 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.Logistics\BPM.Logistics.csproj">
+      <Project>{8ecc21f8-31d6-4cee-98e6-36f1eaff4087}</Project>
+      <Name>BPM.Logistics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>

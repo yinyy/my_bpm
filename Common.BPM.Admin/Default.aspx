@@ -44,7 +44,20 @@
 	
 
 	<div  region="south" split="false" style="height: 30px; border-top:none; ">
-		<div class="footer">脚注</div>
+		<div class="footer">
+            Email:<%=ConfigurationManager.AppSettings["email"] %>
+            <%
+                DateTime now = DateTime.Now;
+                DateTime limit = new DateTime(2015, 2, 1);
+
+                if (now.AddDays(5).Date >= limit.Date)
+                {
+            %>
+            &nbsp;&nbsp;&nbsp;&nbsp;<label style="color:#ff0000">产品试用将于2015年2月1日到期。为了不影响您的正常试用，请您付费。</label>
+            <%                    
+                } 
+            %>
+		</div>
 	</div>
 	<div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden" border="false">
 		<div id="tabs" class="easyui-tabs"  fit="true"  >

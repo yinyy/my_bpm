@@ -1,0 +1,1 @@
+<%@ WebHandler Language="C#" CodeBehind="LogisticsInquiryHandler.ashx.cs" Class="BPM.Admin.demo.ashx.LogisticsInquiryHandler" %>

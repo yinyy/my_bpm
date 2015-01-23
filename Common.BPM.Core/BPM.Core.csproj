@@ -34,9 +34,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\DotNet 控件\JSON.NET\Json45r7\Bin\Net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Omu.ValueInjecter, Version=2.3.1.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\DotNet\数据访问\ValueInjecter\Omu.ValueInjecter.dll</HintPath>
+    <Reference Include="Omu.ValueInjecter">
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
