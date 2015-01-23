@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="sprinkler.ino" />
-    <None Include="protocal.docx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.sprinkler.vsarduino.h">
@@ -25,9 +24,6 @@
     <ClInclude Include="Plc.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Plc.cpp">

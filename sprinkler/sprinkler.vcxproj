@@ -76,14 +76,10 @@
     <None Include="sprinkler.ino">
       <FileType>CppCode</FileType>
     </None>
-    <None Include="protocal.docx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Plc.h" />
     <ClInclude Include="Visual Micro\.sprinkler.vsarduino.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Plc.cpp" />
