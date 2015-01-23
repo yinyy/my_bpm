@@ -114,18 +114,5 @@ namespace BPM.Core.Bll
 
             return new JsonMessage { Data = k.ToString(), Message = msg, Success = k > 0 }.ToString();
         }
-
-        public List<Department> GetFreight(int[] ids)
-        {
-            return DepartmentDal.Instance.GetAll().Where(d => ids.Contains(d.KeyId)).ToList();
-        }
-
-        public string GetFreightForDatagrid(int parentId)
-        {
-            var q = DepartmentDal.Instance.GetChildren(parentId);
-            var o = new { count = q.Count(), rows = q.ToArray() };
-
-            return JSONhelper.ToJson(o);
-        }
     }
 }

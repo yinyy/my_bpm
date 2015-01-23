@@ -11,6 +11,7 @@ using Omu.ValueInjecter;
 using System.Configuration;
 using BPM.Logistics.Bll;
 using BPM.Logistics.model;
+using BPM.Logistics.ext;
 
 namespace BPM.Admin.demo.ashx
 {

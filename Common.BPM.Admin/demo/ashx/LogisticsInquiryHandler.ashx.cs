@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.SessionState;
 using BPM.Logistics.Model;
 using BPM.Logistics.Bll;
-
+using BPM.Logistics.ext;
 using Omu.ValueInjecter;
 using BPM.Core;
 using BPM.Core.Bll;
@@ -16,7 +16,7 @@ using System.Configuration;
 using System.Net.Mail;
 using System.Data;
 using BPM.Common.Data.Filter;
-using BPM.Logistics;
+using BPM.Logistics.Util;
 
 namespace BPM.Admin.demo.ashx
 {

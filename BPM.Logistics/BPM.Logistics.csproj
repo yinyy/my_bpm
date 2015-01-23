@@ -45,13 +45,19 @@
     <Compile Include="dal\LogisticsFeedbackDal.cs" />
     <Compile Include="dal\LogisticsFreightGroupDal.cs" />
     <Compile Include="dal\LogisticsInquiryDal.cs" />
-    <Compile Include="EmailHelper.cs" />
+    <Compile Include="ext\DepartmentBllExtension.cs" />
+    <Compile Include="ext\DicBllExtension.cs" />
+    <Compile Include="util\EmailHelper.cs" />
     <Compile Include="model\LogisticsFeedbackModel.cs" />
     <Compile Include="model\LogisticsFreightGroupModel.cs" />
     <Compile Include="model\LogisticsInquiryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
+      <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
+      <Name>BPM.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>

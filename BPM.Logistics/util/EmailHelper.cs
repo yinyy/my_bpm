@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 
-namespace BPM.Logistics
+namespace BPM.Logistics.Util
 {
     public class EmailHelper
     {
