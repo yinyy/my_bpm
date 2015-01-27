@@ -747,7 +747,7 @@ var CRUD = {
                                 return false;
                             }
 
-                            var query = createParam('edit', row.KeyId);;
+                            var query = createParam('add', row.KeyId);;
                             jQuery.ajaxjson(actionURL, query, function (d) {
                                 if (parseInt(d) > 0) {
                                     msg.ok('修改成功！');
@@ -780,12 +780,12 @@ var CRUD = {
                                 return false;
                             }
 
-                            var query = createParam('edit', row.KeyId);;
+                            var query = createParam('add', row.KeyId);
                             jQuery.ajaxjson(actionURL, query, function (d) {
                                 if (parseInt(d) > 0) {
                                     hDialog.dialog('close');
-
-                                    var rid = row.KeyId;
+                                    
+                                    var rid = parseInt(d);
                                     jQuery.ajaxjson(actionURL, createParam('send', rid), function (d) {
                                         if (d == 1) {
                                             msg.ok('已经发送询盘信息。')
