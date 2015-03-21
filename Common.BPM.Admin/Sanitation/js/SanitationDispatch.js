@@ -1,5 +1,8 @@
 var actionURL = '/Sanitation/ashx/SanitationDispatchHandler.ashx';
-var formurl   = '/Sanitation/html/SanitationDispatch.html';
+var formurl = '/Sanitation/html/SanitationDispatch.html';
+var formediturl = '/Sanitation/html/SanitationDispatchEdit.html';
+var map;
+
 
 $(function () {
 
@@ -13,9 +16,13 @@ $(function () {
     $('#a_read_card').click(CARD.read);
 
     //高级查询
-   $('#a_search').click(function () {
+    $('#a_search').click(function () {
         search.go('list');
-   });
+    });
+
+    map = new BMap.Map('dd');          // 创建地图实例
+    map.addControl(new BMap.NavigationControl());
+    map.enableScrollWheelZoom(true);
 });
 
 var grid = {
@@ -40,27 +47,86 @@ var grid = {
 		        }
 		    },
 		    {
-		        title: '姓名', field: 'Name', width: 120, formatter: function (v, r, i) {
+		        title: '姓名', field: 'Name', width: 120, align: 'center',formatter: function (v, r, i) {
 		            return v + '[' + r.Code + ']';
 		        }
 		    },
-		    { title: '车辆', field: 'Plate', width: 120, align: 'center' },
-		    { title: '次数', field: 'Workload', width: 80, align: 'right' },
-		    { title: '车载类型', field: 'Kind', width: 120, align: 'center' },
+		    {
+		        title: '车辆', field: 'Plate', width: 120, align: 'center', formatter: function (v, r, i) {
+		            return '鲁' + v;
+		        }
+		    },
+            {
+                title: '加注地点', field: 'Address', width: 120, align: 'center'
+            },
+		    {
+		        title: '加注类型', field: 'Kind', width: 120, align: 'center', formatter: function (v, r, i) {
+		            if (v == 1) {
+		                return "纯水";
+		            } else {
+		                return "肥水";
+		            }
+		        }
+		    },
 		    {
 		        title: '加注浓度', field: 'Potency', width: 120, align: 'right', formatter: function (v, r, i) {
 		            return v + '‰';
-		        }},
+		        }
+		    },
             {
-                title: '是否生效', field: 'Enabled', width: 80, align: 'center', formatter: function (v, r, i) {
-                    if (v=='是') {
-                        return '<img src="/css/icon/16/bullet_tick.png"/>';
+                title: '当前状态', field: 'Status', width: 100, align: 'center', formatter: function (v, r, i) {
+                    if (v == 0) {
+                        return '工作中';
+                    }else if (v == 1) {
+                        return '完成';
                     } else {
-                        return '<img src="/css/icon/16/bullet_minus.png"/>';
+                        return '未知';
+                    }
+                }
+            }, {
+                title: '管子类型', field: 'Working', width: 100,align:'center', formatter: function (v, r, i) {
+                    if (r.Status == 1) {
+                        if (v == 0) {
+                            return "粗管";
+                        } else if (v == 1) {
+                            return "细管";
+                        }
+                    } else {
+                        return '';
                     }
                 }
             },
-		    {title:'备注',field:'Memo',width:400}               
+		    {
+		        title: '签到时间', field: 'Signed', width: 200, align: 'center', formatter: function (v, r, i) {
+		            if (r.Status == 1) {
+		                return v;
+		            } else {
+		                return '';
+		            }
+		        }},
+            {
+                title: '签到地点', field: 'Destination', width: 80, align: 'center', formatter: function (v, r, i) {
+                    if (r.Status == 1) {
+                        var ss = v.split(',');
+                        return '<a href="javascript:showMap(' + ss[0] + ', ' + ss[1] + ');">查看</a>';
+                    } else {
+                        return '';
+                    }
+                }
+            },
+            {
+                title: '签到区域', field: 'Region', width: 80, align: 'center', formatter: function (v, r, i) {
+                    if (r.Status == 1) {
+                        if (v == 1) {
+                            return "内部";
+                        } else if (v == 0) {
+                            return "外部";
+                        }
+                    } else {
+                        return "";
+                    }
+                }
+            }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
@@ -85,14 +151,53 @@ function createParam(action, keyid) {
     return "json=" + JSON.stringify(o);
 }
 
+function convertGpgga(v) {
+    var a = parseInt(v);
+    var b = (v - a) * 100.0 / 60.0;
+
+    return a + b;
+}
+
+function showMap(lng, lat) {
+    //var hDialog = top.jQuery.hDialog({
+    //    title: '地图', width: 400, height: 463, content: '<div id="map_container"></div>', iconCls: 'icon-add'
+    //});
+
+    $('#dd').dialog({
+        title: '地图',
+        width: 800,
+        height: 550,
+        closed: false,
+        cache: false,
+        modal: false
+    }).dialog('maximize');
+
+    var xx = convertGpgga(lng);
+    var yy = convertGpgga(lat);
+    var gpsPoint = new BMap.Point(xx, yy);
+
+    //alert(xx + "," + yy);
+
+    //map.centerAndZoom("东营市", 12);                 // 初始化地图，设置中心点坐标和地图级别
+    map.clearOverlays();
+
+    BMap.Convertor.translate(gpsPoint, 0, function (point) {
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        var label = new BMap.Label("签到地点", { offset: new BMap.Size(20, -10) });
+        marker.setLabel(label); //添加百度label
+        map.centerAndZoom(point, 15);
+    });     //真实经纬度转成百度坐标
+}
+
 
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 400, height: 423, href:formurl, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 400, height: 463, href:formurl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
-                    jQuery.ajaxjson(actionURL, query, function (d) {
+                    jQuery.ajaxjson(actionURL, query+'&count='+top.$('#txt_Count').val(), function (d) {
                         if (d == '0') {
                             alert('驾驶员或车辆已经被安排了。');
                         } else {
@@ -118,19 +223,17 @@ var CRUD = {
     edit: function () {
         var row = grid.getSelectedRow();
         if (row) {
-            if (row.Enabled == '是') {
-                msg.warning('该行已经生效。不能编辑！');
-            } else {
+            if (row.Status == 0) {
                 var hDialog = top.jQuery.hDialog({
-                    title: '编辑', width: 400, height: 353, href: formurl, iconCls: 'icon-save',
+                    title: '编辑', width: 400, height: 425, href: formediturl, iconCls: 'icon-save',
                     onLoad: function () {
                         top.$('#txt_Time').datebox('setValue', row.Time.substring(0, 10));
                         top.$('#txt_DriverId').combobox('setValue', row.DriverId);
                         top.$('#txt_TrunkId').combobox('setValue', row.TrunkId);
-                        top.$('#txt_Workload').numberbox('setValue', row.Workload);
-                        if (row.Enabled == '是') {
-                            top.$('#txt_Enabled').attr('checked', 'checked');
-                        }
+                        top.$('#txt_Kind').combobox('setValue', row.Kind);
+                        top.$('#txt_Potency').numberbox('setValue', row.Potency);
+                        top.$('#txt_Destination').val(row.Destination);
+                        top.$('#txt_Priority').numberbox('setValue', row.Priority);
                         top.$('#txt_Memo').val(row.Memo);
                     },
                     submit: function () {
@@ -153,6 +256,8 @@ var CRUD = {
                         return false;
                     }
                 });
+            } else {
+                msg.warning('该行不能编辑！');
             }
         } else {
             msg.warning('请选择要修改的行。');

@@ -33,7 +33,10 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-		    { title: '车牌号', field: 'Plate', width: 120, align: 'center' },
+		    {
+		        title: '车牌号', field: 'Plate', width: 120, align: 'center', formatter: function (v, r, i) {
+		            return '鲁' + v;
+		        }},
 		    { title: '品牌', field: 'Brand', width: 120 },
 		    {title:'型号',field:'Model',width:200},
 		    {
@@ -152,7 +155,7 @@ var CARD = {
     write: function () {
         var row = grid.getSelectedRow();
         if (row) {
-            var epc = CARDClass.makeTrunkCard(row.KeyId, row.Plate.substring(1));
+            var epc = CARDClass.makeTrunkCard(row.KeyId, row.Plate);
             CARDClass.writeEPC(epc, function (cardno) {
                 alert('写卡成功。卡号：' + cardno.substring(0, 20) + '。');
             });
@@ -175,7 +178,7 @@ var CARD = {
                     alert('查无此车。');
                 } else {
                     var s = '卡号：' + cardno + '\n' +
-                   '车牌号：' + d.Plate
+                   '车牌号：鲁' + d.Plate
 
                     alert(s);
                 }

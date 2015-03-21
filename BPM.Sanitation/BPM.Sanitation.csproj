@@ -40,15 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bll\SanitationDetailBll.cs" />
     <Compile Include="bll\SanitationDispatchBll.cs" />
     <Compile Include="bll\SanitationDriverBll.cs" />
     <Compile Include="bll\SanitationTrunkBll.cs" />
-    <Compile Include="dal\SanitationDetailDal.cs" />
     <Compile Include="dal\SanitationDispatchDal.cs" />
     <Compile Include="dal\SanitationDriverDal.cs" />
     <Compile Include="dal\SanitationTrunkDal.cs" />
-    <Compile Include="model\SanitationDetailModel.cs" />
     <Compile Include="model\SanitationDispatchModel.cs" />
     <Compile Include="model\SanitationDriverModel.cs" />
     <Compile Include="model\SanitationTrunkModel.cs" />

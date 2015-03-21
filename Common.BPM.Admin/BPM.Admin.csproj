@@ -2838,16 +2838,15 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="qqloading.html" />
-    <Content Include="Sanitation\html\SanitationDetail.html" />
+    <Content Include="Sanitation\html\SanitationMap.html" />
+    <Content Include="Sanitation\html\SanitationDispatchEdit.html" />
     <Content Include="Sanitation\html\SanitationDispatch.html" />
     <Content Include="Sanitation\html\SanitationDriver.html" />
     <Content Include="Sanitation\html\SanitationTrunk.html" />
     <Content Include="Sanitation\js\card.js" />
-    <Content Include="Sanitation\js\SanitationDetail.js" />
     <Content Include="Sanitation\js\SanitationDispatch.js" />
     <Content Include="Sanitation\js\SanitationDriver.js" />
     <Content Include="Sanitation\js\SanitationTrunk.js" />
-    <Content Include="Sanitation\SanitationDetail.aspx" />
     <Content Include="Sanitation\SanitationDispatch.aspx" />
     <Content Include="Sanitation\SanitationDriver.aspx" />
     <Content Include="Sanitation\SanitationTrunk.aspx" />
@@ -3347,7 +3346,6 @@
     <Content Include="Sanitation\ashx\SanitationTrunkHandler.ashx" />
     <Content Include="Sanitation\ashx\SanitationDispatchHandler.ashx" />
     <Content Include="Sanitation\ashx\SanitationHandler.ashx" />
-    <Content Include="Sanitation\ashx\SanitationDetailHandler.ashx" />
     <None Include="Properties\PublishProfiles\Sanitation.BPM.pubxml" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
@@ -3589,9 +3587,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sanitation\ashx\SanitationDetailHandler.ashx.cs">
-      <DependentUpon>SanitationDetailHandler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="Sanitation\ashx\SanitationDispatchHandler.ashx.cs">
       <DependentUpon>SanitationDispatchHandler.ashx</DependentUpon>
     </Compile>
@@ -3603,13 +3598,6 @@
     </Compile>
     <Compile Include="Sanitation\ashx\SanitationTrunkHandler.ashx.cs">
       <DependentUpon>SanitationTrunkHandler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="Sanitation\SanitationDetail.aspx.cs">
-      <DependentUpon>SanitationDetail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Sanitation\SanitationDetail.aspx.designer.cs">
-      <DependentUpon>SanitationDetail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Sanitation\SanitationDispatch.aspx.cs">
       <DependentUpon>SanitationDispatch.aspx</DependentUpon>

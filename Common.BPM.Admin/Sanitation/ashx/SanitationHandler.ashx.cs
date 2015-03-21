@@ -23,48 +23,28 @@ namespace BPM.Admin.Sanitation.ashx
         {
             context.Response.ContentType = "text/plain";
             string action = context.Request.Params["action"];
+            string code;
+            string plate;
+            double lng;
+            double lat;
+            int pipe; 
             int dispatchId;
+            SanitationDispatchModel dispatch;
 
             switch (action)
             {
-                case "get":
-                    dispatchId= Convert.ToInt32(context.Request.Params["dispatchId"]);
-
-                    SanitationDispatchModel dispatchModel = SanitationDispatchBll.Instance.GetById(dispatchId);
-                    if (dispatchModel == null)
-                    {
-                        context.Response.Write("error_dispatch");//没有本次任务，提示数据错误
-                    }
-                    else if (DateTime.Now.Date != dispatchModel.Time.Date)
-                    {
-                        context.Response.Write("error_date");//加水的时间不对。
-                    }
-                    else
-                    {
-                        int finished = SanitationDetailBll.Instance.Get(dispatchId).Count();//获取今天、当前任务的完成次数
-                        SanitationTrunkModel trunkModel = SanitationTrunkBll.Instance.GetById(dispatchModel.TrunkId);
-                        context.Response.Write(
-                            string.Format("success_{0},{1},{2},{3},{4},{5},{6}",
-                            dispatchModel.DriverId, 
-                            dispatchModel.TrunkId,
-                            trunkModel.Volumn, 
-                            dispatchModel.Workload,
-                            finished, dispatchModel.Potency, DicDal.Instance.Get(dispatchModel.KindId).Code));//如果正确，则返回当前任务的司机编号、车辆编号、任务次数、已完成次数
-                    }
-
-                    break;
                 case "save":
                     dispatchId = Convert.ToInt32(context.Request.Params["dispatchId"]);
                     decimal volumn = Convert.ToDecimal(context.Request.Params["volumn"]);
                     string address = context.Request.Params["address"];
 
-                    SanitationDetailModel m = new SanitationDetailModel();
-                    m.Address = address;
-                    m.Time = DateTime.Now;
-                    m.Volumn = volumn;
-                    m.DispatchId = dispatchId;
+                    //SanitationDetailModel m = new SanitationDetailModel();
+                    //m.Address = address;
+                    //m.Time = DateTime.Now;
+                    //m.Volumn = volumn;
+                    //m.DispatchId = dispatchId;
 
-                    dispatchId = SanitationDetailBll.Instance.Add(m);
+                    //dispatchId = SanitationDetailBll.Instance.Add(m);
                     if (dispatchId >= 0)
                     {
                         context.Response.Write("success_save_" + dispatchId);
@@ -75,7 +55,48 @@ namespace BPM.Admin.Sanitation.ashx
                     }
 
                     break;
+                case "current"://车载设备获得当前任务的方法
+                    code = context.Request.Params["code"];
+                    plate = context.Request.Params["plate"];
+
+                    dispatch = SanitationDispatchBll.Instance.Current(code, plate);
+
+                    context.Response.Write(string.Format("current:{0}", dispatch == null ? 0 : dispatch.KeyId));
+                    break;
+                case "sign"://车载设备签到的方法
+                    code = context.Request.Params["code"];
+                    plate = context.Request.Params["plate"];
+                    lng=Convert.ToDouble( context.Request.Params["lng"]);
+                    lng /= 100.0;
+                    lat = Convert.ToDouble(context.Request.Params["lat"]);
+                    lat /= 100.0;
+                    pipe = Convert.ToInt32(context.Request.Params["pipe"]);
+
+                    dispatch = SanitationDispatchBll.Instance.Current(code, plate);
+                    dispatch.Signed = DateTime.Now;
+                    dispatch.Destination = string.Format("{0},{1}",lng,lat);
+                    dispatch.Working = pipe;
+                    dispatch.Region = 1;//TODO:这个将来需要通过计算验证是在区域外签到还是区域内签到的
+                    dispatch.Status = 1;
+
+                    context.Response.Write(string.Format("signed:{0}", SanitationDispatchBll.Instance.Update(dispatch)));
+                    break;
                 default:
+                    string result = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+                    if (string.IsNullOrEmpty(result))
+                    {
+                        result = context.Request.ServerVariables["REMOTE_ADDR"];
+                    }
+                    if (string.IsNullOrEmpty(result))
+                    {
+                        result = context.Request.UserHostAddress;
+                    }
+                    if (string.IsNullOrEmpty(result))
+                    {
+                        result = "0.0.0.0";
+                    }
+
+                    context.Response.Write(result);
                     break;
             }
         }

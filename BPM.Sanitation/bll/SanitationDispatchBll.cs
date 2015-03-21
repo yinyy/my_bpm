@@ -5,6 +5,7 @@ using System.Text;
 using Sanitation.Dal;
 using Sanitation.Model;
 using BPM.Common.Provider;
+using BPM.Common;
 
 namespace Sanitation.Bll
 {
@@ -40,35 +41,17 @@ namespace Sanitation.Bll
             return SanitationDispatchDal.Instance.Get(id);
         }
 
-        public bool Validate(SanitationDispatchModel d)
+        public SanitationDispatchModel Current(string code, string plate)
         {
-            //验证司机和车辆是否被安排过
-            if (SanitationDispatchDal.Instance.GetWhere(new
-            {
-                Time = d.Time.Date,
-                DriverId = d.DriverId,
-                Enabled = "是"
-            }).Count() > 0)
-            {
-                return false;
-            }
+            SanitationDriverModel driver = SanitationDriverDal.Instance.GetWhere(new { Code = code }).FirstOrDefault();
+            SanitationTrunkModel trunk = SanitationTrunkDal.Instance.GetWhere(new { Plate = plate }).FirstOrDefault();
 
-            if (SanitationDispatchDal.Instance.GetWhere(new
-                {
-                    Time = d.Time.Date,
-                    TrunkId = d.TrunkId,
-                    Enabled = "是"
-                }).Count() > 0)
+            return SanitationDispatchDal.Instance.GetWhere(new
             {
-                return false;
-            }
-
-            return true;
-        }
-
-        public SanitationDispatchModel Get(DateTime now, string plate)
-        {
-            return SanitationDispatchDal.Instance.GetWhere(new { Time = now.Date, Plate = plate, Enabled="是" }).FirstOrDefault();
+                DriverId = driver.KeyId,
+                TrunkId = trunk.KeyId,
+                Status = 0
+            }).Where(r => r.Time.Date == DateTime.Now.Date).OrderByDescending(r => r.KeyId).FirstOrDefault();
         }
     }
 }

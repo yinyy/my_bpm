@@ -35,24 +35,34 @@ namespace Sanitation.Model
 		[Description("车辆")]
 		public int TrunkId { get; set; }
       
-		/// <summary>
-		/// 次数
-		/// </summary>
-		[Description("次数")]
-		public int Workload { get; set; }
-
-        [Description("加注类型")]
-        public int KindId { get; set; }
+		[Description("加注类型")]
+        public int Kind { get; set; }
         [Description("浓度")]
         public int Potency { get; set; }
-		/// <summary>
-		/// 备注
-		/// </summary>
-		[Description("备注")]
-		public string Memo { get; set; }
-
-        [Description("是否生效")]
-        public string Enabled { get; set; }	
+        /// <summary>
+        /// 0：表示加注完成
+        /// 1：表示签到完成
+        /// </summary>
+        [Description("状态")]
+        public int Status { get; set; }
+        /// <summary>
+        /// 签到的位置坐标
+        /// </summary>
+        [Description("目的地")]
+        public string Destination { get; set; }
+        /// <summary>
+        /// 签到的区域
+        /// </summary>
+        [Description("签到区域")]
+        public int Region { get; set; }
+        [Description("签到时间")]
+        public DateTime Signed { get; set; }
+        /// <summary>
+        /// 0：表示粗管
+        /// 1：表示细管
+        /// </summary>
+        [Description("管子类型")]
+        public int Working { get; set; }
 
 		public override string ToString()
 		{

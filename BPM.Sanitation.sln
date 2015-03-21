@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.Common", "Common\BPM.Common.csproj", "{16183C27-23BE-4335-AE94-F12BB57421FF}"
 EndProject
@@ -21,9 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{400174
 	ProjectSection(SolutionItems) = preProject
 		文档\README.txt = 文档\README.txt
 		文档\绘图1.vsdx = 文档\绘图1.vsdx
+		文档\串口屏幕\设置.docx = 文档\串口屏幕\设置.docx
 		文档\通讯协议.docx = 文档\通讯协议.docx
 		文档\需求分析.docx = 文档\需求分析.docx
+		文档\项目指导书.docx = 文档\项目指导书.docx
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SignBox", "SignBox\SignBox.vcxproj", "{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +109,16 @@ Global
 		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C5739B39-CC2A-4730-9ACA-43B8EFCED6F0}.Release|Win32.ActiveCfg = Release|Any CPU
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Debug|Win32.Build.0 = Debug|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Any CPU.ActiveCfg = Release|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Win32.ActiveCfg = Release|Win32
+		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

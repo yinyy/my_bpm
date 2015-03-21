@@ -34,97 +34,9 @@ namespace BPM.Admin.Sanitation.ashx
                 rpm.CurrentContext = context;
             }
 
+            SanitationDispatchModel d;
             switch (rpm.Action)
             {
-                case "add":
-                    SanitationDispatchModel d = new SanitationDispatchModel();
-                    d.InjectFrom(rpm.Entity);
-                    if (d.Enabled == null)
-                    {
-                        d.Enabled = "否";
-                    }
-
-                    if (d.Enabled == "是"){
-                        if (SanitationDispatchBll.Instance.Validate(d))
-                        {
-                            context.Response.Write(SanitationDispatchBll.Instance.Add(d)); ;
-                        }
-                        else
-                        {
-                            context.Response.Write("0");
-                        }
-                    }
-                    else
-                    {
-                        context.Response.Write(SanitationDispatchBll.Instance.Add(d)); ;
-                    }
-                    break;
-                case "edit":
-                    d = new SanitationDispatchModel();
-                    d.InjectFrom(rpm.Entity);
-                    d.KeyId = rpm.KeyId;
-                    if (d.Enabled == null)
-                    {
-                        d.Enabled = "否";
-                    }
-
-                    if (d.Enabled == "是")
-                    {
-                        if (SanitationDispatchBll.Instance.Validate(d))
-                        {
-                            context.Response.Write(SanitationDispatchBll.Instance.Update(d));
-                        }
-                        else
-                        {
-                            context.Response.Write("0");
-                        }
-                    }
-                    else
-                    {
-                        context.Response.Write(SanitationDispatchBll.Instance.Update(d));
-                    }
-                    break;
-                case "delete":
-                    context.Response.Write(SanitationDispatchBll.Instance.Delete(rpm.KeyId));
-                    break;
-                case "enable":
-                    d = SanitationDispatchBll.Instance.GetById(rpm.KeyId);
-                    d.Enabled = "是";
-
-                    if (SanitationDispatchBll.Instance.Validate(d))
-                    {
-                        context.Response.Write(SanitationDispatchBll.Instance.Update(d));
-                    }
-                    else
-                    {
-                        context.Response.Write("0");
-                    }
-                    break;
-                case "analyse_card":
-                    d = SanitationDispatchBll.Instance.GetById(rpm.KeyId);
-
-                    if (d != null)
-                    {
-                        SanitationDriverModel dm = SanitationDriverBll.Instance.GetById(d.DriverId);
-                        SanitationTrunkModel tm = SanitationTrunkBll.Instance.GetById(d.TrunkId);
-
-                        var obj = new
-                        {
-                            Name = dm.Name,
-                            Code = dm.Code,
-                            Plate = tm.Plate,
-                            Workload = d.Workload,
-                            Time = d.Time.ToString("yyyy年MM月dd日"),
-                            Finished = SanitationDetailBll.Instance.Get(d.KeyId).Count()
-                        };
-
-                        context.Response.Write(JSONhelper.ToJson(obj));
-                    }
-                    else
-                    {
-                        context.Response.Write(JSONhelper.ToJson(d));
-                    }
-                    break;
                 default:
                     context.Response.Write(SanitationDispatchBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     break;

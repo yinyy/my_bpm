@@ -44,5 +44,10 @@ namespace Sanitation.Bll
         {
             return SanitationTrunkDal.Instance.Get(trunkId);
         }
+
+        public SanitationTrunkModel GetByPlate(string plate)
+        {
+            return SanitationTrunkDal.Instance.GetWhere(new { Plate = plate }).FirstOrDefault();
+        }
     }
 }

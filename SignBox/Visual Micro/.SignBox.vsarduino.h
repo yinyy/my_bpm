@@ -46,7 +46,11 @@
 #define portOutputRegister(P)
 #define portInputRegister(P)
 #define portModeRegister(P)
-#include <sprinkler.ino>
-#include <Plc.cpp>
-#include <Plc.h>
+#include <SignBox.ino>
+#include <GprsHelper.cpp>
+#include <GprsHelper.h>
+#include <GpsHelper.cpp>
+#include <GpsHelper.h>
+#include <ScreenHelper.cpp>
+#include <ScreenHelper.h>
 #endif
