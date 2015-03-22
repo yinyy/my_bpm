@@ -188,6 +188,9 @@ function showMap(lng, lat) {
         marker.setLabel(label); //添加百度label
         map.centerAndZoom(point, 15);
     });     //真实经纬度转成百度坐标
+
+    //绘制工作区域
+
 }
 
 

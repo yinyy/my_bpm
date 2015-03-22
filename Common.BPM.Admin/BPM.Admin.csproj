@@ -2139,6 +2139,7 @@
     <Content Include="css\icon\32\link_delete.png" />
     <Content Include="css\icon\32\link_edit.png" />
     <Content Include="css\icon\32\link_go.png" />
+    <Content Include="css\icon\32\location.png" />
     <Content Include="css\icon\32\lock.png" />
     <Content Include="css\icon\32\lock_add.png" />
     <Content Include="css\icon\32\lock_break.png" />
@@ -2846,10 +2847,13 @@
     <Content Include="Sanitation\js\card.js" />
     <Content Include="Sanitation\js\SanitationDispatch.js" />
     <Content Include="Sanitation\js\SanitationDriver.js" />
+    <Content Include="Sanitation\js\SanitationMapData.js" />
+    <Content Include="Sanitation\js\SanitationWorkRegion.js" />
     <Content Include="Sanitation\js\SanitationTrunk.js" />
     <Content Include="Sanitation\SanitationDispatch.aspx" />
     <Content Include="Sanitation\SanitationDriver.aspx" />
     <Content Include="Sanitation\SanitationTrunk.aspx" />
+    <Content Include="Sanitation\SanitationWorkRegion.aspx" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
     <Content Include="scripts\alertify\alertify.core.css" />
     <Content Include="scripts\alertify\alertify.default.css" />
@@ -3347,6 +3351,7 @@
     <Content Include="Sanitation\ashx\SanitationDispatchHandler.ashx" />
     <Content Include="Sanitation\ashx\SanitationHandler.ashx" />
     <None Include="Properties\PublishProfiles\Sanitation.BPM.pubxml" />
+    <Content Include="Sanitation\ashx\SanitationWorkRegionHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3599,6 +3604,9 @@
     <Compile Include="Sanitation\ashx\SanitationTrunkHandler.ashx.cs">
       <DependentUpon>SanitationTrunkHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Sanitation\ashx\SanitationWorkRegionHandler.ashx.cs">
+      <DependentUpon>SanitationWorkRegionHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Sanitation\SanitationDispatch.aspx.cs">
       <DependentUpon>SanitationDispatch.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3619,6 +3627,13 @@
     </Compile>
     <Compile Include="Sanitation\SanitationTrunk.aspx.designer.cs">
       <DependentUpon>SanitationTrunk.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sanitation\SanitationWorkRegion.aspx.cs">
+      <DependentUpon>SanitationWorkRegion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sanitation\SanitationWorkRegion.aspx.designer.cs">
+      <DependentUpon>SanitationWorkRegion.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
