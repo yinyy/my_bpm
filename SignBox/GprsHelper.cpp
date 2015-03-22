@@ -30,12 +30,17 @@ int GprsHelperClass::timedRead()
 
 String GprsHelperClass::readGprsData() {
 	String ret;
-	int c = timedRead();
+
+	if (gprs.available()>0){
+		ret = gprs.readString();
+	}
+
+	/*int c = timedRead();
 	while (c >= 0)
 	{
 		ret += (char)c;
 		c = timedRead();
-	}
+	}*/
 	return ret;
 }
 

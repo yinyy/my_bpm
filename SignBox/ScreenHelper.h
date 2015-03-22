@@ -23,7 +23,7 @@ class ScreenHelperClass
 {
  protected:
 private:
-
+	String waitForOk();
  public:
 	 int currentScreen;
 	 void changeScreen(int index);

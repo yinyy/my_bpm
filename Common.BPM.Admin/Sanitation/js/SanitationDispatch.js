@@ -167,7 +167,7 @@ function showMap(lng, lat) {
         title: '地图',
         width: 800,
         height: 550,
-        closed: false,
+        closed: false, 
         cache: false,
         modal: false
     }).dialog('maximize');

@@ -9,11 +9,14 @@ void ScreenHelperClass::changeScreen(int index){
 	Serial1.write((char)(0x30 + index));
 	Serial1.write("\r\n");
 	currentScreen = index;
-	delay(300);
+	
+	//µÈ´ý´¥ÃþÆÁ·µ»ØOK
+	while (waitForOk() != "OK");
 }
 
 void ScreenHelperClass::enableTouchScreen() {
 	Serial1.write("TPN(2);\r\n");
+	while (waitForOk() != "OK");
 }
 
 String ScreenHelperClass::waitForDriverCode() {
@@ -38,17 +41,21 @@ void ScreenHelperClass::drawString(char* cmd){
 
 void ScreenHelperClass::end(){
 	Serial1.write("\r\n");
+	while (waitForOk() != "OK");
 }
 
 void ScreenHelperClass::showTime(String time){
-	time = "DS16(10,15,'" + time + "',2);PIC(300,7,5);";
+	if (time == "00:00:00"){
+		time = "DS16(10,15,'" + time + "',2);PIC(300,7,5);";
+	}
+	else{
+		time = "DS16(10,15,'" + time + "',2);PIC(300,7,2);";
+	}
 	char cs[50];
 	time.toCharArray(cs, 50);
 
 	drawString(cs);
 	end();
-
-	delay(100);
 }
 
 String ScreenHelperClass::readCommand() {
@@ -76,6 +83,18 @@ User_Command ScreenHelperClass::commandIntent(String command){
 	}
 
 	return User_Command_Unknow;
+}
+
+String ScreenHelperClass::waitForOk(){
+	String line;
+
+	while (Serial1.available() <= 0);
+	if (Serial1.available() > 0){
+		line = Serial1.readStringUntil('\n');
+		line.trim();
+	}
+
+	return line;
 }
 
 ScreenHelperClass ScreenHelper;

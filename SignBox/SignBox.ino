@@ -70,7 +70,6 @@ void drawScreenByCommand(String command) {
 			screenHelper.drawString(SIGN_BUTTON_RIGHT);
 			screenHelper.drawString(SIGN_BUTTON_RIGHT_TITLE);
 			screenHelper.enableTouchScreen();
-			delay(100);
 		}
 		else {
 			initScreen();
@@ -103,13 +102,15 @@ void setup() {
 }
 
 void loop() {
-	if ((millis() - lastTime[2] > 1000) && (screenHelper.currentScreen == 4)) {
+	if ((millis() - lastTime[2] > 500) && (screenHelper.currentScreen == 4)) {
 		if ((gps.statusOfGPS == 1) || (gps.statusOfGPS == 2)) {
 			screenHelper.showTime(gps.time);
 		}
 		else {
 			screenHelper.showTime("00:00:00");
 		}
+
+		lastTime[2] = millis();
 	}
 
 	//check GPS 1s, the reason is I want to show the gps time in the touch screen.
