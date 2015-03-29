@@ -21,9 +21,6 @@ PLC							m		n
 #define DEVICE_CODE "A002"
 
 
-//记录上一次读卡的时间
-long lastReadMillis;
-
 CardReaderHelperClass crh;
 PlcHelperClass plch;
 SimHelperClass simh;
@@ -34,9 +31,12 @@ String driverCode;
 String trunkPlate;
 boolean canReadCard = true;
 
+long lastTime;
 
 void setup()
 {
+	lastTime = millis();
+
 	//等待SIM900A加电
 	pinMode(SIM900A_PWR_KEY_PIN, OUTPUT);
 	digitalWrite(SIM900A_PWR_KEY_PIN, HIGH);
@@ -61,11 +61,11 @@ void setup()
 	delay(1000);
 	
 	//判断SIM900A是否准备就绪
-	if (!simh.isReady()){
+	while (!simh.isReady()){
 		Serial.println("SIM900A_ERROR");
 
 		//SIM900A模块无法启动，程序停止
-		while (true);
+		delay(1000);
 	}
 	Serial.println("SIM900A AT Ready.");
 
@@ -73,11 +73,14 @@ void setup()
 	uint8_t sq = simh.checkSignal();
 	Serial.println("SIM900A Singal Regular:" + String(sq));
 	//如果信号质量小于n，即判断无法获得信号
-	if (sq < 5 || sq == 99){
+	while (sq < 5 || sq == 99){
 		Serial.println("Singal Low!");
 		
 		//SIM900A信号太弱，无法连接网络
-		while (true);
+		delay(1000);
+
+		sq = simh.checkSignal();
+		Serial.println("SIM900A Singal Regular:" + String(sq));
 	}
 	
 	//打开IP应用
@@ -104,26 +107,28 @@ void setup()
 
 void loop()
 {
+	if (millis() - lastTime > 10000){
+		//每10秒钟检查一次PLC的工作状态
+		canReadCard = plch.canReadCard();
+		lastTime = millis();
+	}
+
 	String plcCommand = plch.readCommand();
-	if (plcCommand.startsWith("02010101")){
-		//是否可以读卡
-		canReadCard = true;
-	}
-	else if (plcCommand.startsWith("02010100")){
-		canReadCard = false;
-	}
-	else if (plcCommand.startsWith("020303")){
+	if (plcCommand.startsWith("010205")){
 		//加水完成，保存信息
 		float volumn;
 		int kind;
+		int potency;
 
-		if (plch.getVolumnAndKind(plcCommand, &volumn, &kind)){
+		if (plch.getVolumnPotencyKind(plcCommand, &volumn, &potency, &kind)){
 			//把相关的信息存储到服务器
-			if (!simh.save(DEVICE_CODE, driverCode, trunkPlate, volumn, kind)){
+			if (!simh.save(DEVICE_CODE, driverCode, trunkPlate, volumn, potency, kind)){
 				plch.saveError();
+				Serial.println("Save Error");
 			}
 			else{
 				plch.saveSuccess();
+				Serial.println("Save Success");
 			}
 		}
 	}
