@@ -190,7 +190,14 @@ function showMap(lng, lat) {
     });     //真实经纬度转成百度坐标
 
     //绘制工作区域
+    var wrp = [];
+    for (var i = 0; i < workRegionPoints.length; i++) {
+        wrp[wrp.length] = new BMap.Point(workRegionPoints[i].x, workRegionPoints[i].y);
+    }
 
+    polygon = new BMap.Polygon(wrp, { strokeColor: "blue", strokeWeight: 2, strokeOpacity: 0.5, fillColor: 'red', fillOpacity: 0.05 });  //创建多边形
+    map.addOverlay(polygon);   //增加多边形
+    //polygon.enableEditing();
 }
 
 

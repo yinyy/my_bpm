@@ -8,6 +8,9 @@ using Sanitation.Model;
 using BPM.Core.Model;
 using BPM.Core.Bll;
 using BPM.Core.Dal;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace BPM.Admin.Sanitation.ashx
 {
@@ -73,7 +76,7 @@ namespace BPM.Admin.Sanitation.ashx
                     dispatch.Signed = DateTime.Now;
                     dispatch.Destination = string.Format("{0},{1}",lng,lat);
                     dispatch.Working = pipe;
-                    dispatch.Region = 1;//TODO:这个将来需要通过计算验证是在区域外签到还是区域内签到的
+                    dispatch.Region = isInRegion(lng, lat);//TODO:这个将来需要通过计算验证是在区域外签到还是区域内签到的
                     dispatch.Status = 1;
 
                     context.Response.Write(string.Format("signed:{0}", SanitationDispatchBll.Instance.Update(dispatch)));
@@ -105,5 +108,108 @@ namespace BPM.Admin.Sanitation.ashx
                 return false;
             }
         }
+
+        private int isInRegion(double lng, double lat)
+        {
+            lng = (int)lng + (lng - (int)lng) * 100 / 60;
+            lat = (int)lat + (lat - (int)lat) * 100 / 60;
+
+            string url = string.Format("http://api.map.baidu.com/geoconv/v1/?ak=FBddae84e942f0b6b28aa762786b00f8&coords={0},{1}", lng, lat);
+            WebRequest wq = WebRequest.Create(url);
+            WebResponse ws = wq.GetResponse();
+            Stream stream = ws.GetResponseStream();
+            StreamReader reader = new StreamReader(stream);
+            string json = reader.ReadToEnd();
+
+            A a = JsonConvert.DeserializeObject<A>(json);
+            if (a.status == 0)
+            {
+                double x = a.result[0].x;
+                double y = a.result[0].y;
+
+                reader = new StreamReader(HttpContext.Current.Server.MapPath("~/Sanitation/js/SanitationMapData.js"));
+                json = reader.ReadToEnd();
+                json = json.Substring(json.IndexOf('['), json.IndexOf(']') - json.IndexOf('[') + 1);
+
+                B[] region = JsonConvert.DeserializeObject<B[]>(json);
+                int littlePoints = 0;
+                int largePoints = 0;
+                for (int i = 0; i < region.Length; i++)
+                {
+                    B b1 = region[i];
+                    B b2 = region[(i + 1) % region.Length];
+
+                    if (y >= Math.Min(b1.y, b2.y) && y <= Math.Max(b1.y, b2.y))
+                    {
+                        if ((b2.y == b1.y) && (y == b2.y))
+                        {//水平线
+                            littlePoints = 1;
+                            largePoints = 1;
+                            break;
+                        }
+                        else if (b2.x == b1.x)
+                        {//垂直线
+                            if (x < b2.x)
+                            {
+                                largePoints++;
+                            }
+                            else if (x > b2.x)
+                            {
+                                littlePoints++;
+                            }
+                            else
+                            {
+                                largePoints = 1;
+                                littlePoints = 1;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            double k = (b2.y - b1.y) / (b2.x - b1.x);
+                            double b = b2.y - k * b2.x;
+
+                            double tx = (y - b) / k;
+                            if (x < tx)
+                            {
+                                largePoints++;
+                            }
+                            else if (x > tx)
+                            {
+                                littlePoints++;
+                            }
+                            else
+                            {
+                                largePoints = 1;
+                                littlePoints = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if ((littlePoints % 2 == 1) && (largePoints % 2 == 1))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            return 0;
+        }
+    }
+    class A
+    {
+        public int status { get; set; }
+        public B[] result { get; set; }
+    }
+
+    class B
+    {
+        public double x { get; set; }
+        public double y { get; set; }
     }
 }

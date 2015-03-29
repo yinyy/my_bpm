@@ -3352,6 +3352,7 @@
     <Content Include="Sanitation\ashx\SanitationHandler.ashx" />
     <None Include="Properties\PublishProfiles\Sanitation.BPM.pubxml" />
     <Content Include="Sanitation\ashx\SanitationWorkRegionHandler.ashx" />
+    <Content Include="Sanitation\ashx\Handler1.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3592,6 +3593,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sanitation\ashx\Handler1.ashx.cs">
+      <DependentUpon>Handler1.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Sanitation\ashx\SanitationDispatchHandler.ashx.cs">
       <DependentUpon>SanitationDispatchHandler.ashx</DependentUpon>
     </Compile>

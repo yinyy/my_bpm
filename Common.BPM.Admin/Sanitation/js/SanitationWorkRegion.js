@@ -26,7 +26,7 @@ var Map = {
 
         var wrp = [];
         for (var i = 0; i < workRegionPoints.length; i++) {
-            wrp[wrp.length] = new BMap.Point(workRegionPoints[i].lng, workRegionPoints[i].lat);
+            wrp[wrp.length] = new BMap.Point(workRegionPoints[i].x, workRegionPoints[i].y);
         }
 
         polygon = new BMap.Polygon(wrp, { strokeColor: "blue", strokeWeight: 2, strokeOpacity: 0.5, fillColor: 'red', fillOpacity: 0.05 });  //创建多边形
@@ -38,7 +38,7 @@ var Map = {
         var ps = polygon.getPath();
         var o = [];
         for (var i = 0; i < ps.length; i++) {
-            o[o.length] = { lng: ps[i].lng, lat: ps[i].lat };
+            o[o.length] = { x: ps[i].lng, y: ps[i].lat };
         }
 
         $.post(actionUrl, { action: 'save', path: JSON.stringify(o) }, function (data) {
