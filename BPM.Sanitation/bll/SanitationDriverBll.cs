@@ -45,5 +45,10 @@ namespace Sanitation.Bll
         {
             return SanitationDriverDal.Instance.Get(driverId);
         }
+
+        public SanitationDriverModel GetByCode(string code)
+        {
+            return SanitationDriverDal.Instance.GetWhere(new { Code = code }).FirstOrDefault();
+        }
     }
 }

@@ -15,13 +15,13 @@
     },
 
     readEPC: function (success_handler, error_handler) {
-        var o = { action: 'read', mem: 1, start: '0002'};
+        var o = { action: 'read', mem: 1, start: '0002' };
         var command = JSON.stringify(o);
 
         invockWebSocket(command, success_handler, error_handler);
     },
 
-    prefix:function(card){
+    prefix: function (card) {
         return String.fromCharCode(parseInt(card.substring(0, 2), 16)) + String.fromCharCode(parseInt(card.substring(2, 4), 16));
     },
 
@@ -47,53 +47,26 @@
         return (b1 << 8) + b0;
     },
 
-    parseDispatchId:function(card){
-        var b3 = parseInt(card.substring(16, 18), 16);
-        var b2 = parseInt(card.substring(18, 20), 16);
-        var b1 = parseInt(card.substring(20, 22), 16);
-        var b0 = parseInt(card.substring(22, 24), 16);
-
-        return (b3 << 24) + (b2 << 16) + (b1 << 8) + b0;
-    },
-
-    //人员前缀为PP（第1字），后面跟着KeyId（第2Word，最大表示65535左右），再接上人员编号D001（第3、4字），再接上任务KeyId（第5、6字）。
+    //人员前缀为PP（第1字），后面跟着KeyId（第2Word，最大表示65535左右），再接上人员编号0001（第3、4字）。
     makeDriverCard: function (rid, code) {
         var data = 'PP';
-        var b0 = rid & 0xFF;
-        var b1 = (rid >> 8) & 0xFF;
-
-        data += String.fromCharCode(b1) + String.fromCharCode(b0);
+        data += String.fromCharCode((rid >> 8) & 0xFF) + String.fromCharCode(rid & 0xFF);
         data += code;
         data += '\0\0\0\0';
 
         return data;
     },
 
-    //车辆前缀为TK（第1字），后面跟着KeyId（第2Word，最大表示65535左右），再接上车牌号E12345（第3、4、5字）。
-    makeTrunkCard: function (rid, plate) {
+    //车辆前缀为TK（第1字），后面跟着KeyId（第2字，最大表示65535左右），再接上车牌号E12345（第3、4、5字），再加上车的体积（第6字）。
+    makeTrunkCard: function (rid, plate, volumn) {
         var data = 'TK';
-        var b0 = rid & 0xFF;
-        var b1 = (rid >> 8) & 0xFF;
-
-        data += String.fromCharCode(b1) + String.fromCharCode(b0);
+        data += String.fromCharCode((rid >> 8) & 0xFF) + String.fromCharCode(rid & 0xFF);
         data += plate;
-        data += '\0\0';
+        data += String.fromCharCode((volumn >> 8) & 0xFF) + String.fromCharCode(volumn & 0xFF);;
 
-        return data;
-    },
-
-    makeDispatchCard: function (driverCard, did) {
-        var data = driverCard.substring(0, 8);
-        var b0 = did & 0xFF;
-        var b1 = (did >> 8) & 0xFF;
-        var b2 = (did >> 16) & 0xFF;
-        var b3 = (did >> 24) & 0xFF;
-
-        data += String.fromCharCode(b3) + String.fromCharCode(b2) + String.fromCharCode(b1) + String.fromCharCode(b0);
-        
         return data;
     }
-};
+}
 
 function invockWebSocket(command, success_handler, error_handler, notips) {
     window.WebSocket = window.WebSocket || window.MozWebSocket;

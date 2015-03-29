@@ -28,32 +28,28 @@ namespace BPM.Admin.Sanitation.ashx
             double lng;
             double lat;
             int pipe; 
-            int dispatchId;
             SanitationDispatchModel dispatch;
 
             switch (action)
             {
                 case "save":
-                    dispatchId = Convert.ToInt32(context.Request.Params["dispatchId"]);
-                    decimal volumn = Convert.ToDecimal(context.Request.Params["volumn"]);
+                    code = context.Request.Params["driver"];
+                    plate = context.Request.Params["trunk"];
+                    float volumn = Convert.ToSingle(context.Request.Params["volumn"]);
                     string address = context.Request.Params["address"];
+                    int kind = Convert.ToInt32(context.Request.Params["kind"]);
+                    int potency = Convert.ToInt32(context.Request.Params["potency"]);
 
-                    //SanitationDetailModel m = new SanitationDetailModel();
-                    //m.Address = address;
-                    //m.Time = DateTime.Now;
-                    //m.Volumn = volumn;
-                    //m.DispatchId = dispatchId;
+                    dispatch = new SanitationDispatchModel();
+                    dispatch.DriverId = SanitationDriverBll.Instance.GetByCode(code).KeyId;
+                    dispatch.Kind = kind;
+                    dispatch.Potency = 5;
+                    dispatch.Status = 0;
+                    dispatch.TrunkId = SanitationTrunkBll.Instance.GetByPlate(plate).KeyId;
+                    dispatch.Time = DateTime.Now;
+                    dispatch.Address = DicDal.Instance.GetWhere(new { Code = address }).FirstOrDefault().Title;
 
-                    //dispatchId = SanitationDetailBll.Instance.Add(m);
-                    if (dispatchId >= 0)
-                    {
-                        context.Response.Write("success_save_" + dispatchId);
-                    }
-                    else
-                    {
-                        context.Response.Write("error_save");
-                    }
-
+                    context.Response.Write(SanitationDispatchBll.Instance.Add(dispatch));
                     break;
                 case "current"://车载设备获得当前任务的方法
                     code = context.Request.Params["code"];

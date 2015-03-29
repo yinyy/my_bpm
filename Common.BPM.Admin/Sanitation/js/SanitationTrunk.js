@@ -155,7 +155,7 @@ var CARD = {
     write: function () {
         var row = grid.getSelectedRow();
         if (row) {
-            var epc = CARDClass.makeTrunkCard(row.KeyId, row.Plate);
+            var epc = CARDClass.makeTrunkCard(row.KeyId, row.Plate, parseInt(row.Volumn*10));
             CARDClass.writeEPC(epc, function (cardno) {
                 alert('写卡成功。卡号：' + cardno.substring(0, 20) + '。');
             });
@@ -166,7 +166,7 @@ var CARD = {
 
     read: function () {
         CARDClass.readEPC(function (data) {
-            var cardno = data.substring(0, 20);
+            var cardno = data.substring(0, 24);
 
             if (!CARDClass.isTrunkCard(cardno)) {
                 alert('卡片错误。请使用车辆卡。');
@@ -178,7 +178,8 @@ var CARD = {
                     alert('查无此车。');
                 } else {
                     var s = '卡号：' + cardno + '\n' +
-                   '车牌号：鲁' + d.Plate
+                   '车牌号：鲁' + d.Plate + '\n' +
+                   '容量：' + d.Volumn + 'm³';
 
                     alert(s);
                 }

@@ -63,6 +63,8 @@ namespace Sanitation.Model
         /// </summary>
         [Description("管子类型")]
         public int Working { get; set; }
+        [Description("加水地点")]
+        public string Address { get; set; }
 
 		public override string ToString()
 		{

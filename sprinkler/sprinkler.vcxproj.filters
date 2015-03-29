@@ -15,19 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sprinkler.ino" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Visual Micro\.sprinkler.vsarduino.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Plc.h">
+    <ClInclude Include="CardReaderHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlcHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SimHelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Plc.cpp">
+    <ClCompile Include="CardReaderHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PlcHelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SimHelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sprinkler.ino" />
   </ItemGroup>
 </Project>

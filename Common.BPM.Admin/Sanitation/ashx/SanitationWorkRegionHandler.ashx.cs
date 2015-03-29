@@ -23,7 +23,7 @@ namespace BPM.Admin.Sanitation.ashx
                 case "save":
                     string text = string.Format("var workRegionPoints = {0};", context.Request.Params["path"]);
                     string file = context.Server.MapPath("~/Sanitation/js/SanitationMapData.js");
-                    using (StreamWriter sw = new StreamWriter(file,false))
+                    using (StreamWriter sw = new StreamWriter(file,false))//需要在服务器上给IIS_USR增加权限才能操作。
                     {
                         sw.Write(text);
                     }
