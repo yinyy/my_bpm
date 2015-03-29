@@ -50,6 +50,7 @@ namespace BPM.Admin.Sanitation.ashx
                     dispatch.Address = DicDal.Instance.GetWhere(new { Code = address }).FirstOrDefault().Title;
 
                     context.Response.Write("SavedSuccess:" + SanitationDispatchBll.Instance.Add(dispatch));
+                    context.Response.Flush();
                     break;
                 case "current"://车载设备获得当前任务的方法
                     code = context.Request.Params["code"];
@@ -95,8 +96,6 @@ namespace BPM.Admin.Sanitation.ashx
                     context.Response.Write(result);
                     break;
             }
-
-            context.Response.Flush();
         }
 
         public bool IsReusable

@@ -91,6 +91,7 @@ void setup() {
 	screenHelper.changeScreen(5);
 
 	code = screenHelper.waitForDriverCode();
+	Serial.println(code);
 	initScreen();
 
 	gpsHelper.init();

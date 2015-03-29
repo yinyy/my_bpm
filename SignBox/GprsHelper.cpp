@@ -47,7 +47,7 @@ String GprsHelperClass::readGprsData() {
 String GprsHelperClass::readCommand() {
 	String command;
 	String data = readGprsData();
-
+	
 	//first:find Content-Length
 	int index = data.indexOf("Content-Length:");
 	if (index < 0) {
