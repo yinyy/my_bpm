@@ -4,12 +4,24 @@ $(function () {
 
     autoResize({ dataGrid: '#list', gridType: 'datagrid', callback: grid.bind, height: 0 });
 
+    $('#a_export').click(function () {
+        var ee = new ExportExcel('list', "V_Quoted_Analyse",
+            [
+            { title: '货代公司', field: 'TrueName' },
+            { title: '询盘次数', field: 'Sended' },
+            { title: '报价次数', field: 'Replied' },
+            { title: '中标次数', field: 'Bidded' }
+            ]);
+        ee.go();
+    });
+
 });
 
 var grid = {
     bind: function (winSize) {
         $('#list').datagrid({
             url: actionURL,
+            toolbar: '#toolbar',
             title: "数据列表",
             iconCls: 'icon icon-list',
             width: winSize.width,
