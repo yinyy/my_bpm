@@ -25,7 +25,6 @@ namespace BPM.Admin.Sanitation.ashx
 
             UserBll.Instance.CheckUserOnlingState();
 
-            //int k;
             var json = HttpContext.Current.Request["json"];
             var rpm = new RequestParamModel<SanitationDispatchModel>(context) { CurrentContext = context };
             if (!string.IsNullOrEmpty(json))
