@@ -127,8 +127,13 @@ void loop()
 	delay(1000);
 	current.trunk.card = crh.readTrunkCard();
 	if (current.trunk.card != ""){
+		Serial.println(current.trunk.card);
+
 		current.driver.card = crh.readDriverCard();
 		if (current.driver.card != ""){
+
+			Serial.println(current.driver.card);
+
 			current.time = millis();
 
 			//车卡和人卡都读出来了，把车牌号和人员编号发送给PLC
@@ -147,8 +152,10 @@ void loop()
 
 				while (!plch.isReady()){
 					delay(1000);//在PLC没有准备好的情况下，每1秒询问一次
+					Serial.println("PLC ready?");
 				}
 
+				Serial.println("PLC Ready");
 				//PLC就绪
 				plch.send(current.driver.code, current.trunk.code, volumn);
 
@@ -164,9 +171,11 @@ void loop()
 				if (plch.getVolumnPotencyKind(cmd, &volumn, &potency, &kind)){
 					//把相关的信息存储到服务器
 					if (!simh.save(DEVICE_CODE, current.driver.code, current.trunk.code, volumn, potency, kind)){
+						plch.saveError();
 						Serial.println("Save Error");
 					}
 					else{
+						plch.saveSuccess();
 						Serial.println("Save Success");
 					}
 				}
