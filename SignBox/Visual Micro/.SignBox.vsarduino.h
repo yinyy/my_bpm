@@ -18,7 +18,7 @@
 #define USBCON
 #define USB_MANUFACTURER "\"Unknown\""
 #define USB_PRODUCT "\"LinkIt ONE\""
-#define ARDUINO 161
+#define ARDUINO 157
 #define ARDUINO_MAIN
 #define printf iprintf
 #define __MTK__

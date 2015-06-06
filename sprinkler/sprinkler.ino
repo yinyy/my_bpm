@@ -48,7 +48,7 @@ void setup()
 	last.time = 0;
 
 	//Arduino准备
-	Serial.begin(9600);
+	//Serial.begin(9600);
 	Serial1.begin(DEFAULT_BAUD_SIM);//SIM900A
 	Serial2.begin(DEFAULT_BAUD_PLC);//PLC
 	Serial3.begin(DEFAULT_BAUD_CARD_READER);//JR5815
@@ -56,37 +56,50 @@ void setup()
 	while (!Serial1);
 	while (!Serial2);
 	while (!Serial3); 
-	while (!Serial);
+	//while (!Serial);
 
 	simh.init();
 	delay(1000);
 	
+	int count = 0;
+
 	//判断SIM900A是否准备就绪
 	while (!simh.isReady()){
-		Serial.println("SIM900A_ERROR");
+		//Serial.println("SIM900A_ERROR");
 
 		//SIM900A模块无法启动，程序停止
 		delay(1000);
+
+		if (count++ > 5){
+			break;
+		}
 	}
-	Serial.println("SIM900A AT Ready.");
+	//Serial.println("SIM900A AT Ready.");
 
 	//检查信号状态
 	uint8_t sq = simh.checkSignal();
-	Serial.println("SIM900A Singal Regular:" + String(sq));
+	//Serial.println("SIM900A Singal Regular:" + String(sq));
 	//如果信号质量小于n，即判断无法获得信号
+
+	count = 0;
 	while (sq < 5 || sq == 99){
-		Serial.println("Singal Low!");
+		//Serial.println("Singal Low!");
 		
 		//SIM900A信号太弱，无法连接网络
 		delay(1000);
 
 		sq = simh.checkSignal();
-		Serial.println("SIM900A Singal Regular:" + String(sq));
+		//Serial.println("SIM900A Singal Regular:" + String(sq));
+
+		if (count++ > 5){
+			break;
+		}
 	}
 	
 	//打开IP应用
+	count = 0;
 	do{
-		Serial.println("SIM900A_CONNECTING_NETWORK");
+		//Serial.println("SIM900A_CONNECTING_NETWORK");
 
 		int cs = simh.checkContextStatus();
 		if (cs == Context_Status_Connected){
@@ -100,13 +113,17 @@ void setup()
 		}
 
 		delay(1000);
+
+		if (count++ > 5){
+			break;
+		}
 	} while (1);
 	 
 	//SIM900A进入工作状态
-	Serial.println("SIM900A IP Context 1 Ready.");
+	//Serial.println("SIM900A IP Context 1 Ready.");
 
-	current.driver.code = "0002";
-	current.trunk.code = "E82762";
+	//current.driver.code = "0002";
+	//current.trunk.code = "E82762";
 }
 
 void loop()
@@ -127,18 +144,13 @@ void loop()
 	delay(1000);
 	current.trunk.card = crh.readTrunkCard();
 	if (current.trunk.card != ""){
-		Serial.println(current.trunk.card);
-
 		current.driver.card = crh.readDriverCard();
 		if (current.driver.card != ""){
-
-			Serial.println(current.driver.card);
-
 			current.time = millis();
 
 			//车卡和人卡都读出来了，把车牌号和人员编号发送给PLC
 			current.trunk.code = crh.getPlate(current.trunk.card);
-			current.driver.code = crh.getCode(current.driver.code);
+			current.driver.code = crh.getCode(current.driver.card);
 			float volumn = crh.getVolumn(current.trunk.card);
 
 			//只有满足一下条件才能继续操作
@@ -152,10 +164,10 @@ void loop()
 
 				while (!plch.isReady()){
 					delay(1000);//在PLC没有准备好的情况下，每1秒询问一次
-					Serial.println("PLC ready?");
+					//Serial.println("PLC ready?");
 				}
 
-				Serial.println("PLC Ready");
+				//Serial.println("PLC Ready");
 				//PLC就绪
 				plch.send(current.driver.code, current.trunk.code, volumn);
 
@@ -172,11 +184,11 @@ void loop()
 					//把相关的信息存储到服务器
 					if (!simh.save(DEVICE_CODE, current.driver.code, current.trunk.code, volumn, potency, kind)){
 						plch.saveError();
-						Serial.println("Save Error");
+						//Serial.println("Save Error");
 					}
 					else{
 						plch.saveSuccess();
-						Serial.println("Save Success");
+						//Serial.println("Save Success");
 					}
 				}
 
