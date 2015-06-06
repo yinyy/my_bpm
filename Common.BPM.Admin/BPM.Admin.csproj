@@ -54,16 +54,15 @@
       <HintPath>..\packages\fasterflect.2.1.0\lib\net40\Fasterflect.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\dll\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\DotNet\数据访问\ValueInjecter\Omu.ValueInjecter.dll</HintPath>
+    <Reference Include="Omu.ValueInjecter">
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -108,6 +107,7 @@
     <Content Include="css\icon\16\add.png" />
     <Content Include="css\icon\16\advancedsettings.png" />
     <Content Include="css\icon\16\advancedsettings2.png" />
+    <Content Include="css\icon\16\air_compressor.png" />
     <Content Include="css\icon\16\anchor.png" />
     <Content Include="css\icon\16\application.png" />
     <Content Include="css\icon\16\application_add.png" />
@@ -804,6 +804,7 @@
     <Content Include="css\icon\16\font_smaller.png" />
     <Content Include="css\icon\16\forward_blue.png" />
     <Content Include="css\icon\16\forward_green.png" />
+    <Content Include="css\icon\16\gift_card.png" />
     <Content Include="css\icon\16\group.png" />
     <Content Include="css\icon\16\group32.png" />
     <Content Include="css\icon\16\group_add.png" />
@@ -1572,6 +1573,7 @@
     <Content Include="css\icon\16\vector_delete.png" />
     <Content Include="css\icon\16\vector_key.png" />
     <Content Include="css\icon\16\wand.png" />
+    <Content Include="css\icon\16\washer_setting.png" />
     <Content Include="css\icon\16\weather_cloud.png" />
     <Content Include="css\icon\16\weather_clouds.png" />
     <Content Include="css\icon\16\weather_cloudy.png" />
@@ -1611,6 +1613,7 @@
     <Content Include="css\icon\16\zoom_out.png" />
     <Content Include="css\icon\32\accept.png" />
     <Content Include="css\icon\32\add.png" />
+    <Content Include="css\icon\32\air_compressor.png" />
     <Content Include="css\icon\32\anchor.png" />
     <Content Include="css\icon\32\application.png" />
     <Content Include="css\icon\32\application_add.png" />
@@ -2061,6 +2064,7 @@
     <Content Include="css\icon\32\font_add.png" />
     <Content Include="css\icon\32\font_delete.png" />
     <Content Include="css\icon\32\font_go.png" />
+    <Content Include="css\icon\32\gift_card.png" />
     <Content Include="css\icon\32\group.png" />
     <Content Include="css\icon\32\group_add.png" />
     <Content Include="css\icon\32\group_delete.png" />
@@ -2508,6 +2512,7 @@
     <Content Include="css\icon\32\text_align_left.png" />
     <Content Include="css\icon\32\text_align_right.png" />
     <Content Include="css\icon\32\text_allcaps.png" />
+    <Content Include="css\icon\32\washer_setting.png" />
     <Content Include="css\lane_btn_sprites.png" />
     <Content Include="css\mainlogin.css" />
     <Content Include="css\radio.png" />
@@ -3322,6 +3327,25 @@
     <Content Include="scripts\easyui\themes\metro\images\Thumbs.db" />
     <Content Include="theme\bootstrap\style.css" />
     <Content Include="theme\metro\style.css" />
+    <Content Include="Washer\html\WasherCardEdit.html" />
+    <Content Include="Washer\html\WasherCard.html" />
+    <Content Include="Washer\html\WasherDevice.html" />
+    <Content Include="Washer\html\WasherDeviceAdd.html" />
+    <Content Include="Washer\html\WasherCustom.html" />
+    <Content Include="Washer\js\WasherCardAdmin.js" />
+    <Content Include="Washer\js\WasherCard.js" />
+    <Content Include="Washer\js\WasherCustomAdmin.js" />
+    <Content Include="Washer\js\WasherDevice.js" />
+    <Content Include="Washer\js\WasherDeviceAdmin.js" />
+    <Content Include="Washer\js\WasherCustom.js" />
+    <Content Include="Washer\js\WasherSetting.js" />
+    <Content Include="Washer\WasherCard.aspx" />
+    <Content Include="Washer\WasherCardAdmin.aspx" />
+    <Content Include="Washer\WasherCustom.aspx" />
+    <Content Include="Washer\WasherCustomAdmin.aspx" />
+    <Content Include="Washer\WasherDevice.aspx" />
+    <Content Include="Washer\WasherDeviceAdmin.aspx" />
+    <Content Include="Washer\WasherSetting.aspx" />
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
@@ -3527,6 +3551,11 @@
     <Content Include="sys\ashx\DicHandler.ashx" />
     <Content Include="sys\ashx\LogHandler.ashx" />
     <Content Include="sys\ashx\DataBaseHandler.ashx" />
+    <Content Include="Washer\ashx\WasherCustomHandler.ashx" />
+    <Content Include="Washer\ashx\WasherDeviceHandler.ashx" />
+    <Content Include="Washer\ashx\WasherSettingHandler.ashx" />
+    <Content Include="Washer\ashx\WasherCardHandler.ashx" />
+    <Content Include="Washer\ashx\WasherHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\ExportExcel.aspx.cs">
@@ -3663,6 +3692,70 @@
     <Compile Include="sys\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherCardHandler.ashx.cs">
+      <DependentUpon>WasherCardHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\ashx\WasherCustomHandler.ashx.cs">
+      <DependentUpon>WasherCustomHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\ashx\WasherDeviceHandler.ashx.cs">
+      <DependentUpon>WasherDeviceHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\ashx\WasherHandler.ashx.cs">
+      <DependentUpon>WasherHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\ashx\WasherSettingHandler.ashx.cs">
+      <DependentUpon>WasherSettingHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherCard.aspx.cs">
+      <DependentUpon>WasherCard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherCard.aspx.designer.cs">
+      <DependentUpon>WasherCard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherCardAdmin.aspx.cs">
+      <DependentUpon>WasherCardAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherCardAdmin.aspx.designer.cs">
+      <DependentUpon>WasherCardAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherCustom.aspx.cs">
+      <DependentUpon>WasherCustom.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherCustom.aspx.designer.cs">
+      <DependentUpon>WasherCustom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherCustomAdmin.aspx.cs">
+      <DependentUpon>WasherCustomAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherCustomAdmin.aspx.designer.cs">
+      <DependentUpon>WasherCustomAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherDevice.aspx.cs">
+      <DependentUpon>WasherDevice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherDevice.aspx.designer.cs">
+      <DependentUpon>WasherDevice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherDeviceAdmin.aspx.cs">
+      <DependentUpon>WasherDeviceAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherDeviceAdmin.aspx.designer.cs">
+      <DependentUpon>WasherDeviceAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherSetting.aspx.cs">
+      <DependentUpon>WasherSetting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherSetting.aspx.designer.cs">
+      <DependentUpon>WasherSetting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.Debug.config">
@@ -3686,6 +3779,10 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.Washer\BPM.Washer.csproj">
+      <Project>{e62eb623-f837-4f58-9ca9-4ec850ce94d4}</Project>
+      <Name>BPM.Washer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>
@@ -3717,7 +3814,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>9590</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9581/</IISUrl>
+          <IISUrl>http://localhost:9582/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -164,7 +164,7 @@ namespace BPM.Common
             return json;
         }
 
-        public static string FormatJSONForJQgrid(int totalpages, int pageindex, int recordcount, object list)
+        public static string FormatJSONForJQgrid(long totalpages, long pageindex, long recordcount, object list)
         {
             var json = new { total = totalpages, page = pageindex, records = recordcount, rows = list };
             return ToJson(json);
@@ -213,7 +213,7 @@ namespace BPM.Common
         /// <param name="recordcount">总记录数</param>
         /// <param name="rows">每页记录的JSON格式</param>
         /// <returns></returns>
-        public static string FormatJSONForEasyuiDataGrid(int recordcount, object rowsList)
+        public static string FormatJSONForEasyuiDataGrid(long recordcount, object rowsList)
         {
             return ToJson(new { total = recordcount, rows = rowsList });
         }

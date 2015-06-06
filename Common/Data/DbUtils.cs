@@ -534,7 +534,7 @@ namespace BPM.Common.Data
             }
         }
 
-        public static T Get<T>(long keyid) where T : new()
+        public static T Get<T>(int keyid) where T : new()
         {
             using (var conn = new SqlConnection(cs))
             using (var cmd = conn.CreateCommand())

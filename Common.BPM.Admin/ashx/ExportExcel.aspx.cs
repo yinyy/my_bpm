@@ -34,7 +34,6 @@ namespace KaoQin.Web.ajax
                 int recordCount;
                 DataTable dt = DbUtils.GetPageWithSp(pcp, out recordCount);
                 
-
                 GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", dt);
             }
             else

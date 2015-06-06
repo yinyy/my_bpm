@@ -13,7 +13,7 @@
     <table id="depGrid"></table>
 
  
-    <script type="text/javascript" src="js/department.js?v=5"></script>
+    <script type="text/javascript" src="js/department.js?v=5&d=<%=DateTime.Now.Ticks %>"></script>
     
 
 </asp:Content>

@@ -117,7 +117,7 @@ namespace BPM.Admin.sys.ashx
 
         void AddCategory(DicCategory dc,HttpContext context)
         {
-            int k = DicCategoryDal.Instance.Insert(dc);
+            int k = (int)DicCategoryDal.Instance.Insert(dc);
             var msg = "添加成功。";
             if (k <= 0)
                 msg = "添加失败。";

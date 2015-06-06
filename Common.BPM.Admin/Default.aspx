@@ -43,9 +43,7 @@
 		<%=NavContent %>
 	
 
-	<div  region="south" split="false" style="height: 30px; border-top:none; ">
-		<div class="footer">脚注</div>
-	</div>
+	<div  region="south" split="false" style="height: 30px; border-top:none; "><div class="footer">脚注</div></div>
 	<div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden" border="false">
 		<div id="tabs" class="easyui-tabs"  fit="true"  >
 			<%--<div title="欢迎使用" style="padding:20px;overflow:hidden;" id="home">

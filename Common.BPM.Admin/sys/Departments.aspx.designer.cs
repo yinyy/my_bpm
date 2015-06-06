@@ -7,7 +7,7 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace Xiucai.BPM.Admin.sys {
+namespace BPM.Admin.sys {
     
     
     public partial class Departments {

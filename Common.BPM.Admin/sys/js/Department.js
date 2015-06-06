@@ -34,7 +34,7 @@ var mygrid = {
             idField: 'KeyId',
             treeField: 'DepartmentName',
             columns: [[
-                { title: '部门名称', field: 'DepartmentName', width: 200 },
+                { title: '部门名称', field: 'DepartmentName', width: 400 },
                 { title: '排序', field: 'Sortnum', width: 60, align: 'center' },
                 { title: '备注', field: 'Remark', width: 240 }
             ]]
