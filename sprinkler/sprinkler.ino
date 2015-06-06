@@ -59,7 +59,7 @@ void setup()
 	//while (!Serial);
 
 	simh.init();
-	delay(1000);
+	delay(10000);
 	
 	int count = 0;
 
