@@ -19,6 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "校验码生成器", "校�
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{400174EF-0CF7-42A2-A721-4C3C03D50BD7}"
 	ProjectSection(SolutionItems) = preProject
+		文档\[元元]实际成本费用表.xls = 文档\[元元]实际成本费用表.xls
 		文档\Arduino与PLC通信的新协议.docx = 文档\Arduino与PLC通信的新协议.docx
 		文档\README.txt = 文档\README.txt
 		文档\绘图1.vsdx = 文档\绘图1.vsdx

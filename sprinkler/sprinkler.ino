@@ -141,10 +141,18 @@ void loop()
 	5¡¢·µ»Ø²½Öè1
 	*/
 
-	delay(1000);
+	delay(200);
 	current.trunk.card = crh.readTrunkCard();
 	if (current.trunk.card != ""){
-		current.driver.card = crh.readDriverCard();
+		int read_count = 0;
+
+		do{
+			delay(50);
+
+			current.driver.card = crh.readDriverCard();
+			read_count++;
+		} while (read_count < 10 && current.driver.card == "");
+
 		if (current.driver.card != ""){
 			current.time = millis();
 
