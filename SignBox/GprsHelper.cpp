@@ -12,7 +12,7 @@ long _startMillis;
 void GprsHelperClass::init(){
 	//open gprs
 	while (!LGPRS.attachGPRS("CMNET", NULL, NULL)) {
-		//Serial.println("attach GPRS");
+		//Serial.println("GPRS");
 		delay(500);
 	}
 }

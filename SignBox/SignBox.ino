@@ -84,14 +84,14 @@ void setup() {
 	Serial1.begin(115200);
 	while (!Serial1);
 
-	Serial.begin(115200);
-
+	/*Serial.begin(115200);
+	Serial.println("Ready");*/
 	screenHelper.changeScreen(1);
 	delay(5000);
 	screenHelper.changeScreen(5);
 
 	code = screenHelper.waitForDriverCode();
-	Serial.println(code);
+	//Serial.println(code);
 	initScreen();
 
 	gpsHelper.init();
@@ -103,6 +103,7 @@ void setup() {
 }
 
 void loop() {
+	//Serial.println("dsfadsfads");
 	if ((millis() - lastTime[2] > 500) && (screenHelper.currentScreen == 4)) {
 		if ((gps.statusOfGPS == 1) || (gps.statusOfGPS == 2)) {
 			screenHelper.showTime(gps.time);
@@ -122,6 +123,7 @@ void loop() {
 
 	//check works per 30s.
 	if ((screenHelper.currentScreen == 4) && (millis() - lastTime[1] > 30000)) {
+		Serial.println("adfadsfasdfasdfasd");
 		gprsHelper.sendCommand(code, PLATE);
 		lastTime[1] = millis();
 	}
@@ -137,4 +139,3 @@ void loop() {
 		executeCommand(command);
 	}
 }
-

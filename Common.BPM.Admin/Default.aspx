@@ -8,7 +8,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>项目名称</title>
+	<title>基于物联网的智能控制系统</title>
 	<script type="text/javascript" src="Scripts/jquery-1.8.3.min.js"></script>
    
 	<%=WebExtensions.CombresLink(base.ThemeName) %>
@@ -44,7 +44,7 @@
 	
 
 	<div  region="south" split="false" style="height: 30px; border-top:none; ">
-		<div class="footer">[脚注]</div>
+		<div class="footer">[基于物联网的智能控制系统]</div>
 	</div>
 	<div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden" border="false">
 		<div id="tabs" class="easyui-tabs"  fit="true"  >

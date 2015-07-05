@@ -9,9 +9,8 @@
 	#include "WProgram.h"
 #endif
 
-
-#include <LGPRS.h>
-#include <LGPRSClient.h>
+#include <LGPRS\LGPRS.h>
+#include <LGPRS\LGPRSClient.h>
 
 #define SERVER_URL		"221.2.232.82"
 #define SERVER_PORT		8766

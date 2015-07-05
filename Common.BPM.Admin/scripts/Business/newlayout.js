@@ -529,6 +529,10 @@ $(function () {
         });
     });
 
+    $('#help').click(function () {
+        window.open('help.pdf', 'help', null);
+    });
+
 
     $(window).load(function () {
         $('#loading').fadeOut();

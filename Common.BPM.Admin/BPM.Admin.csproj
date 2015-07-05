@@ -3345,6 +3345,7 @@
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
+    <Content Include="help.pdf" />
     <None Include="Properties\PublishProfiles\bpm.pubxml" />
     <Content Include="Sanitation\ashx\SanitationDriverHandler.ashx" />
     <Content Include="Sanitation\ashx\SanitationTrunkHandler.ashx" />

@@ -21,11 +21,11 @@ $(function () {
             text: '登录',
             iconCls: 'icon-user',
             handler: login
-        }, {
+        }/*, {
             text: 'About Me',
             iconCls: 'icon-comments',
             handler:aboutMe
-        }],align:'center',
+        }*/],align:'center',
         onLoad: function () {
             
             if (!showValidateCode) {
