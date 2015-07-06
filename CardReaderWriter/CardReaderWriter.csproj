@@ -106,6 +106,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icon.ico" />
     <Content Include="UhfReader_API.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{400174
 	ProjectSection(SolutionItems) = preProject
 		文档\[元元]实际成本费用表.xls = 文档\[元元]实际成本费用表.xls
 		文档\Arduino与PLC通信的新协议.docx = 文档\Arduino与PLC通信的新协议.docx
+		文档\logo.psd = 文档\logo.psd
 		文档\README.txt = 文档\README.txt
 		文档\使用说明.docx = 文档\使用说明.docx
 		文档\电路板外壳-15.6.12.rar = 文档\电路板外壳-15.6.12.rar
@@ -32,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{400174
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SignBox", "SignBox\SignBox.vcxproj", "{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CardReaderWriterSetup", "CardReaderWriterSetup\CardReaderWriterSetup.vdproj", "{C420B40A-F06B-42DF-AFD4-364EE765BCCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +126,12 @@ Global
 		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Win32.ActiveCfg = Release|Win32
 		{5D8EFD53-0ECC-49B8-A3D3-E99A059BB188}.Release|Win32.Build.0 = Release|Win32
+		{C420B40A-F06B-42DF-AFD4-364EE765BCCB}.Debug|Any CPU.ActiveCfg = Debug
+		{C420B40A-F06B-42DF-AFD4-364EE765BCCB}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{C420B40A-F06B-42DF-AFD4-364EE765BCCB}.Debug|Win32.ActiveCfg = Debug
+		{C420B40A-F06B-42DF-AFD4-364EE765BCCB}.Release|Any CPU.ActiveCfg = Release
+		{C420B40A-F06B-42DF-AFD4-364EE765BCCB}.Release|Mixed Platforms.ActiveCfg = Release
+		{C420B40A-F06B-42DF-AFD4-364EE765BCCB}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
