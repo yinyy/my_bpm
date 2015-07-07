@@ -26,34 +26,62 @@ namespace BPM.Admin.Sanitation.ashx
         {
             context.Response.ContentType = "text/plain";
             string action = context.Request.Params["action"];
-            string code;
-            string plate;
-            double lng;
-            double lat;
-            int pipe; 
+            string code=null;
+            string plate=null;
+            double lng=0;
+            double lat=0;
+            int pipe=0;
+            float volumn = 0;
+            string address = null;
+            int kind = 0;
+            int potency = 0;
+
             SanitationDispatchModel dispatch;
+
+            string log_dir = context.Server.MapPath("~/logs");
+            if(!Directory.Exists(log_dir)){
+            Directory.CreateDirectory(log_dir);
+            }
 
             switch (action)
             {
                 case "save":
-                    code = context.Request.Params["driver"];
-                    plate = context.Request.Params["trunk"];
-                    float volumn = Convert.ToSingle(context.Request.Params["volumn"]);
-                    string address = context.Request.Params["address"];
-                    int kind = Convert.ToInt32(context.Request.Params["kind"]);
-                    int potency = Convert.ToInt32(context.Request.Params["potency"]);
+                    try
+                    {
+                        code = context.Request.Params["driver"];
+                        plate = context.Request.Params["trunk"];
+                        volumn = Convert.ToSingle(context.Request.Params["volumn"]);
+                        address = context.Request.Params["address"];
+                        kind = Convert.ToInt32(context.Request.Params["kind"]);
+                        potency = Convert.ToInt32(context.Request.Params["potency"]);
 
-                    dispatch = new SanitationDispatchModel();
-                    dispatch.DriverId = SanitationDriverBll.Instance.GetByCode(code).KeyId;
-                    dispatch.Kind = kind;
-                    dispatch.Potency = 5;
-                    dispatch.Status = 0;
-                    dispatch.TrunkId = SanitationTrunkBll.Instance.GetByPlate(plate).KeyId;
-                    dispatch.Time = DateTime.Now;
-                    dispatch.Address = DicDal.Instance.GetWhere(new { Code = address }).FirstOrDefault().Title;
+                        dispatch = new SanitationDispatchModel();
+                        dispatch.DriverId = SanitationDriverBll.Instance.GetByCode(code).KeyId;
+                        dispatch.Kind = kind;
+                        dispatch.Potency = potency;
+                        dispatch.Status = 0;
+                        dispatch.TrunkId = SanitationTrunkBll.Instance.GetByPlate(plate).KeyId;
+                        dispatch.Time = DateTime.Now;
+                        dispatch.Address = DicDal.Instance.GetWhere(new { Code = address }).FirstOrDefault().Title;
 
-                    context.Response.Write("SavedSuccess:" + SanitationDispatchBll.Instance.Add(dispatch));
-                    context.Response.Flush();
+                        context.Response.Write("SavedSuccess:" + SanitationDispatchBll.Instance.Add(dispatch));
+                    }
+                    catch (Exception e)
+                    {
+                        string log_file = string.Format("{0}\\{1}.txt", log_dir, Convert.ToString(DateTime.Now.Ticks, 16));
+                        using (StreamWriter writer = new StreamWriter(new FileStream(log_file, FileMode.CreateNew)))
+                        {
+                            writer.WriteLine(string.Format("code={0},plate={1},volumn={2},address={3},kind={4},potency={5}", code, plate, volumn, address, kind, potency));
+                            writer.WriteLine(e.Message);
+                            writer.WriteLine(e.StackTrace);
+                        }
+
+                        context.Response.Write("error");
+                    }
+                    finally
+                    {
+                        context.Response.Flush();
+                    }
                     break;
                 case "current"://车载设备获得当前任务的方法
                     code = context.Request.Params["code"];
@@ -62,6 +90,7 @@ namespace BPM.Admin.Sanitation.ashx
                     dispatch = SanitationDispatchBll.Instance.Current(code, plate);
 
                     context.Response.Write(string.Format("current:{0}", dispatch == null ? 0 : dispatch.KeyId));
+                    context.Response.Flush();
                     break;
                 case "sign"://车载设备签到的方法
                     code = context.Request.Params["code"];
@@ -80,6 +109,7 @@ namespace BPM.Admin.Sanitation.ashx
                     dispatch.Status = 1;
 
                     context.Response.Write(string.Format("signed:{0}", SanitationDispatchBll.Instance.Update(dispatch)));
+                    context.Response.Flush();
                     break;
                 default:
                     string result = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
@@ -97,6 +127,7 @@ namespace BPM.Admin.Sanitation.ashx
                     }
 
                     context.Response.Write(result);
+                    context.Response.Flush();
                     break;
             }
         }

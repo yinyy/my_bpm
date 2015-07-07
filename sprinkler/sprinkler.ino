@@ -40,11 +40,11 @@ Info_Struct current, last;
 void setup()
 {
 	current.driver.card = "";
-	current.driver.code = "";
+	current.trunk.card = "";
 	current.time = 0;
 
 	last.driver.card = "";
-	last.driver.code = "";
+	last.trunk.card = "";
 	last.time = 0;
 
 	//Arduino准备
@@ -59,10 +59,8 @@ void setup()
 	//while (!Serial);
 
 	simh.init();
-	delay(10000);
-	
-	int count = 0;
 
+	int count = 0;
 	//判断SIM900A是否准备就绪
 	while (!simh.isReady()){
 		//Serial.println("SIM900A_ERROR");
@@ -70,7 +68,7 @@ void setup()
 		//SIM900A模块无法启动，程序停止
 		delay(1000);
 
-		if (count++ > 5){
+		if (count++ > 20){
 			break;
 		}
 	}
@@ -121,9 +119,6 @@ void setup()
 	 
 	//SIM900A进入工作状态
 	//Serial.println("SIM900A IP Context 1 Ready.");
-
-	//current.driver.code = "0002";
-	//current.trunk.code = "E82762";
 }
 
 /*
@@ -217,14 +212,14 @@ void loop()
 	*/
 
 	//delay(20);
-	current.trunk.card = crh.readTrunkCard();
+	current.trunk.card = crh.readTrunkCard();//"544B000A4538323736320058";
 	if (current.trunk.card != ""){
 		int read_count = 0;
 
 		do{
 			//delay(20);
 
-			current.driver.card = crh.readDriverCard();
+			current.driver.card = crh.readDriverCard();//"5050000830303031";// 
 			read_count++;
 		} while (read_count < 10 && current.driver.card == "");
 
@@ -254,7 +249,7 @@ void loop()
 				//PLC就绪
 				plch.send(current.driver.code, current.trunk.code, volumn);
 
-				String cmd;
+				String cmd;// = "0102050051000000";
 				do{
 					delay(1000);
 					cmd = plch.readCommand();
@@ -264,14 +259,38 @@ void loop()
 				int kind;
 				int potency;
 				if (plch.getVolumnPotencyKind(cmd, &volumn, &potency, &kind)){
-					//把相关的信息存储到服务器
-					if (!simh.save(DEVICE_CODE, current.driver.code, current.trunk.code, volumn, potency, kind)){
-						plch.saveError();
-						//Serial.println("Save Error");
-					}
-					else{
+					/*Serial.print("plate = ");
+					Serial.println(current.trunk.code);
+					Serial.print("code = ");
+					Serial.println(current.driver.code);
+					Serial.print("volumn = ");
+					Serial.println(volumn);
+					Serial.print("potency = ");
+					Serial.println(potency);
+					Serial.print("kind = ");
+					Serial.println(kind);
+*/
+					int saveCount = 0;
+					boolean saved = false;
+
+					do{
+						//把相关的信息存储到服务器，尝试提交5次
+						saved = simh.save(DEVICE_CODE, current.driver.code, current.trunk.code, volumn, potency, kind);
+						//Serial.print("Saved ");
+						//Serial.println(saveCount);
+
+						if (saved){
+							break;
+						}
+					} while (saveCount++ < 5);
+
+					if (saved){
 						plch.saveSuccess();
 						//Serial.println("Save Success");
+					}
+					else{
+						plch.saveError();
+						//Serial.println("Save Error");
 					}
 				}
 
