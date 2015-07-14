@@ -14,6 +14,3 @@
     <script src="../scripts/Business/Export.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/LogisticsQuotedAnalyse.js?d=<%=DateTime.Now.Ticks %>"></script>
 </asp:Content>
-
-
-

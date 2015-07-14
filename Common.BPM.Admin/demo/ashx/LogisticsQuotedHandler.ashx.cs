@@ -63,8 +63,9 @@ namespace BPM.Admin.demo.ashx
 
                     //判断是否超过时间
                     LogisticsInquiryModel inquiry = DbUtils.Get<LogisticsInquiryModel>(model.InquiryId);
+                    DateTime now = DateTime.Now;
 
-                    if (DateTime.Now.CompareTo(inquiry.Ended) > 0)
+                    if (now.CompareTo(inquiry.Ended) > 0)
                     {
                         context.Response.Write(-1);
                     }
@@ -93,6 +94,15 @@ namespace BPM.Admin.demo.ashx
                         model.Published = DateTime.Now;
                         model.Eta = rpm.Entity.Eta;
                         model.Counted = model.Counted + 1;
+
+                        #region 如果是在结束时间内5分钟报价的，那么，结束时间自动延续5分钟
+                        now = now.AddMinutes(5);
+                        if (now.CompareTo(inquiry.Ended) >= 0)
+                        {
+                            inquiry.Ended = inquiry.Ended.AddMinutes(5);
+                            LogisticsInquiryBll.Instance.Update(inquiry);
+                        }
+                        #endregion
 
                         context.Response.Write(LogisticsFeedbackBll.Instance.Update(model));
 
