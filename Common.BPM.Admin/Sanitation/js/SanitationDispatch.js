@@ -35,7 +35,7 @@ var grid = {
             frozenColumns: [[]],
             columns: [[
 		    {
-		        title: '日期', field: 'Time', width: 120, align: 'center', formatter: function (v, r, i) {
+		        title: '日期', field: 'Time', width: 160, align: 'center', formatter: function (v, r, i) {
 		            return v.substring(0, 10);
 		        }
 		    },

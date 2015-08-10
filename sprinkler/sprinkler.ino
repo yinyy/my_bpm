@@ -39,6 +39,8 @@ Info_Struct current, last;
 
 void setup()
 {
+	delay(20000);
+
 	current.driver.card = "";
 	current.trunk.card = "";
 	current.time = 0;
@@ -295,7 +297,7 @@ void loop()
 				}
 
 				//完成一次加水过程，等到30秒
-				delay(30000);
+				delay(10000);
 			
 				last.driver.code = current.driver.code;
 				last.trunk.code = current.trunk.code;
