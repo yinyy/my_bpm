@@ -31,10 +31,10 @@ namespace CardReaderWriter
             cbVersion.SelectedIndex = 1;
             cbBaud.SelectedIndex = 3;
 
-            if (cbBaud.Items.Count > 0)
-            {
-                cbPort.SelectedIndex = 0;
-            }
+            //if (cbBaud.Items.Count > 0)
+            //{
+            //    cbPort.SelectedIndex = 0;
+            //}
         }
 
         private void FetchSerialPorts()

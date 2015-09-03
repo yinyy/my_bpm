@@ -37,6 +37,31 @@ SimHelperClass simh;
 
 Info_Struct current, last;
 
+void openIP() {
+	//打开IP应用
+	int count = 0;
+	do {
+		//Serial.println("SIM900A_CONNECTING_NETWORK");
+
+		int cs = simh.checkContextStatus();
+		if (cs == Context_Status_Connected) {
+			break;
+		}
+		else if (cs == Context_Status_Closed) {
+			simh.openContext();
+		}
+		else {
+			;//Context_Status_Closing或者Context_Status_Connecting时，等待即可。
+		}
+
+		delay(1000);
+
+		if (count++ > 5) {
+			break;
+		}
+	} while (1);
+}
+
 void setup()
 {
 	delay(20000);
@@ -96,28 +121,7 @@ void setup()
 		}
 	}
 	
-	//打开IP应用
-	count = 0;
-	do{
-		//Serial.println("SIM900A_CONNECTING_NETWORK");
-
-		int cs = simh.checkContextStatus();
-		if (cs == Context_Status_Connected){
-			break;
-		}
-		else if (cs == Context_Status_Closed){
-			simh.openContext();
-		}
-		else{
-			;//Context_Status_Closing或者Context_Status_Connecting时，等待即可。
-		}
-
-		delay(1000);
-
-		if (count++ > 5){
-			break;
-		}
-	} while (1);
+	openIP();
 	 
 	//SIM900A进入工作状态
 	//Serial.println("SIM900A IP Context 1 Ready.");
@@ -270,10 +274,12 @@ void loop()
 					Serial.print("potency = ");
 					Serial.println(potency);
 					Serial.print("kind = ");
-					Serial.println(kind);
-*/
+					Serial.println(kind);*/
+
 					int saveCount = 0;
 					boolean saved = false;
+
+					openIP();
 
 					do{
 						//把相关的信息存储到服务器，尝试提交5次

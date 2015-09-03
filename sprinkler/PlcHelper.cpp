@@ -115,10 +115,11 @@ boolean PlcHelperClass::getVolumnPotencyKind(String command, float* volumn, int*
 		ch[3] = command.charAt(13);
 		*potency = (int)strtol(ch, NULL, 16);
 
-		char ch2[2];
-		ch2[0] = command.charAt(14);
-		ch2[1] = command.charAt(15);
-		*kind = (int)strtol(ch2, NULL, 16);
+		ch[0] = 0;
+		ch[1] = 0;
+		ch[2] = command.charAt(14);
+		ch[3] = command.charAt(15);
+		*kind = (int)strtol(ch, NULL, 16);
 
 		return true;
 	}

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -44,10 +44,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\Arduino\arduino-1.5.7\hardware\arduino\avr\cores\arduino;F:\Arduino\arduino-1.5.7\hardware\arduino\avr\variants\mega;F:\Working\Sanitation.BPM\sprinkler;F:\Arduino\arduino-1.5.7\libraries;F:\Arduino\arduino-1.5.7\hardware\arduino\avr\libraries;D:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;E:\MyDocuments\Documents\Arduino\libraries;f:\arduino\arduino-1.5.7\hardware\tools\avr\avr\include\;f:\arduino\arduino-1.5.7\hardware\tools\avr\avr\include\avr\;f:\arduino\arduino-1.5.7\hardware\tools\avr\avr\;f:\arduino\arduino-1.5.7\hardware\tools\avr\lib\gcc\avr\4.8.1\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Arduino\arduino-1.6.5-r2\hardware\arduino\avr\cores\arduino;F:\Arduino\arduino-1.6.5-r2\hardware\arduino\avr\variants\mega;F:\Working\Sanitation.BPM\sprinkler;F:\Arduino\arduino-1.6.5-r2\libraries;F:\Arduino\arduino-1.6.5-r2\hardware\arduino\avr\libraries;D:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\4vg5lv2q.vnw\Micro Platforms\default\debuggers;E:\尹元元\Documents\Arduino\libraries;F:\Arduino\arduino-1.6.5-r2\hardware\tools\avr/avr/include/;F:\Arduino\arduino-1.6.5-r2\hardware\tools\avr//avr/include/avr/;F:\Arduino\arduino-1.6.5-r2\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>F:\Working\Sanitation.BPM\sprinkler\Visual Micro\.sprinkler.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;ARDUINO=157;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;GCC_VERSION=40801;ARDUINO_ARCH_AVR;ARDUINO_AVR_MEGA2560;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
