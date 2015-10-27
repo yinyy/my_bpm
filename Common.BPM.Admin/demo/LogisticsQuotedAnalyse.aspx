@@ -10,6 +10,10 @@
     <!-- datagrid 列表 -->
     <table id="list" ></table>  
 
+    <!-- 引入多功能查询js -->
+    <script src="../../scripts/Business/Search.js"></script>
+
+
     <!-- 引入js文件 -->
     <script src="../scripts/Business/Export.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/LogisticsQuotedAnalyse.js?d=<%=DateTime.Now.Ticks %>"></script>

@@ -7,6 +7,8 @@ using System.Web.SessionState;
 using BPM.Core.Bll;
 using BPM.Common;
 using BPM.Common.Data;
+using BPM.Common.Data.Filter;
+using BPM.Core;
 
 namespace BPM.Admin.demo.ashx
 {
@@ -20,16 +22,19 @@ namespace BPM.Admin.demo.ashx
             context.Response.ContentType = "text/plain";
 
             UserBll.Instance.CheckUserOnlingState();
+
+            string where = FilterTranslator.ToSql(context.Request["Filter"]);
             var pcp = new ProcCustomPage("V_Quoted_Analyse")
                     {
                         PageIndex = 1,
                         PageSize = 999999,
-                        OrderFields = "TrueName asc"
-                    };
+                        OrderFields = "TrueName asc",
+                        WhereString = where
+            };
 
             int count = 0;
-            DataTable table = DbUtils.GetPageWithSp(pcp, out count);
 
+            DataTable table = DbUtils.GetPageWithSp(pcp, out count);
             context.Response.Write(JSONhelper.FormatJSONForEasyuiDataGrid(count, table));
         }
 

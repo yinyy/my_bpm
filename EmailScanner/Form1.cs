@@ -49,7 +49,7 @@ namespace EmailScanner
                     DataClasses1DataContext db = new DataClasses1DataContext();
 
                     var q = (from aR in db.Logistics_Inquiry
-                             where aR.Ended >= now.AddMinutes(-2) && aR.SendNotification == null
+                             where aR.SendNotification == null
                              join aD in db.Sys_Dics on aR.Inquirer equals aD.KeyId
                              orderby aR.Ended descending
                              select new { InquiryId = aR.KeyId, Time = aR.Ended, Inquirer = aD.Title, Email = aD.Remark, Created = aR.Published, Port=aR.Port, Cargo=aR.Cargo, Amount=aR.Amount }).ToArray();
@@ -71,7 +71,7 @@ namespace EmailScanner
                     foreach (var i in q)
                     {
                         string t = i.Time.ToString("yyyyMMddHH:mm");
-                        if (nowstr == t)
+                        if (nowstr.CompareTo(t)>0)
                         {
                             StringBuilder sb = new StringBuilder();
                             sb.Append(string.Format("【{0:yyyy年MM月dd日 HH:mm:ss}】发布的询盘已经完成。询盘详细信息如下：<br/>", i.Created));

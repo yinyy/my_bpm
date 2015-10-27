@@ -14,7 +14,9 @@ $(function () {
             ]);
         ee.go();
     });
-
+    $('#a_search').click(function () {
+        
+    });
 });
 
 var grid = {

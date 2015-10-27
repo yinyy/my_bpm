@@ -42,8 +42,9 @@ $(function () {
             { title: '航线', field: 'SupplyGroupTitle' },
             { title: '发送给', field: 'SupplyNames' },
             { title: '当前状态', field: 'Status' },
-            { title: '中标公司', field: 'Bidder'},
-            { title: '价格', field: 'BidderPrice'},
+            { title: '中标公司', field: 'Bidder' },
+            { title: '中标公司名称', field: 'BidderTrueName' },
+            { title: '价格', field: 'BidderPrice' },
             { title: '船公司', field: 'BidderShip' },
             { title: 'ETD', field: 'BidderETD' },
             { title: 'ETA', field: 'BidderETA'},
@@ -107,8 +108,8 @@ var grid = {
 		    },
 		    {
 		        title: '中标公司', field: 'Bidder', width: 150, formatter: function (value, row, index) {
-		            if (row.Status == '已完成') {
-		                return row.Bidder;
+		            if (row.Status == '已完成' && row.Bidder!=null) {
+		                return row.Bidder+'['+row.BidderTrueName+']';
 		            } else {
 		                return '';
 		            }
