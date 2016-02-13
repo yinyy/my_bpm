@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -3779,6 +3780,18 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Weixin\PublicPlatform\WeChat.Event\WeChat.Event.csproj">
+      <Project>{873cf515-cc90-43a2-97f8-3b276af60145}</Project>
+      <Name>WeChat.Event</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Weixin\WeChat.Model\WeChat.Model\WeChat.Model.csproj">
+      <Project>{a5596b2c-ed0e-4791-9b5a-13882d4c77e8}</Project>
+      <Name>WeChat.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Weixin\WeChat.Utils\WeChat.Utils\WeChat.Utils.csproj">
+      <Project>{a78ce527-0da2-451a-914d-e53a7ffd6b9e}</Project>
+      <Name>WeChat.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BPM.Washer\BPM.Washer.csproj">
       <Project>{e62eb623-f837-4f58-9ca9-4ec850ce94d4}</Project>
       <Name>BPM.Washer</Name>
