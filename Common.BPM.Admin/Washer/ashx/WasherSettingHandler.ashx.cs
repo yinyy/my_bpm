@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.SessionState;
 using Washer.Bll;
 using Washer.Model;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -19,41 +21,45 @@ namespace BPM.Admin.Washer.ashx
 
         public void ProcessRequest(HttpContext context)
         {
+            var settings = new
+            {
+                Brand = "",
+                Logo = "",
+                CardColor = "",
+                Introduction = "",
+                Setting = new
+                {
+                    Subscribe = 0,
+                    Recharge = new int[3],
+                    PointKind = "",
+                    Level = new int[5]
+                }
+            };
+
             context.Response.ContentType = "text/plain";
 
             UserBll.Instance.CheckUserOnlingState();
             User user = SysVisitor.Instance.CurrentUser;
             int departmentId = user.DepartmentId;
-
-            WasherSettingModel model;
+         
+            Department dept;
             string action = context.Request.Params["action"];
             switch (action)
             {
                 case "js":
-                    model = WasherSettingBll.Instance.GetByDepartmentId(departmentId);
-                    if (model == null)
-                    {
-                        context.Response.Write("var config={money: 0, other: ''}");
-                    }
-                    else
-                    {
-                        context.Response.Write("var config = " + model.Value);
-                    }
+                    dept = DepartmentBll.Instance.Get(departmentId);
+                    context.Response.Write("var json = " + JsonConvert.SerializeObject(dept));
+
                     break;
                 default:
-                    model = WasherSettingBll.Instance.GetByDepartmentId(departmentId);
-                    if (model == null)
-                    {
-                        model = new WasherSettingModel();
-                        model.DepartmentId = departmentId;
-                        model.Value = "";
-
-                        model.KeyId = WasherSettingBll.Instance.Add(model);
-                    }
-
-                    model.Value = context.Request.Params["json"];
-
-                    context.Response.Write(WasherSettingBll.Instance.Update(model));
+                    dept = DepartmentBll.Instance.Get(departmentId);
+                    dept.Brand = context.Request.Params["Brand"];
+                    dept.Logo = context.Request.Params["Logo"];
+                    dept.CardColor = context.Request.Params["CardColor"];
+                    dept.Introduction = context.Request.Params["Introduction"];
+                    dept.Setting = context.Request.Params["Setting"];
+                    
+                    context.Response.Write(DepartmentBll.Instance.Update(dept));
 
                     break;
             }

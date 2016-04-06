@@ -11,6 +11,10 @@ using Washer.Bll;
 using Washer.Model;
 using Omu.ValueInjecter;
 using BPM.Core.Dal;
+using ZXing.QrCode;
+using ZXing;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -44,41 +48,97 @@ namespace BPM.Admin.Washer.ashx
             {
                 case "add":
                     model = rpm.Entity;
-
-                    model.Title = "";
+                    
+                    model.Province = "";
+                    model.City = "";
+                    model.Region = "";
                     model.Address = "";
-                    model.Status = 0;
-                    model.Position = "";
-                    model.Updated = DateTime.Now;
+                    model.Status = "";
+                    model.IpAddress = "";
                     model.Memo2 = "";
-                    model.Deleted = false;
+                    model.Setting = "{\"Price\": 0}";
                   
                     context.Response.Write(WasherDeviceBll.Instance.Add(model));
                     break;
+                case "users":
+                    context.Response.Write(JSONhelper.ToJson(UserDal.Instance.GetAll().Select(u => new { KeyId = u.KeyId, Title = u.TrueName + "()" })));
+                    break;
+                case "dpts":
+                    context.Response.Write(JSONhelper.ToJson(DepartmentDal.Instance.GetAll().Select(d => new { KeyId = d.KeyId, Title = d.DepartmentName })));
+                    break;
                 case "edit":
-                    model = WasherDeviceBll.Instance.GetById(rpm.KeyId);
-
-                    model.Serial = rpm.Entity.Serial;
+                    model = WasherDeviceBll.Instance.Get(rpm.KeyId);
+                    model.SerialNumber = rpm.Entity.SerialNumber;
+                    model.BoardNumber = rpm.Entity.BoardNumber;
+                    model.DeliveryTime = rpm.Entity.DeliveryTime;
+                    model.ProductionTime = rpm.Entity.ProductionTime;
                     model.DepartmentId = rpm.Entity.DepartmentId;
                     model.Memo = rpm.Entity.Memo;
         
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;
-                case "edit2":
-                    model = WasherDeviceBll.Instance.GetById(rpm.KeyId);
-
-                    model.Title = rpm.Entity.Title;
+                case "del":
+                    context.Response.Write(WasherDeviceBll.Instance.Delete(rpm.KeyId));
+                    break;
+                case "set":
+                    model = WasherDeviceBll.Instance.Get(rpm.KeyId);
+                    model.Province = rpm.Entity.Province.Substring(rpm.Entity.Province.IndexOf('_')+1);
+                    model.City = rpm.Entity.City.Substring(rpm.Entity.City.IndexOf('_') + 1);
+                    model.Region= rpm.Entity.Region.Substring(rpm.Entity.Region.IndexOf('_') + 1);
                     model.Address = rpm.Entity.Address;
+                    model.Setting = rpm.Entity.Setting;
                     model.Memo2 = rpm.Entity.Memo2;
 
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;
-                case "del":
-                    context.Response.Write(WasherDeviceBll.Instance.Delete(rpm.KeyId));
+                case "device_qrcode":
+                    model = WasherDeviceBll.Instance.Get(rpm.KeyId);
+                    string url = string.Format("/qrcode/{0}", model.KeyId);
+                    string filename = context.Server.MapPath(url);
+
+                    if (!Directory.Exists(filename))
+                    {
+                        Directory.CreateDirectory(filename);
+                    }
+                    
+                    url = string.Format("{0}/{1}.jpg", url, model.SerialNumber);
+                    filename = context.Server.MapPath(url);
+
+                    if (File.Exists(filename))
+                    {
+                        context.Response.Write(JSONhelper.ToJson(new { Success = true, Url = url }));
+                    }
+                    else {
+                        try
+                        {
+                            BarcodeWriter writer = new BarcodeWriter();
+                            writer.Format = BarcodeFormat.QR_CODE;
+                            writer.Options = new QrCodeEncodingOptions()
+                            {
+                                CharacterSet = "utf-8",
+                                DisableECI = true,
+                                Width = 2048,
+                                Height = 2048
+                            };
+                            writer.Write(model.SerialNumber).Save(filename, ImageFormat.Jpeg);
+                            context.Response.Write(JSONhelper.ToJson(new { Success = true, Url = url }));
+                        }
+                        catch (Exception e)
+                        {
+                            context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = e.Message }));
+                        }
+                    }
+                    break;
+                case "edit2":
+                    model = WasherDeviceBll.Instance.Get(rpm.KeyId);
+
+                    
+
+                    context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;
                 case "del2":
-                    model = WasherDeviceBll.Instance.GetById(rpm.KeyId);
-                    model.Deleted = true;
+                    model = WasherDeviceBll.Instance.Get(rpm.KeyId);
+                    
 
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;

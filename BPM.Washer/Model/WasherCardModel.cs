@@ -1,23 +1,29 @@
-﻿using BPM.Common.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Washer.Model
 {
-    [TableName("Washer_Cards")]
-    [Description("洗车卡")]
     public class WasherCardModel
     {
         public int KeyId { get; set; }
-        public string Serial { get; set; }
-        public int DepartmentId { get; set; }
-        public int CustomId { get; set; }
-        public int UserId { get; set; }
-        public decimal Money { get; set; }
-        public int Status { get; set; }
-        public string Memo { get; set; }
+
+        public string Card { get; set; }
+
+        public string Logo { get; set; }
+
+        public float Coins { get; set; }
+
+        public int Points { get; set; }
+
+        public string CardColor { get; set; }
+
+        public string Brand { get; set; }
+
+        public string Setting { get; set; }
+
+        public string Introduction { get; set; }
     }
 }

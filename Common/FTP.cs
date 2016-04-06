@@ -142,7 +142,7 @@ namespace BPM.Common
                 response.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -180,10 +180,12 @@ namespace BPM.Common
                 }
                 strm.Close();
                 fs.Close();
-                result= true;
+                result = true;
             }
-            catch (Exception ex)
-            {return false; }
+            catch
+            {
+                return false;
+            }
             
             return result;
         }
@@ -218,7 +220,7 @@ namespace BPM.Common
                 strm.Close();
                 fs.Close();
             }
-            catch (Exception ex)
+            catch
             { }
         }
         /// <summary>
@@ -246,7 +248,7 @@ namespace BPM.Common
                 response.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -273,7 +275,7 @@ namespace BPM.Common
                 response.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch 
             { return false; }
         }
 
@@ -346,7 +348,7 @@ namespace BPM.Common
                 response.Close();
                 return result.ToString().Split('\n');
             }
-            catch (Exception ex)
+            catch 
             {
                 downloadFiles = null;
                 return downloadFiles;
@@ -379,7 +381,7 @@ namespace BPM.Common
                 response.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

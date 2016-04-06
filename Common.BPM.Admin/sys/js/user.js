@@ -131,7 +131,8 @@ var mygrid = {
                             return '';
                         return '<img style="cursor:pointer" title="激活禁用帐号" onclick="javascript:setUserAttr(\'isdisabled\',' + d.KeyId + ',' + v + ')" src="/css/icon/16/bullet_' + (v == false ? "tick.png" : "minus.png") + '" />';
                     }
-                },{title:'描述',field:'Remark',width:200}
+                },
+                { title: '描述', field: 'Remark', width: 200 }
             ]],
             pagination: true,
             pageSize:PAGESIZE,
@@ -184,7 +185,7 @@ var crud = {
         var addDialog = top.$.hDialog({
             href: formUrl + '?v=' + Math.random(),
             width: 500,
-            height: 400,
+            height: 360,
             title: '新建帐号',
             iconCls: 'icon-user_add',
             onLoad: function () {
@@ -224,9 +225,6 @@ var crud = {
                 }
             }
         });
-        
-        
-        
     },
     update: function() {
         var row = mygrid.selectRow();
@@ -234,7 +232,7 @@ var crud = {
             var editDialog = top.$.hDialog({
                 href: edit_formUrl + '?v=' + Math.random(),
                 width: 500,
-                height: 350,
+                height: 290,
                 title: '修改帐号',
                 iconCls: 'icon-user_add',
                 onLoad: function() {

@@ -34,6 +34,18 @@ namespace BPM.Core.Model
         {
             get { return DepartmentDal.Instance.GetChildren(KeyId); }
         }
+       
+        public string Brand { get; set; }
+
+        public string Logo { get; set; }
+
+        public string CardColor { get; set; }
+
+        public string Setting { get; set; }
+
+        public string Introduction { get; set; }
+
+        public string Qrticket { get; set; }
 
         /// <summary>
         /// tree 节点状态

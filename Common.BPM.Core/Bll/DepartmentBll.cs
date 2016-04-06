@@ -68,6 +68,11 @@ namespace BPM.Core.Bll
             return new JsonMessage {Data = k.ToString(), Message = msg, Success = k > 0}.ToString();
         }
 
+        public Department GetDepartmentByName(string deptName)
+        {
+            return DepartmentDal.Instance.GetWhere(new { DepartmentName = deptName }).FirstOrDefault();
+        }
+
         public string EditDepartment(Department dep)
         {
             string msg = "修改失败。";
@@ -115,7 +120,15 @@ namespace BPM.Core.Bll
             return new JsonMessage { Data = k.ToString(), Message = msg, Success = k > 0 }.ToString();
         }
 
+        public Department Get(int keyId)
+        {
+            return DepartmentDal.Instance.Get(keyId);
+        }
 
+        public int Update(Department dept)
+        {
+            return DepartmentDal.Instance.Update(dept);
+        }
        
     }
 }

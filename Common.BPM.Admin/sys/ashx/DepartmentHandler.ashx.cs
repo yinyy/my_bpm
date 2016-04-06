@@ -8,6 +8,7 @@ using BPM.Common;
 using BPM.Core;
 using BPM.Core.Model;
 using Omu.ValueInjecter;
+using WeChat.Utils;
 
 namespace BPM.Admin.sys.ashx
 {
@@ -44,6 +45,22 @@ namespace BPM.Admin.sys.ashx
                     break;
                 case "delete":
                     context.Response.Write(DepartmentBll.Instance.DeleteDepartment(rpm.KeyId));
+                    break;
+                case "subscribe_qrcode":
+                    Department dept = DepartmentBll.Instance.Get(rpm.KeyId);
+
+                    string ticket = "";
+                    if (dept.Qrticket == null)
+                    {
+                        dept.Qrticket = ticket = WeChatQrcodeHelper.GetPermanenceCode(rpm.KeyId);
+                        DepartmentBll.Instance.Update(dept);
+                    }
+                    else
+                    {
+                        ticket = dept.Qrticket;
+                    }
+
+                    context.Response.Write(JSONhelper.ToJson(new { Success = !string.IsNullOrWhiteSpace(ticket), Ticket = ticket }));
                     break;
                 default:
                     context.Response.Write(DepartmentBll.Instance.GetDepartmentTreegridData());

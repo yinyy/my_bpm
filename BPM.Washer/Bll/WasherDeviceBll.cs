@@ -40,14 +40,14 @@ namespace Washer.Bll
             return WasherDeviceDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);
         }
 
-        public WasherDeviceModel GetById(int keyId)
+        public WasherDeviceModel Get(int keyId)
         {
             return WasherDeviceDal.Instance.GetWhere(new { KeyId = keyId }).FirstOrDefault();
         }
 
-        public WasherDeviceModel GetBySerial(string serial)
+        public WasherDeviceModel Get(string serialNumber)
         {
-            return WasherDeviceDal.Instance.GetWhere(new { Serial = serial }).FirstOrDefault();
+            return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
         }
     }
 }

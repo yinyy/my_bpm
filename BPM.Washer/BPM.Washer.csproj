@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Washer</RootNamespace>
     <AssemblyName>Washer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,22 +44,25 @@
   <ItemGroup>
     <Compile Include="Bll\WasherCardBll.cs" />
     <Compile Include="Bll\WasherConsumeBll.cs" />
-    <Compile Include="Bll\WasherCustomBll.cs" />
     <Compile Include="Bll\WasherDeviceBll.cs" />
-    <Compile Include="Bll\WasherRechargeBll.cs" />
-    <Compile Include="Bll\WasherSettingBll.cs" />
+    <Compile Include="Bll\WasherOrderBll.cs" />
+    <Compile Include="Bll\WasherReceivedMessageBll.cs" />
+    <Compile Include="Bll\WasherRewardBll.cs" />
+    <Compile Include="Bll\WasherSpendingBll.cs" />
     <Compile Include="Dal\WasherCardDal.cs" />
     <Compile Include="Dal\WasherConsumeDal.cs" />
-    <Compile Include="Dal\WasherCustomDal.cs" />
     <Compile Include="Dal\WasherDeviceDal.cs" />
-    <Compile Include="Dal\WasherRechargeDal.cs" />
-    <Compile Include="Dal\WasherSettingDal.cs" />
+    <Compile Include="Dal\WasherOrderDal.cs" />
+    <Compile Include="Dal\WasherRewardDal.cs" />
+    <Compile Include="Dal\WasherReceivedMessageDal.cs" />
+    <Compile Include="Dal\WasherSpendingDal.cs" />
     <Compile Include="Model\WasherCardModel.cs" />
     <Compile Include="Model\WasherConsumeModel.cs" />
-    <Compile Include="Model\WasherCustomModel.cs" />
     <Compile Include="Model\WasherDeviceModel.cs" />
-    <Compile Include="Model\WasherRechargeModel.cs" />
-    <Compile Include="Model\WasherSettingModel.cs" />
+    <Compile Include="Model\WasherOrderModel.cs" />
+    <Compile Include="Model\WasherRewardModel.cs" />
+    <Compile Include="Model\WasherReceivedMessageModel.cs" />
+    <Compile Include="Model\WasherSpendingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

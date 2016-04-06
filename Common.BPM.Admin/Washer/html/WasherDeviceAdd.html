@@ -1,7 +1,10 @@
 ﻿<form id="uiform">
     <table class="grid">
-        <tr><td>序列号：</td><td><input type="text" id="txt_Serial" name="Serial" class="txt03 easyui-validatebox" data-options="required:true,invalidMessage:'请输入设备序列号。'" style="width: 180px;" /></td></tr>
-        <tr><td>所属客户：</td><td><input type="text" id="txt_DepartmentId" name="DepartmentId" class="txt03 easyui-combobox" data-options="editable:false" style="width: 186px;" /></td></tr>
-        <tr><td>备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 310px; height:80px"></textarea> </td></tr>
+        <tr><td align="right">序列号：</td><td><input type="text" id="txt_SerialNumber" name="SerialNumber" class="txt03 easyui-validatebox" data-options="required:true" style="width: 250px;" /></td></tr>
+        <tr><td align="right">主板号：</td><td><input type="text" id="txt_BoardNumber" name="BoardNumber" class="txt03 easyui-validatebox" data-options="required:true" style="width: 250px;" /></td></tr>
+        <tr><td align="right">生产时间：</td><td><input type="text" id="txt_ProductionTime" name="ProductionTime" style="width:255px" /></td></tr>
+        <tr><td align="right">客户名称：</td><td><input type="text" id="txt_DepartmentId" name="DepartmentId" class="txt03" style="width:255px" /></td></tr>
+        <tr><td align="right">出厂时间：</td><td><input type="text" id="txt_DeliveryTime" name="DeliveryTime" style="width:255px"/></td></tr>
+        <tr><td align="right">备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 340px; height:80px"></textarea> </td></tr>
     </table>
 </form>

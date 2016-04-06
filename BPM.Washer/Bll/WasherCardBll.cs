@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Washer.Dal;
 using Washer.Model;
 
@@ -15,34 +16,27 @@ namespace Washer.Bll
             get { return SingletonProvider<WasherCardBll>.Instance; }
         }
 
-        public long Add(WasherCardModel model)
+        public List<WasherCardModel> GetCards(string openId)
         {
-            return WasherCardDal.Instance.Insert(model);
+            var cards = WasherCardDal.Instance.GetCards(openId);
+                
+            //    .Select(c => new WasherCardModel
+            //{
+            //    Coins = c.Coins,
+            //    KeyId = c.KeyId,
+            //    Picture = "/PublicPlatform/Web/images/default_card.png",
+            //    Points = c.Points,
+            //    Serial = c.Card,
+            //    Logo = "/PublicPlatform/Web/images/default_logo.png",
+            //    Name = "测试的品牌"
+            //}).ToList();
+
+            return cards;
         }
 
-        public int Update(WasherCardModel model)
+        public string GetIntroduction(int keyId)
         {
-            return WasherCardDal.Instance.Update(model);
-        }
-
-        public int Delete(int keyid)
-        {
-            return WasherCardDal.Instance.Delete(keyid);
-        }
-
-        public string GetJson(int pageindex, int pagesize, string filterJson, string sort = "Keyid", string order = "asc")
-        {
-            return WasherCardDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);
-        }
-
-        public WasherCardModel GetById(int keyId)
-        {
-            return WasherCardDal.Instance.GetWhere(new { KeyId = keyId }).FirstOrDefault();
-        }
-
-        public WasherCardModel GetBySerial(string serial)
-        {
-            return WasherCardDal.Instance.GetWhere(new { Serial = serial }).FirstOrDefault();
+            return WasherCardDal.Instance.GetIntroduction(keyId);
         }
     }
 }

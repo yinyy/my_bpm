@@ -8,13 +8,35 @@ using System.Text;
 namespace Washer.Model
 {
     [TableName("Washer_Consumes")]
-    [Description("洗车卡消费记录表")]
+    [Description("消费者")]
     public class WasherConsumeModel
     {
         public int KeyId { get; set; }
-        public int CardId { get; set; }
-        public int DeviceId { get; set; }
-        public DateTime Time { get; set; }
-        public decimal Money { get; set; }
+
+        public string UnionId { get; set; }
+
+        public string OpenId { get; set; }
+
+        public string NickName { get; set; }
+
+        public string Country { get; set; }
+
+        public string City { get; set; }
+
+        public string Province { get; set; }
+
+        public string Gender { get; set; }
+
+        public int DepartmentId{ get; set; }
+
+        public int RefererId { get; set; }
+
+        public string Card { get; set; }
+
+        public float Coins { get; set; }
+
+        public int Points { get; set; }
+
+        public string Memo { get; set; }
     }
 }

@@ -1,0 +1,144 @@
+﻿a{
+    text-decoration: none;
+}
+
+div.card_container{
+    height: 91px;
+    
+    padding-top: 10px;
+
+    background-image: url(../images/card_background.png);
+    background-position-y: bottom;
+}
+
+div.card_container div.card{
+	height: 91px;
+    width: 95%;
+
+    margin: 0px auto;
+
+    background-color: #fa4f28;
+
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+    -webkit-border-top-left-radius: 15px;
+    -webkit-border-top-right-radius: 15px;
+
+    -moz-border-radius-topleft: 15px;
+    -moz-border-radius-topright: 15px;
+}
+
+div.card_container div.card img{
+    width: 48px;
+    height: 48px;
+
+    margin: 8px 0px 0px 15px;
+    
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+}
+
+div.card_container div.card p {
+    position: relative;
+	top: -54px;
+
+    line-height: 50px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    margin: 0px 0px 0px 80px;
+}
+
+div.card_container div.bottom{
+    height: 25px;
+    width: 95%;
+
+    margin: 0px auto;
+
+    position: relative;
+    top: -25px;
+
+    background-color: rgba(206, 206, 206, 0.3);
+}
+
+div.card_container div.bottom p {
+    font-size: 12px;
+    color: #ffffff;
+
+    line-height: 25px;
+
+	margin: 0px;
+}
+
+div.card_container div.bottom p.left{
+    padding-left: 15px;
+}
+
+div.card_container div.bottom p.right{
+    position: relative;
+    top: -25px;
+
+    padding-right: 15px;
+
+    text-align: right;
+}
+
+div.page{
+    background-color:#fbf9fe;
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+div#consume_right{
+}
+
+div#machine_network{
+}
+
+div#consume_record{
+}
+
+div#promote{
+    text-align: center;
+}
+
+div#promote img{
+    margin: 20px auto;
+    width: 75%;
+}
+
+ul.amount_charge{
+    display:-webkit-flex;
+    display:flex;
+
+    padding: 0px;
+    margin: 0px;
+
+    list-style: none;
+}
+
+ul.amount_charge li{
+    -webkit-flex:1;
+    flex:1;
+
+    text-align: center;
+    
+    border: 1px solid #cecece;
+    
+    margin: 0px 5px;
+    padding: 5px 0px;
+
+    font-size: 0.8em;
+}
+
+ul.amount_charge li.selected{
+    border-color: #ff6a00;
+}

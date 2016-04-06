@@ -1,0 +1,24 @@
+﻿<form id="uiform">
+    <div id="userTab" fit="true" style="height: 300px; overflow: hidden;">
+        <div title="安装信息" style="padding: 2px; overflow: hidden;">
+            <table class="grid">
+                <tr>
+                    <td style="text-align:right; width: 70px;">省：</td>
+                    <td>
+                        <input type="text" name="Province" class="txt03" id="txt_Province" />
+                    </td>
+                </tr>
+                <tr><td style="text-align:right;">市：</td><td><input type="text" name="City" class="txt03" id="txt_City" /></td></tr>
+                <tr><td style="text-align:right;">区：</td><td><input type="text" name="Region" class="txt03" id="txt_Region" /></td></tr>
+                <tr><td style="text-align:right;">街道：</td><td><textarea name="Address" id="txt_Address" cols="35" rows="3" /></td></tr>
+                <tr><td style="text-align:right;">备注：</td><td><textarea name="Memo2" id="txt_Memo2" cols="35" rows="5" /></td></tr>
+            </table>
+        </div>
+        <div title="参数设置" style="padding: 2px">
+            <table class="grid">
+                <tr><td style="text-align:right; width: 70px;">单价：</td><td><input type="text" name="Setting_Coin" class="txt03" style="width:200px" id="txt_Setting_Coin" />元</td></tr>
+            </table>
+            <input type="hidden" name="Setting" id="txt_Setting"/>
+        </div>
+    </div>
+</form>

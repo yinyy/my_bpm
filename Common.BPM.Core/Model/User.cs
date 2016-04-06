@@ -39,7 +39,7 @@ namespace BPM.Core.Model
         public string Remark { get; set; }
         [Description("个性化设置")]
         public string ConfigJson { get; set; }
-
+        
         [DbField(false)]
         public Department Department
         {

@@ -4,12 +4,10 @@ using System.Text;
 using System.Linq;
 using System.Data;
 using System.IO;
-using System.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Collections;
 
 using BPM.Common.Data.SqlServer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BPM.Common
 {

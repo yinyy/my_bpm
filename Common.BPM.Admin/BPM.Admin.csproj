@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,13 +13,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BPM.Admin</RootNamespace>
     <AssemblyName>BPM.Admin</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +30,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,6 +39,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxMin">
@@ -62,31 +65,37 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Omu.ValueInjecter">
       <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
     </Reference>
     <Reference Include="Yahoo.Yui.Compressor">
       <HintPath>..\packages\YUICompressor.NET.1.7.1.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing">
+      <HintPath>E:\尹元元\Desktop\zxing.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -2839,6 +2848,25 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
+    <Content Include="PublicPlatform\data\menu.txt" />
+    <Content Include="PublicPlatform\Test.aspx" />
+    <Content Include="PublicPlatform\Web\Card\Detail.aspx" />
+    <Content Include="PublicPlatform\Web\Card\List.aspx" />
+    <Content Include="PublicPlatform\Web\css\card.css" />
+    <Content Include="PublicPlatform\Web\css\StyleSheet1.css" />
+    <Content Include="PublicPlatform\Web\css\WeUI\style\weui.css" />
+    <Content Include="PublicPlatform\Web\css\WeUI\style\weui.min.css" />
+    <Content Include="images\PublicPlatform\card_background.png" />
+    <Content Include="images\PublicPlatform\default_logo.png" />
+    <Content Include="PublicPlatform\Web\images\icon_nav_article.png" />
+    <Content Include="PublicPlatform\Web\images\icon_nav_button.png" />
+    <Content Include="PublicPlatform\Web\images\icon_nav_cell.png" />
+    <Content Include="PublicPlatform\Web\images\icon_nav_msg.png" />
+    <Content Include="PublicPlatform\Web\images\transparent_1x1.png" />
+    <Content Include="PublicPlatform\Web\js\card.js" />
+    <Content Include="PublicPlatform\Web\js\jquery-2_2_1_min.js" />
+    <Content Include="PublicPlatform\Web\Promote.aspx" />
+    <Content Include="PublicPlatform\Web\Test.aspx" />
     <Content Include="qqloading.html" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
     <Content Include="scripts\alertify\alertify.core.css" />
@@ -2849,6 +2877,9 @@
     <Content Include="scripts\Business\login.js" />
     <Content Include="scripts\Business\newlayout.js" />
     <Content Include="scripts\Business\Search.js" />
+    <Content Include="scripts\Colorpicker\spectrum.css" />
+    <Content Include="scripts\Colorpicker\spectrum.js" />
+    <Content Include="scripts\easyui\easyloader.js" />
     <Content Include="scripts\easyui\locale\easyui-lang-ar.js" />
     <Content Include="scripts\easyui\locale\easyui-lang-el.js" />
     <Content Include="scripts\easyui\locale\easyui-lang-it.js" />
@@ -3308,6 +3339,27 @@
     <Content Include="scripts\easyui\themes\icons\sum.png" />
     <Content Include="scripts\easyui\themes\icons\tip.png" />
     <Content Include="scripts\easyui\themes\icons\undo.png" />
+    <Content Include="scripts\fine-uploader\continue.gif" />
+    <Content Include="scripts\fine-uploader\edit.gif" />
+    <Content Include="scripts\fine-uploader\fine-uploader-gallery.css" />
+    <Content Include="scripts\fine-uploader\fine-uploader-gallery.min.css" />
+    <Content Include="scripts\fine-uploader\fine-uploader-new.css" />
+    <Content Include="scripts\fine-uploader\fine-uploader-new.min.css" />
+    <Content Include="scripts\fine-uploader\fine-uploader.css" />
+    <Content Include="scripts\fine-uploader\fine-uploader.js" />
+    <Content Include="scripts\fine-uploader\fine-uploader.min.css" />
+    <Content Include="scripts\fine-uploader\fine-uploader.min.js" />
+    <Content Include="scripts\fine-uploader\iframe.xss.response.js" />
+    <Content Include="scripts\fine-uploader\loading.gif" />
+    <Content Include="scripts\fine-uploader\pause.gif" />
+    <Content Include="scripts\fine-uploader\placeholders\not_available-generic.png" />
+    <Content Include="scripts\fine-uploader\placeholders\waiting-generic.png" />
+    <Content Include="scripts\fine-uploader\processing.gif" />
+    <Content Include="scripts\fine-uploader\retry.gif" />
+    <Content Include="scripts\fine-uploader\templates\default.html" />
+    <Content Include="scripts\fine-uploader\templates\gallery.html" />
+    <Content Include="scripts\fine-uploader\templates\simple-thumbnails.html" />
+    <Content Include="scripts\fine-uploader\trash.gif" />
     <Content Include="scripts\jquery-1.8.2.min.js" />
     <Content Include="scripts\jquery-1.8.3.min.js" />
     <Content Include="scripts\knockout\knockout.mapping-latest.js" />
@@ -3328,29 +3380,23 @@
     <Content Include="scripts\easyui\themes\metro\images\Thumbs.db" />
     <Content Include="theme\bootstrap\style.css" />
     <Content Include="theme\metro\style.css" />
-    <Content Include="Washer\html\WasherCardEdit.html" />
-    <Content Include="Washer\html\WasherCard.html" />
-    <Content Include="Washer\html\WasherDevice.html" />
+    <Content Include="Washer\html\WasherDeviceSet.html" />
     <Content Include="Washer\html\WasherDeviceAdd.html" />
-    <Content Include="Washer\html\WasherCustom.html" />
-    <Content Include="Washer\js\WasherCardAdmin.js" />
-    <Content Include="Washer\js\WasherCard.js" />
-    <Content Include="Washer\js\WasherCustomAdmin.js" />
+    <Content Include="Washer\js\WasherConsume.js" />
     <Content Include="Washer\js\WasherDevice.js" />
-    <Content Include="Washer\js\WasherDeviceAdmin.js" />
-    <Content Include="Washer\js\WasherCustom.js" />
     <Content Include="Washer\js\WasherSetting.js" />
-    <Content Include="Washer\WasherCard.aspx" />
-    <Content Include="Washer\WasherCardAdmin.aspx" />
-    <Content Include="Washer\WasherCustom.aspx" />
-    <Content Include="Washer\WasherCustomAdmin.aspx" />
+    <Content Include="Washer\WasherConsume.aspx" />
     <Content Include="Washer\WasherDevice.aspx" />
-    <Content Include="Washer\WasherDeviceAdmin.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
-    <None Include="Properties\PublishProfiles\bpm.pubxml" />
+    <Content Include="ashx\UploadHandler.ashx" />
+    <Content Include="Pay\DefaultHandler.ashx" />
+    <None Include="Properties\PublishProfiles\本地.pubxml" />
+    <Content Include="PublicPlatform\DefaultHandler.ashx" />
+    <None Include="Properties\PublishProfiles\远程.pubxml" />
+    <Content Include="scripts\fine-uploader\LICENSE" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3378,7 +3424,6 @@
     <Content Include="sys\js\Navigation.js" />
     <Content Include="sys\js\Buttons.js" />
     <Content Include="scripts\date.js" />
-    <Content Include="scripts\easyui\easyloader.js" />
     <Content Include="scripts\easyui\easyui-validate-rules.js" />
     <Content Include="scripts\easyui\jquery.easyui.min.js" />
     <Content Include="scripts\gantt\images\add.png" />
@@ -3552,13 +3597,20 @@
     <Content Include="sys\ashx\DicHandler.ashx" />
     <Content Include="sys\ashx\LogHandler.ashx" />
     <Content Include="sys\ashx\DataBaseHandler.ashx" />
-    <Content Include="Washer\ashx\WasherCustomHandler.ashx" />
     <Content Include="Washer\ashx\WasherDeviceHandler.ashx" />
     <Content Include="Washer\ashx\WasherSettingHandler.ashx" />
-    <Content Include="Washer\ashx\WasherCardHandler.ashx" />
     <Content Include="Washer\ashx\WasherHandler.ashx" />
+    <Content Include="Washer\ashx\WasherConsumeHandler.ashx" />
+    <Content Include="Washer\ashx\WasherDistrictHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ashx\UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Pay\DefaultHandler.ashx.cs">
+      <DependentUpon>DefaultHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Processor\WasherProcessor.cs" />
     <Compile Include="ashx\ExportExcel.aspx.cs">
       <DependentUpon>ExportExcel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3596,6 +3648,44 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicPlatform\DefaultHandler.ashx.cs">
+      <DependentUpon>DefaultHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Card\Detail.aspx.cs">
+      <DependentUpon>Detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Card\Detail.aspx.designer.cs">
+      <DependentUpon>Detail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Card\List.aspx.cs">
+      <DependentUpon>List.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Card\List.aspx.designer.cs">
+      <DependentUpon>List.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Promote.aspx.cs">
+      <DependentUpon>Promote.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Promote.aspx.designer.cs">
+      <DependentUpon>Promote.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3693,11 +3783,11 @@
     <Compile Include="sys\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Washer\ashx\WasherCardHandler.ashx.cs">
-      <DependentUpon>WasherCardHandler.ashx</DependentUpon>
+    <Compile Include="Washer\ashx\WasherDistrictHandler.ashx.cs">
+      <DependentUpon>WasherDistrictHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Washer\ashx\WasherCustomHandler.ashx.cs">
-      <DependentUpon>WasherCustomHandler.ashx</DependentUpon>
+    <Compile Include="Washer\ashx\WasherConsumeHandler.ashx.cs">
+      <DependentUpon>WasherConsumeHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Washer\ashx\WasherDeviceHandler.ashx.cs">
       <DependentUpon>WasherDeviceHandler.ashx</DependentUpon>
@@ -3708,33 +3798,12 @@
     <Compile Include="Washer\ashx\WasherSettingHandler.ashx.cs">
       <DependentUpon>WasherSettingHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Washer\WasherCard.aspx.cs">
-      <DependentUpon>WasherCard.aspx</DependentUpon>
+    <Compile Include="Washer\WasherConsume.aspx.cs">
+      <DependentUpon>WasherConsume.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Washer\WasherCard.aspx.designer.cs">
-      <DependentUpon>WasherCard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Washer\WasherCardAdmin.aspx.cs">
-      <DependentUpon>WasherCardAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Washer\WasherCardAdmin.aspx.designer.cs">
-      <DependentUpon>WasherCardAdmin.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Washer\WasherCustom.aspx.cs">
-      <DependentUpon>WasherCustom.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Washer\WasherCustom.aspx.designer.cs">
-      <DependentUpon>WasherCustom.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Washer\WasherCustomAdmin.aspx.cs">
-      <DependentUpon>WasherCustomAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Washer\WasherCustomAdmin.aspx.designer.cs">
-      <DependentUpon>WasherCustomAdmin.aspx</DependentUpon>
+    <Compile Include="Washer\WasherConsume.aspx.designer.cs">
+      <DependentUpon>WasherConsume.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherDevice.aspx.cs">
       <DependentUpon>WasherDevice.aspx</DependentUpon>
@@ -3742,13 +3811,6 @@
     </Compile>
     <Compile Include="Washer\WasherDevice.aspx.designer.cs">
       <DependentUpon>WasherDevice.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Washer\WasherDeviceAdmin.aspx.cs">
-      <DependentUpon>WasherDeviceAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Washer\WasherDeviceAdmin.aspx.designer.cs">
-      <DependentUpon>WasherDeviceAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherSetting.aspx.cs">
       <DependentUpon>WasherSetting.aspx</DependentUpon>
@@ -3773,6 +3835,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dbase\" />
+    <Folder Include="PublicPlatform\ashx\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\jQgrid\gray\images\MSSCCPRJ.SCC" />
@@ -3780,18 +3843,6 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Weixin\PublicPlatform\WeChat.Event\WeChat.Event.csproj">
-      <Project>{873cf515-cc90-43a2-97f8-3b276af60145}</Project>
-      <Name>WeChat.Event</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Weixin\WeChat.Model\WeChat.Model\WeChat.Model.csproj">
-      <Project>{a5596b2c-ed0e-4791-9b5a-13882d4c77e8}</Project>
-      <Name>WeChat.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Weixin\WeChat.Utils\WeChat.Utils\WeChat.Utils.csproj">
-      <Project>{a78ce527-0da2-451a-914d-e53a7ffd6b9e}</Project>
-      <Name>WeChat.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BPM.Washer\BPM.Washer.csproj">
       <Project>{e62eb623-f837-4f58-9ca9-4ec850ce94d4}</Project>
       <Name>BPM.Washer</Name>
@@ -3804,6 +3855,10 @@
       <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
       <Name>BPM.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WeChat\WeChat.csproj">
+      <Project>{7fa1a34e-e1ad-40e6-ac1f-3cb1794aa1cc}</Project>
+      <Name>WeChat</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="sys\ashx\ButtonHandler.ashx" />
@@ -3811,6 +3866,9 @@
   <ItemGroup>
     <Content Include="scripts\easyui\themes\default\images\Thumbs.db" />
     <Content Include="scripts\easyui\themes\gray\images\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

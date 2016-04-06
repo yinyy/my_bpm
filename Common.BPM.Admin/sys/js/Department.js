@@ -43,7 +43,7 @@ var mygrid = {
 }
 
 var crud = {
-    createParam:function (action, keyid) {
+    createParam: function (action, keyid) {
         var o = {};
         var query = top.$('#xiucaiForm').serializeArray();
         query = convertArray(query);
@@ -52,7 +52,7 @@ var crud = {
         o.keyid = keyid;
         return "json=" + JSON.stringify(o);
     },
-    initCtrl: function(depId) {
+    initCtrl: function (depId) {
         var treedata = $('#depGrid').treegrid("getData");
         var str = JSON.stringify(treedata);
         str = str.replace(/DepartmentName/g, "text").replace(/KeyId/g, "id");
@@ -73,13 +73,13 @@ var crud = {
         top.$('#txtsortnum').numberspinner({ min: 0 });
         top.$('#xiucaiForm').validate();
     },
-    add: function() {
+    add: function () {
         var addDialog = top.$.hDialog({
-            content: formHtml, height: 300, title: "增加部门", iconCls: 'icon-add',
+            content: formHtml, height: 253, title: "增加部门", iconCls: 'icon-add',
             submit: function () {
                 if (top.$('#xiucaiForm').validate().form()) {
                     var query = crud.createParam('add', 0);
-                    $.ajaxjson(actionUrl, query, function(d) {
+                    $.ajaxjson(actionUrl, query, function (d) {
                         if (d.Success) {
                             $('#depGrid').treegrid("reload");
                             addDialog.dialog('close');
@@ -107,11 +107,11 @@ var crud = {
             top.$('#txtparentid').combotree('setValue', 0);
         }
     },
-    edit: function() {
+    edit: function () {
         var row = $('#depGrid').treegrid('getSelected');
         if (row) {
             var editDialog = top.$.hDialog({
-                content: formHtml, height: 300, title: "修改部门", iconCls: 'icon-edit',
+                content: formHtml, height: 253, title: "修改部门", iconCls: 'icon-edit',
                 submit: function () {
                     if (top.$('#xiucaiForm').validate().form()) {
 
@@ -119,7 +119,7 @@ var crud = {
                         var newparentid = top.$('#txtparentid').combotree('getValue');
 
                         var i = 0;
-                        $.each(childrennodes, function() {
+                        $.each(childrennodes, function () {
                             if (this.KeyId == newparentid)
                                 i++;
                         });
@@ -130,7 +130,7 @@ var crud = {
                         }
 
                         var query = crud.createParam('edit', row.KeyId);
-                        $.ajaxjson(actionUrl, query, function(d) {
+                        $.ajaxjson(actionUrl, query, function (d) {
                             if (d.Success) {
                                 $('#depGrid').treegrid("reload");
                                 editDialog.dialog('close');
@@ -146,8 +146,9 @@ var crud = {
 
             crud.initCtrl(row.KeyId);
             top.$('#txtgroupname').val(row.DepartmentName);
+            top.$('#txtchannel').val(row.Channel);
             top.$('#txtparentid').combotree('setValue', row.ParentId);
-            top.$('#txtsortnum').numberspinner('setValue',row.Sortnum);
+            top.$('#txtsortnum').numberspinner('setValue', row.Sortnum);
             top.$('#txtremark').val(row.Remark);
 
         } else {
@@ -156,14 +157,14 @@ var crud = {
         }
         return false;
     },
-    del: function() {
+    del: function () {
         var row = $('#depGrid').treegrid('getSelected');
         if (row) {
             var childrensCount = $('#depGrid').treegrid('getChildren', row.KeyId).length;
 
             if (childrensCount == 0) {
                 if (confirm('确认要删除此部门吗？')) {
-                    $.ajaxjson(actionUrl, crud.createParam("delete",row.KeyId), function (d) {
+                    $.ajaxjson(actionUrl, crud.createParam("delete", row.KeyId), function (d) {
                         if (d.Success) {
                             $('#depGrid').treegrid("reload");
                             msg.ok(d.Message);
@@ -180,6 +181,31 @@ var crud = {
         else {
             msg.warning('请选择要删除的部门.');
         }
+        return false;
+    },
+    qrcode: function (kid) {
+        $.post(actionUrl, crud.createParam("subscribe_qrcode", kid), function (d) {
+            if (d.Success) {
+                var dialog = top.$.hDialog({
+                    content: '<img id="qrcodeimage" width="300px" height="300px" alt="二维码"/>',
+                    height: 380, width: 320,
+                    title: "关注二维码",
+                    iconCls: 'icon-edit',
+                    buttons: [{
+                        text: '关闭',
+                        iconCls: 'icon-cancel',
+                        handler: function () {
+                            dialog.dialog('close');
+                        }
+                    }]
+                });
+
+                top.$('#qrcodeimage').attr('src', 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + d.Ticket);
+            } else {
+                msg.warning('获取二维码时发生错误。');
+            }
+        }, 'json');
+
         return false;
     }
 }
