@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BPM.Core.Bll;
+using BPM.Core.Model;
+using System;
 using System.IO;
 using System.Web;
 using System.Xml.Serialization;
@@ -25,10 +27,17 @@ namespace BPM.Admin.PublicPlatform
                 string timestamp = context.Request["timestamp"];
                 string nonce = context.Request["nonce"];
                 string echostr = context.Request["echostr"];
-                
-                if (WeChatToolkit.Validate(signature, timestamp, nonce))
+                string deptId = context.Request["did"];
+
+                MyDebug.debug(string.Format("{0}\n{1}\n{2}\n{3}", signature, timestamp, nonce, echostr));
+
+                if (!string.IsNullOrWhiteSpace(deptId))
                 {
-                    context.Response.Write(echostr);
+                    Department dept = DepartmentBll.Instance.Get(Convert.ToInt32(deptId));
+                    if (dept != null && WeChatToolkit.InterfaceConfigurationValidate(signature, timestamp, nonce, dept.Token))
+                    {
+                        context.Response.Write(echostr);
+                    }
                 }
             }
             else if (context.Request.HttpMethod.ToUpper() == "POST")
@@ -50,7 +59,7 @@ namespace BPM.Admin.PublicPlatform
                         bll.Add(new WasherReceivedMessageModel() { OpenId = message.From, Primitive = xml, Type = message.Type, UnixTime = message.Created, Time = DateTime.Now });
                         #endregion
                     }
-                }              
+                }
                 new WasherProcessor().process(message);
             }
         }

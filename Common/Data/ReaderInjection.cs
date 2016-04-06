@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Omu.ValueInjecter;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Omu.ValueInjecter;
 
 namespace BPM.Common.Data
 {

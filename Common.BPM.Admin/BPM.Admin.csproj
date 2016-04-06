@@ -95,7 +95,7 @@
       <HintPath>..\packages\YUICompressor.NET.1.7.1.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
     </Reference>
     <Reference Include="zxing">
-      <HintPath>E:\尹元元\Desktop\zxing.dll</HintPath>
+      <HintPath>..\..\..\项目类库\ZXing.Net.0.14.0.0\net4.5\zxing.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

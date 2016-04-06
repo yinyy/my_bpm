@@ -39,7 +39,7 @@ namespace BPM.Admin.ashx
                     }
                 }
 
-                context.Response.Write(JsonConvert.SerializeObject(new { success = true, logo = url }));//{"success": false, "error": "error message to display", "reset": true}  "preventRetry": true
+                context.Response.Write(JsonConvert.SerializeObject(new { success = true, url = url }));//{"success": false, "error": "error message to display", "reset": true}  "preventRetry": true
             }
             catch(Exception exp)
             {

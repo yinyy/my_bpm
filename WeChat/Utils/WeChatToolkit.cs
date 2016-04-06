@@ -87,9 +87,9 @@ namespace WeChat.Utils
         /// <param name="timestamp"></param>
         /// <param name="nonce"></param>
         /// <returns>true：通过验证，false：未通过验证</returns>
-        public static bool Validate(string signature, string timestamp, string nonce)
+        public static bool InterfaceConfigurationValidate(string signature, string timestamp, string nonce, string token)
         {
-            string[] arr = { AppConfiguration.Token, timestamp, nonce };
+            string[] arr = { token, timestamp, nonce };
             Array.Sort(arr);
             string str = string.Join("", arr);
 

@@ -126,5 +126,10 @@ namespace 模拟微信服务器
                 rtbResponse.Text = ee.Message;
             }
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

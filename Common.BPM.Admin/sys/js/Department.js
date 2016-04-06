@@ -3,6 +3,7 @@ var formHtml = '<form  id="xiucaiForm"><table class="grid">';
 formHtml += '<tr><td>部门名称：</td><td><input type="text" class="txt03 required" name="DepartmentName" id="txtgroupname" /></td></tr>';
 formHtml += '<tr><td>上级部门：</td><td><input style="width:200px" id="txtparentid" name="parentid" /></td></tr>';
 formHtml += '<tr><td>排序：</td><td><input id="txtsortnum" name="sortnum" value="0" /></td></tr>';
+formHtml += '<tr><td>标识：</td><td><input id="txttag" name="tag"/></td></tr>';
 formHtml += '<tr><td>备注：</td><td><textarea tip="备注信息"  style="width:80%;height:50px;" class="txt03" rows=5 id="txtremark" name="remark"></textarea></td></tr>';
 formHtml += '</table></form>';
 
@@ -149,6 +150,7 @@ var crud = {
             top.$('#txtchannel').val(row.Channel);
             top.$('#txtparentid').combotree('setValue', row.ParentId);
             top.$('#txtsortnum').numberspinner('setValue', row.Sortnum);
+            top.$('#txttag').val(row.Tag);
             top.$('#txtremark').val(row.Remark);
 
         } else {

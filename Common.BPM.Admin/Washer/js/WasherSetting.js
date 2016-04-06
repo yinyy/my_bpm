@@ -65,8 +65,8 @@ $(function () {
         },
         callbacks: {
             onComplete: function (id, name, json, xhr) {
-                $('#Logo').attr('src', json.logo);
-                $('#txt_Logo').val(json.logo);
+                $('#Logo').attr('src', json.url);
+                $('#txt_Logo').val(json.url);
                 
                 msg.ok('上传成功。');
             },
@@ -88,6 +88,10 @@ $(function () {
 
     $('#btnok').click(function () {
         var json = {};
+        json.Appid = $('#txt_Appid').val();
+        json.Secret = $('#txt_Secret').val();
+        json.Aeskey = $('#txt_Aeskey').val();
+        json.Token = $('#txt_Token').val();
         json.Brand = $('#txt_Brand').val();
         json.Logo = $('#txt_Logo').val();
         json.CardColor = $("#txt_Color").spectrum("get").toHexString();
@@ -123,6 +127,10 @@ $(function () {
     });
 
     //显示原来的数据
+    $('#txt_Appid').val(json.Appid);
+    $('#txt_Secret').val(json.Secret);
+    $('#txt_Aeskey').val(json.Aeskey);
+    $('#txt_Token').val(json.Token);
     $('#txt_Brand').val(json.Brand);
     $('#txt_Logo').val(json.Logo);
     $('#Logo').attr('src', json.Logo);

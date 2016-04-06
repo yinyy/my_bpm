@@ -39,6 +39,15 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div id="sysconfig" style="margin:10px;">
+        <h1>微信参数设置</h1>
+        <div class="c">
+            <ul>
+                <li><label>appid：</label><input type="text" id="txt_Appid" name="Appid" style="width: 500px;"/></li>
+                <li><label>secret：</label><input type="text" id="txt_Secret" name="Secret" style="width: 500px;"/></li>
+                <li><label>aeskey：</label><input type="text" id="txt_Aeskey" name="Aeskey" style="width: 500px;"/></li>
+                <li><label>Token：</label><input type="text" id="txt_Token" name="Token" style="width: 500px;"/></li>
+           </ul>
+        </div>
         <h1>品牌</h1>
         <div class="c">
             <ul>

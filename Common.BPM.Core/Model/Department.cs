@@ -47,6 +47,11 @@ namespace BPM.Core.Model
 
         public string Qrticket { get; set; }
 
+        public string Appid { get; set; }
+        public string Secret { get; set; }
+        public string Aeskey { get; set; }
+        public string Token { get; set; }
+        public string Tag { get; set; }
         /// <summary>
         /// tree 节点状态
         /// </summary>

@@ -23,6 +23,10 @@ namespace BPM.Admin.Washer.ashx
         {
             var settings = new
             {
+                Appid="",
+                Secret="",
+                Aeskey="",
+                Token="",
                 Brand = "",
                 Logo = "",
                 CardColor = "",
@@ -53,6 +57,10 @@ namespace BPM.Admin.Washer.ashx
                     break;
                 default:
                     dept = DepartmentBll.Instance.Get(departmentId);
+                    dept.Appid = context.Request.Params["Appid"];
+                    dept.Secret = context.Request.Params["Secret"];
+                    dept.Aeskey = context.Request.Params["Aeskey"];
+                    dept.Token = context.Request.Params["Token"];
                     dept.Brand = context.Request.Params["Brand"];
                     dept.Logo = context.Request.Params["Logo"];
                     dept.CardColor = context.Request.Params["CardColor"];

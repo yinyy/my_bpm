@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Omu.ValueInjecter;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Omu.ValueInjecter;
 
 namespace BPM.Common.Data
 {
