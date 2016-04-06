@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -2839,6 +2840,7 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="qqloading.html" />
+    <Content Include="Sanitation\html\SanitationDispatchSearch.html" />
     <Content Include="Sanitation\html\SanitationMap.html" />
     <Content Include="Sanitation\html\SanitationDispatchEdit.html" />
     <Content Include="Sanitation\html\SanitationDispatch.html" />

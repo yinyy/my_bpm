@@ -1,6 +1,7 @@
 var actionURL = '/Sanitation/ashx/SanitationDispatchHandler.ashx';
 var formurl = '/Sanitation/html/SanitationDispatch.html';
 var formediturl = '/Sanitation/html/SanitationDispatchEdit.html';
+var searchurl = '/Sanitation/html/SanitationDispatchSearch.html';
 var map;
 
 
@@ -10,7 +11,63 @@ $(function () {
 
     //高级查询
     $('#a_search').click(function () {
-        search.go('list');
+        var hDialog = top.jQuery.hDialog({
+            title: '查询', width: 350, height: 185, href: searchurl, iconCls: 'icon-search', buttons: [
+                {
+                    text: '确定', iconCls: 'icon-ok', handler: function () {
+                        if (top.$('#uiform').form('validate')) {
+                            var filter = '';
+                            if (top.$('#txt_Condition').val() == '') {
+                                filter = '{"groupOp":"AND","rules":[{"field":"Time","op":"ge","data":"' +
+                                top.$('#txt_Time_Start').datebox('getValue') + '"}, {"field":"Time","op":"le","data":"' +
+                                top.$('#txt_Time_End').datebox('getValue') + '"}],"groups":[]}';
+                            } else {
+                                filter = '{"groupOp":"AND","rules":[{"field":"Time","op":"ge","data":"' +
+                                top.$('#txt_Time_Start').datebox('getValue') + '"}, {"field":"Time","op":"le","data":"' +
+                                top.$('#txt_Time_End').datebox('getValue') + '"}],"groups":[{"groupOp":"OR","rules":[{"field":"Plate","op":"cn","data":"' +
+                                top.$('#txt_Condition').val() + '"},{"field":"Name","op":"cn","data":"' +
+                                top.$('#txt_Condition').val() + '"}],"groups":[]}]}';
+                            }
+
+                            $('#list').datagrid('reload', { filter: filter });
+                            $('body').data('where', filter);//.replace('Time', '加水时间').replace('Name', '姓名').replace('Plate', '车牌号')
+                            hDialog.dialog('close');
+                        }
+                        return false;
+                    }},
+                {
+                    text: '清空', iconCls: 'icon-clear', handler: function () {
+                        $('#list').datagrid('reload', { filter: '' });
+                        $('body').data('where', '');
+                        hDialog.dialog('close');
+                    }},
+                {
+                    text: '关闭', iconCls: 'icon-cancel', handler: function () {
+                        hDialog.dialog('close');
+                    }}
+            ]
+        });
+
+        top.$('#uiform').validate();
+    });
+    $('#a_export').click(function () {
+        var ee = new ExportExcel('list', "V_Dispatch2",
+            [
+            { title: '姓名', field: 'Name' },
+            { title: '编号', field: 'Code' },
+            { title: '车牌号', field: 'Plate' },
+            { title: '加水时间', field: 'Time' },
+            { title: '加水地点', field: 'Address' },
+            { title: '类型', field: 'Kind' },
+            { title: '容积', field: 'Volumn' },
+            { title: '浓度', field: 'Potency' },
+            { title: '工作状态', field: 'Status' },
+            { title: '签到时间', field: 'Signed' },
+            { title: '管子', field: 'Working' },
+            { title: '坐标', field: 'Destination' },
+            { title: '区域', field: 'Region' }
+            ]);
+        ee.go();
     });
 
     map = new BMap.Map('dd');          // 创建地图实例
@@ -36,7 +93,7 @@ var grid = {
             columns: [[
 		    {
 		        title: '日期', field: 'Time', width: 160, align: 'center', formatter: function (v, r, i) {
-		            return v.substring(0, 10);
+		            return v;
 		        }
 		    },
 		    {
@@ -66,6 +123,11 @@ var grid = {
 		            return v + '‰';
 		        }
 		    },
+            {
+                title: '加注量', field: 'Volumn', width: 120, align: 'right', formatter: function (v, r, i) {
+                    return v + '方';
+                }
+            },
             {
                 title: '当前状态', field: 'Status', width: 100, align: 'center', formatter: function (v, r, i) {
                     if (v == 0) {

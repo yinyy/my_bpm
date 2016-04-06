@@ -27,6 +27,8 @@
 
     <!-- 引入多功能查询js -->
     <script src="../../scripts/Business/Search.js"></script>
+    <script src="../scripts/Business/Export.js?d=<%=DateTime.Now.Ticks %>"></script>
+
 
     <!-- 引入js文件 -->
     <script src="js/card.js?d=<%=DateTime.Now%>"></script>

@@ -63,7 +63,7 @@ var search = {
                 });
             }, submit: function () {
                 var _filter = search.buildFilterObj();
-                //alert(JSON.stringify(_filter));
+                alert(JSON.stringify(_filter));
                 if (search.toSqlWhere(_filter) == '')
                     $('#' + gridid).datagrid('reload', { filter: '' });
                 else

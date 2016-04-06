@@ -302,7 +302,7 @@ void loop()
 					}
 				}
 
-				//完成一次加水过程，等到30秒
+				//完成一次加水过程，等到10秒
 				delay(10000);
 			
 				last.driver.code = current.driver.code;

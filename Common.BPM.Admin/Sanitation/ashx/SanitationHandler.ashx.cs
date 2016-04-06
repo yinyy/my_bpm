@@ -63,6 +63,7 @@ namespace BPM.Admin.Sanitation.ashx
                         dispatch.TrunkId = SanitationTrunkBll.Instance.GetByPlate(plate).KeyId;
                         dispatch.Time = DateTime.Now;
                         dispatch.Address = DicDal.Instance.GetWhere(new { Code = address }).FirstOrDefault().Title;
+                        dispatch.Volumn = volumn;
 
                         context.Response.Write("SavedSuccess:" + SanitationDispatchBll.Instance.Add(dispatch));
                     }
