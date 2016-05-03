@@ -33,97 +33,7 @@ namespace Washer.Processor
 
                     WeChatToolkit.ReplyMessage(message);
 
-                    Department dept;
-                    int refererId = -1;
-
-                    if (string.IsNullOrEmpty(received.Key))
-                    {
-                        //这是直接扫码过来的
-                        dept = DepartmentBll.Instance.GetDepartmentByName(ConfigurationManager.AppSettings["default_department"]);
-                    }
-                    else if (received.Key.StartsWith("channel"))
-                    {
-                        //客户的二维码
-                        dept = DepartmentBll.Instance.Get(Convert.ToInt32(received.Key.Substring(7)));
-                    }
-                    else if (received.Key.StartsWith("consume"))
-                    {
-                        //消费者的推广码
-                        refererId = Convert.ToInt32(received.Key.Substring(7));
-                        WasherConsumeModel referer = WasherConsumeBll.Instance.Get(refererId);
-                        if (referer == null)
-                        {
-                            refererId = -1;
-                            dept = DepartmentBll.Instance.GetDepartmentByName(ConfigurationManager.AppSettings["default_department"]);
-                        }
-                        else
-                        {
-                            dept = DepartmentBll.Instance.Get(referer.DepartmentId);
-                        }
-                    }
-                    else
-                    {
-                        dept = DepartmentBll.Instance.GetDepartmentByName(ConfigurationManager.AppSettings["default_department"]);
-                    }
-
-                    //判断数据库中是否有这个消费者的记录
-                    WasherConsumeModel consume = WasherConsumeBll.Instance.Get(dept.KeyId, received.From);
-                    if (consume == null)
-                    {
-                        #region 这是不存在的消费者，将其加入到消费者表中
-                        consume = new WasherConsumeModel();
-                        consume.UnionId = "";
-                        consume.OpenId = received.From;
-                        consume.NickName = "";
-                        consume.Country = "";
-                        consume.Province = "";
-                        consume.City = "";
-                        consume.Gender = "";
-                        consume.DepartmentId = dept.KeyId;
-                        consume.RefererId = refererId;
-                        consume.Card = "";
-                        consume.Coins = 0;
-                        consume.Points = 0;
-                        consume.Memo = "";
-
-                        #region 获取其微信公开信息
-                        BasicInfoModel basicInfo = WeChatToolkit.GetBasicInfo(consume.OpenId);
-                        if (basicInfo != null)
-                        {
-                            consume.UnionId = basicInfo.UnionId;
-                            consume.NickName = basicInfo.NickName;
-                            consume.Country = basicInfo.Country;
-                            consume.Province = basicInfo.Province;
-                            consume.City = basicInfo.City;
-                            consume.Gender = basicInfo.Gender == 1 ? "男" : basicInfo.Gender == 2 ? "女" : "未知";
-                        }
-                        #endregion
-
-                        consume.KeyId = WasherConsumeBll.Instance.Add(consume);
-                        #endregion
-
-                        #region 更新积分信息
-                        var setting = new { Subscribe = 0, Recharge = new int[] { 0, 0, 0 }, PointKind = "", Level = new int[] { 0, 0, 0, 0, 0 } };//{"Subscribe":1,"Recharge":[2,3,4],"PointKind":"Percent","Level":[5,6,7,8,9]}
-                        setting = JsonConvert.DeserializeAnonymousType(dept.Setting, setting);
-
-                        //先更新积分奖励记录
-                        WasherRewardModel reward = new WasherRewardModel();
-                        reward.ConsumeId = consume.KeyId;
-                        reward.Kind = WasherRewardBll.Kind.Subscribe;
-                        reward.Memo = "";
-                        reward.Points = setting.Subscribe;
-                        reward.Memo = "";
-                        reward.Time = DateTime.Now;
-
-                        #region 再更新个人积分
-                        if (WasherRewardBll.Instance.Add(reward) > 0)
-                        {
-                            consume.Points += setting.Subscribe;
-                            WasherConsumeBll.Instance.Update(consume);
-                        }
-                        #endregion
-                        #endregion
-                    }
+                    
                 }
                 #endregion
                 #region 扫码等待事件
@@ -144,7 +54,7 @@ namespace Washer.Processor
                         #endregion
 
                         #region 检查用户是否具有使用这台洗车机的权限
-                        WasherConsumeModel consume = WasherConsumeBll.Instance.Get(device.DepartmentId, received.From);
+                        WasherConsumeModel consume = WasherConsumeBll.Instance.Get(device.DepartmentId);
                         if (consume == null)
                         {
                             WeChatToolkit.PostMessage(JSONhelper.ToJson(new
@@ -181,20 +91,20 @@ namespace Washer.Processor
                         #region 检查用户的洗车币余额
                         var deviceSetting = new { Coin = 0.0f };
                         deviceSetting = JsonConvert.DeserializeAnonymousType(device.Setting, deviceSetting);
-                        if (consume.Coins < deviceSetting.Coin)
-                        {
-                            WeChatToolkit.PostMessage(JSONhelper.ToJson(new
-                            {
-                                touser = received.From,
-                                msgtype = "text",
-                                text = new
-                                {
-                                    content = "您的余额已不足，请先充值。"
-                                }
-                            }));
+                        //if (consume.Coins < deviceSetting.Coin)
+                        //{
+                        //    WeChatToolkit.PostMessage(JSONhelper.ToJson(new
+                        //    {
+                        //        touser = received.From,
+                        //        msgtype = "text",
+                        //        text = new
+                        //        {
+                        //            content = "您的余额已不足，请先充值。"
+                        //        }
+                        //    }));
 
-                            return;
-                        }
+                        //    return;
+                        //}
                         #endregion
 
                         #region 扣费、返积分
@@ -202,7 +112,7 @@ namespace Washer.Processor
                         var departmentSetting = new { Point = new { WashCar = 0 } };//{"WashCar":10,"Subscribe":1,"Recharge":[2,3,4],"PointKind":"Percent","Level":[5,6,7,8,9]}
                         departmentSetting = JsonConvert.DeserializeAnonymousType(dept.Setting, departmentSetting);
 
-                        consume.Coins -= deviceSetting.Coin;
+                        //consume.Coins -= deviceSetting.Coin;
                         consume.Points += departmentSetting.Point.WashCar;
                         if (WasherConsumeBll.Instance.Update(consume) <= 0)
                         {
@@ -250,7 +160,7 @@ namespace Washer.Processor
                             {
                                 content = string.Format("设备准备就绪。\n您本次消费 {0} 洗车币，还有 {1} 洗车币，本次新增 {2} 积分，累计 {3} 积分。",
                                 deviceSetting.Coin, 
-                                consume.Coins,
+                                //consume.Coins,
                                 departmentSetting.Point.WashCar,
                                 consume.Points)
                             }

@@ -15,28 +15,25 @@ namespace Washer.Bll
         {
             get { return SingletonProvider<WasherCardBll>.Instance; }
         }
-
-        public List<WasherCardModel> GetCards(string openId)
+        
+        public WasherCardModel Get(WasherConsumeModel consume)
         {
-            var cards = WasherCardDal.Instance.GetCards(openId);
-                
-            //    .Select(c => new WasherCardModel
-            //{
-            //    Coins = c.Coins,
-            //    KeyId = c.KeyId,
-            //    Picture = "/PublicPlatform/Web/images/default_card.png",
-            //    Points = c.Points,
-            //    Serial = c.Card,
-            //    Logo = "/PublicPlatform/Web/images/default_logo.png",
-            //    Name = "测试的品牌"
-            //}).ToList();
-
-            return cards;
+            return WasherCardDal.Instance.GetWhere(new { DepartmentId = consume.DepartmentId, BinderId = consume.KeyId }).OrderByDescending(a => a.Binded).FirstOrDefault();
         }
 
-        public string GetIntroduction(int keyId)
+        public WasherCardModel Get(int departmentId, string cardNo)
         {
-            return WasherCardDal.Instance.GetIntroduction(keyId);
+            return WasherCardDal.Instance.GetWhere(new { DepartmentId = departmentId, CardNo = cardNo }).FirstOrDefault();
+        }
+
+        public WasherCardModel Get(int keyId)
+        {
+            return WasherCardDal.Instance.Get(keyId);
+        }
+
+        public int Update(WasherCardModel card)
+        {
+            return WasherCardDal.Instance.Update(card);
         }
     }
 }

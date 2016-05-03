@@ -30,9 +30,9 @@ namespace Washer.Bll
             return WasherConsumeDal.Instance.Get(keyId);
         }
 
-        public WasherConsumeModel Get(int deptId, string openId)
+        public WasherConsumeModel Get(int deptId, int binderId)
         {
-            return WasherConsumeDal.Instance.GetWhere(new { OpenId = openId, DepartmentId = deptId }).FirstOrDefault();
+            return WasherConsumeDal.Instance.GetWhere(new { BinderId = binderId, DepartmentId = deptId }).FirstOrDefault();
         }
 
         public WasherConsumeModel Get(string unionId, string openId)
@@ -40,9 +40,21 @@ namespace Washer.Bll
             return WasherConsumeDal.Instance.GetWhere(new { UnionId = unionId, OpenId = openId }).FirstOrDefault();
         }
 
+        public WasherConsumeModel Get(int departmentId, string telphone)
+        {
+            return WasherConsumeDal.Instance.GetWhere(new { DepartmentId = departmentId, Telphone = telphone }).FirstOrDefault();
+        }
+
+        public WasherConsumeModel Get(WasherWeChatConsumeModel wxconsume)
+        {
+            return WasherConsumeDal.Instance.GetWhere(new { BinderId=wxconsume.KeyId, DepartmentId=wxconsume.DepartmentId }).FirstOrDefault();
+        }
+
         public int Update(WasherConsumeModel consume)
         {
             return WasherConsumeDal.Instance.Update(consume);
         }
+
+
     }
 }

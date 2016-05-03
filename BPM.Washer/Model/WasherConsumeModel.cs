@@ -12,31 +12,25 @@ namespace Washer.Model
     public class WasherConsumeModel
     {
         public int KeyId { get; set; }
+        
+        public int DepartmentId { get; set; }
 
-        public string UnionId { get; set; }
-
-        public string OpenId { get; set; }
-
-        public string NickName { get; set; }
-
-        public string Country { get; set; }
-
-        public string City { get; set; }
-
-        public string Province { get; set; }
+        public int? BinderId { get; set; }
+        public DateTime? Bindered { get; set; }
+        
+        public string Name { get; set; }
 
         public string Gender { get; set; }
 
-        public int DepartmentId{ get; set; }
+        public string Telphone { get; set; }
 
-        public int RefererId { get; set; }
-
-        public string Card { get; set; }
-
-        public float Coins { get; set; }
+        public string Password { get; set; }
 
         public int Points { get; set; }
 
         public string Memo { get; set; }
+
+        [DbField(false)]
+        public string Vcode { get; set; }
     }
 }

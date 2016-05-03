@@ -22,10 +22,5 @@ namespace Washer.Dal
             
             return list;
         }
-
-        public string GetIntroduction(int keyId)
-        {
-            return DbUtils.GetList<WasherCardModel>(string.Format("select * from V_Consumes where KeyId = {0}", keyId), null).FirstOrDefault().Introduction;
-        }
     }
 }

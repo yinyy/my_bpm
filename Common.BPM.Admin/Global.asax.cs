@@ -6,6 +6,9 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using Combres;
+using BPM.Core.Bll;
+using Senparc.Weixin.MP.CommonAPIs;
+using BPM.Core.Model;
 
 namespace BPM.Admin
 {
@@ -15,6 +18,15 @@ namespace BPM.Admin
         protected void Application_Start(object sender, EventArgs e)
         {
             RouteTable.Routes.AddCombresRoute("Combres");
+
+            //注册所有的公众号的appid和secret
+            foreach (Department d in DepartmentBll.Instance.GetAll())
+            {
+                if (!string.IsNullOrWhiteSpace(d.Appid))
+                {
+                    AccessTokenContainer.Register(d.Appid, d.Secret);
+                }
+            }
         }
 
         protected void Session_Start(object sender, EventArgs e)

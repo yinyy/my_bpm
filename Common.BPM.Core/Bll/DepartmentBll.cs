@@ -26,6 +26,11 @@ namespace BPM.Core.Bll
             return treeNodes;
         }
 
+        public IEnumerable<Department> GetAll()
+        {
+            return DepartmentDal.Instance.GetAll();
+        }
+
         /// <summary>
         /// 获取部门数据
         /// </summary>
@@ -39,6 +44,11 @@ namespace BPM.Core.Bll
         public string GetDepartmentTreegridData()
         {
             return JSONhelper.ToJson(DepartmentDal.Instance.GetChildren());
+        }
+
+        public Department Get(string tag)
+        {
+            return DepartmentDal.Instance.GetWhere(new { Tag = tag }).FirstOrDefault();
         }
 
         public bool HasDepartmentBy(string departmentName,int depid=0)

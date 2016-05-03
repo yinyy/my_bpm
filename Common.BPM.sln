@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChat", "WeChat\WeChat.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "模拟微信服务器", "模拟微信服务器\模拟微信服务器\模拟微信服务器.csproj", "{4990C1F4-FB67-40E4-80B0-AC301D9990F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.TcpServer", "BPM.TcpServer\BPM.TcpServer.csproj", "{2B97016D-58EF-4246-BC80-5C0A8A3B252E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.BoardListener", "BPM.BoardListener\BPM.BoardListener.csproj", "{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,18 +91,18 @@ Global
 		{4990C1F4-FB67-40E4-80B0-AC301D9990F5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4990C1F4-FB67-40E4-80B0-AC301D9990F5}.Release|Win32.ActiveCfg = Release|Any CPU
 		{4990C1F4-FB67-40E4-80B0-AC301D9990F5}.Release|Win32.Build.0 = Release|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Debug|Win32.Build.0 = Debug|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Release|Win32.ActiveCfg = Release|Any CPU
-		{2B97016D-58EF-4246-BC80-5C0A8A3B252E}.Release|Win32.Build.0 = Release|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Debug|Win32.Build.0 = Debug|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2E7FC718-5E89-4CEE-BD41-22B6CA0577DF}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

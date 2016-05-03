@@ -2,21 +2,46 @@
     "button": [
         {
             "type": "scancode_waitmsg", 
-            "name": "洗车", 
-            "key": "m111_wash_car"
+            "name": "我要洗车", 
+            "key": "m101_washcar"
         }, 
         {
-            "name": "我的", 
+            "name": "个人中心", 
             "sub_button": [
                 {
                     "type": "view", 
-                    "name": "洗车卡", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fCard%2fList.aspx&response_type=code&scope=snsapi_base&state=danis001#wechat_redirect"
-                }, 
+                    "name": "我的账户", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fProfile.aspx&response_type=code&scope=snsapi_base&state=69#wechat_redirect"
+                },
+				{
+                    "type": "view", 
+                    "name": "忘记密码", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fPassword.aspx&response_type=code&scope=snsapi_base&state=69#wechat_redirect"
+                },
                 {
                     "type": "click", 
-                    "name": "推广", 
-                    "key": "m123_promote"
+                    "name": "优惠信息", 
+                    "key": "m203_infos"
+                },
+				{
+                    "type": "click", 
+                    "name": "我要推广", 
+                    "key": "m204_promote"
+                }
+            ]
+        },
+		{
+            "name": "帮助指南", 
+            "sub_button": [
+				{
+                    "type": "view", 
+                    "name": "代理加盟", 
+                    "url": "http://139.129.43.203/PublicPlatform/Web/Proxy.aspx"
+                },
+				{
+                    "type": "view", 
+                    "name": "使用手册", 
+                    "url": "http://139.129.43.203/PublicPlatform/Web/Help.aspx"
                 }
             ]
         }

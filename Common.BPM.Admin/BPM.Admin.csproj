@@ -72,6 +72,14 @@
     <Reference Include="Omu.ValueInjecter">
       <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
+    <Reference Include="Senparc.Weixin, Version=4.5.16.25603, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.4.5.16\lib\net45\Senparc.Weixin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=13.6.10.25605, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.MP.13.6.10\lib\net45\Senparc.Weixin.MP.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -2850,22 +2858,28 @@
     <Content Include="login.html" />
     <Content Include="PublicPlatform\data\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
-    <Content Include="PublicPlatform\Web\Card\Detail.aspx" />
-    <Content Include="PublicPlatform\Web\Card\List.aspx" />
-    <Content Include="PublicPlatform\Web\css\card.css" />
+    <Content Include="PublicPlatform\Web\Card.aspx" />
+    <Content Include="PublicPlatform\Web\css\Profile.css" />
+    <Content Include="PublicPlatform\Web\css\Card.css" />
+    <Content Include="PublicPlatform\Web\css\Records.css" />
     <Content Include="PublicPlatform\Web\css\StyleSheet1.css" />
     <Content Include="PublicPlatform\Web\css\WeUI\style\weui.css" />
     <Content Include="PublicPlatform\Web\css\WeUI\style\weui.min.css" />
     <Content Include="images\PublicPlatform\card_background.png" />
     <Content Include="images\PublicPlatform\default_logo.png" />
+    <Content Include="PublicPlatform\Web\images\icon_card.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_article.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_button.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_cell.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_msg.png" />
     <Content Include="PublicPlatform\Web\images\transparent_1x1.png" />
-    <Content Include="PublicPlatform\Web\js\card.js" />
+    <Content Include="PublicPlatform\Web\js\Profile.js" />
+    <Content Include="PublicPlatform\Web\js\Card.js" />
     <Content Include="PublicPlatform\Web\js\jquery-2_2_1_min.js" />
+    <Content Include="PublicPlatform\Web\js\Records.js" />
+    <Content Include="PublicPlatform\Web\Profile.aspx" />
     <Content Include="PublicPlatform\Web\Promote.aspx" />
+    <Content Include="PublicPlatform\Web\Records.aspx" />
     <Content Include="PublicPlatform\Web\Test.aspx" />
     <Content Include="qqloading.html" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
@@ -3394,9 +3408,11 @@
     <Content Include="ashx\UploadHandler.ashx" />
     <Content Include="Pay\DefaultHandler.ashx" />
     <None Include="Properties\PublishProfiles\本地.pubxml" />
-    <Content Include="PublicPlatform\DefaultHandler.ashx" />
+    <Content Include="PublicPlatform\Index.ashx" />
     <None Include="Properties\PublishProfiles\远程.pubxml" />
     <Content Include="scripts\fine-uploader\LICENSE" />
+    <Content Include="PublicPlatform\Web\handler\ProfileHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\CardHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3610,6 +3626,12 @@
     <Compile Include="Pay\DefaultHandler.ashx.cs">
       <DependentUpon>DefaultHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="PublicPlatform\Download\CodeRecord.cs" />
+    <Compile Include="PublicPlatform\Download\Config.cs" />
+    <Compile Include="PublicPlatform\Download\ConfigHelper.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageContext.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageHandler.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageHandler_Event.cs" />
     <Compile Include="PublicPlatform\Processor\WasherProcessor.cs" />
     <Compile Include="ashx\ExportExcel.aspx.cs">
       <DependentUpon>ExportExcel.aspx</DependentUpon>
@@ -3648,8 +3670,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublicPlatform\DefaultHandler.ashx.cs">
-      <DependentUpon>DefaultHandler.ashx</DependentUpon>
+    <Compile Include="PublicPlatform\Index.ashx.cs">
+      <DependentUpon>Index.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Test.aspx.cs">
       <DependentUpon>Test.aspx</DependentUpon>
@@ -3658,19 +3680,26 @@
     <Compile Include="PublicPlatform\Test.aspx.designer.cs">
       <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Card\Detail.aspx.cs">
-      <DependentUpon>Detail.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Utilities\Server.cs" />
+    <Compile Include="PublicPlatform\Web\Card.aspx.cs">
+      <DependentUpon>Card.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Card\Detail.aspx.designer.cs">
-      <DependentUpon>Detail.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\Card.aspx.designer.cs">
+      <DependentUpon>Card.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Card\List.aspx.cs">
-      <DependentUpon>List.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\handler\CardHandler.ashx.cs">
+      <DependentUpon>CardHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\ProfileHandler.ashx.cs">
+      <DependentUpon>ProfileHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Card\List.aspx.designer.cs">
-      <DependentUpon>List.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\Promote.aspx.cs">
       <DependentUpon>Promote.aspx</DependentUpon>
@@ -3678,6 +3707,13 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\Promote.aspx.designer.cs">
       <DependentUpon>Promote.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Records.aspx.cs">
+      <DependentUpon>Records.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Records.aspx.designer.cs">
+      <DependentUpon>Records.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\Test.aspx.cs">
       <DependentUpon>Test.aspx</DependentUpon>

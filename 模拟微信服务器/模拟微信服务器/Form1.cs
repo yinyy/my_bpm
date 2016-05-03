@@ -23,7 +23,9 @@ namespace 模拟微信服务器
         {
             rtbResponse.Text = "";
 
-            string url = string.Format("http://localhost:9582/PublicPlatform/DefaultHandler.ashx");
+         
+            //string url = string.Format("http://139.129.43.203/PublicPlatform/Index.ashx?tag=69");
+            string url = string.Format("http://localhost:9582/PublicPlatform/Index.ashx?tag=69");
             //string url = string.Format("http://139.129.43.203//PublicPlatform/DefaultHandler.ashx");
 
             try

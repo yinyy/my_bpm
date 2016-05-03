@@ -48,7 +48,7 @@ namespace WeChat.Utils
                 //如果当前的access_token为null或者当前的时间与上次获取access_token相比，超过了7100秒，则刷新access_token
                 if (_AccessToken == null || _AccessTokenExpires.Subtract(DateTime.Now).Seconds <= 10)
                 {
-                    string url = string.Format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}", AppConfiguration.AppId, AppConfiguration.AppSecret);
+                    string url = string.Format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}", "wx6dc74da9d1ac4ea4", "1690cf75848e0d70dd54bde18f116352");
 
                     WebRequest request = WebRequest.Create(url);
                     request.Method = "GET";

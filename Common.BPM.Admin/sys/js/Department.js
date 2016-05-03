@@ -1,9 +1,9 @@
 ﻿
 var formHtml = '<form  id="xiucaiForm"><table class="grid">';
 formHtml += '<tr><td>部门名称：</td><td><input type="text" class="txt03 required" name="DepartmentName" id="txtgroupname" /></td></tr>';
+formHtml += '<tr><td>唯一标识：</td><td><input id="txttag" name="Tag" class="txt03 required"/></td></tr>';
 formHtml += '<tr><td>上级部门：</td><td><input style="width:200px" id="txtparentid" name="parentid" /></td></tr>';
 formHtml += '<tr><td>排序：</td><td><input id="txtsortnum" name="sortnum" value="0" /></td></tr>';
-formHtml += '<tr><td>标识：</td><td><input id="txttag" name="tag"/></td></tr>';
 formHtml += '<tr><td>备注：</td><td><textarea tip="备注信息"  style="width:80%;height:50px;" class="txt03" rows=5 id="txtremark" name="remark"></textarea></td></tr>';
 formHtml += '</table></form>';
 
@@ -36,6 +36,7 @@ var mygrid = {
             treeField: 'DepartmentName',
             columns: [[
                 { title: '部门名称', field: 'DepartmentName', width: 400 },
+                { title: '唯一标识', field: 'Tag', width: 200, align: 'center' },
                 { title: '排序', field: 'Sortnum', width: 60, align: 'center' },
                 { title: '备注', field: 'Remark', width: 240 }
             ]]
@@ -76,7 +77,7 @@ var crud = {
     },
     add: function () {
         var addDialog = top.$.hDialog({
-            content: formHtml, height: 253, title: "增加部门", iconCls: 'icon-add',
+            content: formHtml, height: 290, title: "增加部门", iconCls: 'icon-add',
             submit: function () {
                 if (top.$('#xiucaiForm').validate().form()) {
                     var query = crud.createParam('add', 0);
@@ -112,7 +113,7 @@ var crud = {
         var row = $('#depGrid').treegrid('getSelected');
         if (row) {
             var editDialog = top.$.hDialog({
-                content: formHtml, height: 253, title: "修改部门", iconCls: 'icon-edit',
+                content: formHtml, height: 290, title: "修改部门", iconCls: 'icon-edit',
                 submit: function () {
                     if (top.$('#xiucaiForm').validate().form()) {
 

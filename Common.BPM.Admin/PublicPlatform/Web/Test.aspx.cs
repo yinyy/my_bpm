@@ -43,9 +43,9 @@ namespace BPM.Admin.PublicPlatform.Web
 
         private void GetCards(string openId)
         {
-            List<WasherCardModel> cards = WasherCardBll.Instance.GetCards(openId);
-            cardRepeater.DataSource = cards;
-            cardRepeater.DataBind();
+            //List<WasherCardModel> cards = WasherCardBll.Instance.GetCards(openId);
+            //cardRepeater.DataSource = cards;
+            //cardRepeater.DataBind();
         }
     }
 }
