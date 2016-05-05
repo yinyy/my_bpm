@@ -212,5 +212,9 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 	return true;
 }
 
+void SimHelperClass::sendShortMessage(String message, String phone) {
+
+}
+
 SimHelperClass SimHelper;
 

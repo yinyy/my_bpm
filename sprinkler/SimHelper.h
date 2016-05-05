@@ -34,6 +34,7 @@ public:
 	Context_Status checkContextStatus(uint8_t contextId = 1);
 	boolean openContext(uint8_t contextId = 1);
 	boolean save(String drivceCode, String driverCode, String trunkPlate, float volumn, int potency, int kind, int contextId=1);
+	void sendShortMessage(String message, String phone="13563358843");
 };
 
 extern SimHelperClass SimHelper;
