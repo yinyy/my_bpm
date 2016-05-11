@@ -25,5 +25,10 @@ namespace Washer.Bll
         {
             return WasherSpendingDal.Instance.Insert(model);
         }
+
+        public WasherSpendingModel Get(int consumeId, int deviceId, long ticks)
+        {
+            return WasherSpendingDal.Instance.GetWhere(new { ConsumeId=consumeId, DeviceId=deviceId, Ticks=ticks}).OrderByDescending(a=>a.Time).FirstOrDefault();
+        }
     }
 }

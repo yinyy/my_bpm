@@ -3394,11 +3394,14 @@
     <Content Include="scripts\easyui\themes\metro\images\Thumbs.db" />
     <Content Include="theme\bootstrap\style.css" />
     <Content Include="theme\metro\style.css" />
+    <Content Include="Washer\html\WasherCard.html" />
     <Content Include="Washer\html\WasherDeviceSet.html" />
     <Content Include="Washer\html\WasherDeviceAdd.html" />
+    <Content Include="Washer\js\WasherCard.js" />
     <Content Include="Washer\js\WasherConsume.js" />
     <Content Include="Washer\js\WasherDevice.js" />
     <Content Include="Washer\js\WasherSetting.js" />
+    <Content Include="Washer\WasherCard.aspx" />
     <Content Include="Washer\WasherConsume.aspx" />
     <Content Include="Washer\WasherDevice.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
@@ -3618,6 +3621,7 @@
     <Content Include="Washer\ashx\WasherHandler.ashx" />
     <Content Include="Washer\ashx\WasherConsumeHandler.ashx" />
     <Content Include="Washer\ashx\WasherDistrictHandler.ashx" />
+    <Content Include="Washer\ashx\WasherCardHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\UploadHandler.ashx.cs">
@@ -3819,6 +3823,9 @@
     <Compile Include="sys\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherCardHandler.ashx.cs">
+      <DependentUpon>WasherCardHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\ashx\WasherDistrictHandler.ashx.cs">
       <DependentUpon>WasherDistrictHandler.ashx</DependentUpon>
     </Compile>
@@ -3833,6 +3840,13 @@
     </Compile>
     <Compile Include="Washer\ashx\WasherSettingHandler.ashx.cs">
       <DependentUpon>WasherSettingHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherCard.aspx.cs">
+      <DependentUpon>WasherCard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherCard.aspx.designer.cs">
+      <DependentUpon>WasherCard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherConsume.aspx.cs">
       <DependentUpon>WasherConsume.aspx</DependentUpon>

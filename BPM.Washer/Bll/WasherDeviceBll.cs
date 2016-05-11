@@ -1,8 +1,6 @@
 ﻿using BPM.Common.Provider;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Washer.Dal;
 using Washer.Model;
 
@@ -48,6 +46,11 @@ namespace Washer.Bll
         public WasherDeviceModel Get(string serialNumber)
         {
             return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
+        }
+
+        public WasherDeviceModel GetByBoardNumber(string deviceID)
+        {
+            return WasherDeviceDal.Instance.GetWhere(new { BoardNumber=deviceID}).FirstOrDefault();
         }
     }
 }

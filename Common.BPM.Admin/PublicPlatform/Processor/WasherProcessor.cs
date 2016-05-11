@@ -131,7 +131,7 @@ namespace Washer.Processor
 
                         WasherSpendingModel spending = new WasherSpendingModel();
                         spending.Coins = deviceSetting.Coin;
-                        spending.ConsumerId = consume.KeyId;
+                        spending.ConsumeId = consume.KeyId;
                         spending.DeviceId = device.KeyId;
                         spending.Kind = WasherSpendingBll.Kind.WashCar;
                         spending.Memo = "";

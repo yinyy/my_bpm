@@ -22,5 +22,11 @@ namespace Washer.Dal
             
             return list;
         }
+
+        internal string GetJson(int pageindex, int pagesize, string filterJson, string sort, string order)
+        {
+            return base.JsonDataForEasyUIdataGrid("V_Cards", pageindex, pagesize, filterJson,
+                                                  sort, order);
+        }
     }
 }

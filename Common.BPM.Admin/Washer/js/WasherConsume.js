@@ -26,37 +26,38 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-		    {
-		        title: '昵称', field: 'NickName', width: 130, align: 'center'
-		    },
+		    { title: '姓名', field: 'Name', width: 130, align: 'center' },
             { title: '性别', field: 'Gender', width: 60, align: 'center' },
             {
-                title: '归属地', field: 'Country', width: 150, align: 'center', formatter: function (v, r, i) {
+                title: '昵称', field: 'NickName', width: 130, align: 'center', formatter(v, r, i) {
+                    if (v == null) {
+                        return '';
+                    }
+
+                    return v;
+                }},
+            { title: '电话', field: 'Telphone', width: 130, align: 'center' },
+            { title: '运营商', field: 'DepartmentName', width: 180, align: 'center' },
+            {
+                title: '归属地', field: 'Country', width: 200, align: 'center', formatter: function (v, r, i) {
+                    if (v == null) {
+                        return '';
+                    }
+
                     return r.Country + ' - ' + r.Province + ' - ' + r.City;
                 }
             },
             {
-                title: '运营商', field: 'DepartmentName', width: 180, align: 'center'
-            },
-            //{
-            //    title: '卡号', field: 'Card', width: 200, align: 'center'
-            //},
-            { title: '余额', field: 'Coins', width: 130, align: 'right' },
+                title: '可用洗车币', field: 'ValidCoins', width: 80, align: 'right', formatter(v, r, i) {
+                    return v == null ? '0.00' : v.toFixed(2);
+                }},
             {
-                title: '积分', field: 'Points', width: 130, align: 'right'
-            },
+                title: '即将过期', field: 'WillExpireCoins', width: 80, align: 'right', formatter(v, r, i) {
+                    return v == null ? '0.00' : v.toFixed(2);
+                }},
             {
-                title: '推荐人', field: 'RefererId', width: 130, align: 'center', formatter: function (v, r, i) {
-                    if (r.RefererOpenId == null) {
-                        return '无';
-                    } else {
-                        return r.RefererNickName;
-                    }
-                }
-            },
-            {
-                title: '记录', field: 'KeyId', width: 100, align: 'center', formatter: function (v, r, i) {
-                    return '<a href="javascript:void(0)">消费</a>&nbsp;<a href="javascript:void(0)">充值</a>&nbsp;<a href="javascript:void(0)">积分</a>';
+                title: '积分', field: 'Points', width: 80, align: 'right', formatter(v, r, i) {
+                    return v == null ? '0' : v;
                 }
             }
             ]],

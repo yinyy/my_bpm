@@ -11,6 +11,18 @@ $(function () {
     $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
     $('#a_set').click(CRUD.set);
+    $('#a_move').click(function () {
+        var query = createParam('start', '0');
+        jQuery.ajaxjson(actionURL, query, function (d) {
+            if (parseInt(d) > 0) {
+                msg.ok('添加成功！');
+                hDialog.dialog('close');
+                grid.reload();
+            } else {
+                MessageOrRedirect(d);
+            }
+        });
+    });
 
     //高级查询
     $('#a_search').click(function () {
@@ -69,18 +81,14 @@ var grid = {
                 }},
             {
                 title: '当前状态', field: 'Status', width: 100, align: 'center', formatter: function (v, r, i) {
-                    if (r.UpdateTime == null) {
-                        return '未知';
-                    } else {
-                        return r.UpdateTime.substring(0, 10) + '<br/>' + r.UpdateTime.substring(11, 16) + '<br/>' + r.Status;
-                    }
+                    return '等待解析';
                 }},
             {
                 title: 'IP地址', field: 'IpAddress', width: 110, align: 'center', formatter: function (v, r, i) {
                     if (v=='') {
                         return '未知';
                     } else {
-                        return v;
+                        return r.UpdateTime + '<br/>' + v;
                     }
                 }},
             {
@@ -134,7 +142,7 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 450, height: 352, href: addDeviceUrl, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 450, height: 317, href: addDeviceUrl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
@@ -173,7 +181,7 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '编辑', width: 450, height: 352, href: addDeviceUrl, iconCls: 'icon-edit',
+                title: '编辑', width: 450, height: 317, href: addDeviceUrl, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_DepartmentId').combobox({
                         url: actionURL + "?json=" + JSON.stringify({ action: 'dpts' }),
@@ -194,8 +202,8 @@ var CRUD = {
                     top.$('#txt_SerialNumber').val(row.SerialNumber);
                     top.$('#txt_BoardNumber').val(row.BoardNumber);
                     top.$('#txt_DepartmentId').combobox('setValue', row.DepartmentId);
-                    top.$('#txt_ProductionTime').datebox('setValue', row.ProductionTime);
-                    top.$('#txt_DeliveryTime').datebox('setValue', row.DeliveryTime);
+                    top.$('#txt_ProductionTime').datebox('setValue', row.ProductionTime.substring(0, 10));
+                    top.$('#txt_DeliveryTime').datebox('setValue', row.DeliveryTime.substring(0, 10));
                     top.$('#txt_Memo').val(row.Memo);
                 },
                 submit: function () {
@@ -240,7 +248,7 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '设置', width: 450, height: 374, href: setDeviceUrl, iconCls: 'icon-edit',
+                title: '设置', width: 800, height: 374, href: setDeviceUrl, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_Province').combobox({
                         url: "/Washer/ashx/WasherDistrictHandler.ashx?action=province",
@@ -301,18 +309,22 @@ var CRUD = {
                     top.$('#txt_Address').val(row.Address);
                     top.$('#txt_Memo2').val(row.Memo2);
 
-                    top.$('#txt_Setting_Coin').numberbox({   
-                        min:0,   
-                        precision:2   
-                    });
-
                     var setting = eval("(" + row.Setting + ")");
-                    top.$('#txt_Setting_Coin').numberbox('setValue', setting.Coin);
+                    var params = setting.Params; 
+                    top.$("input[name='params'").each(function (idx) {
+                        $(this).val(params[idx]);
+                    });
+                    top.$('#txt_BoardNumber').val(row.BoardNumber);
                 },
                 submit: function () {
                     if (top.$('#uiform').form('validate')) {
-                        top.$('#txt_Setting').val(JSON.stringify({ Coin: top.$('#txt_Setting_Coin').numberbox('getValue') }));
-                        var query = createParam('set', row.KeyId);;
+                        var ps = [];
+                        top.$("input[name='params']").each(function (idx) {
+                            ps[ps.length] = parseInt($(this).val());
+                        });
+
+                        top.$('#txt_Setting').val(JSON.stringify({ Coin: 0, Params: ps}));
+                        var query = createParam('set', row.KeyId);
                         jQuery.ajaxjson(actionURL, query, function (d) {
                             if (parseInt(d) > 0) {
                                 msg.ok('修改成功！');
