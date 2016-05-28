@@ -27,7 +27,7 @@ namespace Washer.Model
         public DateTime ValidateFrom { get; set; }
 
         public DateTime ValidateEnd { get; set; }
-        public float Coins { get; set; }
+        public int Coins { get; set; }
         public string Memo { get; set; }
     }
 }

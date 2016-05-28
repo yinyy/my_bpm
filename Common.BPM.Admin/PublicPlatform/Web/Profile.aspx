@@ -26,7 +26,6 @@
         else        
         {
     %>
-
         <input type="hidden" id="BinderId" value="<%=wxconsume.KeyId %>" />
         <input type="hidden" id="DepartmentId" value="<%=wxconsume.DepartmentId %>" />
         <input type="hidden" id="ConsumeId" value="<%=consume==null?0:consume.KeyId%>" />
@@ -100,31 +99,38 @@
                 </div>
             </div>
             <div class="weui_cells weui_cells_access">
-                <a class="weui_cell" href="./Card.aspx?id=<%=wxconsume.KeyId %>">
+                <a class="weui_cell" href="./Card.aspx?wxid=<%=wxconsume.KeyId %>">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>我的洗车卡</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Records.aspx?id=<%=wxconsume.KeyId %>&type=1">
+                <a class="weui_cell" href="./Records.aspx?wxid=<%=wxconsume.KeyId %>&type=1">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>充值记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Records.aspx?id=<%=wxconsume.KeyId %>&type=2">
+                <a class="weui_cell" href="./Records.aspx?wxid=<%=wxconsume.KeyId %>&type=2">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>消费记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Records.aspx?id=<%=wxconsume.KeyId %>&type=3">
+                <a class="weui_cell" href="./Records.aspx?wxid=<%=wxconsume.KeyId %>&type=3">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>积分记录</p>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </a>
+                <a class="weui_cell" href="./Payment.aspx?wxid=<%=wxconsume.KeyId %>">
+                    <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>微信支付</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>

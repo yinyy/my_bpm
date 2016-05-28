@@ -1,9 +1,11 @@
 ﻿<form id="uiform">
     <table class="grid">
         <tr><td align="right">序列号：</td><td><input type="text" id="txt_SerialNumber" name="SerialNumber" class="txt03 easyui-validatebox" data-options="required:true" style="width: 250px;" /></td></tr>
+        <tr><td align="right">主板编号：</td><td><input type="text" id="txt_BoardNumber" name="BoardNumber" class="txt03 easyui-validatebox" required="required" validType="length[6,6]" style="width: 250px;" /></td></tr>
         <tr><td align="right">生产时间：</td><td><input type="text" id="txt_ProductionTime" name="ProductionTime" style="width:255px" /></td></tr>
         <tr><td align="right">客户名称：</td><td><input type="text" id="txt_DepartmentId" name="DepartmentId" class="txt03" style="width:255px" /></td></tr>
         <tr><td align="right">出厂时间：</td><td><input type="text" id="txt_DeliveryTime" name="DeliveryTime" style="width:255px"/></td></tr>
         <tr><td align="right">备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 340px; height:80px"></textarea> </td></tr>
+        <tr><td align="right">&nbsp;</td><td><input type="checkbox" name="Enabled" id="chk_Enabled" checked="checked" value="false"/><label for="chk_Enabled">启用设备</label></td></tr>
     </table>
 </form>

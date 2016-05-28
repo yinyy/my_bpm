@@ -107,31 +107,44 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
         public override IResponseMessageBase OnEvent_ScanRequest(RequestMessageEvent_Scan requestMessage)
         {
-            //通过扫描关注
-            var responseMessage = CreateResponseMessage<ResponseMessageText>();
-
-            //下载文档
+            ResponseMessageBase message = null;
             if (!string.IsNullOrEmpty(requestMessage.EventKey))
             {
-                var sceneId = long.Parse(requestMessage.EventKey.Replace("qrscene_", ""));
-                //var configHelper = new ConfigHelper(new HttpContextWrapper(HttpContext.Current));
-                var codeRecord =
-                    ConfigHelper.CodeCollection.Values.FirstOrDefault(z => z.QrCodeTicket != null && z.QrCodeId == sceneId);
-
-
-                if (codeRecord != null)
+                string senceId = requestMessage.EventKey;
+                if (senceId.StartsWith("9"))
                 {
-                    //确认可以下载
-                    codeRecord.AllowDownload = true;
-                    responseMessage.Content = GetDownloadInfo(codeRecord);
+                    WasherDeviceModel device;
+                    WasherWeChatConsumeModel wxconsume;
+                    if ((device = WasherDeviceBll.Instance.GetByBoardNumber(senceId.Substring(1))) == null ||
+                        (wxconsume = WasherWeChatConsumeBll.Instance.Get(device.DepartmentId, requestMessage.FromUserName)) == null)
+                    {
+                        var responseMessage = CreateResponseMessage<ResponseMessageText>();
+                        responseMessage.Content = "参数错误！";
+                        message = responseMessage;
+                    }
+                    else {
+                        //TODO:检查洗车机是否可用
+
+
+                        var responseMessage = CreateResponseMessage<ResponseMessageText>();
+                        responseMessage.Content = "<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Payment.aspx?wxid=" +
+                            wxconsume.KeyId + "&b=" + senceId.Substring(1) + "'>点这个链接，启动洗车机。</a>";
+                        message = responseMessage;
+                    }
+                }
+                else if (senceId.StartsWith("8"))
+                {
+                    //什么也不做
+                }
+                else
+                {
+                    var responseMessage = CreateResponseMessage<ResponseMessageText>();
+                    responseMessage.Content = "参数错误！";
+                    message = responseMessage;
                 }
             }
 
-            responseMessage.Content = responseMessage.Content ?? string.Format("通过扫描二维码进入，场景值：{0}", requestMessage.EventKey);
-
-
-
-            return responseMessage;
+            return message;
         }
 
         public override IResponseMessageBase OnEvent_ViewRequest(RequestMessageEvent_View requestMessage)

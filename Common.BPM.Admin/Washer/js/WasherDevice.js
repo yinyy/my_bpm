@@ -1,6 +1,7 @@
 ﻿var actionURL = '/Washer/ashx/WasherDeviceHandler.ashx';
 var addDeviceUrl = '/Washer/html/WasherDeviceAdd.html';
 var setDeviceUrl = '/Washer/html/WasherDeviceSet.html';
+
 var province = city = area = null;
 
 $(function () {
@@ -11,18 +12,8 @@ $(function () {
     $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
     $('#a_set').click(CRUD.set);
-    $('#a_move').click(function () {
-        var query = createParam('start', '0');
-        jQuery.ajaxjson(actionURL, query, function (d) {
-            if (parseInt(d) > 0) {
-                msg.ok('添加成功！');
-                hDialog.dialog('close');
-                grid.reload();
-            } else {
-                MessageOrRedirect(d);
-            }
-        });
-    });
+    $('#a_consume').click(CRUD.consume);
+    $('#a_qrcode').click(CRUD.qrcode);
 
     //高级查询
     $('#a_search').click(function () {
@@ -106,11 +97,6 @@ var grid = {
                     return str;
                 }
             },
-            {
-                title: '二维码', field: 'KeyId', width: 90, align: 'center', formatter: function (v, r, i) {
-                    return '<a href="javascript:void(0);">支付</a>&nbsp;<a href="javascript:void(0);" onclick="CRUD.qrcode(' + r.KeyId + ');">设备</a>';
-                }
-            },
             { title: '客户备注', field: 'Memo2', width: 180, align: 'left' }
             ]],
             pagination: true,
@@ -142,14 +128,20 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 450, height: 317, href: addDeviceUrl, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 450, height: 387, href: addDeviceUrl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
+                    top.$('#chk_Enabled').val(top.$('#chk_Enabled').attr('checked')=='checked');
+
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
                         if (parseInt(d) > 0) {
                             msg.ok('添加成功！');
                             hDialog.dialog('close');
                             grid.reload();
+                        } else if (parseInt(d) == -1) {
+                            msg.warning('主板编号重复。');
+                        } else if (parseInt(d) == -2) {
+                            msg.warning('序列号重复。');
                         } else {
                             MessageOrRedirect(d);
                         }
@@ -181,7 +173,7 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '编辑', width: 450, height: 317, href: addDeviceUrl, iconCls: 'icon-edit',
+                title: '编辑', width: 450, height: 387, href: addDeviceUrl, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_DepartmentId').combobox({
                         url: actionURL + "?json=" + JSON.stringify({ action: 'dpts' }),
@@ -205,15 +197,26 @@ var CRUD = {
                     top.$('#txt_ProductionTime').datebox('setValue', row.ProductionTime.substring(0, 10));
                     top.$('#txt_DeliveryTime').datebox('setValue', row.DeliveryTime.substring(0, 10));
                     top.$('#txt_Memo').val(row.Memo);
+                    if (row.Enabled) {
+                        top.$('#chk_Enabled').attr('checked', 'checked');
+                    } else {
+                        top.$('#chk_Enabled').removeAttr('checked');
+                    }
                 },
                 submit: function () {
                     if (top.$('#uiform').form('validate')) {
+                        top.$('#chk_Enabled').val(top.$('#chk_Enabled').attr('checked') == 'checked');
+
                         var query = createParam('edit', row.KeyId);;
                         jQuery.ajaxjson(actionURL, query, function (d) {
                             if (parseInt(d) > 0) {
                                 msg.ok('修改成功！');
                                 hDialog.dialog('close');
                                 grid.reload();
+                            } else if (parseInt(d) == -1) {
+                                msg.warning('主板编号重复。');
+                            } else if (parseInt(d) == -2) {
+                                msg.warning('序列号重复。');
                             } else {
                                 MessageOrRedirect(d);
                             }
@@ -310,11 +313,28 @@ var CRUD = {
                     top.$('#txt_Memo2').val(row.Memo2);
 
                     var setting = eval("(" + row.Setting + ")");
-                    var params = setting.Params; 
+                    var ps = setting.Params;
                     top.$("input[name='params'").each(function (idx) {
-                        $(this).val(params[idx]);
+                        $(this).val(ps[idx]);
                     });
-                    top.$('#txt_BoardNumber').val(row.BoardNumber);
+
+                    var value = ps[31];
+                    alert(value);
+                    if (value%2 == 0) {
+                        top.$('#paramsbit_1').attr('checked', 'checked');
+                    }
+                    value = parseInt(value/2);
+                    if ( value%2== 1) {
+                        top.$('#paramsbit_2').attr('checked', 'checked');
+                    }
+                    value = parseInt(value / 2);
+                    if (value % 2 == 1) {
+                        top.$('#paramsbit_3').attr('checked', 'checked');
+                    }
+
+                    if (!row.Enabled) {
+                        top.$('#paramsbit_1, #paramsbit_2, #paramsbit_3').attr('disabled', 'disabled');
+                    }
                 },
                 submit: function () {
                     if (top.$('#uiform').form('validate')) {
@@ -322,8 +342,12 @@ var CRUD = {
                         top.$("input[name='params']").each(function (idx) {
                             ps[ps.length] = parseInt($(this).val());
                         });
+                        ps[ps.length] = 0;
+                        ps[ps.length] = parseInt((top.$('#paramsbit_3').attr('checked') == 'checked' ? "1" : "0") +
+                            (top.$('#paramsbit_2').attr('checked') == 'checked' ? "1" : "0") +
+                            (top.$('#paramsbit_1').attr('checked') == 'checked' ? "0" : "1"), 2);
 
-                        top.$('#txt_Setting').val(JSON.stringify({ Coin: 0, Params: ps}));
+                        top.$('#txt_Setting').val(JSON.stringify({ Coin: 0, Params: ps }));
                         var query = createParam('set', row.KeyId);
                         jQuery.ajaxjson(actionURL, query, function (d) {
                             if (parseInt(d) > 0) {
@@ -342,29 +366,75 @@ var CRUD = {
             msg.warning('请选择要设置的行。');
         }
     },
-    qrcode: function (keyId) {
-        $.post(actionURL, createParam("device_qrcode", keyId), function (d) {
-            if (d.Success) {
-                var dialog = top.$.hDialog({
-                    content: '<img id="qrcodeimage" width="300px" height="300px" alt="二维码"/>',
-                    height: 380, width: 320,
-                    title: "关注二维码",
-                    iconCls: 'icon-edit',
-                    buttons: [{
-                        text: '关闭',
-                        iconCls: 'icon-cancel',
-                        handler: function () {
-                            dialog.dialog('close');
+    qrcode: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            $.post(actionURL, createParam("qrcode", row.KeyId), function (d) {
+                if (d.Success) {
+                    var dialog = top.$.hDialog({
+                        content: '<img id="qrcodeimage" width="300px" height="300px" alt="二维码"/>',
+                        height: 380, width: 320,
+                        title: "二维码",
+                        iconCls: 'icon-add',
+                        buttons: [{
+                            text: '关闭',
+                            iconCls: 'icon-cancel',
+                            handler: function () {
+                                dialog.dialog('close');
+                            }
+                        }]
+                    });
+
+                    top.$('#qrcodeimage').attr('src', d.Url);
+                } else {
+                    msg.warning('生成二维码时发生错误。');
+                }
+            }, 'json');
+        } else {
+            msg.warning('请选择设备。');
+        }
+    },
+    consume: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            var hDialog = top.jQuery.hDialog({
+                title: '消费记录', width: 700, height: 635, content: '<table id="dg2"></table>', iconCls: 'icon-list'
+            });
+            top.$('#dg2').datagrid({
+                url: actionURL + '?' + "json=" + JSON.stringify({ action: 'device_consume', keyid: row.KeyId }),
+                width: 680,
+                height: 558,
+                nowrap: false, //折行
+                rownumbers: true, //行号
+                striped: true, //隔行变色
+                idField: 'KeyId',//主键
+                singleSelect: true, //单选
+                columns: [[
+                    {
+                        field: 'Time', title: '消费时间', align: 'center', width: 180, formatter(v, r, i) {
+                            return v.substring(0, 19);
                         }
-                    }]
-                });
-
-                top.$('#qrcodeimage').attr('src', d.Url);
-            } else {
-                msg.warning('生成二维码时发生错误。');
-            }
-        }, 'json');
-
-        return false;
+                    },
+                    { field: 'Name', title: '姓名', align: 'center', width: 100 },
+                    {
+                        field: 'Coins', title: '消费洗车币', width: 100, align: 'right', formatter(v, r, i) {
+                            return '￥' + v.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'Address', title: '洗车地点', width: 250, align: 'center', formatter(v, r, i) {
+                            return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
+                        }
+                    }
+                ]],
+                pagination: true,
+                pageSize: PAGESIZE,
+                pageList: [20, 40, 50],
+                sortName: 'Time',
+                sortOrder: 'desc'
+            });
+        } else {
+            msg.warning('请选择设备。');
+        }
     }
 }

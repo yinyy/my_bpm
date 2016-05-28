@@ -55,19 +55,14 @@ namespace Washer.Bll
             return WasherConsumeDal.Instance.Update(consume);
         }
 
-        public float GetValidCoins(int keyId)
+        public int GetValidCoins(int consumeId)
         {
-            if (GetValidCards(keyId).Count == 0)
+            if (WasherCardBll.Instance.GetValidCards(consumeId).Count()== 0)
             {
                 return 0;
             }
 
-            return GetValidCards(keyId).Select(a => a.Coins).Aggregate((t, a) => { return t + a; });
-        }
-
-        public List<WasherCardModel> GetValidCards(int keyId)
-        {
-            return WasherCardDal.Instance.GetWhere(new { BinderId = keyId }).Where(a => a.ValidateEnd.Date.CompareTo(DateTime.Now.Date) >= 0).OrderByDescending(a => a.ValidateEnd).ToList();
+            return WasherCardBll.Instance.GetValidCards(consumeId).Select(a => a.Coins).Aggregate((t, a) => { return t + a; });
         }
     }
 }

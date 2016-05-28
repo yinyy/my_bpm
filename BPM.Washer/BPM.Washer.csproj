@@ -42,36 +42,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bll\WasherCardLogBll.cs" />
     <Compile Include="Bll\WasherCardBll.cs" />
     <Compile Include="Bll\WasherConsumeBll.cs" />
+    <Compile Include="Bll\WasherDeviceLogBll.cs" />
     <Compile Include="Bll\WasherDeviceBll.cs" />
     <Compile Include="Bll\WasherOrderBll.cs" />
     <Compile Include="Bll\WasherReceivedMessageBll.cs" />
     <Compile Include="Bll\WasherRewardBll.cs" />
-    <Compile Include="Bll\WasherSpendingBll.cs" />
+    <Compile Include="Bll\WasherValidatorBll.cs" />
     <Compile Include="Bll\WasherVcodeBll.cs" />
     <Compile Include="Bll\WasherWeChatConsumeBll.cs" />
+    <Compile Include="Dal\WasherCardLogDal.cs" />
     <Compile Include="Dal\WasherCardDal.cs" />
     <Compile Include="Dal\WasherConsumeDal.cs" />
+    <Compile Include="Dal\WasherDeviceLogDal.cs" />
     <Compile Include="Dal\WasherDeviceDal.cs" />
     <Compile Include="Dal\WasherOrderDal.cs" />
     <Compile Include="Dal\WasherRewardDal.cs" />
     <Compile Include="Dal\WasherReceivedMessageDal.cs" />
-    <Compile Include="Dal\WasherSpendingDal.cs" />
     <Compile Include="Dal\WasherVcodeDal.cs" />
     <Compile Include="Dal\WasherWeChatConsumeDal.cs" />
+    <Compile Include="Extension\DepartmentBll.cs" />
+    <Compile Include="Model\WasherCardLogModel.cs" />
     <Compile Include="Model\WasherCardModel.cs" />
     <Compile Include="Model\WasherConsumeModel.cs" />
+    <Compile Include="Model\WasherDeviceLogModel.cs" />
     <Compile Include="Model\WasherDeviceModel.cs" />
     <Compile Include="Model\WasherOrderModel.cs" />
     <Compile Include="Model\WasherRewardModel.cs" />
     <Compile Include="Model\WasherReceivedMessageModel.cs" />
-    <Compile Include="Model\WasherSpendingModel.cs" />
     <Compile Include="Model\WasherVcodeModel.cs" />
     <Compile Include="Model\WasherWeChatConsumeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
+      <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
+      <Name>BPM.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>

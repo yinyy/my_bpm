@@ -26,6 +26,11 @@ namespace Washer.Bll
             return WasherCardDal.Instance.GetWhere(new { DepartmentId = departmentId, CardNo = cardNo }).FirstOrDefault();
         }
 
+        public IEnumerable<WasherCardModel> GetValidCards(int consumeId)
+        {
+            return WasherCardDal.Instance.GetWhere(new { BinderId = consumeId }).Where(a => a.ValidateEnd.Date.CompareTo(DateTime.Now.Date) >= 0);//.OrderByDescending(a => a.ValidateEnd)
+        }
+
         public WasherCardModel Get(int keyId)
         {
             return WasherCardDal.Instance.Get(keyId);
@@ -46,36 +51,39 @@ namespace Washer.Bll
             return WasherCardDal.Instance.Insert(model);
         }
 
-        public float Deduction(int cardId, float money)
+        public int Deduction(int cardId, int cost, int ticks)
         {
             #region 计算折扣金额
-            float money1 = money = money * 0.9f;
+            int cost1 = cost = (int)(cost * 0.9);
             #endregion
 
             WasherCardModel card = WasherCardBll.Instance.Get(cardId);
             if (card.Coins > 0)
             {
-                if (card.Coins >= money)
+                if (card.Coins >= cost)
                 {
-                    money = 0;
-                    card.Coins -= money;
+                    card.Coins -= cost;
+                    cost = 0;
                 }
                 else {
-                    money -= card.Coins;
+                    cost -= card.Coins;
                     card.Coins = 0;
                 }
+                //card.Memo = string.Format("{0}", ticks);
                 WasherCardBll.Instance.Update(card);
             }
 
-            if (money > 0)
+            if (cost > 0)
             {
-                var cards = WasherConsumeBll.Instance.GetValidCards(card.BinderId.Value).Where(a=>a.Coins>0);
+                var cards = WasherCardBll.Instance.GetValidCards(card.BinderId.Value).Where(a=>a.Coins>0).OrderBy(a=>a.ValidateEnd);
                 foreach(WasherCardModel c in cards)
                 {
-                    if (c.Coins >= money)
+                    if (c.Coins >= cost)
                     {
-                        c.Coins -= money;
-                        money = 0;
+                        c.Coins -= cost;
+                        cost = 0;
+
+                        c.Memo = string.Format("{0}", ticks);
                         WasherCardBll.Instance.Update(c);
 
                         break;
@@ -83,13 +91,15 @@ namespace Washer.Bll
                     else
                     {
                         c.Coins = 0;
-                        money -= c.Coins;
+                        cost -= c.Coins;
+
+                        c.Memo = string.Format("{0}", ticks);
                         WasherCardBll.Instance.Update(c);
                     }
                 }
             }
 
-            return money1 - money;
+            return cost1;
         }
     }
 }

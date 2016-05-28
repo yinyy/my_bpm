@@ -57,5 +57,8 @@ namespace Washer.Model
 
         [Description("设备的参数设置")]
         public string Setting { get; set; }
+
+        [Description("管理员设置设备是否可以")]
+        public bool Enabled { get; set; }
     }
 }

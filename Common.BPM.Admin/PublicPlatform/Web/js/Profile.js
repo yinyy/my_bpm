@@ -1,4 +1,4 @@
-﻿var actionURL = '/PublicPlatform/Web/handler/ProfileHandler.ashx';
+﻿var actionURL = '/PublicPlatform/Web/Profile.aspx';
 
 var countdownvalue = 30;
 
@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     $('a#bind').click(function () {
         var name = $.trim($('input#Name').val());
-        var gender = $('input#Gender').prop('checked')==true ? '男' : '女';
+        var gender = $('input#Gender').prop('checked') == true ? '男' : '女';
         var telphone = $.trim($('input#Telphone').val());
         var vcode = $.trim($('input#Vcode').val());
         var password = $.trim($('input#Password').val());
@@ -48,50 +48,45 @@ $(document).ready(function () {
             return;
         }
 
-        var o = {
+        $.getJSON(actionURL, {
             action: 'bind',
-            keyId: 0,
-            jsonEntity: JSON.stringify({
-                BinderId: $.trim($('input#BinderId').val()),
-                DepartmentId: parseInt($.trim($('input#DepartmentId').val())),
-                Name: name,
-                Gender: gender,
-                Telphone: telphone,
-                Vcode: vcode,
-                Password: password
-            })
-        };
-        o = "json=" + JSON.stringify(o);
-        $.getJSON(actionURL + '?' + o, function (json) {
-            if (json.success == 1) {
-                alert('用户信息绑定成功。');
+            BinderId: $.trim($('input#BinderId').val()),
+            DepartmentId: parseInt($.trim($('input#DepartmentId').val())),
+            Name: name,
+            Gender: gender,
+            Telphone: telphone,
+            Vcode: vcode,
+            Password: password
+        }, function (json) {
+            switch (json.Success) {
+                case 0:
+                    alert('用户信息绑定成功。');
 
-                $('input#Name').val('');
-                $('input#Gender').removeProp('checked');
-                $('input#Telphone').val('');
-                $('input#Vcode').val('');
-                $('input#Password').val('');
-                $('input#Repassword').val('');
+                    $('input#ConsumeId').val(json.keyId);
 
-                $('input#ConsumeId').val(json.keyId);
-
-                $('div#content1').hide();
-                $('div#content2').show();
-            } else {
-                alert(json.errmsg);
+                    $('div#content1').hide();
+                    $('div#content2').show();
+                    break;
+                case -1:
+                    alert('获取验证码错误。');
+                    break;
+                case -2:
+                    alert('绑定时发生错误。');
+                    break;
+                case -3:
+                    alert('用户信息已被绑定。');
+                    break;
+                default:
+                    alert('其它错误。');
+                    break;
             }
         });
     });
 
     $('a#unbind').click(function () {
         if (confirm('确认解除用户绑定吗？')) {
-            var o = {
-                action: 'unbind',
-                keyId: parseInt($.trim($('input#ConsumeId').val()))
-            };
-            o = "json=" + JSON.stringify(o);
-            $.getJSON(actionURL + '?' + o, function (json) {
-                if (json.success == 1) {
+            $.getJSON(actionURL, { action: 'unbind', ConsumeId: parseInt($.trim($('input#ConsumeId').val())) }, function (json) {
+                if (json.Success == 0) {
                     alert('已经解除绑定。');
 
                     $('div#content1').show();
@@ -118,16 +113,8 @@ function validateTelphone() {
 function getVcode() {
     $('a#GetVcode').addClass('weui_btn_disabled');
 
-    var o = {
-        action: 'vcode',
-        keyId: 0,
-        jsonEntity: JSON.stringify({
-            Telphone: $.trim($('input#Telphone').val())
-        })
-    };
-    o = "json=" + JSON.stringify(o);
-    $.getJSON(actionURL + '?' + o, function (json) {
-        if (json.success == 1) {
+    $.getJSON(actionURL, { action: 'vcode', Telphone: $.trim($('input#Telphone').val()) }, function (json) {
+        if (json.Success == 0) {
             countdownvalue = 30;
             countdown();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Washer.Dal;
 using Washer.Model;
+using System;
 
 namespace Washer.Bll
 {
@@ -48,9 +49,14 @@ namespace Washer.Bll
             return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
         }
 
-        public WasherDeviceModel GetByBoardNumber(string deviceID)
+        public WasherDeviceModel GetByBoardNumber(string boardNumber)
         {
-            return WasherDeviceDal.Instance.GetWhere(new { BoardNumber=deviceID}).FirstOrDefault();
+            return WasherDeviceDal.Instance.GetWhere(new {BoardNumber=boardNumber}).FirstOrDefault();
+        }
+
+        public WasherDeviceModel GetBySerialNumber(string serialNumber)
+        {
+            return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
         }
     }
 }

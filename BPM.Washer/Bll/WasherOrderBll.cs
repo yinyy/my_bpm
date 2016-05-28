@@ -27,5 +27,15 @@ namespace Washer.Bll
         {
             return WasherOrderDal.Instance.Insert(model);
         }
+
+        public WasherOrderModel Get(string serial)
+        {
+            return WasherOrderDal.Instance.GetWhere(new { Serial = serial }).FirstOrDefault();
+        }
+
+        public int Update(WasherOrderModel order)
+        {
+            return WasherOrderDal.Instance.Update(order);
+        }
     }
 }

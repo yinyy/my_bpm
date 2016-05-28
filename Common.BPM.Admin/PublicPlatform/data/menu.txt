@@ -1,7 +1,7 @@
 ﻿{
     "button": [
         {
-            "type": "scancode_waitmsg", 
+            "type": "scancode_push", 
             "name": "我要洗车", 
             "key": "m101_washcar"
         }, 
@@ -11,12 +11,12 @@
                 {
                     "type": "view", 
                     "name": "我的账户", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fProfile.aspx&response_type=code&scope=snsapi_base&state=69#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2d8bcab64b53be3a&redirect_uri=http://xc.senlanjidian.com/PublicPlatform/Web/Profile.aspx&response_type=code&scope=snsapi_base&state=70#wechat_redirect"
                 },
 				{
                     "type": "view", 
                     "name": "忘记密码", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fPassword.aspx&response_type=code&scope=snsapi_base&state=69#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2d8bcab64b53be3a&redirect_uri=http://xc.senlanjidian.com/PublicPlatform/Web/Password.aspx&response_type=code&scope=snsapi_base&state=70#wechat_redirect"
                 },
                 {
                     "type": "click", 
@@ -36,12 +36,12 @@
 				{
                     "type": "view", 
                     "name": "代理加盟", 
-                    "url": "http://139.129.43.203/PublicPlatform/Web/Proxy.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Proxy.aspx"
                 },
 				{
                     "type": "view", 
                     "name": "使用手册", 
-                    "url": "http://139.129.43.203/PublicPlatform/Web/Help.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Help.aspx"
                 }
             ]
         }

@@ -71,21 +71,20 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     #endregion
                     break;
                 case "bind":
-                    int code = WasherVcodeBll.Instance.Validate(rpm.Entity.Telphone, rpm.Entity.Vcode, 3);
+                    WasherVcodeResult code = WasherVcodeBll.Instance.Validate(rpm.Entity.Telphone, rpm.Entity.Vcode, 3);
                     #region 判断用户的验证码是否正确                    
-                    if (code != 0)
+                    if (code != WasherVcodeResult.验证码正确)
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { success = 0, errmsg = code == 1 ? "请先获取验证码。" : code == 2 ? "验证码已经过期。" : "验证码错误。" }));
+                        context.Response.Write(JSONhelper.ToJson(new { success = 0, errmsg = code.ToString() }));
                         return;
                     }
                     #endregion
-
+                    
                     consume = WasherConsumeBll.Instance.Get(rpm.Entity.DepartmentId, rpm.Entity.Telphone);
                     #region 不存在用户信息的时候，直接绑定
                     if (consume == null)
                     {
-                        consume = new WasherConsumeModel();
-                        consume.InjectFrom(rpm.Entity);
+                        consume = rpm.Entity;
                         consume.Bindered = DateTime.Now;
                         consume.Memo = "";
                         consume.Points = 0;

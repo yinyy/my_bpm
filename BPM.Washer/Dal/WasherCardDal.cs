@@ -16,13 +16,6 @@ namespace Washer.Dal
             get { return SingletonProvider<WasherCardDal>.Instance; }
         }
 
-        public List<WasherCardModel> GetCards(string openId)
-        {
-            var list = DbUtils.GetList<WasherCardModel>(string.Format("select * from V_Consumes where OpenId = '{0}'", openId), null).ToList();
-            
-            return list;
-        }
-
         internal string GetJson(int pageindex, int pagesize, string filterJson, string sort, string order)
         {
             return base.JsonDataForEasyUIdataGrid("V_Cards", pageindex, pagesize, filterJson,

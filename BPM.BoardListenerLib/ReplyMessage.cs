@@ -57,6 +57,13 @@ namespace BPM.BoardListenerLib
 
             return buffer;
         }
+
+        public override string ToString()
+        {
+            return string.Format("方向：返回；命令：时间同步；设备号：{0}；时间戳：{1}。",
+                this.BoardNumber,
+                this.Ticks);
+        }
     }
 
     public class ReplyReadSettingMessage : ReplyMessageBase
@@ -89,6 +96,34 @@ namespace BPM.BoardListenerLib
 
             return buffer;
         }
+
+        public override string ToString()
+        {
+            if (ErrorCode == 1)
+            {
+                return string.Format("方向：返回；命令：读取设置；设备号：{0}；错误。",
+                    this.BoardNumber);
+            }
+            else
+            {
+                int index = 1;
+
+                return string.Format("方向：返回；命令：读取设置；设备号：{0}；{1}。",
+                    this.BoardNumber,
+                    this.Values.Select(v => string.Format("参数{0:00}：{1}", index++, v)).Aggregate((r, v) =>
+                    {
+                        if (string.IsNullOrWhiteSpace(r))
+                        {
+                            r = v;
+                        }
+                        else
+                        {
+                            r += "；" + v;
+                        }
+                        return r;
+                    }));
+            }
+        }
     }
 
     public class ReplyUploadStatusMessage : ReplyMessageBase
@@ -104,35 +139,50 @@ namespace BPM.BoardListenerLib
 
             return buffer;
         }
+
+        public override string ToString()
+        {
+            return string.Format("方向：返回；命令：上传状态；设备号：{0}；状态：{1}。",
+                    this.BoardNumber,
+                    this.Status);
+        }
     }
 
     public class ReplyAccountMessage : ReplyMessageBase
     {
-        public int CardId;
-        public int Payment;
+        public int BalanceId;
+        public int Remain;
 
         public override byte[] ToByteArray()
         {
             Length = 12;
             InitBuffer();
 
-            buffer[11] = (byte)((CardId >> 24) & 0xff);
-            buffer[12] = (byte)((CardId >> 16) & 0xff);
-            buffer[13] = (byte)((CardId >> 8) & 0xff);
-            buffer[14] = (byte)(CardId & 0xff);
+            buffer[11] = (byte)((BalanceId >> 24) & 0xff);
+            buffer[12] = (byte)((BalanceId >> 16) & 0xff);
+            buffer[13] = (byte)((BalanceId >> 8) & 0xff);
+            buffer[14] = (byte)(BalanceId & 0xff);
 
-            buffer[15] = (byte)((Payment >> 24) & 0xff);
-            buffer[16] = (byte)((Payment >> 16) & 0xff);
-            buffer[17] = (byte)((Payment >> 8) & 0xff);
-            buffer[18] = (byte)(Payment & 0xff);
+            buffer[15] = (byte)((Remain >> 24) & 0xff);
+            buffer[16] = (byte)((Remain >> 16) & 0xff);
+            buffer[17] = (byte)((Remain >> 8) & 0xff);
+            buffer[18] = (byte)(Remain & 0xff);
 
             return buffer;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("方向：返回；命令：消费结算；设备号：{0}；记录序号：{1}；实际金额：{2:#.00}。",
+                    this.BoardNumber,
+                    this.BalanceId,
+                    this.Remain/100.0);
         }
     }
 
     public class ReplyValidateMessage : ReplyMessageBase
     {
-        public int CardId;
+        public int BalanceId;
         public CardKind Kind;
         public CardStatus Status;
         public int Money;
@@ -146,10 +196,10 @@ namespace BPM.BoardListenerLib
                 Length = 14;
                 InitBuffer();
 
-                buffer[11] = (byte)((CardId >> 24) & 0xff);
-                buffer[12] = (byte)((CardId >> 16) & 0xff);
-                buffer[13] = (byte)((CardId >> 8) & 0xff);
-                buffer[14] = (byte)(CardId & 0xff);
+                buffer[11] = (byte)((BalanceId >> 24) & 0xff);
+                buffer[12] = (byte)((BalanceId >> 16) & 0xff);
+                buffer[13] = (byte)((BalanceId >> 8) & 0xff);
+                buffer[14] = (byte)(BalanceId & 0xff);
 
                 buffer[15] = (byte)Kind;
                 buffer[16] = (byte)Status;
@@ -164,16 +214,26 @@ namespace BPM.BoardListenerLib
                 Length = 10;
                 InitBuffer();
 
-                buffer[11] = (byte)((CardId >> 24) & 0xff);
-                buffer[12] = (byte)((CardId >> 16) & 0xff);
-                buffer[13] = (byte)((CardId >> 8) & 0xff);
-                buffer[14] = (byte)(CardId & 0xff);
+                buffer[11] = (byte)((BalanceId >> 24) & 0xff);
+                buffer[12] = (byte)((BalanceId >> 16) & 0xff);
+                buffer[13] = (byte)((BalanceId >> 8) & 0xff);
+                buffer[14] = (byte)(BalanceId & 0xff);
 
                 buffer[15] = (byte)Kind;
                 buffer[16] = (byte)Status;
             }
 
             return buffer;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("方向：返回；命令：验证账户；设备号：{0}；记录序号：{1}；类型：{2}；状态：{3}；金额：{4:#.00}。",
+                    this.BoardNumber,
+                    this.BalanceId,
+                    this.Kind.ToString(),
+                    this.Status.ToString(),
+                    this.Money / 100.0);
         }
     }
 
@@ -182,24 +242,37 @@ namespace BPM.BoardListenerLib
         public override byte[] ToByteArray()
         {
             buffer = new byte[1];
-            buffer[0] = 0;
+            buffer[0] = 0x01;
 
             return buffer;
         }
-    }
 
-    public class ReplyOperationMessage : ReplyMessageBase
-    {
-        public int Status;
-
-        public override byte[] ToByteArray()
+        public override string ToString()
         {
-            Length = 5;
-            InitBuffer();
-
-            buffer[11] = (byte)Status;
-
-            return buffer;
+            return string.Format("方向：返回；命令：心跳同步。",
+                    this.BoardNumber);
         }
     }
+
+    //public class ReplyOperationMessage : ReplyMessageBase
+    //{
+    //    public int Status;
+
+    //    public override byte[] ToByteArray()
+    //    {
+    //        Length = 5;
+    //        InitBuffer();
+
+    //        buffer[11] = (byte)Status;
+
+    //        return buffer;
+    //    }
+
+    //    public override string ToString()
+    //    {
+    //        return string.Format("方向：返回；命令：指令控制；设备号：{0}；操作代码：{1}。",
+    //                this.BoardNumber,
+    //                this.Status);
+    //    }
+    //}
 }

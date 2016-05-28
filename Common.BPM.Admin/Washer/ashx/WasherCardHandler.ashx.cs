@@ -36,16 +36,33 @@ namespace BPM.Admin.Washer.ashx
             }
 
             WasherCardModel model;
+            string filter;
             switch (rpm.Action)
             {
                 case "add":
                     model = rpm.Entity;
+                    WasherCardModel c2 = WasherCardBll.Instance.Get(departmentId, model.CardNo);
+                    if (c2 == null)
+                    {
+                        model.DepartmentId = departmentId;
+                        model.Kind = "temporary";
+                        model.Memo = "";
+                        model.Coins *= 100;
 
-                    model.DepartmentId = user.DepartmentId;
-                    model.Kind = "temporary";
-                    model.Memo = "";
-
-                    context.Response.Write(WasherCardBll.Instance.Add(model));
+                        context.Response.Write(WasherCardBll.Instance.Add(model));
+                    }
+                    else
+                    {
+                        context.Response.Write("-1");
+                    }
+                    break;
+                case "consume":
+                    filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"CardId\",\"op\":\"eq\",\"data\":\"{0}\"}}, {{\"field\":\"Coins\",\"op\":\"lt\",\"data\":\"0\"}}],\"groups\":[]}}", rpm.KeyId);
+                    context.Response.Write(WasherCardLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
+                    break;
+                case "recharge":
+                    filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"CardId\",\"op\":\"eq\",\"data\":\"{0}\"}}, {{\"field\":\"Coins\",\"op\":\"gt\",\"data\":\"0\"}}],\"groups\":[]}}", rpm.KeyId);
+                    context.Response.Write(WasherCardLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
                     break;
                 default:
                     if (user.IsAdmin)
@@ -54,7 +71,7 @@ namespace BPM.Admin.Washer.ashx
                     }
                     else
                     {
-                        string filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}",user.DepartmentId, rpm.Filter);
+                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}",departmentId, rpm.Filter);
                         context.Response.Write(WasherCardBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
                     }
                     break;

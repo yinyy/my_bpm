@@ -39,10 +39,20 @@ namespace BPM.Admin.Washer.ashx
                 rpm.CurrentContext = context;
             }
 
+            string filter;
+
             switch (rpm.Action)
             {
                 default:
-                    context.Response.Write(WasherConsumeBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
+                    if (user.IsAdmin)
+                    {
+                        context.Response.Write(WasherConsumeBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
+                    }
+                    else
+                    {
+                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                        context.Response.Write(WasherConsumeBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
+                    }
                     break;
             }
         }

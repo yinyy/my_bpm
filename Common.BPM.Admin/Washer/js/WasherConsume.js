@@ -4,6 +4,8 @@ $(function () {
 
     autoResize({ dataGrid: '#list', gridType: 'datagrid', callback: grid.bind, height: 0 });
 
+    $('#a_consume').click(CRUD.consume);
+
     //高级查询
     $('#a_search').click(function () {
         search.go('list');
@@ -29,6 +31,14 @@ var grid = {
 		    { title: '姓名', field: 'Name', width: 130, align: 'center' },
             { title: '性别', field: 'Gender', width: 60, align: 'center' },
             {
+                title: '微信ID', field: 'OpenId', width: 250, align: 'center', formatter(v, r, i) {
+                    var str = r.OpenId;
+                    if (r.UnionId != null) {
+                        str += '<br/>' + r.UnionId;
+                    }
+                    return str;
+                }},
+            {
                 title: '昵称', field: 'NickName', width: 130, align: 'center', formatter(v, r, i) {
                     if (v == null) {
                         return '';
@@ -49,11 +59,11 @@ var grid = {
             },
             {
                 title: '可用洗车币', field: 'ValidCoins', width: 80, align: 'right', formatter(v, r, i) {
-                    return v == null ? '0.00' : v.toFixed(2);
+                    return v == null ? '0.00' : (v/100.0).toFixed(2);
                 }},
             {
                 title: '即将过期', field: 'WillExpireCoins', width: 80, align: 'right', formatter(v, r, i) {
-                    return v == null ? '0.00' : v.toFixed(2);
+                    return v == null ? '0.00' : (v/100.0).toFixed(2);
                 }},
             {
                 title: '积分', field: 'Points', width: 80, align: 'right', formatter(v, r, i) {
@@ -170,6 +180,101 @@ var CRUD = {
             }
         } else {
             msg.warning('请选择要删除的行。');
+        }
+    },
+    consume: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            var hDialog = top.jQuery.hDialog({
+                title: '记录', width: 750, height: 655, content: '<div id="tt"></div>', iconCls: 'icon-list'
+            });
+
+            top.$('#tt').tabs({
+                border: false,
+                width: 730,
+                height: 578
+            });
+            top.$('#tt').tabs('add', {
+                title: '消费记录',
+                content: '<table id="dg1"></table>',
+                closable: false
+            });
+            top.$('#tt').tabs('add', {
+                title: '充值记录',
+                content: '<table id="dg2"></table>',
+                closable: false
+            });
+            top.$('#tt').tabs('select', 0);
+
+            top.$('#dg1').datagrid({
+                url: actionURL + '?' + "json=" + JSON.stringify({ action: 'consume', keyid: row.KeyId }),
+                width: 730,
+                height: 549,
+                nowrap: false, //折行
+                rownumbers: true, //行号
+                striped: true, //隔行变色
+                idField: 'KeyId',//主键
+                singleSelect: true, //单选
+                columns: [[
+                    {
+                        field: 'Time', title: '消费时间', align: 'center', width: 170, formatter(v, r, i) {
+                            return v.substring(0, 19);
+                        }
+                    },
+                    {
+                        field: 'Address', title: '洗车地点', width: 200, align: 'center', formatter(v, r, i) {
+                            return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
+                        }
+                    },
+                    { field: 'SerialNumber', title: '设备序列号', align: 'center', width: 120 },
+                {
+                    field: 'Coins', title: '消费洗车币', width: 100, align: 'right', formatter(v, r, i) {
+                        return '￥' + v.toFixed(2);
+                    }
+                }, { field: 'Kind', title: '消费方式', align: 'center', width: 80 }
+                ]],
+                pagination: true,
+                pageSize: PAGESIZE,
+                pageList: [20, 40, 50],
+                sortName: 'Time',
+                sortOrder: 'desc'
+            });
+
+            //top.$('#dg2').datagrid({
+            //    url: actionURL + '?' + "json=" + JSON.stringify({ action: 'recharge', keyid: row.KeyId }),
+            //    width: 730,
+            //    height: 549,
+            //    nowrap: false, //折行
+            //    rownumbers: true, //行号
+            //    striped: true, //隔行变色
+            //    idField: 'KeyId',//主键
+            //    singleSelect: true, //单选
+            //    columns: [[
+            //        {
+            //            field: 'Time', title: '消费时间', align: 'center', width: 180, formatter(v, r, i) {
+            //                return v.substring(0, 19);
+            //            }
+            //        },
+            //        { field: 'Name', title: '姓名', align: 'center', width: 100 },
+            //        {
+            //            field: 'Coins', title: '消费洗车币', width: 100, align: 'right', formatter(v, r, i) {
+            //                return '￥' + v.toFixed(2);
+            //            }
+            //        },
+            //        {
+            //            field: 'Address', title: '洗车地点', width: 250, align: 'center', formatter(v, r, i) {
+            //                return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
+            //            }
+            //        }
+            //    ]],
+            //    pagination: true,
+            //    pageSize: PAGESIZE,
+            //    pageList: [20, 40, 50],
+            //    sortName: 'Time',
+            //    sortOrder: 'desc'
+            //});
+        } else {
+            msg.warning('请选择设备。');
         }
     }
 };

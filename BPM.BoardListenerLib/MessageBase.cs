@@ -39,7 +39,7 @@ namespace BPM.BoardListenerLib
             Unusual = 0x02
         }
 
-        public long Ticks;
+        public int Ticks;
         public CommandType Command;
         public int Length;
         public string BoardNumber;

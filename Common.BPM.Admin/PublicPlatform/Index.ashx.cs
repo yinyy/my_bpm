@@ -44,6 +44,11 @@ namespace BPM.Admin.PublicPlatform
                 }
             }
 
+            //using (StreamWriter writer = new StreamWriter(context.Server.MapPath("~/App_Data/00" + DateTime.Now.Ticks + ".txt")))
+            //{
+            //    writer.WriteLine(string.Format("signature={0}&timestamp={1}&nonce={2}&echostr={3}&token={5}", signature, timestamp, nonce, echostr, tag, token));
+            //}
+            
             if (context.Request.HttpMethod.ToUpper() == "GET")
             {
                 if (CheckSignature.Check(signature, timestamp, nonce, token))
@@ -62,12 +67,12 @@ namespace BPM.Admin.PublicPlatform
             }
             else if (context.Request.HttpMethod.ToUpper() == "POST")
             {
-                //if (!CheckSignature.Check(signature, timestamp, nonce, token))
-                //{
-                //    context.Response.Write("failed!");
-                //    context.Response.End();
-                //    return;
-                //}
+                if (!CheckSignature.Check(signature, timestamp, nonce, token))
+                {
+                    context.Response.Write("failed!");
+                    context.Response.End();
+                    return;
+                }
 
                 PostModel postModel = new PostModel()
                 {

@@ -15,9 +15,25 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
-    
-    </div>
+        <div class="weui_cells_title">消费记录</div>
+        <div class="weui_cells weui_cells_access">
+            <a class="weui_cell" href="javascript:;">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>2014年11月12日 08:09:33</p>
+                </div>
+                <div>
+                    ￥9.00
+                </div>
+            </a>
+            <a class="weui_cell" href="javascript:;">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>2014年11月12日 08:09:33</p>
+                </div>
+                <div>
+                    ￥8.78
+                </div>
+            </a>
+        </div>
     </form>
 </body>
 </html>

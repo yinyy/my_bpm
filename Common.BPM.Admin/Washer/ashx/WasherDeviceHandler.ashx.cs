@@ -3,22 +3,17 @@ using BPM.Core;
 using BPM.Core.Bll;
 using BPM.Core.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
 using Washer.Bll;
 using Washer.Model;
-using Omu.ValueInjecter;
 using BPM.Core.Dal;
-using ZXing.QrCode;
-using ZXing;
-using System.IO;
-using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Net;
-using System.Text;
 using System.Configuration;
+using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -52,18 +47,32 @@ namespace BPM.Admin.Washer.ashx
             {
                 case "add":
                     model = rpm.Entity;
+                    model.BoardNumber = string.Format("{0:000000000}", model.BoardNumber);
 
-                    model.BoardNumber = "";
-                    model.Province = "";
-                    model.City = "";
-                    model.Region = "";
-                    model.Address = "";
-                    model.Status = "";
-                    model.IpAddress = "";
-                    model.Memo2 = "";
-                    model.Setting = string.Format("{{\"Coin\": 0, \"Params\":[{0}]}}", ConfigurationManager.AppSettings["board_default_setting"]);
-                  
-                    context.Response.Write(WasherDeviceBll.Instance.Add(model));
+                    if (WasherDeviceBll.Instance.GetBySerialNumber(model.SerialNumber) == null)
+                    {
+                        if (WasherDeviceBll.Instance.GetByBoardNumber(model.BoardNumber) == null)
+                        {
+                            model.Province = "";
+                            model.City = "";
+                            model.Region = "";
+                            model.Address = "";
+                            model.Status = "";
+                            model.IpAddress = "";
+                            model.Memo2 = "";
+                            model.Setting = string.Format("{{\"Coin\": 0, \"Params\":[{0}]}}", ConfigurationManager.AppSettings["board_default_setting"]);
+
+                            context.Response.Write(WasherDeviceBll.Instance.Add(model));
+                        }
+                        else
+                        {
+                            context.Response.Write("-1");
+                        }
+                    }
+                    else
+                    {
+                        context.Response.Write("-2");
+                    }
                     break;
                 case "users":
                     context.Response.Write(JSONhelper.ToJson(UserDal.Instance.GetAll().Select(u => new { KeyId = u.KeyId, Title = u.TrueName + "()" })));
@@ -75,76 +84,76 @@ namespace BPM.Admin.Washer.ashx
                     model = WasherDeviceBll.Instance.Get(rpm.KeyId);
                     model.SerialNumber = rpm.Entity.SerialNumber;
                     model.BoardNumber = rpm.Entity.BoardNumber;
-                    model.DeliveryTime = rpm.Entity.DeliveryTime;
-                    model.ProductionTime = rpm.Entity.ProductionTime;
-                    model.DepartmentId = rpm.Entity.DepartmentId;
-                    model.Memo = rpm.Entity.Memo;
-        
-                    context.Response.Write(WasherDeviceBll.Instance.Update(model));
+
+                    WasherDeviceModel d2;
+                    if ((d2 = WasherDeviceBll.Instance.GetBySerialNumber(model.SerialNumber)) == null || model.KeyId == d2.KeyId)
+                    {
+                        if ((d2 = WasherDeviceBll.Instance.GetByBoardNumber(model.BoardNumber)) == null || model.KeyId == d2.KeyId)
+                        {
+                            model.DeliveryTime = rpm.Entity.DeliveryTime;
+                            model.ProductionTime = rpm.Entity.ProductionTime;
+                            model.DepartmentId = rpm.Entity.DepartmentId;
+                            model.Memo = rpm.Entity.Memo;
+                            model.Enabled = rpm.Entity.Enabled;
+
+                            context.Response.Write(WasherDeviceBll.Instance.Update(model));
+                        }
+                        else
+                        {
+                            context.Response.Write("-1");
+                        }
+                    }
+                    else
+                    {
+                        context.Response.Write("-2");
+                    }
                     break;
                 case "del":
                     context.Response.Write(WasherDeviceBll.Instance.Delete(rpm.KeyId));
                     break;
                 case "set":
                     model = WasherDeviceBll.Instance.Get(rpm.KeyId);
-                    model.Province = rpm.Entity.Province.Substring(rpm.Entity.Province.IndexOf('_')+1);
+                    model.Province = rpm.Entity.Province.Substring(rpm.Entity.Province.IndexOf('_') + 1);
                     model.City = rpm.Entity.City.Substring(rpm.Entity.City.IndexOf('_') + 1);
-                    model.Region= rpm.Entity.Region.Substring(rpm.Entity.Region.IndexOf('_') + 1);
+                    model.Region = rpm.Entity.Region.Substring(rpm.Entity.Region.IndexOf('_') + 1);
                     model.Address = rpm.Entity.Address;
                     model.Setting = rpm.Entity.Setting;
-                    model.BoardNumber = string.Format("{0:000000000}", rpm.Entity.BoardNumber);
+
                     model.Memo2 = rpm.Entity.Memo2;
 
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
+
                     break;
-                case "device_qrcode":
+                case "qrcode":
                     model = WasherDeviceBll.Instance.Get(rpm.KeyId);
-                    string url = string.Format("/qrcode/{0}", model.KeyId);
-                    string filename = context.Server.MapPath(url);
-
-                    if (!Directory.Exists(filename))
-                    {
-                        Directory.CreateDirectory(filename);
-                    }
+                    Department dept = DepartmentBll.Instance.Get(model.DepartmentId);
                     
-                    url = string.Format("{0}/{1}.jpg", url, model.SerialNumber);
-                    filename = context.Server.MapPath(url);
-
-                    if (File.Exists(filename))
+                    //利用设备序列号和公众号生成二维码
+                    string accessToken = AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret);
+                    var result = QrCodeApi.CreateByStr(accessToken, string.Format("9{0}", model.BoardNumber));
+                    if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = true, Url = url }));
+                        context.Response.Write(JSONhelper.ToJson(new
+                        {
+                            Success = true,
+                            Url = QrCodeApi.GetShowQrCodeUrl(result.ticket)
+                        }));
                     }
-                    else {
-                        try
-                        {
-                            BarcodeWriter writer = new BarcodeWriter();
-                            writer.Format = BarcodeFormat.QR_CODE;
-                            writer.Options = new QrCodeEncodingOptions()
-                            {
-                                CharacterSet = "utf-8",
-                                DisableECI = true,
-                                Width = 2048,
-                                Height = 2048
-                            };
-                            writer.Write(model.SerialNumber).Save(filename, ImageFormat.Jpeg);
-                            context.Response.Write(JSONhelper.ToJson(new { Success = true, Url = url }));
-                        }
-                        catch (Exception e)
-                        {
-                            context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = e.Message }));
-                        }
+                    else
+                    {
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false }));
                     }
                     break;
                 case "edit2":
                     model = WasherDeviceBll.Instance.Get(rpm.KeyId);
 
-                    
+
 
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;
                 case "del2":
                     model = WasherDeviceBll.Instance.Get(rpm.KeyId);
-                    
+
 
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;
@@ -161,7 +170,8 @@ namespace BPM.Admin.Washer.ashx
                     try
                     {
                         socket.Connect(address, 6000);
-                    }catch(Exception exp)
+                    }
+                    catch (Exception exp)
                     {
                         Console.WriteLine(exp.Message);
                     }
@@ -172,7 +182,8 @@ namespace BPM.Admin.Washer.ashx
                     byte[] buffer = new byte[1024];
                     int len = socket.Receive(buffer);
 
-                    foreach(byte b in buffer){
+                    foreach (byte b in buffer)
+                    {
                         Console.Write(string.Format("{0:x2}", b));
                     }
                     Console.WriteLine();
@@ -183,7 +194,15 @@ namespace BPM.Admin.Washer.ashx
                     context.Response.Write("1");
                     break;
                 default:
-                    context.Response.Write(WasherDeviceBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
+                    if (user.IsAdmin)
+                    {
+                        context.Response.Write(WasherDeviceBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
+                    }
+                    else
+                    {
+                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", user.DepartmentId, rpm.Filter);
+                        context.Response.Write(WasherDeviceBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
+                    }
                     break;
             }
         }
