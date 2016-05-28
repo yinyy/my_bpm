@@ -36,6 +36,7 @@ PlcHelperClass plch;
 SimHelperClass simh;
 
 Info_Struct current, last;
+String shortMessage = "";
 
 void openIP() {
 	//打开IP应用
@@ -217,6 +218,8 @@ void loop()
 	5、返回步骤1
 	*/
 
+	shortMessage = "";
+
 	//delay(20);
 	current.trunk.card = crh.readTrunkCard();//"544B000A4538323736320058";
 	if (current.trunk.card != ""){
@@ -277,17 +280,17 @@ void loop()
 					Serial.println(kind);*/
 
 					int saveCount = 0;
-					boolean saved = false;
-
-					openIP();
+					int saved = 0;
 
 					do{
+						openIP();
+
 						//把相关的信息存储到服务器，尝试提交5次
 						saved = simh.save(DEVICE_CODE, current.driver.code, current.trunk.code, volumn, potency, kind);
 						//Serial.print("Saved ");
 						//Serial.println(saveCount);
 
-						if (saved){
+						if (saved==Http_Save_Status_Success){
 							break;
 						}
 					} while (saveCount++ < 5);
@@ -298,6 +301,8 @@ void loop()
 					}
 					else{
 						plch.saveError();
+
+						simh.sendShortMessage("NotSaved.Info:" + current.driver.code + "," + current.trunk.code + ".SaveStatus:" + saved + ".");
 						//Serial.println("Save Error");
 					}
 				}

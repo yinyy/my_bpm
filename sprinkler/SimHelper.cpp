@@ -117,7 +117,7 @@ boolean SimHelperClass::openContext(uint8_t contextId){
 	}
 }
 
-boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkPlate, float volumn, int potency, int kind, int contextId){
+Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, String trunkPlate, float volumn, int potency, int kind, int contextId){
 	String url = SERVER_URL + "action=save&timespan=" + String(millis(), HEX) + "&address=" + deviceCode + "&volumn=" + volumn + "&kind=" + String(kind) + "&driver=" + driverCode + "&trunk=" + trunkPlate + "&potency="+String(potency);
 	//Serial.println(url);
 
@@ -140,7 +140,7 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 
 	msg = read();
 	if (msg != "OK"){
-		return false;
+		return Http_Save_Status_INIT;
 	}
 
 	//设置HTTP请求参数CID
@@ -149,7 +149,7 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 
 	msg = read();
 	if (msg != "OK"){
-		return false;
+		return Http_Save_Status_HTTPPARA_CID;
 	}
 
 	//设置HTTP请求参数URL
@@ -158,7 +158,7 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 
 	msg = read();
 	if (msg != "OK"){
-		return false;
+		return Http_Save_Status_HTTPPARA_URL;
 	}
 
 	//激活HTTP请求
@@ -167,7 +167,7 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 
 	msg = read();
 	if (msg != "OK"){
-		return false;
+		return Http_Save_Status_HTTPACTION;
 	}
 
 	//Serial.println("Maybe error");
@@ -180,13 +180,13 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 
 	//Serial.println("5:" + msg);
 	if (!msg.startsWith("+HTTPACTION")){
-		return false;
+		return Http_Save_Status_HTTPACTION2;
 	}
 
 	String sc = msg.substring(msg.indexOf(',') + 1, msg.lastIndexOf(','));
 	//Serial.println("6:" + sc);
 	if (sc != "200"){
-		return false;
+		return Http_Save_Status_HTTPACTION_200;
 	}
 
 	//可以读取数据了
@@ -209,11 +209,67 @@ boolean SimHelperClass::save(String deviceCode, String driverCode, String trunkP
 		ans.trim();
 	}
 
-	return true;
+	return Http_Save_Status_Success;
 }
 
 void SimHelperClass::sendShortMessage(String message, String phone) {
+	clear();
 
+	//设置短消息为文本模式
+	Serial1.print("AT+CMGF=1\r");
+	Serial1.flush();
+	delay(500);
+	clear();
+
+	//设置字符集
+	Serial1.print("AT+CSCS=\"GSM\"\r");
+	Serial1.flush();
+	delay(500);
+	clear();
+
+	//发送消息
+	Serial1.print("AT+CMGS=\"" + phone + "\"\r");
+	Serial1.flush();
+	delay(500);//等到出现">"
+
+	Serial1.print(message);
+	Serial1.flush();
+	delay(500);
+	Serial1.write(0x1A);//结束信息并发送
+	//Serial1.write(0x1B);//结束信息并取消
+	Serial1.flush();
+	delay(500);
+
+	clear();
+}
+
+String SimHelperClass::status() {
+	String message = "";
+
+	clear();
+	switch (checkContextStatus()) {
+	case Context_Status_Closed:
+		message = "closed,";
+		break;
+	case Context_Status_Closing:
+		message = "closing";
+		break;
+	case Context_Status_Connected:
+		message = "connected";
+		break;
+	case Context_Status_Connecting:
+		message = "connecting";
+		break;
+	case Context_Status_Error:
+		message = "error";
+		break;
+	default:
+		message = "unknown";
+		break;
+	}
+
+
+	return message;
 }
 
 SimHelperClass SimHelper;

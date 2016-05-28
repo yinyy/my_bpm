@@ -19,6 +19,17 @@ enum Context_Status
 	Context_Status_Error = 4
 };
 
+enum Http_Save_Status
+{
+	Http_Save_Status_Success=0,
+	Http_Save_Status_INIT=1,
+	Http_Save_Status_HTTPPARA_CID = 2,
+	Http_Save_Status_HTTPPARA_URL = 3,
+	Http_Save_Status_HTTPACTION = 4,
+	Http_Save_Status_HTTPACTION2 = 5,
+	Http_Save_Status_HTTPACTION_200 = 6
+};
+
 class SimHelperClass
 {
 private:
@@ -33,8 +44,9 @@ public:
 	uint8_t checkSignal();
 	Context_Status checkContextStatus(uint8_t contextId = 1);
 	boolean openContext(uint8_t contextId = 1);
-	boolean save(String drivceCode, String driverCode, String trunkPlate, float volumn, int potency, int kind, int contextId=1);
+	Http_Save_Status save(String drivceCode, String driverCode, String trunkPlate, float volumn, int potency, int kind, int contextId=1);
 	void sendShortMessage(String message, String phone="13563358843");
+	String status();
 };
 
 extern SimHelperClass SimHelper;
