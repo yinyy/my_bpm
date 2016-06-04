@@ -9,6 +9,49 @@ $(function () {
 
     autoResize({ dataGrid: '#list', gridType: 'treegrid', callback: grid.bind, height: 0 });
 
+    //增加新纪录
+    $('#a_add').click(function () {
+        var hDialog = top.jQuery.hDialog({
+            title: '添加', width: 480, height: 395, href: formurl, iconCls: 'icon-add', submit: function () {
+                if (top.$('#uiform').form('validate')) {
+                    var query = createParam('add', '0');
+                    jQuery.ajaxjson(actionURL, query, function (d) {
+                        if (parseInt(d) > 0) {
+                            msg.ok('添加成功！');
+                            hDialog.dialog('close');
+                            grid.reload();
+                        } else {
+                            MessageOrRedirect(d);
+                        }
+                    });
+                }
+                return false;
+            }, onLoad: function () {
+                
+            }
+        });
+
+        top.$('#uiform').validate();
+    });
+    //删除记录
+    $('#a_delete').click(function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            if (confirm('确认要删除选中的记录吗？')) {
+                var query = createParam('delete', row.KeyId);;
+                jQuery.ajaxjson(actionURL, query, function (d) {
+                    if (parseInt(d) > 0) {
+                        msg.ok('删除成功！');
+                        grid.reload();
+                    } else {
+                        MessageOrRedirect(d);
+                    }
+                });
+            }
+        } else {
+            msg.warning('请选择要修改的行。');
+        }
+    });
     //高级查询
     $('#a_search').click(function () {
         var hDialog = top.jQuery.hDialog({
@@ -65,7 +108,8 @@ $(function () {
             { title: '签到时间', field: 'Signed' },
             { title: '管子', field: 'Working' },
             { title: '坐标', field: 'Destination' },
-            { title: '区域', field: 'Region' }
+            { title: '区域', field: 'Region' },
+            { title: '备注', field: 'Memo' }
             ]);
         ee.go();
     });
@@ -181,18 +225,23 @@ var grid = {
                         return "";
                     }
                 }
+            },
+            {
+                title: '备注', field: 'Memo', width: 200
             }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
-            pageList: [20, 40, 50]
+            pageList: [20, 40, 50],
+            sortName: 'KeyId',
+            sortOrder: 'desc'
         });
     },
     getSelectedRow: function () {
         return $('#list').datagrid('getSelected');
     },
     reload: function () {
-        $('#list').datagrid('clearSelections').datagrid('reload', { filter: '' });
+        $('#list').datagrid('clearSelections').datagrid('reload');
     }
 };
 

@@ -63,6 +63,31 @@ void openIP() {
 	} while (1);
 }
 
+void closeIP() {
+	//打开IP应用
+	int count = 0;
+	do {
+		//Serial.println("SIM900A_CONNECTING_NETWORK");
+
+		int cs = simh.checkContextStatus();
+		if (cs == Context_Status_Connected) {
+			simh.closeContext();
+		}
+		else if (cs == Context_Status_Closed) {
+			break;
+		}
+		else {
+			
+		}
+
+		delay(1000);
+
+		if (count++ > 5) {
+			break;
+		}
+	} while (1);
+}
+
 void setup()
 {
 	delay(20000);
@@ -122,7 +147,7 @@ void setup()
 		}
 	}
 	
-	openIP();
+	//openIP();
 	 
 	//SIM900A进入工作状态
 	//Serial.println("SIM900A IP Context 1 Ready.");
@@ -201,6 +226,12 @@ void setup()
 //		}
 //	}
 //}
+
+
+void loop00() {
+	simh.sendShortMessage("test send message");
+	delay(10000);
+}
 
 //老读卡器（玖锐）
 void loop()
@@ -289,13 +320,15 @@ void loop()
 						saved = simh.save(DEVICE_CODE, current.driver.code, current.trunk.code, volumn, potency, kind);
 						//Serial.print("Saved ");
 						//Serial.println(saveCount);
+						
+						closeIP();
 
 						if (saved==Http_Save_Status_Success){
 							break;
 						}
 					} while (saveCount++ < 5);
 
-					if (saved){
+					if (saved==Http_Save_Status_Success){
 						plch.saveSuccess();
 						//Serial.println("Save Success");
 					}

@@ -58,7 +58,7 @@ namespace BPM.Admin.Sanitation.ashx
                     context.Response.Write(SanitationTrunkBll.Instance.Delete(rpm.KeyId));
                     break;
                 case "combobox":
-                    context.Response.Write(JSONhelper.ToJson(SanitationTrunkBll.Instance.GetAll().Select(ad => new { KeyId = ad.KeyId, Title = ad.Plate }).OrderBy(ad=>ad.Title)));
+                    context.Response.Write(JSONhelper.ToJson(SanitationTrunkBll.Instance.GetAll().Select(ad => new { KeyId = ad.KeyId, Title = ad.Plate }).OrderBy(ad => ad.Title)));
                     break;
                 
                 default:

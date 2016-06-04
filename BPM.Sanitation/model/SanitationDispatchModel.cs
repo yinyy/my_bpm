@@ -69,6 +69,7 @@ namespace Sanitation.Model
         [Description("加水容积")]
         public float Volumn { get; set; }
 
+        public string Memo { get; set; }
 		public override string ToString()
 		{
 			return JSONhelper.ToJson(this);

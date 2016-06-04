@@ -117,9 +117,27 @@ boolean SimHelperClass::openContext(uint8_t contextId){
 	}
 }
 
+boolean SimHelperClass::closeContext(uint8_t contextId) {
+	clear();
+
+	String cid = String(contextId);
+	Serial1.print("AT+SAPBR=0," + cid + "\r");
+	Serial1.flush();
+
+	String msg = read();
+	if (msg == "OK") {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, String trunkPlate, float volumn, int potency, int kind, int contextId){
 	String url = SERVER_URL + "action=save&timespan=" + String(millis(), HEX) + "&address=" + deviceCode + "&volumn=" + volumn + "&kind=" + String(kind) + "&driver=" + driverCode + "&trunk=" + trunkPlate + "&potency="+String(potency);
 	//Serial.println(url);
+	String msg = "";
+	int count = 0;
 
 	//发送HTTP请求
 	clear();
@@ -130,15 +148,21 @@ Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, Stri
 	Serial1.print("AT+HTTPTERM\r");
 	Serial1.flush();
 
-	String msg = read();
 	//不判断HTTPTERM操作是否成功。
-	delay(500);
+	do {
+		msg = read();
+		count++;
+	} while (msg == "" && count<=5);
 
 	//初始化HTTP
 	Serial1.print("AT+HTTPINIT\r");
 	Serial1.flush();
 
-	msg = read();
+	count = 0;
+	do {
+		msg = read();
+		count++;
+	} while (msg == "" && count <= 5);
 	if (msg != "OK"){
 		return Http_Save_Status_INIT;
 	}
@@ -147,7 +171,11 @@ Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, Stri
 	Serial1.print("AT+HTTPPARA=\"CID\", \"" + cid + "\"\r");
 	Serial1.flush();
 
-	msg = read();
+	count = 0;
+	do {
+		msg = read();
+		count++;
+	} while (msg == "" && count <= 5);
 	if (msg != "OK"){
 		return Http_Save_Status_HTTPPARA_CID;
 	}
@@ -156,7 +184,11 @@ Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, Stri
 	Serial1.print("AT+HTTPPARA=\"URL\", \"" + url + "\"\r");
 	Serial1.flush();
 
-	msg = read();
+	count = 0;
+	do {
+		msg = read();
+		count++;
+	} while (msg == "" && count <= 5);
 	if (msg != "OK"){
 		return Http_Save_Status_HTTPPARA_URL;
 	}
@@ -165,7 +197,11 @@ Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, Stri
 	Serial1.print("AT+HTTPACTION=0\r");
 	Serial1.flush();
 
-	msg = read();
+	count = 0;
+	do {
+		msg = read();
+		count++;
+	} while (msg == "" && count <= 5);
 	if (msg != "OK"){
 		return Http_Save_Status_HTTPACTION;
 	}
@@ -201,15 +237,21 @@ Http_Save_Status SimHelperClass::save(String deviceCode, String driverCode, Stri
 		delay(1000);
 	}
 
+	String ans = "";
 	if (msg.startsWith("+HTTPREAD") && msg.endsWith("OK")){
 		//Serial.println(msg);
 
 		//去掉开头和结尾的字符
-		String ans = msg.substring(msg.indexOf('\n') + 1, msg.lastIndexOf('\r'));
+		ans = msg.substring(msg.indexOf('\n') + 1, msg.lastIndexOf('\r'));
 		ans.trim();
 	}
 
-	return Http_Save_Status_Success;
+	if (ans.indexOf("SavedSuccess")!=-1) {
+		return Http_Save_Status_Success;
+	}
+	else {
+		return Http_Save_Status_Error;
+	}
 }
 
 void SimHelperClass::sendShortMessage(String message, String phone) {

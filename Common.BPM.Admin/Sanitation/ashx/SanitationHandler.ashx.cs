@@ -26,11 +26,11 @@ namespace BPM.Admin.Sanitation.ashx
         {
             context.Response.ContentType = "text/plain";
             string action = context.Request.Params["action"];
-            string code=null;
-            string plate=null;
-            double lng=0;
-            double lat=0;
-            int pipe=0;
+            string code = null;
+            string plate = null;
+            double lng = 0;
+            double lat = 0;
+            int pipe = 0;
             float volumn = 0;
             string address = null;
             int kind = 0;
@@ -39,8 +39,9 @@ namespace BPM.Admin.Sanitation.ashx
             SanitationDispatchModel dispatch;
 
             string log_dir = context.Server.MapPath("~/logs");
-            if(!Directory.Exists(log_dir)){
-            Directory.CreateDirectory(log_dir);
+            if (!Directory.Exists(log_dir))
+            {
+                Directory.CreateDirectory(log_dir);
             }
 
             switch (action)
@@ -96,7 +97,7 @@ namespace BPM.Admin.Sanitation.ashx
                 case "sign"://车载设备签到的方法
                     code = context.Request.Params["code"];
                     plate = context.Request.Params["plate"];
-                    lng=Convert.ToDouble( context.Request.Params["lng"]);
+                    lng = Convert.ToDouble(context.Request.Params["lng"]);
                     lng /= 100.0;
                     lat = Convert.ToDouble(context.Request.Params["lat"]);
                     lat /= 100.0;
@@ -104,7 +105,7 @@ namespace BPM.Admin.Sanitation.ashx
 
                     dispatch = SanitationDispatchBll.Instance.Current(code, plate);
                     dispatch.Signed = DateTime.Now;
-                    dispatch.Destination = string.Format("{0},{1}",lng,lat);
+                    dispatch.Destination = string.Format("{0},{1}", lng, lat);
                     dispatch.Working = pipe;
                     dispatch.Region = isInRegion(lng, lat);//TODO:这个将来需要通过计算验证是在区域外签到还是区域内签到的
                     dispatch.Status = 1;
@@ -131,6 +132,8 @@ namespace BPM.Admin.Sanitation.ashx
                     context.Response.Flush();
                     break;
             }
+
+            context.Response.End();
         }
 
         public bool IsReusable

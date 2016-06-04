@@ -30,7 +30,7 @@ namespace Sanitation.Dal
                 PageIndex = pageindex,
                 PageSize = pagesize,
                 WhereString = where,
-                OrderFields="Time desc, Name asc, Plate asc"
+                OrderFields=sort+" " + order
             };
 
             int count = 0;

@@ -1,11 +1,9 @@
 <form id="uiform"><table class="grid">
-    <tr><td>日期：</td><td><input type="text" id="txt_Time" name="Time" class="easyui-datebox" style="width: 186px;" data-options="required:true, editable:false" /></td></tr>
-    <tr><td>姓名：</td><td><input type="text" id="txt_DriverId" name="DriverId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationDriverHandler.ashx?json={action:\'combobox\'}'" style="width: 186px;" /></td></tr>
-    <tr><td>车辆：</td><td><input type="text" id="txt_TrunkId" name="TrunkId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationtrunkHandler.ashx?json={action:\'combobox\'}'" style="width:186px;" /></td></tr>
-    <tr><td>类型：</td><td><input type="text" id="txt_Kind" name="Kind" class="easyui-combobox" data-options="required:true, editable:false, valueField:'Title', textField:'Title', url:'/sys/ashx/DicHandler.ashx?action=code&code=trunk_kind'" style="width:186px;" /></td></tr>
-    <tr><td>浓度：</td><td><input type="text" id="txt_Potency" name="Potency" class="easyui-numberbox" data-options="required:true, min:0, max:1000, precision:0" style="width: 170px;" value="0" />‰</td></tr>
-    <tr><td>地点：</td><td><input type="text" id="txt_Destination" name="Destination" class="txt03" data-options="required:true" style="width: 180px;" /></td></tr>
-    <tr><td>车次：</td><td><input type="text" id="txt_Count" name="Count" class="easyui-numberbox" data-options="required:true, min:1, max:50, precision:0" style="width: 182px;" value="1"/></td></tr>
-    <tr><td>优先级：</td><td><input type="text" id="txt_Priority" name="Priority" class="easyui-numberbox" data-options="required:true, min:1, max:10, precision:0" style="width: 95px;" value="5"/>&nbsp;（低）1-9（高）</td></tr>
-    <tr><td>备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 310px; height: 80px;"></textarea></td></tr>
+    <tr><td>司机编号：</td><td><input type="text" id="txt_DriverId" name="DriverId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationDriverHandler.ashx?json={action:\'combobox\'}&showCode=true'" style="width: 310px;" /></td></tr>
+    <tr><td>车辆编号：</td><td><input type="text" id="txt_TrunkId" name="TrunkId" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/Sanitation/ashx/SanitationtrunkHandler.ashx?json={action:\'combobox\'}'" style="width:310px;" /></td></tr>
+    <tr><td>类型：</td><td><input type="text" id="txt_Kind" name="Kind" class="easyui-combobox" data-options="required:true, editable:false, valueField:'Title', textField:'Title', url:'/sys/ashx/DicHandler.ashx?action=code&code=trunk_kind'" style="width:310px;" /></td></tr>
+    <tr><td>浓度：</td><td><input type="text" id="txt_Potency" name="Potency" class="easyui-numberbox" data-options="required:true, min:0, max:1000, precision:0" style="width: 290px;" value="0" />‰</td></tr>
+    <tr><td>地点：</td><td><input type="text" id="txt_Address" name="Address" class="easyui-combobox" data-options="required:true, editable:false, valueField:'KeyId', textField:'Title', url:'/sys/ashx/DicHandler.ashx?action=code&code=device'" style="width: 310px;" /></td></tr>
+    <tr><td>体积：</td><td><input type="text" id="txt_Volumn" name="Volumn" class="easyui-numberbox" data-options="required:true,min:0, max:20, precision:1" style="width: 310px;" value="0" /></td></tr>
+    <tr><td>备注：</td><td><textarea id="txt_Memo" name="Memo" class="txt03" style="width: 310px; height: 80px;">上传失败，手工添加。原加注时间：年月日 ::。</textarea></td></tr>
 </table></form>

@@ -11,6 +11,7 @@ using Omu.ValueInjecter;
 using BPM.Core;
 using BPM.Core.Bll;
 using BPM.Common;
+using BPM.Core.Dal;
 
 namespace BPM.Admin.Sanitation.ashx
 {
@@ -33,9 +34,25 @@ namespace BPM.Admin.Sanitation.ashx
                 rpm.CurrentContext = context;
             }
 
-            SanitationDispatchModel d;
             switch (rpm.Action)
             {
+                case "add":
+                    SanitationDispatchModel dispatch = new SanitationDispatchModel() {
+                        DriverId = rpm.Entity.DriverId,
+                        TrunkId = rpm.Entity.TrunkId,
+                        Volumn = rpm.Entity.Volumn,
+                        Address = DicDal.Instance.GetWhere(new { KeyId = rpm.Entity.Address }).FirstOrDefault().Title,
+                        Kind = rpm.Entity.Kind,
+                        Potency = rpm.Entity.Potency,
+                        Status=0,
+                        Time = DateTime.Now,
+                        Memo =rpm.Entity.Memo
+                    };
+                    context.Response.Write(SanitationDispatchBll.Instance.Add(dispatch));
+                    break;
+                case "delete":
+                    context.Response.Write(SanitationDispatchBll.Instance.Delete(rpm.KeyId));
+                    break;
                 default:
                     context.Response.Write(SanitationDispatchBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     break;
