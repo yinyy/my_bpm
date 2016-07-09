@@ -114,7 +114,12 @@ $(function () {
             }, Coin: {
                 Exchange: parseInt($('#txt_Exchange').val()),
                 Recharge: [parseInt($('#txt_Coin50').val()), parseInt($('#txt_Coin100').val()), parseInt($('#txt_Coin200').val())]
-            }
+            }, Buy: [
+                { Card: 50, Price: parseFloat($('#txt_Card50').val()), Day: parseInt($('#txt_Day50').val()), Product: '50元洗车卡', Score: parseInt($('#txt_Score50').val()) },
+                { Card: 100, Price: parseFloat($('#txt_Card100').val()), Day: parseInt($('#txt_Day100').val()), Product: '100元洗车卡', Score: parseInt($('#txt_Score100').val()) },
+                { Card: 200, Price: parseFloat($('#txt_Card200').val()), Day: parseInt($('#txt_Day200').val()), Product: '200元洗车卡', Score: parseInt($('#txt_Score200').val()) },
+                { Card: 300, Price: parseFloat($('#txt_Card300').val()), Day: parseInt($('#txt_Day300').val()), Product: '300元洗车卡', Score: parseInt($('#txt_Score300').val()) }
+            ]
         };
         json.Setting = JSON.stringify(json.Setting);
 
@@ -141,24 +146,35 @@ $(function () {
         var setting = eval("(" + json.Setting + ")");
         $('#txt_WashCar').val(setting.Point.WashCar);
         $('#txt_Subscribe').val(setting.Point.Subscribe);
-        $('#txt_Point50').val(setting.Point.Recharge[0]);
-        $('#txt_Point100').val(setting.Point.Recharge[1]);
-        $('#txt_Point200').val(setting.Point.Recharge[2]);
+
+        $('#txt_Point50, #txt_Point100, #txt_Point200').each(function (idx, obj) {
+            $(this).val(setting.Point.Recharge[idx]);
+        });
+
         if (setting.Point.Referers.Kind == 'Point') {
             $('#rb_Kind_Point').click();
         } else {
             $('#rb_Kind_Percent').click();
         }
-        $('#txt_Level1').val(setting.Point.Referers.Level[0]);
-        $('#txt_Level2').val(setting.Point.Referers.Level[1]);
-        $('#txt_Level3').val(setting.Point.Referers.Level[2]);
-        $('#txt_Level4').val(setting.Point.Referers.Level[3]);
-        $('#txt_Level5').val(setting.Point.Referers.Level[4]);
+
+        $('#txt_Level1, #txt_Level2, #txt_Level3, #txt_Level4, #txt_Level5').each(function(idx, obj){
+            $(this).val(setting.Point.Referers.Level[idx]);
+        });
 
         $('#txt_Exchange').val(setting.Coin.Exchange);
-        $('#txt_Coin50').val(setting.Coin.Recharge[0]);
-        $('#txt_Coin100').val(setting.Coin.Recharge[1]);
-        $('#txt_Coin200').val(setting.Coin.Recharge[2]);
+        $('#txt_Coin50, #txt_Coin100, #txt_Coin200').each(function (idx, obj) {
+            $(this).val(setting.Coin.Recharge[idx]);
+        });
+
+        $('#txt_Card50, #txt_Card100, #txt_Card200, #txt_Card300').each(function (idx, obj) {
+            $(this).val(setting.Buy[idx].Price);
+        });
+        $('#txt_Day50, #txt_Day100, #txt_Day200, #txt_Day300').each(function (idx, obj) {
+            $(this).val(setting.Buy[idx].Day);
+        });
+        $('#txt_Score50, #txt_Score100, #txt_Score200, #txt_Score300').each(function (idx, obj) {
+            $(this).val(setting.Buy[idx].Score);
+        });
     }
 
     $('body').css('overflow', 'auto');

@@ -50,6 +50,7 @@
     <Compile Include="Bll\WasherOrderBll.cs" />
     <Compile Include="Bll\WasherReceivedMessageBll.cs" />
     <Compile Include="Bll\WasherRewardBll.cs" />
+    <Compile Include="Bll\WasherSendNewsBll.cs" />
     <Compile Include="Bll\WasherValidatorBll.cs" />
     <Compile Include="Bll\WasherVcodeBll.cs" />
     <Compile Include="Bll\WasherWeChatConsumeBll.cs" />
@@ -77,6 +78,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.BoardListenerLib\BPM.BoardListenerLib.csproj">
+      <Project>{67511094-dde4-4899-b4b6-d81f3f1014e2}</Project>
+      <Name>BPM.BoardListenerLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
       <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
       <Name>BPM.Core</Name>

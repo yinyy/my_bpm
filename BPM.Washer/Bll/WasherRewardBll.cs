@@ -15,6 +15,7 @@ namespace Washer.Bll
         {
             public const string Subscribe = "首次关注";
             public const string WashCar = "洗车";
+            public const string BuyCard = "买卡";
         }
 
         public static WasherRewardBll Instance

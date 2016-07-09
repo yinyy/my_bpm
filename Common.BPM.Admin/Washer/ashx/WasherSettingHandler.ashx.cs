@@ -21,24 +21,25 @@ namespace BPM.Admin.Washer.ashx
 
         public void ProcessRequest(HttpContext context)
         {
-            var settings = new
-            {
-                Appid="",
-                Secret="",
-                Aeskey="",
-                Token="",
-                Brand = "",
-                Logo = "",
-                CardColor = "",
-                Introduction = "",
-                Setting = new
-                {
-                    Subscribe = 0,
-                    Recharge = new int[3],
-                    PointKind = "",
-                    Level = new int[5]
-                }
-            };
+            //var settings = new
+            //{
+            //    Appid="",
+            //    Secret="",
+            //    Aeskey="",
+            //    Token="",
+            //    Brand = "",
+            //    Logo = "",
+            //    CardColor = "",
+            //    Introduction = "",
+            //    Setting = new
+            //    {
+            //        Subscribe = 0,
+            //        Recharge = new int[3],
+            //        PointKind = "",
+            //        Level = new int[5],
+            //        Buy=new object[4]
+            //    }
+            //};
 
             context.Response.ContentType = "text/plain";
 

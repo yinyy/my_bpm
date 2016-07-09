@@ -10,27 +10,17 @@
     <link href="./css/WeUI/style/weui.min.css" rel="stylesheet" />
     <link href="./css/Profile.css?d=<%=DateTime.Now %>" rel="stylesheet" />
     <script src="./js/jquery-2_2_1_min.js"></script>
-    <script src="./js/Profile.js?d=<%=DateTime.Now %>"></script>
-    <title>我的洗车卡</title>
+    <script src="js/common.js?t=<%=DateTime.Now %>"></script>
+    <script src="js/Authorize.js?t=<%=DateTime.Now %>"></script>
+    <script src="./js/Profile.js?t=<%=DateTime.Now %>"></script>
+    <title>个人信息</title>
 </head>
 
 <body>
     <form id="uiform" runat="server">
-    <%
-        if (wxconsume == null) //显示绑定的页面        
-        {
-    %>
-        <div>请先关注公众号！</div>
-    <%
-        }
-        else        
-        {
-    %>
-        <input type="hidden" id="BinderId" value="<%=wxconsume.KeyId %>" />
-        <input type="hidden" id="DepartmentId" value="<%=wxconsume.DepartmentId %>" />
-        <input type="hidden" id="ConsumeId" value="<%=consume==null?0:consume.KeyId%>" />
-
-        <div id="content1" style="display:none;">
+        <div id="not_subscribe_region" style="display: none;">请先关注公众号！</div>
+        
+        <div id="bind_region" style="display:none;">
             <div class="weui_cells_title">用户注册</div>
             <div class="weui_cells weui_cells_form">
                 <div class="weui_cell">
@@ -52,17 +42,17 @@
                     <div class="weui_cell_bd weui_cell_primary">
                         <input id="Telphone" class="weui_input" type="number" pattern="[0-9]*" placeholder="请输入电话号码"/>
                     </div>
-                    <div class="weui_cell_ft">
+                    <!--div class="weui_cell_ft">
                         <a id="GetVcode" class="weui_btn weui_btn_mini weui_btn_default weui_btn_disabled">获取验证码</a>
-                    </div>
+                    </div-->
                 </div>
 
-                <div class="weui_cell">
+                <!--div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <input id="Vcode" class="weui_input" type="number" placeholder="请输入验证码"/>
                     </div>
-                </div>
+                </div-->
 
                 <div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">密码</label></div>
@@ -84,75 +74,69 @@
             </div>
         </div>
 
-        <div id="content2" style="display:none;">
+        <div id="info_region" style="display:none;">
             <div class="weui_panel weui_panel_access">
                 <div class="weui_panel_bd">
                     <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
                         <div class="weui_media_hd">
-                            <img class="weui_media_appmsg_thumb" src="<%=userInfo.headimgurl %>" alt="">
+                            <img id="user_photo" class="weui_media_appmsg_thumb" src="" alt="">
                         </div>
                         <div class="weui_media_bd">
-                            <h4 class="weui_media_title"><%=userInfo.nickname %></h4>
+                            <h4 id="nick_name" class="weui_media_title"></h4>
                             <p class="weui_media_desc">注册用户</p>
                         </div>
                     </a>
                 </div>
             </div>
             <div class="weui_cells weui_cells_access">
-                <a class="weui_cell" href="./Card.aspx?wxid=<%=wxconsume.KeyId %>">
+                <a class="weui_cell" href="./Card2.aspx?appid=<%=Session["appid"] %>">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>我的洗车卡</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Records.aspx?wxid=<%=wxconsume.KeyId %>&type=1">
+                <!--a class="weui_cell" href="./Records.aspx?wxid=>&type=1">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>充值记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Records.aspx?wxid=<%=wxconsume.KeyId %>&type=2">
+                <a class="weui_cell" href="./Records.aspx?wxid=&type=2">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>消费记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Records.aspx?wxid=<%=wxconsume.KeyId %>&type=3">
+                <a class="weui_cell" href="./Records.aspx?wxid=&type=3">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>积分记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Payment.aspx?wxid=<%=wxconsume.KeyId %>">
+                <a class="weui_cell" href="./Card/List.aspx?appid=wx2d8bcab64b53be3a&wxid=&d=<%=DateTime.Now %>">
+                    <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>测试</p>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </a-->
+                <%--<a class="weui_cell" href="./Payment.aspx?wxid=<%=wxconsume.KeyId %>">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>微信支付</p>
                     </div>
                     <div class="weui_cell_ft"></div>
-                </a>
+                </a>--%>
             </div>
 
             <div class="weui_btn_area">
                 <a id="unbind" class="weui_btn weui_btn_warn">解除绑定</a>
             </div>
         </div>
-    <%
-        }
-    %>
     </form>
-
-    <script type="text/javascript">
-        if(<%=consume==null?"true":"false"%>){
-            $('div#content1').show();
-            $('div#content2').hide();
-        }else{
-            $('div#content1').hide();
-            $('div#content2').show();
-        }
-    </script>
 </body>
 </html>

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace BPM.BoardListenerLib
 {
-    public class MessageBase
+    public class TcpMessageBase
     {
         public enum CommandType
         {
+            Unknown = 0,
             ValidateCardAndPassword = 101,
             ValidateCard = 102,
             ValidatePhoneAndPassword = 103,
@@ -18,7 +19,7 @@ namespace BPM.BoardListenerLib
             UploadStatus = 203,
             Account = 205,
             HeartBeat = 1001,
-            Operation = 2001
+            Send = 2000
         }
 
         public enum OperationType

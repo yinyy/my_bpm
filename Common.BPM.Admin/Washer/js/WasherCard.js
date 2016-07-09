@@ -13,6 +13,7 @@ $(function () {
 
     $('#a_add').click(CRUD.add);
     $('#a_consume').click(CRUD.consume);
+    $('#a_delete').click(CRUD.del);
 
     //高级查询
     $('#a_search').click(function () {
@@ -60,7 +61,12 @@ var grid = {
                     }
                 }
             },
-            {title: '状态', field: 'Status', width: 80, align: 'center'}
+            { title: '状态', field: 'Status', width: 80, align: 'center' },
+            {
+                title: '用于销售', field: 'Sale', width: 80, align: 'center', formatter(v, r, i) {
+                    return v == true ? '√' : '';
+                }
+            }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
@@ -91,7 +97,7 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 450, height: 252, href: formURL, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 450, height: 287, href: formURL, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
@@ -120,6 +126,24 @@ var CRUD = {
         });
 
         top.$('#uiform').validate();
+    },
+    del: function(){
+        var row = grid.getSelectedRow();
+        if (row) {
+            if (confirm('确认删除选中的洗车卡吗？')) {
+                var rid = row.KeyId;
+                jQuery.ajaxjson(actionURL, createParam('del', rid), function (d) {
+                    if (parseInt(d) > 0) {
+                        msg.ok('删除成功！');
+                        grid.reload();
+                    } else {
+                        MessageOrRedirect(d);
+                    }
+                });
+            }
+        } else {
+            msg.warning('请选择记录。');
+        }
     },
     consume: function () {
         var row = grid.getSelectedRow();

@@ -13,91 +13,309 @@ using System.Web;
 using Washer.Bll;
 using Washer.Model;
 using WeChat.Utils;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using BPM.BoardListenerLib;
+using System.Threading;
+using System.IO;
+using System.Text;
+using System.Web.SessionState;
+using Washer.Extension;
 
 namespace BPM.Admin.Washer.ashx
 {
     /// <summary>
     /// WasherHandler 的摘要说明
     /// </summary>
-    public class WasherHandler : IHttpHandler
+    public class WasherHandler : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
         {
+            JObject jobj = new JObject();
+
             context.Response.ContentType = "text/plain";
             string action = context.Request.Params["action"];
-            switch (action)
+
+            if (action == "PayCoins")
             {
-                case "send_command":
-                    int balanceId = Convert.ToInt32(context.Request.Params["BalanceId"]);
-                    WasherDeviceLogModel deviceLog = WasherDeviceLogBll.Instance.Get(balanceId);
-                    if (deviceLog == null)
+                string appid = context.Session["appid"].ToString();
+                string openid = context.Session["openid"].ToString();
+
+                Department dept = DepartmentBll.Instance.GetByAppid(appid);
+                WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
+
+                //余额支付洗车
+                string boardNumber = context.Request.Params["board"];
+
+                dynamic dobj = WasherValidatorBll.Instance.ValidateWxConsume(boardNumber, wxconsume.KeyId);
+                if (dobj.Success == true)
+                {
+                    ReplyMessageBase replyMessage = new ReplyValidateMessage(boardNumber)
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "设备日志不存在。" }));
-                    }
-                    else if (deviceLog.Ended.Ticks>0)
+                        BalanceId = dobj.BalanceId,
+                        Kind = TcpMessageBase.CardKind.Normal,
+                        Money = dobj.RemainCoins,
+                        Status = TcpMessageBase.CardStatus.Regular
+                    };
+
+                    byte[] buffer = replyMessage.ToByteArray();
+                    buffer[4] = 0xff;
+
+                    if (!string.IsNullOrWhiteSpace(dobj.ListenerIp))
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "设备日志已经过期。" }));
+                        SendData(dobj.ListenerIp, buffer);
                     }
-                    else
+
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "机器已经启动");
+
+                    context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                }
+                else
+                {
+                    context.Response.Write(JSONhelper.ToJson(dobj));
+                }
+            }
+            else if (action == "PayWash")
+            {
+                //微信支付洗车
+                string serial = context.Request.Params["serial"];
+
+                dynamic dobj = WasherValidatorBll.Instance.ValidatePaySerial(serial);
+                if (dobj.Success == true)
+                {
+                    ReplyMessageBase replyMessage = new ReplyValidateMessage(dobj.BoardNumber)
                     {
-                        WasherDeviceModel device = WasherDeviceBll.Instance.Get(deviceLog.DeviceId);
-                        int boardNumber = Convert.ToInt32(device.BoardNumber);
+                        BalanceId = dobj.BalanceId,
+                        Kind = TcpMessageBase.CardKind.Normal,
+                        Money = dobj.RemainCoins,
+                        Status = TcpMessageBase.CardStatus.Regular
+                    };
 
-                        IPAddress localhost = IPAddress.Parse("127.0.0.1");
-                        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        byte[] buffer = new byte[21];
-                        try
-                        {
-                            socket.Connect(IPAddress.Parse(ConfigurationManager.AppSettings["tcp_server"]), Convert.ToInt32(ConfigurationManager.AppSettings["tcp_server_port"]));
+                    byte[] buffer = replyMessage.ToByteArray();
+                    buffer[4] = 0xff;
 
-                            //0-3：时间戳
-                            //4-5：命令
-                            buffer[4] = 0x00;
-                            buffer[5] = 101;
-                            //6：数据量
-                            buffer[6] = 12;
-                            //7-10：设备编号
-                            buffer[7] = (byte)((boardNumber >> 24) & 0xff);
-                            buffer[8] = (byte)((boardNumber >> 16) & 0xff);
-                            buffer[9] = (byte)((boardNumber >> 8) & 0xff);
-                            buffer[10] = (byte)(boardNumber & 0xff);
-                            //11-14：记录序号
-                            buffer[11] = (byte)((deviceLog.CardId >> 24) & 0xff);
-                            buffer[12] = (byte)((deviceLog.CardId >> 16) & 0xff);
-                            buffer[13] = (byte)((deviceLog.CardId >> 8) & 0xff);
-                            buffer[14] = (byte)(deviceLog.CardId & 0xff);
-                            //15：卡类型
-                            buffer[15] = 0x01;
-                            //16：卡状态
-                            buffer[16] = 0x01;
-                            //17-20：金额
-                            buffer[17] = (byte)((deviceLog.RemainCoins >> 24) & 0xff);
-                            buffer[18] = (byte)((deviceLog.RemainCoins >> 16) & 0xff);
-                            buffer[19] = (byte)((deviceLog.RemainCoins >> 8) & 0xff);
-                            buffer[20] = (byte)(deviceLog.RemainCoins & 0xff);
-
-                            socket.Send(buffer);
-                            socket.Close();
-                            
-                            WasherConsumeModel consume = WasherConsumeBll.Instance.Get(deviceLog.ConsumeId);
-                            WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(consume.BinderId.Value);
-                            Department dept = DepartmentBll.Instance.Get(consume.DepartmentId);
-                            
-                            CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), wxconsume.OpenId, "机器已经启动");
-
-                            context.Response.Write(JSONhelper.ToJson(new { Success =true }));
-                        }
-                        catch
-                        {
-                            context.Response.Write(JSONhelper.ToJson(new { Success = false, Message="Socket通信错误。" }));
-                        }
+                    if (!string.IsNullOrWhiteSpace(dobj.ListenerIp))
+                    {
+                        SendData(dobj.ListenerIp, buffer);
                     }
-                    break;
-                default:
-                    break;
+
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "机器已经启动");
+
+                    context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                }
+                else
+                {
+                    context.Response.Write(JSONhelper.ToJson(dobj));
+                }
+            }
+            else if (action == "ValidateCardAndPassword")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                string cardNo = context.Request.Params["cardNo"];
+                string password = context.Request.Params["password"];
+
+                dynamic dobj = WasherValidatorBll.Instance.ValidateCard(boardNumber, cardNo, password);
+                if (dobj.Success == true)
+                {
+                    jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
+                    jobj.Add("Status", (int)TcpMessageBase.CardStatus.Regular);
+                    jobj.Add("Money", dobj.Money);
+                    jobj.Add("BalanceId", dobj.BalanceId);
+                }
+                else
+                {
+                    jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
+                    jobj.Add("Status", (int)TcpMessageBase.CardStatus.Unusual);
+                    jobj.Add("Money", 0);
+                    jobj.Add("BalanceId", 0);
+                }
+
+                context.Response.Write(JSONhelper.ToJson(jobj));
+            }
+            else if (action == "ValidateCard")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                string cardNo = context.Request.Params["cardNo"];
+
+                dynamic dobj = WasherValidatorBll.Instance.ValidateCard(boardNumber, cardNo);
+                if (dobj.Success == true)
+                {
+                    jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
+                    jobj.Add("Status", (int)TcpMessageBase.CardStatus.Regular);
+                    jobj.Add("Money", dobj.Money);
+                    jobj.Add("BalanceId", dobj.BalanceId);
+                }
+                else
+                {
+                    jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
+                    jobj.Add("Status", (int)TcpMessageBase.CardStatus.Unusual);
+                    jobj.Add("Money", 0);
+                    jobj.Add("BalanceId", 0);
+                }
+
+                context.Response.Write(JSONhelper.ToJson(jobj));
+            }
+            else if (action == "ValidatePhoneAndPassword")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                string phone = context.Request.Params["phone"];
+                string password = context.Request.Params["password"];
+
+                dynamic dobj = WasherValidatorBll.Instance.ValidatePhone(boardNumber, phone, password);
+                if (dobj.Success == true)
+                {
+                    jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
+                    jobj.Add("Status", (int)TcpMessageBase.CardStatus.Regular);
+                    jobj.Add("Money", dobj.Money);
+                    jobj.Add("BalanceId", dobj.BalanceId);
+                }
+                else
+                {
+                    jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
+                    jobj.Add("Status", (int)TcpMessageBase.CardStatus.Unusual);
+                    jobj.Add("Money", 0);
+                    jobj.Add("BalanceId", 0);
+                }
+
+                context.Response.Write(JSONhelper.ToJson(jobj));
+            }
+            else if (action == "TimeSync")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                string clientIp = context.Request.Params["clientIp"];
+                string listenerIp = context.Request.Params["listenerIp"];
+
+                WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+                if (device != null)
+                {
+                    device.UpdateTime = DateTime.Now;
+                    device.IpAddress = clientIp;
+                    device.ListenerIp = listenerIp;
+
+                    WasherDeviceBll.Instance.Update(device);
+
+                    jobj.Add("Success", true);
+                    jobj.Add("BoardNumber", device.BoardNumber);
+                    jobj.Add("Serial", device.SerialNumber);
+                    jobj.Add("Address", string.Format("{0}-{1}-{2}-{3}", device.Region, device.Province, device.City, device.Address));
+                    jobj.Add("IP", clientIp);
+
+                    Department dept = DepartmentBll.Instance.Get(device.DepartmentId);
+                    jobj.Add("DepartmentName", dept.DepartmentName);
+                }
+                else
+                {
+                    jobj.Add("Success", false);
+                }
+
+                context.Response.Write(JSONhelper.ToJson(jobj));
+            }
+            else if (action == "ReaderSetting")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+                if (device == null)
+                {
+                    jobj.Add("ErrorCode", 1);
+                }
+                else
+                {
+                    jobj.Add("ErrorCode", 0);
+                    jobj.Add("Values", (JArray)(JObject.Parse(device.Setting)["Params"]));
+                    jobj.Add("Enabled", device.Enabled);
+                }
+
+                context.Response.Write(JSONhelper.ToJson(jobj));
+            }
+            else if (action == "SendSetting")
+            {
+                WasherDeviceModel device = WasherDeviceBll.Instance.Get(Convert.ToInt32(context.Request.Params["keyid"]));
+                if (device == null)
+                {
+                    context.Response.Write("error");
+                }
+                else
+                {
+                    byte[] buffer = new byte[75];
+
+                    long ticks = DateTime.Now.Ticks;
+
+                    buffer[0] = (byte)((ticks >> 24) & 0xff);
+                    buffer[1] = (byte)(((ticks >> 16) & 0xff));
+                    buffer[2] = (byte)(((ticks >> 8) & 0xff));
+                    buffer[3] = (byte)(ticks & 0xff);
+
+                    buffer[4] = (byte)((202 >> 8) & 0xff);
+                    buffer[5] = (byte)(202 & 0xff);
+
+                    buffer[6] = 68;
+
+                    long deviceID = Convert.ToInt32(device.BoardNumber);
+                    buffer[7] = (byte)((deviceID >> 24) & 0xff);
+                    buffer[8] = (byte)((deviceID >> 16) & 0xff);
+                    buffer[9] = (byte)((deviceID >> 8) & 0xff);
+                    buffer[10] = (byte)(deviceID & 0xff);
+
+                    var obj = new { Coin = 0, Params = new int[32] };
+                    obj = JsonConvert.DeserializeAnonymousType(device.Setting, obj);
+                    for (int i = 0; i < obj.Params.Length; i++)
+                    {
+                        buffer[i * 2 + 11] = (byte)((obj.Params[i] >> 8) & 0xff);
+                        buffer[i * 2 + 11 + 1] = (byte)(obj.Params[i] & 0xff);
+                    }
+
+                    if (!device.Enabled)
+                    {
+                        obj.Params[31] = (~0x0001) & obj.Params[31];
+                    }
+
+                    SendData(device.ListenerIp, buffer);
+
+                    context.Response.Write("success");
+                }
+            }
+            else if (action == "UploadStatus")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                string status = "";
+
+                using (Stream stream = context.Request.InputStream)
+                {
+                    byte[] buffer = new byte[context.Request.InputStream.Length];
+                    stream.Read(buffer, 0, buffer.Length);
+                    status = Encoding.UTF8.GetString(buffer);
+                }
+
+                WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+                if (device != null)
+                {
+                    device.Status = status;
+
+                    WasherDeviceBll.Instance.Update(device);
+
+                    context.Response.Write("SUCCESS");
+                }
+                else
+                {
+                    context.Response.Write("ERROR");
+                }
+            }
+            else if (action == "Account")
+            {
+                string boardNumber = context.Request.Params["boardNumber"];
+                int ticks = Convert.ToInt32(context.Request.Params["ticks"]);
+                int balanceId = Convert.ToInt32(context.Request.Params["balanceId"]);
+                int payment = Convert.ToInt32(context.Request.Params["payment"]);
+
+                jobj.Add("Remain", WasherDeviceLogBll.Instance.Clearing(ticks, boardNumber, balanceId, payment));
+                jobj.Add("BalanceId", balanceId);
+
+                context.Response.Write(JSONhelper.ToJson(jobj));
             }
 
+            context.Response.Flush();
+            context.Response.End();
         }
 
         public bool IsReusable
@@ -106,6 +324,26 @@ namespace BPM.Admin.Washer.ashx
             {
                 return false;
             }
+        }
+
+        private void SendData(string ip, byte[] buffer)
+        {
+            new Thread(() =>
+            {
+                try
+                {
+                    IPAddress localhost = IPAddress.Parse(ip);
+                    using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                    {
+                        socket.Connect(IPAddress.Parse(ip), 6000);
+                        socket.Send(buffer);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }).Start();
         }
     }
 }

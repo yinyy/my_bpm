@@ -1,0 +1,20 @@
+﻿div#money_container{
+    background-color: #ffffff;
+    margin: auto 1em;
+    font-size: 0.9em;
+    padding: 0.5em 1em;
+}
+
+div.cell{
+    margin: 5px 0px;
+}
+
+div.hline{
+    background-color: #fbfbfb;
+    height: 1px;
+    clear: both;
+}
+
+div#bottom{
+    margin: 1em 1em;
+}

@@ -30,9 +30,9 @@ namespace Washer.Bll
             return WasherConsumeDal.Instance.Get(keyId);
         }
 
-        public WasherConsumeModel Get(int deptId, int binderId)
+        public WasherConsumeModel GetByBinderId(int binderId)
         {
-            return WasherConsumeDal.Instance.GetWhere(new { BinderId = binderId, DepartmentId = deptId }).FirstOrDefault();
+            return WasherConsumeDal.Instance.GetWhere(new { BinderId = binderId/*, DepartmentId = deptId */}).FirstOrDefault();
         }
 
         public WasherConsumeModel Get(string unionId, string openId)
@@ -45,7 +45,7 @@ namespace Washer.Bll
             return WasherConsumeDal.Instance.GetWhere(new { DepartmentId = departmentId, Telphone = telphone }).FirstOrDefault();
         }
 
-        public WasherConsumeModel Get(WasherWeChatConsumeModel wxconsume)
+        public WasherConsumeModel GetByBinder(WasherWeChatConsumeModel wxconsume)
         {
             return WasherConsumeDal.Instance.GetWhere(new { BinderId=wxconsume.KeyId, DepartmentId=wxconsume.DepartmentId }).FirstOrDefault();
         }
@@ -57,12 +57,13 @@ namespace Washer.Bll
 
         public int GetValidCoins(int consumeId)
         {
-            if (WasherCardBll.Instance.GetValidCards(consumeId).Count()== 0)
+            var cards = WasherCardBll.Instance.GetValidCards(consumeId);
+            if (cards.Count()== 0)
             {
                 return 0;
             }
 
-            return WasherCardBll.Instance.GetValidCards(consumeId).Select(a => a.Coins).Aggregate((t, a) => { return t + a; });
+            return cards.Select(a => a.Coins).Aggregate((t, a) => { return t + a; });
         }
     }
 }

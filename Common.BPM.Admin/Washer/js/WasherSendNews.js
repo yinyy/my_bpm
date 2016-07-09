@@ -1,11 +1,6 @@
-﻿var actionURL = '/Washer/ashx/WasherDeviceHandler.ashx';
-var addDeviceUrl = '/Washer/html/WasherDeviceAdd.html';
-var setDeviceUrl = '/Washer/html/WasherDeviceSet.html';
-
-var province = city = area = null;
+﻿var actionUrl = '/Washer/ashx/WasherSendNewsHandler.ashx';
 
 $(function () {
-
     autoResize({ dataGrid: '#list', gridType: 'datagrid', callback: grid.bind, height: 0 });
 
     $('#a_add').click(CRUD.add);
@@ -25,7 +20,7 @@ $(function () {
 var grid = {
     bind: function (winSize) {
         $('#list').datagrid({
-            url: actionURL,
+            url: actionUrl,
             toolbar: '#toolbar',
             title: "设备列表",
             iconCls: 'icon icon-list',
@@ -38,71 +33,17 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-		    {title: '序列号', field: 'SerialNumber', width: 120, align: 'center'},
-		    { title: '主板号', field: 'BoardNumber', width: 120, align: 'center' },
-            {
-                title: '生产时间', field: 'ProductionTime', width: 90, align: 'center', formatter: function (v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
-                        return v.substring(0, 10);
-                    }
-                }},
-            {
-                title: '出厂时间', field: 'DeliveryTime', width: 90, align: 'center', formatter: function (v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
-                        return v.substring(0, 10);
-                    }
-                }
-            },
-            {
-                title: '客户名称', field: 'DepartmentId', width: 180, align: 'center', formatter: function (v, r, i) {
-                    return r.DepartmentName;
-                }
-            },
-            { title: '备注', field: 'Memo', width: 180, align: 'left' },
-            {
-                title: '安装地点', field: 'Address', width: 200, align: 'center', formatter: function (v, r, i) {
-                    if (r.Province == '') {
-                        return '未安装';
-                    } else {
-                        return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
-                    }
-                }},
-            {
-                title: '当前状态', field: 'Status', width: 100, align: 'center', formatter: function (v, r, i) {
-                    return '等待解析';
-                }},
-            {
-                title: 'IP地址', field: 'IpAddress', width: 110, align: 'center', formatter: function (v, r, i) {
-                    if (v=='') {
-                        return '未知';
-                    } else {
-                        return r.UpdateTime + '<br/>' + v;
-                    }
-                }},
-            {
-                title: '参数设置', field: 'Setting', width: 150, align: 'center', formatter: function (v, r, i) {
-                    var s = JSON.parse(v);
-                    var str = '';
-
-                    if (s.Coin != null) {
-                        if (str != '') {
-                            str += '<br/>';
-                        }
-                        str += '单价：' + s.Coin + '元';
-                    }
-
-                    return str;
-                }
-            },
-            { title: '客户备注', field: 'Memo2', width: 180, align: 'left' }
+		    { title: '创建时间', field: 'UpdateTime', width: 180, align: 'center' },
+		    {
+		        title: '媒体编号', field: 'MediaId', width: 120, align: 'center', formatter: function (v, r, i) {
+		            return '******';
+		        }},
+            { title: '文章数量', field: 'ItemCount', width: 90, align: 'center' },
+            { title: '文章标题列表', field: 'ItemTitles', width: 400 }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
-            pageList: [20, 40, 50],
+            pageList: [5, 10, 15, 20],
             sortName: 'SerialNumber',
             sortOrder: 'asc'
         });

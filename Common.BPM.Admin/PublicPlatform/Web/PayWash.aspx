@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Payment.aspx.cs" Inherits="BPM.Admin.PublicPlatform.Web.Payment" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PayWash.aspx.cs" Inherits="BPM.Admin.PublicPlatform.Web.PayWash" %>
 
 <!DOCTYPE html>
 
@@ -9,15 +9,15 @@
     <title>洗车支付</title>
     <link href="css/WeUI/style/weui.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
-    <link href="css/Payment.css" rel="stylesheet" />
+    <link href="css/PayWash.css" rel="stylesheet" />
     <script src="js/jquery-2_2_1_min.js"></script>
-    <script src="js/Payment.js?d=<%=DateTime.Now.Ticks %>"></script>
-    <script type="text/javascript">
-        <%=Params%>
-    </script>
+    <script src="js/common.js"></script>
+    <script src="js/Authorize.js?t=<%=DateTime.Now %>"></script>
+    <script src="js/Pay.js?t=<%=DateTime.Now.Ticks %>"></script>
+    <script src="js/PayWash.js?t=<%=DateTime.Now.Ticks %>"></script>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" style="display:none;">
         <div id="top_logo">
             <img src="./images/icon_wash_car.png" width="100%" />
         </div>

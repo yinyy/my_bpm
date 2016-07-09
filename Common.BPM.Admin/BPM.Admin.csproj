@@ -2858,11 +2858,11 @@
     <Content Include="login.html" />
     <Content Include="PublicPlatform\data\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
-    <Content Include="PublicPlatform\Web\Card.aspx" />
+    <Content Include="PublicPlatform\Web\Card2.aspx" />
+    <Content Include="PublicPlatform\Web\css\Card2.css" />
     <Content Include="PublicPlatform\Web\css\Profile.css" />
-    <Content Include="PublicPlatform\Web\css\Card.css" />
     <Content Include="PublicPlatform\Web\css\Records.css" />
-    <Content Include="PublicPlatform\Web\css\Payment.css" />
+    <Content Include="PublicPlatform\Web\css\PayWash.css" />
     <Content Include="PublicPlatform\Web\css\style.css" />
     <Content Include="PublicPlatform\Web\css\WeUI\style\weui.css" />
     <Content Include="PublicPlatform\Web\css\WeUI\style\weui.min.css" />
@@ -2875,12 +2875,16 @@
     <Content Include="PublicPlatform\Web\images\icon_nav_msg.png" />
     <Content Include="PublicPlatform\Web\images\transparent_1x1.png" />
     <Content Include="PublicPlatform\Web\images\icon_wash_car.png" />
+    <Content Include="PublicPlatform\Web\js\Card2.js" />
+    <Content Include="PublicPlatform\Web\js\Authorize.js" />
+    <Content Include="PublicPlatform\Web\js\common.js" />
+    <Content Include="PublicPlatform\Web\js\Pay.js" />
+    <Content Include="PublicPlatform\Web\js\PayWash.js" />
     <Content Include="PublicPlatform\Web\js\Profile.js" />
-    <Content Include="PublicPlatform\Web\js\Card.js" />
     <Content Include="PublicPlatform\Web\js\jquery-2_2_1_min.js" />
-    <Content Include="PublicPlatform\Web\js\Payment.js" />
     <Content Include="PublicPlatform\Web\js\Records.js" />
-    <Content Include="PublicPlatform\Web\Payment.aspx" />
+    <Content Include="PublicPlatform\Web\OrderDetail.aspx" />
+    <Content Include="PublicPlatform\Web\PayWash.aspx" />
     <Content Include="PublicPlatform\Web\Profile.aspx" />
     <Content Include="PublicPlatform\Web\Promote.aspx" />
     <Content Include="PublicPlatform\Web\Records.aspx" />
@@ -3403,6 +3407,7 @@
     <Content Include="Washer\html\WasherDeviceAdd.html" />
     <Content Include="Washer\js\WasherCardIncome.js" />
     <Content Include="Washer\js\WasherCardCost.js" />
+    <Content Include="Washer\js\WasherSendNews.js" />
     <Content Include="Washer\js\WasherDeviceLog.js" />
     <Content Include="Washer\js\WasherCard.js" />
     <Content Include="Washer\js\WasherConsume.js" />
@@ -3414,6 +3419,7 @@
     <Content Include="Washer\WasherCard.aspx" />
     <Content Include="Washer\WasherConsume.aspx" />
     <Content Include="Washer\WasherDevice.aspx" />
+    <Content Include="Washer\WasherSendNews.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
@@ -3424,8 +3430,10 @@
     <None Include="Properties\PublishProfiles\远程.pubxml" />
     <Content Include="scripts\fine-uploader\LICENSE" />
     <Content Include="PublicPlatform\Web\handler\ProfileHandler.ashx" />
-    <Content Include="PublicPlatform\Web\PaymentCallback.ashx" />
-    <Content Include="PublicPlatform\Web\PaymentHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\CardHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\UnifyPay.ashx" />
+    <Content Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\Test.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3634,6 +3642,7 @@
     <Content Include="Washer\ashx\WasherCardHandler.ashx" />
     <Content Include="Washer\ashx\WasherDeviceLogHandler.ashx" />
     <Content Include="Washer\ashx\WasherCardLogHandler.ashx" />
+    <Content Include="Washer\ashx\WasherSendNewsHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\UploadHandler.ashx.cs">
@@ -3694,28 +3703,41 @@
       <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Utilities\Server.cs" />
-    <Compile Include="PublicPlatform\Web\Card.aspx.cs">
-      <DependentUpon>Card.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\Card2.aspx.cs">
+      <DependentUpon>Card2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Card.aspx.designer.cs">
-      <DependentUpon>Card.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\Card2.aspx.designer.cs">
+      <DependentUpon>Card2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx.cs">
+      <DependentUpon>AuthorizeHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\CardHandler.ashx.cs">
+      <DependentUpon>CardHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\ProfileHandler.ashx.cs">
       <DependentUpon>ProfileHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Payment.aspx.cs">
-      <DependentUpon>Payment.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\handler\Test.ashx.cs">
+      <DependentUpon>Test.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\UnifyPay.ashx.cs">
+      <DependentUpon>UnifyPay.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\OrderDetail.aspx.cs">
+      <DependentUpon>OrderDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PublicPlatform\Web\Payment.aspx.designer.cs">
-      <DependentUpon>Payment.aspx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\OrderDetail.aspx.designer.cs">
+      <DependentUpon>OrderDetail.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PublicPlatform\Web\PaymentCallback.ashx.cs">
-      <DependentUpon>PaymentCallback.ashx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\PayWash.aspx.cs">
+      <DependentUpon>PayWash.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PublicPlatform\Web\PaymentHandler.ashx.cs">
-      <DependentUpon>PaymentHandler.ashx</DependentUpon>
+    <Compile Include="PublicPlatform\Web\PayWash.aspx.designer.cs">
+      <DependentUpon>PayWash.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\Profile.aspx.cs">
       <DependentUpon>Profile.aspx</DependentUpon>
@@ -3863,6 +3885,9 @@
     <Compile Include="Washer\ashx\WasherHandler.ashx.cs">
       <DependentUpon>WasherHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherSendNewsHandler.ashx.cs">
+      <DependentUpon>WasherSendNewsHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\ashx\WasherSettingHandler.ashx.cs">
       <DependentUpon>WasherSettingHandler.ashx</DependentUpon>
     </Compile>
@@ -3908,6 +3933,13 @@
     <Compile Include="Washer\WasherDevice.aspx.designer.cs">
       <DependentUpon>WasherDevice.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\WasherSendNews.aspx.cs">
+      <DependentUpon>WasherSendNews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherSendNews.aspx.designer.cs">
+      <DependentUpon>WasherSendNews.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\WasherSetting.aspx.cs">
       <DependentUpon>WasherSetting.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3939,6 +3971,10 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.BoardListenerLib\BPM.BoardListenerLib.csproj">
+      <Project>{67511094-dde4-4899-b4b6-d81f3f1014e2}</Project>
+      <Name>BPM.BoardListenerLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BPM.Washer\BPM.Washer.csproj">
       <Project>{e62eb623-f837-4f58-9ca9-4ec850ce94d4}</Project>
       <Name>BPM.Washer</Name>

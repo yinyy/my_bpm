@@ -19,7 +19,7 @@ namespace BPM.Admin.PublicPlatform.Web
                 WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(Convert.ToInt32(keyId));
                 if (wxconsume != null)
                 {
-                    WasherConsumeModel consume = WasherConsumeBll.Instance.Get(wxconsume);
+                    WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinder(wxconsume);
                     if (consume != null)
                     {
 

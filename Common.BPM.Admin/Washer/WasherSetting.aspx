@@ -55,6 +55,20 @@
                 <li><label style="display: inline-block; vertical-align: middle;">商标：</label><img id="Logo" src="/images/PublicPlatform/default_logo.png" alt="Logo" style="display: inline-block; vertical-align: middle;"/><input type="hidden" id="txt_Logo" name="Logo"/><a href="#" id="Upload" class="alertify-button alertify-button-ok" style="margin: 0px 0px 0px 15px; display: inline-block; vertical-align: middle;">上传</a><label style="display: inline-block; vertical-align: middle;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用48x48像素的png图片</label></li>
            </ul>
         </div>
+        <h1>洗车卡</h1>
+        <div class="c">
+            <ul>
+                <li>
+                    <label>购买洗车卡：</label>
+                    <ul>
+                        <li><label>50元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card50" name="Card50"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day50" name="Day50"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score50" /><label>&nbsp;积分。</label></li>
+                        <li><label>100元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card100" name="Card100"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day100" name="Day100"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score100" /><label>&nbsp;积分。</label></li>
+                        <li><label>200元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card200" name="Card200"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day200" name="Day200"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score200" /><label>&nbsp;积分。</label></li>
+                        <li><label>300元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card300" name="Card300"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day300" name="Day300"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score300" /><label>&nbsp;积分。</label></li>
+                    </ul>
+                </li>
+           </ul>
+        </div>
         <h1>洗车币</h1>
         <div class="c">
             <ul>

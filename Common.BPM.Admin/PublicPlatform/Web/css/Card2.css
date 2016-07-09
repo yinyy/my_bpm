@@ -1,0 +1,35 @@
+﻿div#no_cards_region{
+    text-align: center;
+}
+
+ul.card_kind_list{
+    padding: 10px 0px; 
+    margin: 0px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    list-style: none;
+}
+
+ul.card_kind_list li{
+    border: thin solid #cfcfcf;
+    margin: 0px 5px;
+    font-size: 0.9em;
+    padding: 10px 0px;
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    text-align: center;
+}
+
+ul.card_kind_list li:first-child{
+    margin-left: 10px;
+}
+
+ul.card_kind_list li:last-child{
+    margin-right: 10px;
+}
+
+ul.card_kind_list li.selected{
+    border: thin solid #ff0000;
+}

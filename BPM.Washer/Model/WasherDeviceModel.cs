@@ -60,5 +60,6 @@ namespace Washer.Model
 
         [Description("管理员设置设备是否可以")]
         public bool Enabled { get; set; }
+        public string ListenerIp { get; set; }
     }
 }

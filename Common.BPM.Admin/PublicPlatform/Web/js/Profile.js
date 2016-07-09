@@ -1,15 +1,40 @@
-﻿var actionURL = '/PublicPlatform/Web/Profile.aspx';
+﻿var actionUrl= '/PublicPlatform/Web/handler/ProfileHandler.ashx';
 
 var countdownvalue = 30;
 
 $(document).ready(function () {
-    $('input#Telphone').change(validateTelphone);
+    //进行身份验证
+    if (Authorize.authorize() == null) {
+        return;
+    }
 
+    //$.ajax('/PublicPlatform/Web/handler/Test.ashx',
+    //    {
+    //        async: false
+    //    });
+    
+    $.post(actionUrl, function (res) {
+        if (res.Success == false) {
+            $('div#not_subscribe_region').show();
+            $('div#bind_region, div#info_region').hide();
+        } else if(res.Binded==false){
+            $('div#bind_region').show();
+            $('div#not_subscribe_region, div#info_region').hide();
+        } else {
+            $('#user_photo').attr('src', res.Image);
+            $('#nick_name').text(res.Nickname);
+
+            $('div#info_region').show();
+            $('div#not_subscribe_region, div#bind_region').hide();
+        }
+    }, 'json');
+    
+    //绑定用户
     $('a#bind').click(function () {
         var name = $.trim($('input#Name').val());
         var gender = $('input#Gender').prop('checked') == true ? '男' : '女';
         var telphone = $.trim($('input#Telphone').val());
-        var vcode = $.trim($('input#Vcode').val());
+        //var vcode = $.trim($('input#Vcode').val());
         var password = $.trim($('input#Password').val());
         var repassword = $.trim($('input#Repassword').val());
 
@@ -27,12 +52,12 @@ $(document).ready(function () {
             return;
         }
 
-        if (vcode == '') {
-            $('input#Vcode').focus();
-            alert('请输入验证码。')
+        //if (vcode == '') {
+        //    $('input#Vcode').focus();
+        //    alert('请输入验证码。')
 
-            return;
-        }
+        //    return;
+        //}
 
         if (password == '') {
             $('input#Password').focus();
@@ -48,55 +73,48 @@ $(document).ready(function () {
             return;
         }
 
-        $.getJSON(actionURL, {
+        $.getJSON(actionUrl, {
             action: 'bind',
-            BinderId: $.trim($('input#BinderId').val()),
-            DepartmentId: parseInt($.trim($('input#DepartmentId').val())),
-            Name: name,
-            Gender: gender,
-            Telphone: telphone,
-            Vcode: vcode,
-            Password: password
+            name: name,
+            gender: gender,
+            telphone: telphone,
+            //Vcode: vcode,
+            password: password
         }, function (json) {
-            switch (json.Success) {
-                case 0:
-                    alert('用户信息绑定成功。');
+            if (json.Success) {
+                alert('用户绑定成功。');
 
-                    $('input#ConsumeId').val(json.keyId);
-
-                    $('div#content1').hide();
-                    $('div#content2').show();
-                    break;
-                case -1:
-                    alert('获取验证码错误。');
-                    break;
-                case -2:
-                    alert('绑定时发生错误。');
-                    break;
-                case -3:
-                    alert('用户信息已被绑定。');
-                    break;
-                default:
-                    alert('其它错误。');
-                    break;
+                location.reload();
+            }else{
+                alert(json.Message);
             }
         });
     });
 
+    //解除绑定
     $('a#unbind').click(function () {
         if (confirm('确认解除用户绑定吗？')) {
-            $.getJSON(actionURL, { action: 'unbind', ConsumeId: parseInt($.trim($('input#ConsumeId').val())) }, function (json) {
-                if (json.Success == 0) {
+            $.getJSON(actionUrl, { action: 'unbind' }, function (json) {
+                if (json.Success) {
                     alert('已经解除绑定。');
 
-                    $('div#content1').show();
-                    $('div#content2').hide();
+                    $('div#bind_region').show();
+                    $('div#not_subscribe_region, div#info_region').hide();
                 } else {
                     alert('解除绑定时发生错误。！');
                 }
             });
         }
     });
+
+
+
+
+
+
+    //$('input#Telphone').change(validateTelphone);
+
+    
 });
 
 function validateTelphone() {

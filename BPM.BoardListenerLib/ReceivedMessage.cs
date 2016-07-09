@@ -6,101 +6,114 @@ using System.Threading.Tasks;
 
 namespace BPM.BoardListenerLib
 {
-    public class ReceivedMessageBase : MessageBase
+    public class ReceivedMessageBase : TcpMessageBase
     {
         public byte[] Meta;
 
-        public ReplyMessageBase CreateReplyMessage()
-        {
-            ReplyMessageBase mo = null;
-            switch (Command)
-            {
-                case CommandType.HeartBeat:
-                    mo = new ReplyHeartBeatMessage();
-                    break;
-                case CommandType.ValidateCardAndPassword:
-                case CommandType.ValidateCard:
-                case CommandType.ValidatePhoneAndPassword:
-                    mo = new ReplyValidateMessage();
-                    break;
-                case CommandType.TimeSync:
-                    mo = new ReplyTimeSyncMessage();
-                    break;
-                case CommandType.ReaderSetting:
-                    mo = new ReplyReadSettingMessage();
-                    break;
-                case CommandType.UploadStatus:
-                    mo = new ReplyUploadStatusMessage();
-                    break;
-                case CommandType.Account:
-                    mo = new ReplyAccountMessage();
-                    break;
-                default:
-                    break;
-            }
+        //private ReplyMessageBase CreateReplyMessage()
+        //{
+        //    ReplyMessageBase mo = null;
+        //    switch (Command)
+        //    {
+        //        case CommandType.HeartBeat:
+        //            mo = new ReplyHeartBeatMessage();
+        //            break;
+        //        case CommandType.ValidateCardAndPassword:
+        //        case CommandType.ValidateCard:
+        //        case CommandType.ValidatePhoneAndPassword:
+        //            mo = new ReplyValidateMessage();
+        //            break;
+        //        case CommandType.TimeSync:
+        //            mo = new ReplyTimeSyncMessage();
+        //            break;
+        //        case CommandType.ReaderSetting:
+        //            mo = new ReplyReadSettingMessage();
+        //            break;
+        //        case CommandType.UploadStatus:
+        //            mo = new ReplyUploadStatusMessage();
+        //            break;
+        //        case CommandType.Account:
+        //            mo = new ReplyAccountMessage();
+        //            break;
+        //        case CommandType.Send:
+        //            mo = new ReplySendMessage(Meta);
+        //            break;
+        //        default:
+        //            mo = new ReplyUnknownMessage(Meta);
+        //            break;
+        //    }
 
-            if (mo != null)
-            {
-                mo.Command = Command;
-                mo.BoardNumber = BoardNumber;
-                mo.Ticks = (int)DateTime.Now.Ticks;
-            }
+        //    mo.Command = Command;
+        //    mo.BoardNumber = BoardNumber;
+        //    mo.Ticks = (int)DateTime.Now.Ticks;
 
-            return mo;
-        }
+        //    return mo;
+        //}
 
         public static ReceivedMessageBase Parse(byte[] bs)
         {
             ReceivedMessageBase mo = null;
-
             if (bs.Length == 1)
             {
-                mo = new ReceivedHeartBeatMessage(bs.Length);
-                mo.Meta = bs;
-                mo.Command = CommandType.HeartBeat;
-
-                return mo;
+                mo = new ReceivedHeartBeatMessage(bs.Length) { Command = CommandType.HeartBeat };
             }
-
-            try {
-                int command = (bs[4] << 8) + bs[5];
-                switch (command)
+            else if (bs.Length >= 6)
+            {
+                if (bs[4] == 0xff)
                 {
-                    case 201:
-                        mo = new ReceivedTimeSyncMessage() { Command = CommandType.TimeSync };
-                        break;
-                    case 202:
-                        mo = new ReceivedReadSettingMessage() { Command = CommandType.ReaderSetting };
-                        break;
-                    case 203:
-                        mo = new ReceivedUploadStatusMessage() { Command = CommandType.UploadStatus };
-                        break;
-                    case 101:
-                        mo = new ReceivedValidateCardAndPasswordMessage() { Command = CommandType.ValidateCardAndPassword };
-                        break;
-                    case 102:
-                        mo = new ReceivedValidateCardMessage() { Command = CommandType.ValidateCard };
-                        break;
-                    case 103:
-                        mo = new ReceivedValidatePhoneAndPasswordMessage() { Command = CommandType.ValidatePhoneAndPassword };
-                        break;
-                    case 205:
-                        mo = new ReceivedAccountMessage() { Command = CommandType.Account };
-                        break;
-                    default:
-                        mo = null;
-                        break;
+                    mo = new ReceivedSendMessage() { Command = CommandType.Send };
+                }
+                else
+                {
+                    int command = (bs[4] << 8) + bs[5];
+                    switch (command)
+                    {
+                        case 201:
+                            mo = new ReceivedTimeSyncMessage() { Command = CommandType.TimeSync };
+                            break;
+                        case 202:
+                            mo = new ReceivedReadSettingMessage() { Command = CommandType.ReaderSetting };
+                            break;
+                        case 203:
+                            mo = new ReceivedUploadStatusMessage() { Command = CommandType.UploadStatus };
+                            break;
+                        case 101:
+                            mo = new ReceivedValidateCardAndPasswordMessage() { Command = CommandType.ValidateCardAndPassword };
+                            break;
+                        case 102:
+                            mo = new ReceivedValidateCardMessage() { Command = CommandType.ValidateCard };
+                            break;
+                        case 103:
+                            mo = new ReceivedValidatePhoneAndPasswordMessage() { Command = CommandType.ValidatePhoneAndPassword };
+                            break;
+                        case 205:
+                            mo = new ReceivedAccountMessage() { Command = CommandType.Account };
+                            break;
+                        default:
+                            mo = new ReceivedUnknownMessage() { Command = CommandType.Unknown };
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                mo = new ReceivedUnknownMessage() { Command = CommandType.Unknown };
+            }
+        
+            mo.Meta = bs;
+
+            if (mo.Command !=CommandType.Unknown)
+            {
+                if (mo.Command != CommandType.HeartBeat)
+                {
+                    mo.Ticks = (bs[0] << 24) + (bs[1] << 16) + (bs[2] << 8) + bs[3];
+                    mo.Length = bs[6];
                 }
 
-                if (mo == null)
+                if (mo.Meta.Length >= 11)
                 {
-                    return null;
+                    mo.BoardNumber = string.Format("{0:000000}", (bs[7] << 24) + (bs[8] << 16) + (bs[9] << 8) + bs[10]);
                 }
-
-                mo.Meta = bs;
-                mo.Ticks = (bs[0] << 24) + (bs[1] << 16) + (bs[2] << 8) + bs[3];
-                mo.Length = bs[6];
-                mo.BoardNumber = string.Format("{0:000000}", (bs[7] << 24) + (bs[8] << 16) + (bs[9] << 8) + bs[10]);
 
                 switch (mo.Command)
                 {
@@ -142,14 +155,9 @@ namespace BPM.BoardListenerLib
                     default:
                         break;
                 }
-
-                return mo;
-            }catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
             }
 
-            return null;
+            return mo;
         }
     }
 
@@ -257,6 +265,29 @@ namespace BPM.BoardListenerLib
                 this.BoardNumber,
                 this.BalanceId,
                 this.Payment/100.0);
+        }
+    }
+
+    public class ReceivedSendMessage : ReceivedMessageBase
+    {
+        public override string ToString()
+        {
+            return string.Format("方向：接收；命令：直接发送；设备号：{0}。",
+                this.BoardNumber);
+        }
+    }
+
+    public class ReceivedUnknownMessage : ReceivedMessageBase
+    {
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in Meta)
+            {
+                sb.Append(string.Format("{0:x2} ", b));
+            }
+
+            return string.Format("方向：接收；命令：未知；数据：{0}。", sb.ToString().Trim().ToUpper());
         }
     }
 }

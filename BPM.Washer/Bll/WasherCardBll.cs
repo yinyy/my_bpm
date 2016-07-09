@@ -15,7 +15,7 @@ namespace Washer.Bll
         {
             get { return SingletonProvider<WasherCardBll>.Instance; }
         }
-        
+
         public WasherCardModel Get(WasherConsumeModel consume)
         {
             return WasherCardDal.Instance.GetWhere(new { DepartmentId = consume.DepartmentId, BinderId = consume.KeyId }).OrderByDescending(a => a.Binded).FirstOrDefault();
@@ -24,6 +24,11 @@ namespace Washer.Bll
         public WasherCardModel Get(int departmentId, string cardNo)
         {
             return WasherCardDal.Instance.GetWhere(new { DepartmentId = departmentId, CardNo = cardNo }).FirstOrDefault();
+        }
+
+        public int GetCardCountByValue(int departmentId, int value)
+        {
+            return WasherCardDal.Instance.GetWhere(new { DepartmentId = departmentId, Coins = value, Sale = true }).Where(a => a.BinderId == null && a.ValidateEnd.CompareTo(DateTime.Now) > 0).Count();
         }
 
         public IEnumerable<WasherCardModel> GetValidCards(int consumeId)
@@ -51,6 +56,11 @@ namespace Washer.Bll
             return WasherCardDal.Instance.Insert(model);
         }
 
+        public int Delete(int keyId)
+        {
+            return WasherCardDal.Instance.Delete(keyId);
+        }
+
         public int Deduction(int cardId, int cost, int ticks)
         {
             #region 计算折扣金额
@@ -75,8 +85,8 @@ namespace Washer.Bll
 
             if (cost > 0)
             {
-                var cards = WasherCardBll.Instance.GetValidCards(card.BinderId.Value).Where(a=>a.Coins>0).OrderBy(a=>a.ValidateEnd);
-                foreach(WasherCardModel c in cards)
+                var cards = WasherCardBll.Instance.GetValidCards(card.BinderId.Value).Where(a => a.Coins > 0).OrderBy(a => a.ValidateEnd);
+                foreach (WasherCardModel c in cards)
                 {
                     if (c.Coins >= cost)
                     {
@@ -100,6 +110,24 @@ namespace Washer.Bll
             }
 
             return cost1;
+        }
+
+        public bool Bind(WasherConsumeModel consume, int value)
+        {
+            WasherCardModel card = WasherCardDal.Instance.GetWhere(new { DepartmentId = consume.DepartmentId, Coins = value, Sale = true }).Where(a => a.BinderId == null && a.ValidateEnd.CompareTo(DateTime.Now) > 0).FirstOrDefault();
+            if (card == null)
+            {
+                return false;
+            }
+
+            card.Binded = DateTime.Now;
+            card.BinderId = consume.KeyId;
+            if (WasherCardBll.Instance.Update(card) > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

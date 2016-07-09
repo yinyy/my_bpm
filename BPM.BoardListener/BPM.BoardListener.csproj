@@ -143,18 +143,6 @@
       <Project>{67511094-dde4-4899-b4b6-d81f3f1014e2}</Project>
       <Name>BPM.BoardListenerLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BPM.Washer\BPM.Washer.csproj">
-      <Project>{e62eb623-f837-4f58-9ca9-4ec850ce94d4}</Project>
-      <Name>BPM.Washer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
-      <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
-      <Name>BPM.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common\BPM.Common.csproj">
-      <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
-      <Name>BPM.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

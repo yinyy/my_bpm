@@ -10,7 +10,7 @@
 namespace BPM.Admin.PublicPlatform.Web {
     
     
-    public partial class Payment {
+    public partial class Card2 {
         
         /// <summary>
         /// form1 控件。

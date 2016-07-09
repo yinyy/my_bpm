@@ -107,7 +107,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
         public override IResponseMessageBase OnEvent_ScanRequest(RequestMessageEvent_Scan requestMessage)
         {
-            ResponseMessageBase message = null;
+            ResponseMessageText message = CreateResponseMessage<ResponseMessageText>();
             if (!string.IsNullOrEmpty(requestMessage.EventKey))
             {
                 string senceId = requestMessage.EventKey;
@@ -115,21 +115,43 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 {
                     WasherDeviceModel device;
                     WasherWeChatConsumeModel wxconsume;
+                    WasherConsumeModel consume;
+                    //如果主板编号错误或者微信用户错误，提示参数错误
                     if ((device = WasherDeviceBll.Instance.GetByBoardNumber(senceId.Substring(1))) == null ||
                         (wxconsume = WasherWeChatConsumeBll.Instance.Get(device.DepartmentId, requestMessage.FromUserName)) == null)
                     {
-                        var responseMessage = CreateResponseMessage<ResponseMessageText>();
-                        responseMessage.Content = "参数错误！";
-                        message = responseMessage;
+                        message.Content = "参数错误！";
+                    }
+                    //检查该微信用户是否已经登记个人信息，如果没有登记，则提示用户先绑定信息
+                    else if ((consume = WasherConsumeBll.Instance.GetByBinder(wxconsume)) == null)
+                    {
+                        message.Content = "请先绑定个人信息";
                     }
                     else {
-                        //TODO:检查洗车机是否可用
+                        //检查主板是否处于可用状态
+                        var setting = JsonConvert.DeserializeAnonymousType(device.Setting, new { Coins = 0, Params = new int[32] });
+                        if ((setting.Params[31] & 0x01) == 0x00)
+                        {
+                            message.Content = "洗车机不可用。";
+                        }
+                        else
+                        {
+                            int coins = WasherConsumeBll.Instance.GetValidCoins(consume.KeyId);
+                            Department dept = DepartmentBll.Instance.Get(wxconsume.DepartmentId);
 
+                            //如果其卡内还有超过5元的洗车比，则提示其可用直接启动机器
+                            if (coins >= 500)
+                            {
+                                message.Content = string.Format(
+@"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/PayWash.aspx?appid={0}&board={1}&card=true'>这里</a>。
 
-                        var responseMessage = CreateResponseMessage<ResponseMessageText>();
-                        responseMessage.Content = "<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Payment.aspx?wxid=" +
-                            wxconsume.KeyId + "&b=" + senceId.Substring(1) + "'>点这个链接，启动洗车机。</a>";
-                        message = responseMessage;
+微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/PayWash.aspx?appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
+                            }
+                            else
+                            {
+                                message.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/PayWash.aspx?appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
+                            }
+                        }
                     }
                 }
                 else if (senceId.StartsWith("8"))
@@ -138,9 +160,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 }
                 else
                 {
-                    var responseMessage = CreateResponseMessage<ResponseMessageText>();
-                    responseMessage.Content = "参数错误！";
-                    message = responseMessage;
+                    message.Content = "参数错误！";
                 }
             }
 

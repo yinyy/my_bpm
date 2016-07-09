@@ -56,6 +56,9 @@ namespace BPM.Admin.Washer.ashx
                         context.Response.Write("-1");
                     }
                     break;
+                case "del":
+                    context.Response.Write(WasherCardBll.Instance.Delete(rpm.KeyId));
+                    break;
                 case "consume":
                     filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"CardId\",\"op\":\"eq\",\"data\":\"{0}\"}}, {{\"field\":\"Coins\",\"op\":\"lt\",\"data\":\"0\"}}],\"groups\":[]}}", rpm.KeyId);
                     context.Response.Write(WasherCardLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));

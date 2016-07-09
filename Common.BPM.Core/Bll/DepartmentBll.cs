@@ -25,7 +25,7 @@ namespace BPM.Core.Bll
                                 new {id = n.KeyId, text = n.DepartmentName, children = GetDepartmentTreeNodes(n.KeyId)};
             return treeNodes;
         }
-
+        
         public IEnumerable<Department> GetAll()
         {
             return DepartmentDal.Instance.GetAll();

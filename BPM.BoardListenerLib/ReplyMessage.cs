@@ -6,11 +6,25 @@ using System.Threading.Tasks;
 
 namespace BPM.BoardListenerLib
 {
-    public abstract class ReplyMessageBase : MessageBase
+    public abstract class ReplyMessageBase : TcpMessageBase
     {
+        public ReplyMessageBase()
+        {
+            this.Ticks = (int)DateTime.Now.Ticks;
+        }
+
+        public ReplyMessageBase(string boardNumber)
+        {
+            this.BoardNumber = boardNumber;
+            this.Ticks = (int)DateTime.Now.Ticks;
+        }
+
         protected byte[] buffer;
 
-        public abstract byte[] ToByteArray();
+        public virtual byte[] ToByteArray()
+        {
+            return buffer;
+        }
 
         protected void InitBuffer(bool withDeviceId = true)
         {
@@ -42,6 +56,11 @@ namespace BPM.BoardListenerLib
 
     public class ReplyTimeSyncMessage : ReplyMessageBase
     {
+        public ReplyTimeSyncMessage(string boardNumber):base(boardNumber)
+        {
+            this.Command = TcpMessageBase.CommandType.TimeSync;
+        }
+
         public override byte[] ToByteArray()
         {
             Length = 6;
@@ -71,6 +90,11 @@ namespace BPM.BoardListenerLib
         public int ErrorCode = 0;
         public int[] Values = new int[32];
 
+        public ReplyReadSettingMessage(string boardNumber):base(boardNumber)
+        {
+            this.Command = CommandType.ReaderSetting;
+        }
+        
         public override byte[] ToByteArray()
         {
             if (ErrorCode == 0)
@@ -130,6 +154,12 @@ namespace BPM.BoardListenerLib
     {
         public int Status;
 
+        public ReplyUploadStatusMessage(string boardNumber, int Status=1):base(boardNumber)
+        {
+            this.Command = CommandType.UploadStatus;
+            this.Status = Status;
+        }
+
         public override byte[] ToByteArray()
         {
             Length = 1;
@@ -152,6 +182,11 @@ namespace BPM.BoardListenerLib
     {
         public int BalanceId;
         public int Remain;
+
+        public ReplyAccountMessage(string boardNumber):base(boardNumber)
+        {
+            this.Command = CommandType.Account;
+        }
 
         public override byte[] ToByteArray()
         {
@@ -186,6 +221,11 @@ namespace BPM.BoardListenerLib
         public CardKind Kind;
         public CardStatus Status;
         public int Money;
+
+        public ReplyValidateMessage(string boardNumber):base(boardNumber)
+        {
+            this.Command = CommandType.ValidateCardAndPassword;
+        }
 
         public override byte[] ToByteArray()
         {
@@ -239,6 +279,13 @@ namespace BPM.BoardListenerLib
 
     public class ReplyHeartBeatMessage : ReplyMessageBase
     {
+        public string Address="0.0.0.0";
+
+        public ReplyHeartBeatMessage() : base(null)
+        {
+
+        }
+        
         public override byte[] ToByteArray()
         {
             buffer = new byte[1];
@@ -249,30 +296,47 @@ namespace BPM.BoardListenerLib
 
         public override string ToString()
         {
-            return string.Format("方向：返回；命令：心跳同步。",
-                    this.BoardNumber);
+            return string.Format("方向：返回；命令：心跳同步，IP地址：{0}。",
+                    this.Address);
         }
     }
 
-    //public class ReplyOperationMessage : ReplyMessageBase
-    //{
-    //    public int Status;
+    public class ReplySendMessage : ReplyMessageBase
+    {
+        public ReplySendMessage(byte[] buffer):base()
+        {
+            this.buffer = buffer;
+            ClearHighBits();
+        }
 
-    //    public override byte[] ToByteArray()
-    //    {
-    //        Length = 5;
-    //        InitBuffer();
+        public override string ToString()
+        {
+            return string.Format("方向：返回；命令：直接发送；设备号：{0}。",
+                    this.BoardNumber);
+        }
 
-    //        buffer[11] = (byte)Status;
+        private void ClearHighBits()
+        {
+            buffer[4] = 0x00;
+        }
+    }
 
-    //        return buffer;
-    //    }
+    public class ReplyUnknownMessage : ReplyMessageBase
+    {
+        public ReplyUnknownMessage(byte[] bs):base(null)
+        {
+            this.buffer = bs;
+        }
 
-    //    public override string ToString()
-    //    {
-    //        return string.Format("方向：返回；命令：指令控制；设备号：{0}；操作代码：{1}。",
-    //                this.BoardNumber,
-    //                this.Status);
-    //    }
-    //}
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in buffer)
+            {
+                sb.Append(string.Format("{0:x2} ", b));
+            }
+
+            return string.Format("方向：返回；命令：未知，数据：{0}。", sb.ToString().Trim().ToUpper());
+        }
+    }
 }

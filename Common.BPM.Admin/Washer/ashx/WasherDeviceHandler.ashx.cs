@@ -61,6 +61,7 @@ namespace BPM.Admin.Washer.ashx
                             model.IpAddress = "";
                             model.Memo2 = "";
                             model.Setting = string.Format("{{\"Coin\": 0, \"Params\":[{0}]}}", ConfigurationManager.AppSettings["board_default_setting"]);
+                            model.ListenerIp = "139.129.43.203";
 
                             context.Response.Write(WasherDeviceBll.Instance.Add(model));
                         }

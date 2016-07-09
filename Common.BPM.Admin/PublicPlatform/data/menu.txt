@@ -11,12 +11,12 @@
                 {
                     "type": "view", 
                     "name": "我的账户", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2d8bcab64b53be3a&redirect_uri=http://xc.senlanjidian.com/PublicPlatform/Web/Profile.aspx&response_type=code&scope=snsapi_base&state=70#wechat_redirect"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Profile.aspx?appid=wx2d8bcab64b53be3a"
                 },
 				{
                     "type": "view", 
                     "name": "忘记密码", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2d8bcab64b53be3a&redirect_uri=http://xc.senlanjidian.com/PublicPlatform/Web/Password.aspx&response_type=code&scope=snsapi_base&state=70#wechat_redirect"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Password.aspx?appid=wx2d8bcab64b53be3a"
                 },
                 {
                     "type": "click", 
