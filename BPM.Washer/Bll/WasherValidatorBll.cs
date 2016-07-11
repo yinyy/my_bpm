@@ -39,7 +39,6 @@ namespace Washer.Bll
 
             WasherCardModel card;
             if ((card = WasherCardBll.Instance.Get(device.DepartmentId, cardNo)) == null ||
-                card.BinderId == null ||
                 card.ValidateEnd.Date.CompareTo(DateTime.Now.Date) <= 0 ||
                 card.Coins <= 0)
             {
@@ -48,35 +47,62 @@ namespace Washer.Bll
                 return dobj;
             }
 
-            WasherConsumeModel consume;
-            if ((consume = WasherConsumeBll.Instance.Get(card.BinderId.Value)) == null || (password != null && consume.Password != password))
+            if (card.BinderId == null)
             {
-                dobj.Success = false;
-                dobj.Message = "用户不存在、密码错误";
+                WasherDeviceLogModel balance = new WasherDeviceLogModel();
+                balance.CardId = card.KeyId;
+                balance.ConsumeId = null;
+                balance.DeviceId = device.KeyId;
+                balance.Kind = password == null ? "刷卡" : "卡号密码";
+                balance.Memo = "";
+                balance.Started = DateTime.Now;
+                balance.RemainCoins = card.Coins;
+                balance.PayCoins = 0;
+
+                if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) < 0)
+                {
+                    dobj.Success = false;
+                    dobj.Message = "写入设备日志错误";
+                    return dobj;
+                }
+
+                dobj.Success = true;
+                dobj.Money = balance.RemainCoins;
+                dobj.BalanceId = balance.KeyId;
                 return dobj;
             }
-
-            WasherDeviceLogModel balance = new WasherDeviceLogModel();
-            balance.CardId = card.KeyId;
-            balance.ConsumeId = consume.KeyId;
-            balance.DeviceId = device.KeyId;
-            balance.Kind = password == null ? "刷卡" : "卡号密码";
-            balance.Memo = "";
-            balance.Started = DateTime.Now;
-            balance.RemainCoins = card.Coins;
-            balance.PayCoins = 0;
-
-            if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) < 0)
+            else
             {
-                dobj.Success = false;
-                dobj.Message = "写入设备日志错误";
+                WasherConsumeModel consume;
+                if ((consume = WasherConsumeBll.Instance.Get(card.BinderId.Value)) == null || (password != null && consume.Password != password))
+                {
+                    dobj.Success = false;
+                    dobj.Message = "用户不存在、密码错误";
+                    return dobj;
+                }
+
+                WasherDeviceLogModel balance = new WasherDeviceLogModel();
+                balance.CardId = card.KeyId;
+                balance.ConsumeId = consume.KeyId;
+                balance.DeviceId = device.KeyId;
+                balance.Kind = password == null ? "刷卡" : "卡号密码";
+                balance.Memo = "";
+                balance.Started = DateTime.Now;
+                balance.RemainCoins = card.Coins;
+                balance.PayCoins = 0;
+
+                if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) < 0)
+                {
+                    dobj.Success = false;
+                    dobj.Message = "写入设备日志错误";
+                    return dobj;
+                }
+
+                dobj.Success = true;
+                dobj.Money = balance.RemainCoins;
+                dobj.BalanceId = balance.KeyId;
                 return dobj;
             }
-
-            dobj.Success = true;
-            dobj.Money = balance.RemainCoins;
-            dobj.BalanceId = balance.KeyId;
-            return dobj;
         }
 
         /// <summary>

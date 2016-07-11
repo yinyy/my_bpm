@@ -49,6 +49,8 @@ namespace BPM.BoardListener
             InitializeComponent();
 
             log = LogManager.GetLogger(this.GetType());
+
+
             //if (log.IsDebugEnabled)
             //{
             //    log.Debug("dfadfadfadfadsfsdf");

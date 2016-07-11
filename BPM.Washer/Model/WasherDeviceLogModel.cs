@@ -12,7 +12,7 @@ namespace Washer.Model
     {
         public int KeyId { get; set; }
         public int DeviceId { get; set; }
-        public int ConsumeId { get; set; }
+        public int? ConsumeId { get; set; }
         public int CardId { get; set; }
         public DateTime Started { get; set; }
         public DateTime Ended { get; set; }

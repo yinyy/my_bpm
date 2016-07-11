@@ -120,12 +120,12 @@ namespace BPM.BoardListenerLib
                     case CommandType.ValidateCardAndPassword:
                         ReceivedValidateCardAndPasswordMessage rvcpm = mo as ReceivedValidateCardAndPasswordMessage;
 
-                        rvcpm.CardNo = string.Format("{0:0000000000}", (bs[11] << 24) + (bs[12] << 16) + (bs[13] << 8) + bs[14]);
+                        rvcpm.CardNo = string.Format("{0:0000000000}", ((long)bs[11] << 24) + ((long)bs[12] << 16) + (bs[13] << 8) + bs[14]);
                         rvcpm.Password = string.Format("{0:000000}", (bs[15] << 24) + (bs[16] << 16) + (bs[17] << 8) + bs[18]);
                         break;
                     case CommandType.ValidateCard:
                         ReceivedValidateCardMessage rvcm = mo as ReceivedValidateCardMessage;
-                        rvcm.CardNo = string.Format("{0:0000000000}", (bs[11] << 24) + (bs[12] << 16) + (bs[13] << 8) + bs[14]);
+                        rvcm.CardNo = string.Format("{0:0000000000}", ((long) bs[11] << 24) + ((long)bs[12] << 16) + (bs[13] << 8) + bs[14]);
                         break;
                     case CommandType.ValidatePhoneAndPassword:
                         ReceivedValidatePhoneAndPasswordMessage rvppm = mo as ReceivedValidatePhoneAndPasswordMessage;

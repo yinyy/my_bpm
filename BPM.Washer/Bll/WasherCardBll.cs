@@ -64,7 +64,7 @@ namespace Washer.Bll
         public int Deduction(int cardId, int cost, int ticks)
         {
             #region 计算折扣金额
-            int cost1 = cost = (int)(cost * 0.9);
+            int cost1 = cost;// = (int)(cost * 0.9);
             #endregion
 
             WasherCardModel card = WasherCardBll.Instance.Get(cardId);
@@ -83,7 +83,7 @@ namespace Washer.Bll
                 WasherCardBll.Instance.Update(card);
             }
 
-            if (cost > 0)
+            if (cost > 0 && card.BinderId!=null)
             {
                 var cards = WasherCardBll.Instance.GetValidCards(card.BinderId.Value).Where(a => a.Coins > 0).OrderBy(a => a.ValidateEnd);
                 foreach (WasherCardModel c in cards)

@@ -71,7 +71,7 @@ var grid = {
             pagination: true,
             pageSize: PAGESIZE,
             pageList: [20, 40, 50],
-            sortName: 'KeyId',
+            sortName: 'CardNo',
             sortOrder: 'asc'
         });
     },
