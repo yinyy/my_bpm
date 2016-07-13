@@ -1,6 +1,6 @@
 ﻿var actionUrl= '/PublicPlatform/Web/handler/ProfileHandler.ashx';
 
-var countdownvalue = 30;
+var vcode;
 
 $(document).ready(function () {
     //进行身份验证
@@ -12,7 +12,7 @@ $(document).ready(function () {
     //    {
     //        async: false
     //    });
-    
+
     $.post(actionUrl, function (res) {
         if (res.Success == false) {
             $('div#not_subscribe_region').show();
@@ -34,7 +34,7 @@ $(document).ready(function () {
         var name = $.trim($('input#Name').val());
         var gender = $('input#Gender').prop('checked') == true ? '男' : '女';
         var telphone = $.trim($('input#Telphone').val());
-        //var vcode = $.trim($('input#Vcode').val());
+        var vcode = $.trim($('input#Vcode').val());
         var password = $.trim($('input#Password').val());
         var repassword = $.trim($('input#Repassword').val());
 
@@ -52,12 +52,12 @@ $(document).ready(function () {
             return;
         }
 
-        //if (vcode == '') {
-        //    $('input#Vcode').focus();
-        //    alert('请输入验证码。')
+        if (vcode == '') {
+            $('input#Vcode').focus();
+            alert('请输入验证码。')
 
-        //    return;
-        //}
+            return;
+        }
 
         if (password == '') {
             $('input#Password').focus();
@@ -78,7 +78,7 @@ $(document).ready(function () {
             name: name,
             gender: gender,
             telphone: telphone,
-            //Vcode: vcode,
+            vcode: vcode,
             password: password
         }, function (json) {
             if (json.Success) {
@@ -107,51 +107,5 @@ $(document).ready(function () {
         }
     });
 
-
-
-
-
-
-    //$('input#Telphone').change(validateTelphone);
-
-    
+    vcode = new Vcode($('a#GetVcode'), $('input#Telphone'));
 });
-
-function validateTelphone() {
-    var tel = $.trim($('input#Telphone').val());
-    if (tel.length == 11) {
-        $('a#GetVcode').removeClass('weui_btn_disabled');
-        $('a#GetVcode').one('click', getVcode);
-    } else {
-        $('a#GetVcode').addClass('weui_btn_disabled');
-        $('a#GetVcode').unbind('click');
-    }
-}
-
-function getVcode() {
-    $('a#GetVcode').addClass('weui_btn_disabled');
-
-    $.getJSON(actionURL, { action: 'vcode', Telphone: $.trim($('input#Telphone').val()) }, function (json) {
-        if (json.Success == 0) {
-            countdownvalue = 30;
-            countdown();
-
-            alert('验证码已发送至您的手机。请注意查收。');
-        } else {
-            alert('获取验证码错误！');
-        }
-    });
-}
-
-function countdown() {
-    if (countdownvalue == 0) {
-        $('a#GetVcode').html('获取验证码');
-        
-        validateTelphone();
-    } else {
-        $('a#GetVcode').html(countdownvalue + '秒后重新获取');
-        countdownvalue--;
-
-        setTimeout('countdown()', 1000);
-    }
-}

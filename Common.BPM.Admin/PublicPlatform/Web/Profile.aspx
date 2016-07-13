@@ -13,6 +13,7 @@
     <script src="js/common.js?t=<%=DateTime.Now %>"></script>
     <script src="js/Authorize.js?t=<%=DateTime.Now %>"></script>
     <script src="./js/Profile.js?t=<%=DateTime.Now %>"></script>
+    <script src="js/Vcode.js?t=<%=DateTime.Now %>"></script>
     <title>个人信息</title>
 </head>
 
@@ -42,17 +43,17 @@
                     <div class="weui_cell_bd weui_cell_primary">
                         <input id="Telphone" class="weui_input" type="number" pattern="[0-9]*" placeholder="请输入电话号码"/>
                     </div>
-                    <!--div class="weui_cell_ft">
+                    <div class="weui_cell_ft">
                         <a id="GetVcode" class="weui_btn weui_btn_mini weui_btn_default weui_btn_disabled">获取验证码</a>
-                    </div-->
+                    </div>
                 </div>
 
-                <!--div class="weui_cell">
+                <div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <input id="Vcode" class="weui_input" type="number" placeholder="请输入验证码"/>
                     </div>
-                </div-->
+                </div>
 
                 <div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">密码</label></div>

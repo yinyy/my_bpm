@@ -13,6 +13,7 @@
     <script src="js/jquery-2_2_1_min.js"></script>
     <script src="js/Pay.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/Card2.js?d=<%=DateTime.Now.Ticks %>"></script>
+    <script src="js/Vcode.js?t=<%=DateTime.Now.Ticks %>"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -69,6 +70,17 @@
                     <div class="weui_cell_hd"><label class="weui_label">密码</label></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <input id="Password" class="weui_input" type="password" placeholder="请输入密码"/>
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input id="Vcode" class="weui_input" type="number" placeholder="请输入验证码"/>
+                    </div>
+                    <div class="weui_cell_ft">
+                        <input type="hidden" id="Telphone" />
+                        <a id="GetVcode" class="weui_btn weui_btn_mini weui_btn_default">获取验证码</a>
                     </div>
                 </div>
             </div>

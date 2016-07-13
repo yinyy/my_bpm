@@ -2883,6 +2883,7 @@
     <Content Include="PublicPlatform\Web\js\Profile.js" />
     <Content Include="PublicPlatform\Web\js\jquery-2_2_1_min.js" />
     <Content Include="PublicPlatform\Web\js\Records.js" />
+    <Content Include="PublicPlatform\Web\js\Vcode.js" />
     <Content Include="PublicPlatform\Web\OrderDetail.aspx" />
     <Content Include="PublicPlatform\Web\PayWash.aspx" />
     <Content Include="PublicPlatform\Web\Profile.aspx" />
@@ -3434,6 +3435,7 @@
     <Content Include="PublicPlatform\Web\handler\UnifyPay.ashx" />
     <Content Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\Test.ashx" />
+    <Content Include="PublicPlatform\Web\handler\VcodeHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3724,6 +3726,9 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\UnifyPay.ashx.cs">
       <DependentUpon>UnifyPay.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\VcodeHandler.ashx.cs">
+      <DependentUpon>VcodeHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\OrderDetail.aspx.cs">
       <DependentUpon>OrderDetail.aspx</DependentUpon>

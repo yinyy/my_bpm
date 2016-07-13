@@ -29,33 +29,36 @@ namespace Washer.Bll
             return WasherVcodeDal.Instance.Get(telphone);
         }
 
+        public WasherVcodeModel Create(string telphone)
+        {
+            WasherVcodeModel vcode = WasherVcodeBll.Instance.Get(telphone);
+            if (vcode == null || vcode.Validated != null || vcode.Created.AddMinutes(3) <= DateTime.Now)
+            {
+                vcode = new WasherVcodeModel();
+                vcode.Created = DateTime.Now;
+                vcode.Memo = "";
+                vcode.Validated = null;
+                vcode.Telphone = telphone;
+                vcode.Vcode = string.Format("{0:000000}", DateTime.Now.Ticks % 1000000);
+
+                if (WasherVcodeBll.Instance.Save(vcode) > 0)
+                {
+                    return vcode;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return vcode;
+            }
+        }
+
         public int Save(WasherVcodeModel vcode)
         {
             return WasherVcodeDal.Instance.Insert(vcode);
-        }
-
-        public WasherVcodeResult Validate(string telphone, string vcode, int m)
-        {
-            WasherVcodeModel model = Get(telphone);
-            if (model == null)
-            {
-                //还没有获取验证码
-                return WasherVcodeResult.请先获取验证码;
-            }
-            else if (model.Created.AddMinutes(m) <= DateTime.Now)
-            {
-                //验证码超时了
-                return WasherVcodeResult.验证码已过期;
-            }
-            else if (vcode != model.Vcode)
-            {
-                return WasherVcodeResult.验证码错误;
-            }
-
-            model.Validated = DateTime.Now;
-            Update(model);
-
-            return WasherVcodeResult.验证码正确;
         }
 
         public int Update(WasherVcodeModel model)

@@ -39,35 +39,52 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             {
                 string no = context.Request.Params["card"];
                 string password = context.Request.Params["password"];
+                string vcode = context.Request.Params["vcode"];
+                string telphone = context.Request.Params["telphone"];
 
-                WasherCardModel card = WasherCardBll.Instance.Get(dept.KeyId, no);
-                if (card == null)
+                WasherVcodeModel code = WasherVcodeBll.Instance.Get(telphone);
+                if (code == null || code.Validated != null||code.Vcode!=vcode)
                 {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡不存在。" }));
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码错误。" }));
                 }
-                else if (card.Password != password)
+                else if (code.Created.AddMinutes(3) < DateTime.Now)
                 {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "密码错误。" }));
-                }
-                else if (card.BinderId != null)
-                {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡已被其他用户绑定。" }));
-                }
-                else if (DateTime.Now > card.ValidateEnd)
-                {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡以过期。" }));
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码已过期。" }));
                 }
                 else
                 {
-                    card.BinderId = consume.KeyId;
-                    card.Binded = DateTime.Now;
-                    if (WasherCardBll.Instance.Update(card) > 0)
+                    code.Validated = DateTime.Now;
+                    WasherVcodeBll.Instance.Update(code);
+
+                    WasherCardModel card = WasherCardBll.Instance.Get(dept.KeyId, no);
+                    if (card == null)
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡不存在。" }));
+                    }
+                    else if (card.Password != password)
+                    {
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "密码错误。" }));
+                    }
+                    else if (card.BinderId != null)
+                    {
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡已被其他用户绑定。" }));
+                    }
+                    else if (DateTime.Now > card.ValidateEnd)
+                    {
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡以过期。" }));
                     }
                     else
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡绑定失败。" }));
+                        card.BinderId = consume.KeyId;
+                        card.Binded = DateTime.Now;
+                        if (WasherCardBll.Instance.Update(card) > 0)
+                        {
+                            context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                        }
+                        else
+                        {
+                            context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡绑定失败。" }));
+                        }
                     }
                 }
             }
@@ -126,6 +143,9 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "绑定洗车卡失败。" }));
                 }
+            }else if (action == "telphone")
+            {
+                context.Response.Write(JSONhelper.ToJson(new { Success = true, Message = consume.Telphone }));
             }
             else
             {

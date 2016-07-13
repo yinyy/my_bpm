@@ -1,4 +1,5 @@
 ﻿var actionUrl = '/PublicPlatform/Web/handler/CardHandler.ashx';
+var vcode;
 
 function hideAll() {
     $('div#card_list_region').hide();
@@ -190,11 +191,12 @@ var Buy = {
 var Bind = {
     init:function(){
         this.button = { ok: $('div#bind_card_region > div.weui_btn_area > a:first'), cancel: $('div#bind_card_region > div.weui_btn_area > a:last') };
-        this.controller = { number: $('input#CardNo'), password: $('input#Password') };
+        this.controller = { number: $('input#CardNo'), password: $('input#Password'), vcode: $('input#Vcode') };
 
         this.button.ok.click(function () {
             var cardNo = $.trim(Bind.controller.number.val());
             var password = $.trim(Bind.controller.password.val());
+            var vc = $.trim(Bind.controller.vcode.val());
 
             if (cardNo == '') {
                 alert('请输入卡号。');
@@ -208,8 +210,14 @@ var Bind = {
                 return;
             }
 
+            if (vc == '') {
+                alert('请输入验证码。');
+                Binder.controller.Vcode.focus();
+                return;
+            }
+
             Loading.show();
-            $.getJSON(actionUrl, { action: 'bind', card: cardNo, password: password }, function (json) {
+            $.getJSON(actionUrl, { action: 'bind', card: cardNo, password: password, vcode: vc, telphone: $('input#Telphone').val() }, function (json) {
                 Loading.hide();
 
                 if (json.Success) {
@@ -230,6 +238,7 @@ var Bind = {
     clear: function(){
         this.controller.number.val('');
         this.controller.password.val('');
+        this.controller.vcode.val('');
     },
 
     show: function () {
@@ -244,6 +253,11 @@ var Bind = {
 
 
 $(document).ready(function () {
+    vcode = new Vcode($('a#GetVcode'), $('input#Telphone'));
+    $.getJSON(actionUrl, { action: 'telphone' }, function (json) {
+        $('input#Telphone').val(json.Message);
+    });
+
     List.init();
     Buy.init();
     Bind.init();
