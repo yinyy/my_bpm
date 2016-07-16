@@ -127,21 +127,19 @@
                 </li>
             </ul>
         </div>
-        <h1>会员卡</h1>
+        <!--h1>会员卡</!--h1>
         <div class="c">
             <ul>
                 <li><label style="display:block; float:left;">背景色：</label><input type="text" id="txt_Color" name="Color"/></li>
                 <li style="margin-top: 10px;"><label style="vertical-align: middle; display: inline-block;">用卡须知：</label><textarea id="txt_Intro" name="Intro" cols="100" rows="30" style="vertical-align: middle;"></textarea></li>
            </ul>
-        </div>
-
+        </div-->
     </div>
 
 
     <div style="margin:140px;width:160px; margin-top:40px; font-family:'Microsoft YaHei'">
-
         <a id="btnok" href="javascript:;" class="alertify-button alertify-button-ok">保存设置</a>
-
+        <%--<a id="btnmenu" href="javascript:;" class="alertify-button alertify-button-ok">创建菜单</a>--%>
     </div>
 
     <div id="fine-uploader" style="display: none;">

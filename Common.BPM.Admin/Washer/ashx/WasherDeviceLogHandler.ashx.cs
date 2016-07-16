@@ -4,6 +4,7 @@ using BPM.Core.Bll;
 using BPM.Core.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
@@ -37,6 +38,17 @@ namespace BPM.Admin.Washer.ashx
             string filter;
             switch (rpm.Action)
             {
+                case "export":
+                    if (user.IsAdmin)
+                    {
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls",  WasherDeviceLogBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
+                    }
+                    else
+                    {
+                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(filter, rpm.Sort, rpm.Order));
+                    }
+                    break;
                 default:
                     if (user.IsAdmin)
                     {
@@ -49,6 +61,9 @@ namespace BPM.Admin.Washer.ashx
                     }
                     break;
             }
+
+            //context.Response.Flush();
+            //context.Response.End();
         }
 
         public bool IsReusable

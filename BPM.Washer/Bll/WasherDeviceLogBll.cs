@@ -4,6 +4,7 @@ using System.Linq;
 using Washer.Dal;
 using Washer.Model;
 using System;
+using System.Data;
 
 namespace Washer.Bll
 {
@@ -44,6 +45,11 @@ namespace Washer.Bll
             }
 
             return 0;
+        }
+
+        public DataTable Export(string filter, string sort="KeyId", string order="desc")
+        {
+            return WasherDeviceLogDal.Instance.Export(filter, sort, order);
         }
 
         public WasherDeviceLogModel Get(int balanceId)

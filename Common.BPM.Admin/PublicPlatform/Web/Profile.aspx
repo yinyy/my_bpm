@@ -10,8 +10,6 @@
     <link href="./css/WeUI/style/weui.min.css" rel="stylesheet" />
     <link href="./css/Profile.css?d=<%=DateTime.Now %>" rel="stylesheet" />
     <script src="./js/jquery-2_2_1_min.js"></script>
-    <script src="js/common.js?t=<%=DateTime.Now %>"></script>
-    <script src="js/Authorize.js?t=<%=DateTime.Now %>"></script>
     <script src="./js/Profile.js?t=<%=DateTime.Now %>"></script>
     <script src="js/Vcode.js?t=<%=DateTime.Now %>"></script>
     <title>个人信息</title>
@@ -118,7 +116,7 @@
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
-                <a class="weui_cell" href="./Card/List.aspx?appid=wx2d8bcab64b53be3a&wxid=&d=<%=DateTime.Now %>">
+                <a class="weui_cell" href="./Authorize.html?appid=wx2d8bcab64b53be3a">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>测试</p>

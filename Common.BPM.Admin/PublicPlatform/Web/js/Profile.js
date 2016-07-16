@@ -3,16 +3,6 @@
 var vcode;
 
 $(document).ready(function () {
-    //进行身份验证
-    if (Authorize.authorize() == null) {
-        return;
-    }
-
-    //$.ajax('/PublicPlatform/Web/handler/Test.ashx',
-    //    {
-    //        async: false
-    //    });
-
     $.post(actionUrl, function (res) {
         if (res.Success == false) {
             $('div#not_subscribe_region').show();

@@ -12,7 +12,6 @@
     <link href="css/PayWash.css" rel="stylesheet" />
     <script src="js/jquery-2_2_1_min.js"></script>
     <script src="js/common.js"></script>
-    <script src="js/Authorize.js?t=<%=DateTime.Now %>"></script>
     <script src="js/Pay.js?t=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/PayWash.js?t=<%=DateTime.Now.Ticks %>"></script>
 </head>

@@ -19,7 +19,9 @@
     <table id="list" ></table>  
 
     <!-- 引入多功能查询js -->
-    <script src="../../scripts/Business/Search.js"></script>
+    <script src="../../scripts/Business/Search.js?t=<%=DateTime.Now.Ticks %>"></script>
+    <script src="../scripts/Business/Export.js?d=<%=DateTime.Now.Ticks %>"></script>
+
 
     <!-- 引入js文件 -->
     <script src="js/WasherDeviceLog.js?d=<%=DateTime.Now %>"></script>

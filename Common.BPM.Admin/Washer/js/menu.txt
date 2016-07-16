@@ -1,0 +1,39 @@
+﻿{
+    "button": [
+        {
+            "type": "scancode_push", 
+            "name": "我要洗车", 
+            "key": "m101_washcar"
+        }, 
+        {
+            "name": "个人中心", 
+            "sub_button": [
+                {
+                    "type": "view", 
+                    "name": "我的账户", 
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?appid={0}&next=Profile.aspx"
+                },
+				{
+                    "type": "view", 
+                    "name": "我要推广", 
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?appid={0}&next=Promote.aspx"
+                }
+            ]
+        },
+		{
+            "name": "帮助指南", 
+            "sub_button": [
+				{
+                    "type": "click", 
+                    "name": "代理加盟", 
+                    "key": "m301_join"
+                },
+				{
+                    "type": "click", 
+                    "name": "使用手册", 
+                    "key": "m302_help"
+                }
+            ]
+        }
+    ]
+}

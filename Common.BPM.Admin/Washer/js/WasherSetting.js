@@ -82,9 +82,9 @@ $(function () {
         }
     });
 
-    var editor = $('#txt_Intro').xheditor({
-        tools: 'Cut,Copy,Paste,Pastetext,|,Blocktag,|,Source,Preview'
-    });
+    //var editor = $('#txt_Intro').xheditor({
+    //    tools: 'Cut,Copy,Paste,Pastetext,|,Blocktag,|,Source,Preview'
+    //});
 
     $('#btnok').click(function () {
         var json = {};
@@ -94,13 +94,14 @@ $(function () {
         json.Token = $('#txt_Token').val();
         json.Brand = $('#txt_Brand').val();
         json.Logo = $('#txt_Logo').val();
-        json.CardColor = $("#txt_Color").spectrum("get").toHexString();
 
-        var intro = editor.getSource();
-        intro.replace('\\', '\\\\');
-        intro.replace('"', '\"');
-        intro.replace("'", "\'");
-        json.Introduction = intro;
+        //json.CardColor = $("#txt_Color").spectrum("get").toHexString();
+
+        //var intro = editor.getSource();
+        //intro.replace('\\', '\\\\');
+        //intro.replace('"', '\"');
+        //intro.replace("'", "\'");
+        //json.Introduction = intro;
 
         json.Setting = {
             Point: {
@@ -131,6 +132,18 @@ $(function () {
         });
     });
 
+    $('#btnmenu').click(function () {
+        if (confirm('创建菜单将会覆盖已有菜单。确认创建菜单吗？')) {
+            $.post('ashx/WasherSettingHandler.ashx?action=menu', function (json) {
+                if (json.Success == true) {
+                    msg.ok('菜单创建成功。');
+                } else {
+                    alert(json.Message);
+                }
+            });
+        }
+    });
+
     //显示原来的数据
     $('#txt_Appid').val(json.Appid);
     $('#txt_Secret').val(json.Secret);
@@ -139,8 +152,8 @@ $(function () {
     $('#txt_Brand').val(json.Brand);
     $('#txt_Logo').val(json.Logo);
     $('#Logo').attr('src', json.Logo);
-    $("input#txt_Color").spectrum('set', json.CardColor);
-    editor.setSource(json.Introduction);
+    //$("input#txt_Color").spectrum('set', json.CardColor);
+    //editor.setSource(json.Introduction);
 
     if (json.Setting != null) {
         var setting = eval("(" + json.Setting + ")");

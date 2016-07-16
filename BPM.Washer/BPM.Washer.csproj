@@ -76,6 +76,7 @@
     <Compile Include="Model\WasherVcodeModel.cs" />
     <Compile Include="Model\WasherWeChatConsumeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Toolkit\GridView2Excel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BPM.BoardListenerLib\BPM.BoardListenerLib.csproj">

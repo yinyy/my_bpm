@@ -37,6 +37,9 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 context.Session["appid"] = appid;
                 context.Session["openid"] = result.openid;
 
+                //context.Session["appid"] = "wx2d8bcab64b53be3a";
+                //context.Session["openid"] = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";
+
                 context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = result.openid }));
                 //WeixinUserInfoResult userInfo = CommonApi.GetUserInfo(AccessTokenContainer.GetAccessToken(dept.Appid), result.openid);
                 //context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = userInfo.openid }));

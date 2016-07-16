@@ -2856,7 +2856,8 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
-    <Content Include="PublicPlatform\data\menu.txt" />
+    <Content Include="PublicPlatform\Web\Authorize.html" />
+    <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="PublicPlatform\Web\Card2.aspx" />
     <Content Include="PublicPlatform\Web\css\Card2.css" />
@@ -3434,7 +3435,6 @@
     <Content Include="PublicPlatform\Web\handler\CardHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\UnifyPay.ashx" />
     <Content Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx" />
-    <Content Include="PublicPlatform\Web\handler\Test.ashx" />
     <Content Include="PublicPlatform\Web\handler\VcodeHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
@@ -3720,9 +3720,6 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\ProfileHandler.ashx.cs">
       <DependentUpon>ProfileHandler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="PublicPlatform\Web\handler\Test.ashx.cs">
-      <DependentUpon>Test.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\UnifyPay.ashx.cs">
       <DependentUpon>UnifyPay.ashx</DependentUpon>
