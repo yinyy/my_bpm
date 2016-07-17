@@ -3409,6 +3409,7 @@
     <Content Include="Washer\html\WasherDeviceAdd.html" />
     <Content Include="Washer\js\WasherCardIncome.js" />
     <Content Include="Washer\js\WasherCardCost.js" />
+    <Content Include="Washer\js\WasherOrder.js" />
     <Content Include="Washer\js\WasherSendNews.js" />
     <Content Include="Washer\js\WasherDeviceLog.js" />
     <Content Include="Washer\js\WasherCard.js" />
@@ -3421,6 +3422,7 @@
     <Content Include="Washer\WasherCard.aspx" />
     <Content Include="Washer\WasherConsume.aspx" />
     <Content Include="Washer\WasherDevice.aspx" />
+    <Content Include="Washer\WasherOrder.aspx" />
     <Content Include="Washer\WasherSendNews.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
     <Content Include="welcome.html" />
@@ -3645,6 +3647,7 @@
     <Content Include="Washer\ashx\WasherDeviceLogHandler.ashx" />
     <Content Include="Washer\ashx\WasherCardLogHandler.ashx" />
     <Content Include="Washer\ashx\WasherSendNewsHandler.ashx" />
+    <Content Include="Washer\ashx\WasherOrderHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\UploadHandler.ashx.cs">
@@ -3887,6 +3890,9 @@
     <Compile Include="Washer\ashx\WasherHandler.ashx.cs">
       <DependentUpon>WasherHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherOrderHandler.ashx.cs">
+      <DependentUpon>WasherOrderHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\ashx\WasherSendNewsHandler.ashx.cs">
       <DependentUpon>WasherSendNewsHandler.ashx</DependentUpon>
     </Compile>
@@ -3934,6 +3940,13 @@
     </Compile>
     <Compile Include="Washer\WasherDevice.aspx.designer.cs">
       <DependentUpon>WasherDevice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherOrder.aspx.cs">
+      <DependentUpon>WasherOrder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherOrder.aspx.designer.cs">
+      <DependentUpon>WasherOrder.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherSendNews.aspx.cs">
       <DependentUpon>WasherSendNews.aspx</DependentUpon>

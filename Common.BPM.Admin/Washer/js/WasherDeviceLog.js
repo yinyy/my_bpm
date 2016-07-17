@@ -18,47 +18,48 @@ $(function () {
 
     //高级查询
     $('#a_search').click(function () {
-        var hDialog = top.jQuery.hDialog({
-            title: '查询',
-            width: 350,
-            height: 150,
-            content: searchForm,
-            iconCls: 'icon-search',
-            buttons: [
-                {
-                    text: '确定', iconCls: 'icon-ok', handler: function () {
-                        if (top.$('#uiform').form('validate')) {
-                            var filter = '{"groupOp":"AND","rules":[{"field":"Started","op":"ge","data":"' +
-                                top.$('#txt_Time_Start').datebox('getValue') + '"}, {"field":"Started","op":"le","data":"' +
-                                top.$('#txt_Time_End').datebox('getValue') + '"}],"groups":[]}';
+        search.go('list');
+        //var hDialog = top.jQuery.hDialog({
+        //    title: '查询',
+        //    width: 350,
+        //    height: 150,
+        //    content: searchForm,
+        //    iconCls: 'icon-search',
+        //    buttons: [
+        //        {
+        //            text: '确定', iconCls: 'icon-ok', handler: function () {
+        //                if (top.$('#uiform').form('validate')) {
+        //                    var filter = '{"groupOp":"AND","rules":[{"field":"Started","op":"ge","data":"' +
+        //                        top.$('#txt_Time_Start').datebox('getValue') + '"}, {"field":"Started","op":"le","data":"' +
+        //                        top.$('#txt_Time_End').datebox('getValue') + '"}],"groups":[]}';
 
-                            $('#list').datagrid('reload', { filter: filter });
-                            $('body').data('where', filter);//.replace('Time', '加水时间').replace('Name', '姓名').replace('Plate', '车牌号')
-                            //hDialog.dialog('close');
-                        }
-                        return false;
-                    }
-                },
-                {
-                    text: '清空', iconCls: 'icon-clear', handler: function () {
-                        $('#list').datagrid('reload', { filter: '' });
-                        $('body').data('where', '');
-                        //hDialog.dialog('close');
-                    }
-                },
-                {
-                    text: '关闭', iconCls: 'icon-cancel', handler: function () {
-                        hDialog.dialog('close');
-                    }
-                }
-            ]
-        });
+        //                    $('#list').datagrid('reload', { filter: filter });
+        //                    $('body').data('where', filter);//.replace('Time', '加水时间').replace('Name', '姓名').replace('Plate', '车牌号')
+        //                    //hDialog.dialog('close');
+        //                }
+        //                return false;
+        //            }
+        //        },
+        //        {
+        //            text: '清空', iconCls: 'icon-clear', handler: function () {
+        //                $('#list').datagrid('reload', { filter: '' });
+        //                $('body').data('where', '');
+        //                //hDialog.dialog('close');
+        //            }
+        //        },
+        //        {
+        //            text: '关闭', iconCls: 'icon-cancel', handler: function () {
+        //                hDialog.dialog('close');
+        //            }
+        //        }
+        //    ]
+        //});
 
-        top.$('#txt_Time_Start, #txt_Time_End').datebox({
-            required: true,
-            editable: false
-        });
-        top.$('#uiform').validate();
+        //top.$('#txt_Time_Start, #txt_Time_End').datebox({
+        //    required: true,
+        //    editable: false
+        //});
+        //top.$('#uiform').validate();
     });
 
     $('#a_export').click(function () {

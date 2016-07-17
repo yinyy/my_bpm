@@ -1,6 +1,7 @@
 ﻿using BPM.Common.Provider;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,16 @@ namespace Washer.Bll
         public int Update(WasherOrderModel order)
         {
             return WasherOrderDal.Instance.Update(order);
+        }
+
+        public string GetJson(int pageindex, int pagesize, string filter, string sort, string order)
+        {
+            return WasherOrderDal.Instance.GetJson(pageindex, pagesize, filter, sort, order);
+        }
+
+        public DataTable Export(string filter, string sort = "Time", string order = "desc")
+        {
+            return WasherOrderDal.Instance.Export(filter, sort, order);
         }
     }
 }

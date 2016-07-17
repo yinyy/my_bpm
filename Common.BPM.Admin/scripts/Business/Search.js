@@ -41,6 +41,8 @@ var search = {
                 {
                     text: '条件重置', iconCls: 'icon-lightning', handler: function () {
                         sDialog.dialog('refresh');
+                        //尹元元加入
+                        $(body).data('where', '');
                     }
                 }
             ],
@@ -64,6 +66,8 @@ var search = {
             }, submit: function () {
                 var _filter = search.buildFilterObj();
                 //alert(JSON.stringify(_filter));
+                //尹元元加入
+                $('body').data('where', JSON.stringify(_filter));
                 if (search.toSqlWhere(_filter) == '')
                     $('#' + gridid).datagrid('reload', { filter: '' });
                 else
