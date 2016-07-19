@@ -88,10 +88,17 @@
                 </div>
             </div>
             <div class="weui_cells weui_cells_access">
-                <a class="weui_cell" href="./Card2.aspx?appid=<%=Session["appid"] %>">
+                <a class="weui_cell" href="./Card2.aspx">
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>我的洗车卡</p>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </a>
+                <a class="weui_cell" href="./Records.aspx">
+                    <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>洗车记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>
@@ -99,13 +106,6 @@
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>充值记录</p>
-                    </div>
-                    <div class="weui_cell_ft"></div>
-                </a>
-                <a class="weui_cell" href="./Records.aspx?wxid=&type=2">
-                    <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p>消费记录</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>

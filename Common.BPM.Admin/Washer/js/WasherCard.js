@@ -53,7 +53,7 @@ var grid = {
                 }
             },
             {
-                title: '持卡人', field: 'BinderId', width: 100, align: 'center', formatter(v, r, i) {
+                title: '持卡人', field: 'Name', width: 100, align: 'center', formatter(v, r, i) {
                     if (v == null) {
                         return '';
                     } else {

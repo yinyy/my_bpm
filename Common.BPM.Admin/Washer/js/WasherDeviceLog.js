@@ -1,16 +1,14 @@
 ﻿var actionURL = '/Washer/ashx/WasherDeviceLogHandler.ashx';
-var searchForm = '<form id="uiform"><table class="grid">' +
-    '<tr>' +
-        '<td>开始日期：</td>' +
-        '<td><input type="text" id="txt_Time_Start" name="TimeStart" class="easyui-datebox" style="width: 186px;" /></td>' +
-    '</tr>' +
-    '<tr>' +
-        '<td>结束时间：</td>' +
-        '<td><input type="text" id="txt_Time_End" name="TimeEnd" class="easyui-datebox" style="width: 186px;" /></td>' +
-    '</tr>' +
-'</table></form>';
-
-
+//var searchForm = '<form id="uiform"><table class="grid">' +
+//    '<tr>' +
+//        '<td>开始日期：</td>' +
+//        '<td><input type="text" id="txt_Time_Start" name="TimeStart" class="easyui-datebox" style="width: 186px;" /></td>' +
+//    '</tr>' +
+//    '<tr>' +
+//        '<td>结束时间：</td>' +
+//        '<td><input type="text" id="txt_Time_End" name="TimeEnd" class="easyui-datebox" style="width: 186px;" /></td>' +
+//    '</tr>' +
+//'</table></form>';
 
 $(function () {
 
@@ -67,7 +65,7 @@ $(function () {
         var query = "json=" + JSON.stringify(o);
 
         if ($('body').data('where') != null && $('body').data('where') !='') {
-            query = query + "&filter=" + $('body').data('where');;
+            query = query + "&filter=" + $('body').data('where');
         }
 
         window.open(actionURL + '?' + query);

@@ -57,9 +57,9 @@ namespace Washer.Bll
             return WasherDeviceLogDal.Instance.GetWhere(new { KeyId = balanceId }).FirstOrDefault();
         }
 
-        public string GetJson(int pageindex, int pagesize, string filter, string sort, string order)
+        public string GetJson(int pageindex, int pagesize, string filter, string sort, string order, string fields=" * ")
         {
-            return WasherDeviceLogDal.Instance.GetJson(pageindex, pagesize, filter, sort, order);
+            return WasherDeviceLogDal.Instance.GetJson(pageindex, pagesize, filter, sort, order, fields);
         }
     }
 }

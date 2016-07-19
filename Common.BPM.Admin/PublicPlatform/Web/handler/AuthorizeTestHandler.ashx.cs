@@ -1,8 +1,4 @@
 ﻿using BPM.Common;
-using BPM.Core.Bll;
-using BPM.Core.Model;
-using Senparc.Weixin.MP.AdvancedAPIs;
-using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +23,9 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             context.Response.Flush();
             context.Response.End();
         }
-
-        public bool IsReusable
-        {
-            get
-            {
+     
+        public bool IsReusable {
+            get {
                 return false;
             }
         }

@@ -1,2 +1,21 @@
-﻿body {
+﻿p.omit_text{
+    width: 18em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+div#record_list div.weui_btn_area ul{
+    padding: 10px 0px; 
+    margin: 0px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    list-style: none;
+}
+
+div#record_list div.weui_btn_area ul li{
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
 }

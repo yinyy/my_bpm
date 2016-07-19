@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BPM.BoardListener
+namespace ListeningWatcher
 {
     static class Program
     {
@@ -12,18 +12,11 @@ namespace BPM.BoardListener
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            Form1 f = new Form1();
-            if (args.Length > 0 && args[0].Trim() == "autostart")
-            {
-                f.AutoStart = true;
-            }
-
-            Application.Run(f);
+            Application.Run(new Form1());
         }
     }
 }

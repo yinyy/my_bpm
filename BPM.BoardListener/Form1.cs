@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -43,6 +44,7 @@ namespace BPM.BoardListener
 
         private ILog log;//= LogManager.GetLogger("BPM.BoardListener.Form1");
 
+        public bool AutoStart { get; set; }
 
         public Form1()
         {
@@ -56,7 +58,7 @@ namespace BPM.BoardListener
             //    log.Debug("dfadfadfadfadsfsdf");
             //}
         }
-
+        
         private void miStart_Click(object sender, EventArgs e)
         {
             miStart.Enabled = false;
@@ -401,6 +403,8 @@ namespace BPM.BoardListener
                 clients.Clear();
             })).Start();
             #endregion
+
+            resetEvent.Set();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -408,6 +412,11 @@ namespace BPM.BoardListener
             miStop.Enabled = false;
 
             deviceList.ListViewItemSorter = new DeviceSorter();
+
+            if (AutoStart)
+            {
+                miStart_Click(null, null);
+            }
         }
 
         private void miQuit_Click(object sender, EventArgs e)
@@ -560,6 +569,11 @@ namespace BPM.BoardListener
             }
 
             return null;
+        }
+
+        private void miCurrentFolder_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", Application.StartupPath);
         }
     }
 }

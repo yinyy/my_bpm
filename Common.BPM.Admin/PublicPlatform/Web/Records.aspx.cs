@@ -13,19 +13,7 @@ namespace BPM.Admin.PublicPlatform.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            string keyId = Request.Params["id"];
-            if (!string.IsNullOrWhiteSpace(keyId))
-            {
-                WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(Convert.ToInt32(keyId));
-                if (wxconsume != null)
-                {
-                    WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinder(wxconsume);
-                    if (consume != null)
-                    {
-
-                    }
-                }
-            }
+            
         }
     }
 }

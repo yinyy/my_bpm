@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.BoardListener", "BPM.Bo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.BoardListenerLib", "BPM.BoardListenerLib\BPM.BoardListenerLib.csproj", "{67511094-DDE4-4899-B4B6-D81F3F1014E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListeningWatcher", "ListeningWatcher\ListeningWatcher.csproj", "{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,18 @@ Global
 		{67511094-DDE4-4899-B4B6-D81F3F1014E2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{67511094-DDE4-4899-B4B6-D81F3F1014E2}.Release|Win32.ActiveCfg = Release|Any CPU
 		{67511094-DDE4-4899-B4B6-D81F3F1014E2}.Release|Win32.Build.0 = Release|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Debug|Win32.Build.0 = Debug|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

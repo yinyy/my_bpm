@@ -18,11 +18,11 @@ namespace Washer.Dal
             get { return SingletonProvider<WasherDeviceLogDal>.Instance; }
         }
 
-        public string GetJson(int pageindex, int pagesize, string filterJson, string sort = "Started",
-                              string order = "desc")
+        public string GetJson(int pageindex, int pagesize, string filterJson, string sort,
+                              string order, string fields)
         {
             return base.JsonDataForEasyUIdataGrid("V_DeviceLogs", pageindex, pagesize, filterJson,
-                                                  sort, order);
+                                                  sort, order, fields);
         }
 
         public DataTable Export(string filter, string sort="KeyId", string order="desc")

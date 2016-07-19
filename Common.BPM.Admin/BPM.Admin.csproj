@@ -3438,6 +3438,8 @@
     <Content Include="PublicPlatform\Web\handler\UnifyPay.ashx" />
     <Content Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\VcodeHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\AuthorizeTestHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\RecordHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3718,11 +3720,17 @@
     <Compile Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx.cs">
       <DependentUpon>AuthorizeHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="PublicPlatform\Web\handler\AuthorizeTestHandler.ashx.cs">
+      <DependentUpon>AuthorizeTestHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="PublicPlatform\Web\handler\CardHandler.ashx.cs">
       <DependentUpon>CardHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\ProfileHandler.ashx.cs">
       <DependentUpon>ProfileHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\RecordHandler.ashx.cs">
+      <DependentUpon>RecordHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\UnifyPay.ashx.cs">
       <DependentUpon>UnifyPay.ashx</DependentUpon>
