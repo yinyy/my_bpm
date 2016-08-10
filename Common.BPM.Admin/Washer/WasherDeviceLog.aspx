@@ -16,7 +16,7 @@
     <div id="toolbar"><%= base.BuildToolbar()%></div>
 
     <!-- datagrid 列表 -->
-    <table id="list" ></table>  
+    <table id="list"></table>  
 
     <!-- 引入多功能查询js -->
     <script src="../../scripts/Business/Search.js?t=<%=DateTime.Now.Ticks %>"></script>

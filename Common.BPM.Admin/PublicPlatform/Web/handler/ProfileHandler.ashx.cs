@@ -2,6 +2,7 @@
 using BPM.Core;
 using BPM.Core.Bll;
 using BPM.Core.Model;
+using Newtonsoft.Json;
 using Omu.ValueInjecter;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Entities;
@@ -56,7 +57,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     WasherVcodeBll.Instance.Update(code);
 
                     consume = WasherConsumeBll.Instance.Get(dept.KeyId, telphone);
-                    #region 不存在用户信息的时候，直接绑定
+                    #region 不存在用户信息的时候，直接绑定，并分配优惠券
                     if (consume == null)
                     {
                         consume = new WasherConsumeModel();
@@ -72,7 +73,33 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
                         if ((consume.KeyId = WasherConsumeBll.Instance.Add(consume)) > 0)
                         {
-                            context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                            WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+                            if (setting.Coupon.Coins > 0)
+                            {
+                                WasherCardModel card = new WasherCardModel();
+                                card.Binded = DateTime.Now;
+                                card.BinderId = consume.KeyId;
+                                card.CardNo = WasherCardBll.GetNextCouponCardNo(dept.KeyId);
+                                card.Coins = setting.Coupon.Coins;
+                                card.DepartmentId = dept.KeyId;
+                                card.Kind = "Coupon";
+                                card.Memo = "";
+                                card.Password = "123456";
+                                card.ValidateFrom = DateTime.Now;
+                                card.ValidateEnd = DateTime.Now.AddDays(setting.Coupon.Time);
+
+                                if (WasherCardBll.Instance.Add(card) > 0)
+                                {
+                                    context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                                }
+                                else
+                                {
+                                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message="绑定用户成功，但分配优惠卡错误。" }));
+                                }
+                            }
+                            else {
+                                context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                            }
                         }
                         else
                         {

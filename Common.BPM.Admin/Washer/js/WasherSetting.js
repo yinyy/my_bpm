@@ -115,6 +115,9 @@ $(function () {
             }, Coin: {
                 Exchange: parseInt($('#txt_Exchange').val()),
                 Recharge: [parseInt($('#txt_Coin50').val()), parseInt($('#txt_Coin100').val()), parseInt($('#txt_Coin200').val())]
+            }, Coupon: {
+                Coins: parseInt($('#txt_Coupon').val()),
+                Time: parseInt($('#txt_CouponTime').val())
             }, Buy: [
                 { Card: 50, Price: parseFloat($('#txt_Card50').val()), Day: parseInt($('#txt_Day50').val()), Product: '50元洗车卡', Score: parseInt($('#txt_Score50').val()) },
                 { Card: 100, Price: parseFloat($('#txt_Card100').val()), Day: parseInt($('#txt_Day100').val()), Product: '100元洗车卡', Score: parseInt($('#txt_Score100').val()) },
@@ -157,6 +160,7 @@ $(function () {
 
     if (json.Setting != null) {
         var setting = eval("(" + json.Setting + ")");
+
         $('#txt_WashCar').val(setting.Point.WashCar);
         $('#txt_Subscribe').val(setting.Point.Subscribe);
 
@@ -178,6 +182,9 @@ $(function () {
         $('#txt_Coin50, #txt_Coin100, #txt_Coin200').each(function (idx, obj) {
             $(this).val(setting.Coin.Recharge[idx]);
         });
+
+        $('#txt_Coupon').val(setting.Coupon.Coins);
+        $('#txt_CouponTime').val(setting.Coupon.Time);
 
         $('#txt_Card50, #txt_Card100, #txt_Card200, #txt_Card300').each(function (idx, obj) {
             $(this).val(setting.Buy[idx].Price);

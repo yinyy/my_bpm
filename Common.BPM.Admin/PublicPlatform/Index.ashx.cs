@@ -7,12 +7,6 @@ using Senparc.Weixin.MP.Entities.Request;
 using System;
 using System.IO;
 using System.Web;
-using System.Xml.Serialization;
-using Washer.Bll;
-using Washer.Model;
-using Washer.Processor;
-using WeChat.Model;
-using WeChat.Utils;
 
 namespace BPM.Admin.PublicPlatform
 {

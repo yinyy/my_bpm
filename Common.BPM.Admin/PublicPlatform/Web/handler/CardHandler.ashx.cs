@@ -90,24 +90,44 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             }
             else if (action == "query")
             {
-                int value = Convert.ToInt32(context.Request.Params["value"]);
-                int remain = WasherCardBll.Instance.GetCardCountByValue(dept.KeyId, value * 100);
-                float price = 0;
-                string product = "";
-
-                JObject jobj = JObject.Parse(dept.Setting);
-                JArray array = jobj.GetValue("Buy") as JArray;
-                foreach (JObject o in array)
+                if (string.IsNullOrEmpty(context.Request.Params["value"]))
                 {
-                    if (Convert.ToInt32(o.GetValue("Card")) == value)
+                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+                    
+                    JArray array = new JArray();
+                    foreach(WasherDepartmentSettingBuy b in setting.Buy)
                     {
-                        price = Convert.ToSingle(o.GetValue("Price"));
-                        product = o.GetValue("Product").ToString();
+                        JObject jobj = new JObject();
+                        jobj.Add("Title", b.Card);
+                        jobj.Add("Price", b.Price);
+                        jobj.Add("Remain", WasherCardBll.Instance.GetCardCountByValue(dept.KeyId, b.Card * 100));
+                        jobj.Add("Product", b.Product);
 
-                        break;
+                        array.Add(jobj);
                     }
+
+                    context.Response.Write(JSONhelper.ToJson(new { Success = true, Data = array }));
                 }
-                context.Response.Write(JSONhelper.ToJson(new { Success = true, Remain = remain, Price = price, Product = product }));
+                else {
+                    int value = Convert.ToInt32(context.Request.Params["value"]);
+                    int remain = WasherCardBll.Instance.GetCardCountByValue(dept.KeyId, value * 100);
+                    float price = 0;
+                    string product = "";
+
+                    JObject jobj = JObject.Parse(dept.Setting);
+                    JArray array = jobj.GetValue("Buy") as JArray;
+                    foreach (JObject o in array)
+                    {
+                        if (Convert.ToInt32(o.GetValue("Card")) == value)
+                        {
+                            price = Convert.ToSingle(o.GetValue("Price"));
+                            product = o.GetValue("Product").ToString();
+
+                            break;
+                        }
+                    }
+                    context.Response.Write(JSONhelper.ToJson(new { Success = true, Remain = remain, Price = price, Product = product }));
+                }
             }
             else if (action == "payBind")
             {
@@ -122,17 +142,19 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                         if (Convert.ToInt32(o.GetValue("Card")) == value)
                         {
                             int score = Convert.ToInt32(o.GetValue("Score"));
-
-                            WasherRewardModel reward = new WasherRewardModel()
+                            //积分大于0时再增加积分
+                            if (score > 0)
                             {
-                                ConsumeId = consume.KeyId,
-                                Kind = WasherRewardBll.Kind.BuyCard,
-                                Memo = "",
-                                Points = score,
-                                Time = DateTime.Now
-                            };
-                            WasherRewardBll.Instance.Add(reward);
-
+                                WasherRewardModel reward = new WasherRewardModel()
+                                {
+                                    ConsumeId = consume.KeyId,
+                                    Kind = WasherRewardBll.Kind.BuyCard,
+                                    Memo = "",
+                                    Points = score,
+                                    Time = DateTime.Now
+                                };
+                                WasherRewardBll.Instance.Add(reward);
+                            }
                             break;
                         }
                     }

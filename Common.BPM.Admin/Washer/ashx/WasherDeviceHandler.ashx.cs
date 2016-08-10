@@ -202,7 +202,7 @@ namespace BPM.Admin.Washer.ashx
                     else
                     {
                         filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", user.DepartmentId, rpm.Filter);
-                        context.Response.Write(WasherDeviceBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
+                        context.Response.Write(WasherDeviceBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
                     }
                     break;
             }

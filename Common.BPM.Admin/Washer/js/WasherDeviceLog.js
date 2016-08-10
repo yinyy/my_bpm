@@ -103,6 +103,10 @@ var grid = {
             },
             {
                 title: '洗车时间', field: 'Started', width: 250, align: 'center', formatter(v, r, i) {
+                    if (v == null) {
+                        return '';
+                    }
+
                     var str = r.Started.substring(0, 19);
                     if (r.Ended != null) {
                         str += ' - ' + r.Ended.substring(11, 19);
@@ -114,7 +118,11 @@ var grid = {
 		    { title: '洗车机序列号', field: 'SerialNumber', width: 150, align: 'center' },
             {
                 title: '洗车地点', field: 'Address', width: 220, align: 'center', formatter: function (v, r, i) {
-                    if (r.Province == '') {
+                    if (v == null) {
+                        return '';
+                    }
+
+                    if (v== '') {
                         return '未安装';
                     } else {
                         return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
@@ -139,7 +147,24 @@ var grid = {
             pageSize: PAGESIZE,
             pageList: [20, 40, 50],
             sortName: 'KeyId',
-            sortOrder: 'desc'
+            sortOrder: 'desc',
+            /*showFooter: true,*/
+            onLoadSuccess: function () {
+                var rows = $('#list').datagrid('getRows');
+                var amount = 0.0;
+
+                for (var i = 0; i < rows.length; i++) {
+                    amount += rows[i].PayCoins;
+                }
+                
+                var rowIndex = rows.length;
+
+                $('#list').datagrid('appendRow', {
+                    ConsumeName: '<b>消费合计</b>',
+                    PayCoins: amount
+                }); 
+                $('#list').datagrid('mergeCells', {index: rowIndex, field: 'ConsumeName', rowspan: 1, colspan: 4});
+            }
         });
     },
     getSelectedRow: function () {

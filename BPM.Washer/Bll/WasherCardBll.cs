@@ -28,7 +28,7 @@ namespace Washer.Bll
 
         public int GetCardCountByValue(int departmentId, int value)
         {
-            return WasherCardDal.Instance.GetWhere(new { DepartmentId = departmentId, Coins = value, Sale = true }).Where(a => a.BinderId == null && a.ValidateEnd.CompareTo(DateTime.Now) > 0).Count();
+            return WasherCardDal.Instance.GetWhere(new { DepartmentId = departmentId, Coins = value, Kind = "Sale"}).Where(a => a.BinderId == null && a.ValidateEnd.CompareTo(DateTime.Now) > 0).Count();
         }
 
         public IEnumerable<WasherCardModel> GetValidCards(int consumeId)
@@ -128,6 +128,11 @@ namespace Washer.Bll
             }
 
             return false;
+        }
+
+        public static string GetNextCouponCardNo(int deptId)
+        {
+            return string.Format("Coupon_{0}_{1:x}", deptId, DateTime.Now.Ticks);
         }
     }
 }

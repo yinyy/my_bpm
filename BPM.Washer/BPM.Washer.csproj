@@ -68,6 +68,7 @@
     <Compile Include="Model\WasherCardLogModel.cs" />
     <Compile Include="Model\WasherCardModel.cs" />
     <Compile Include="Model\WasherConsumeModel.cs" />
+    <Compile Include="Model\WasherDepartmentSetting.cs" />
     <Compile Include="Model\WasherDeviceLogModel.cs" />
     <Compile Include="Model\WasherDeviceModel.cs" />
     <Compile Include="Model\WasherOrderModel.cs" />

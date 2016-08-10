@@ -2857,6 +2857,7 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="PublicPlatform\Web\Authorize.html" />
+    <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="PublicPlatform\Web\Card2.aspx" />
@@ -3416,6 +3417,7 @@
     <Content Include="Washer\js\WasherConsume.js" />
     <Content Include="Washer\js\WasherDevice.js" />
     <Content Include="Washer\js\WasherSetting.js" />
+    <Content Include="Washer\menu.txt" />
     <Content Include="Washer\WasherCardCost.aspx" />
     <Content Include="Washer\WasherCardIncome.aspx" />
     <Content Include="Washer\WasherDeviceLog.aspx" />
@@ -3744,6 +3746,13 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\OrderDetail.aspx.designer.cs">
       <DependentUpon>OrderDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Outlets.aspx.cs">
+      <DependentUpon>Outlets.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Outlets.aspx.designer.cs">
+      <DependentUpon>Outlets.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\PayWash.aspx.cs">
       <DependentUpon>PayWash.aspx</DependentUpon>

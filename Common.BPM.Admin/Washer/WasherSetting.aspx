@@ -88,6 +88,17 @@
                 </li>
            </ul>
         </div>
+        <h1>优惠券</h1>
+        <div class="c">
+            <ul>
+                <li>
+                    <label>注册个人信息：</label>
+                    <ul>
+                        <li><label>送&nbsp;&nbsp;</label><input type="text" id="txt_Coupon" name="Coupon"/><label>&nbsp;&nbsp;洗车币的优惠价，有效期&nbsp;&nbsp;</label><input type="text" id="txt_CouponTime" name="CouponTime" />&nbsp;&nbsp;天。</li>
+                    </ul>
+                </li>
+           </ul>
+        </div>
         <h1>积分</h1>
         <div class="c">
             <ul>                
@@ -98,7 +109,7 @@
                     </ul>
                 </li>
                 <li>
-                    <label>首次关注：</label>
+                    <label>注册个人信息：</label>
                     <ul>
                         <li><label>&nbsp;&nbsp;</label><input type="text" id="txt_Subscribe" name="Subscribe"/><label>&nbsp;&nbsp;积分</label></li>
                     </ul>

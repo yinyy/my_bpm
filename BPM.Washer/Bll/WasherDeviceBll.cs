@@ -34,6 +34,11 @@ namespace Washer.Bll
             return WasherDeviceDal.Instance.GetAll();
         }
 
+        public List<WasherDeviceModel> GetByDepartment(int deptId)
+        {
+            return WasherDeviceDal.Instance.GetWhere(new { DepartmentId= deptId}).ToList();
+        }
+
         public string GetJson(int pageindex, int pagesize, string filterJson, string sort = "Keyid", string order = "asc")
         {
             return WasherDeviceDal.Instance.GetJson(pageindex, pagesize, filterJson, sort, order);

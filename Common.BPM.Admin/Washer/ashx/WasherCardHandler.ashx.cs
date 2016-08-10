@@ -35,6 +35,12 @@ namespace BPM.Admin.Washer.ashx
                 rpm.CurrentContext = context;
             }
 
+            //Kind
+            //Inner:内部发行卡
+            //Sale:外部售卖卡
+            //Coupon:优惠卡
+            //Convertor:兑换卡
+
             WasherCardModel model;
             string filter;
             switch (rpm.Action)
@@ -45,9 +51,8 @@ namespace BPM.Admin.Washer.ashx
                     if (c2 == null)
                     {
                         model.DepartmentId = departmentId;
-                        model.Kind = "temporary";
                         model.Memo = "";
-                        model.Coins *= 100;
+                        //model.Coins *= 100;
 
                         context.Response.Write(WasherCardBll.Instance.Add(model));
                     }
@@ -59,6 +64,15 @@ namespace BPM.Admin.Washer.ashx
                 case "del":
                     context.Response.Write(WasherCardBll.Instance.Delete(rpm.KeyId));
                     break;
+                case "edit":
+                    model = WasherCardBll.Instance.Get(rpm.KeyId);
+                    model.ValidateFrom = rpm.Entity.ValidateFrom;
+                    model.ValidateEnd = rpm.Entity.ValidateEnd;
+                    model.Kind = rpm.Entity.Kind;
+                    model.Coins = rpm.Entity.Coins;
+
+                    context.Response.Write(WasherCardBll.Instance.Update(model));
+                    break;
                 case "consume":
                     filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"CardId\",\"op\":\"eq\",\"data\":\"{0}\"}}, {{\"field\":\"Coins\",\"op\":\"lt\",\"data\":\"0\"}}],\"groups\":[]}}", rpm.KeyId);
                     context.Response.Write(WasherCardLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
@@ -67,6 +81,21 @@ namespace BPM.Admin.Washer.ashx
                     filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"CardId\",\"op\":\"eq\",\"data\":\"{0}\"}}, {{\"field\":\"Coins\",\"op\":\"gt\",\"data\":\"0\"}}],\"groups\":[]}}", rpm.KeyId);
                     context.Response.Write(WasherCardLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
                     break;
+                //case "coupon":
+                //    model = new WasherCardModel();
+                //    model.Binded = DateTime.Now;
+                //    model.BinderId = 6;
+                //    model.CardNo = string.Format("Coupon_{0}_{1:x}", 69, DateTime.Now.Ticks);
+                //    model.Coins = 10000;
+                //    model.DepartmentId = 69;
+                //    model.Kind = "Coupon";
+                //    model.Memo = "";
+                //    model.Password = "123456";
+                //    model.ValidateFrom = DateTime.Now;
+                //    model.ValidateEnd = DateTime.Now.AddYears(1);
+
+                //    context.Response.Write(WasherCardBll.Instance.Add(model));
+                //    break;
                 default:
                     if (user.IsAdmin)
                     {

@@ -12,8 +12,9 @@ $(function () {
     autoResize({ dataGrid: '#list', gridType: 'datagrid', callback: grid.bind, height: 0 });
 
     $('#a_add').click(CRUD.add);
-    $('#a_consume').click(CRUD.consume);
+    $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
+    $('#a_test').click(CRUD.test);
 
     //高级查询
     $('#a_search').click(function () {
@@ -43,6 +44,21 @@ var grid = {
                 title: '密码', field: 'Password', width: 80, align: 'center'
             },
             {
+                title: '卡类型', field: 'Kind', width: 100, align: 'center', formatter(v, r, i) {
+                    if (v == 'Inner') {
+                        return '内部发行卡';
+                    } else if (v == 'Sale') {
+                        return '售卖卡';
+                    } else if (v == 'Coupon') {
+                        return '优惠卡';
+                    } else if (v == 'Convertor') {
+                        return '兑换卡';
+                    } else {
+                        return '未知类型';
+                    }
+                }
+            },
+            {
                 title: '有效期', field: 'ValidateFrom', width: 200, align: 'center', formatter(v, r, i) {
                     return r.ValidateFrom.substring(0, 10) + ' 至 ' + r.ValidateEnd.substring(0, 10);
                 }
@@ -61,12 +77,7 @@ var grid = {
                     }
                 }
             },
-            { title: '状态', field: 'Status', width: 80, align: 'center' },
-            {
-                title: '用于销售', field: 'Sale', width: 80, align: 'center', formatter(v, r, i) {
-                    return v == true ? '√' : '';
-                }
-            }
+            { title: '状态', field: 'Status', width: 80, align: 'center' }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
@@ -97,7 +108,7 @@ function createParam(action, keyid) {
 var CRUD = {
     add: function () {
         var hDialog = top.jQuery.hDialog({
-            title: '添加', width: 450, height: 287, href: formURL, iconCls: 'icon-add', submit: function () {
+            title: '添加', width: 450, height: 290, href: formURL, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
@@ -143,6 +154,56 @@ var CRUD = {
             }
         } else {
             msg.warning('请选择记录。');
+        }
+    },
+    edit: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            var hDialog = top.jQuery.hDialog({
+                title: '编辑', width: 450, height: 219, href: formURL, iconCls: 'icon-add', submit: function () {
+                    if (top.$('#uiform').form('validate')) {
+                        var query = createParam('edit', row.KeyId);
+                        jQuery.ajaxjson(actionURL, query, function (d) {
+                            if (parseInt(d) > 0) {
+                                msg.ok('更新成功！');
+                                hDialog.dialog('close');
+                                grid.reload();
+                            } else if (parseInt(d) == -1) {
+                                msg.warning('更新失败！');
+                            } else {
+                                MessageOrRedirect(d);
+                            }
+                        });
+                    }
+                    return false;
+                }, onLoad: function () {
+                    top.$('#txt_CardNo').val(row.CardNo);
+                    top.$('#txt_CardNo').parent().parent().hide();
+
+                    top.$('#txt_Password').val(row.Password);
+                    top.$('#txt_Password').parent().parent().hide();
+
+                    top.$('#txt_Coins').numberbox('setValue', row.Coins);
+                    //top.$('#txt_Coins').parent().parent().hide();
+
+                    top.$('#txt_ValidateFrom').datebox({
+                        required: true,
+                        editable: false,
+                        value: row.ValidateFrom.substring(0, 10)
+                    });
+                    top.$('#txt_ValidateEnd').datebox({
+                        required: true,
+                        editable: false,
+                        value: row.ValidateEnd.substring(0, 10)
+                    });
+
+                    top.$('#txt_Kind').val(row.Kind);
+                }
+            });
+
+            top.$('#uiform').validate();
+        } else {
+            msg.warning('请选择洗车卡。');
         }
     },
     consume: function () {
@@ -227,5 +288,17 @@ var CRUD = {
         } else {
             msg.warning('请选择设备。');
         }
+    },
+    test: function () {
+        var query = createParam('coupon', '0');
+        jQuery.ajaxjson(actionURL, query, function (d) {
+            if (parseInt(d) > 0) {
+                msg.ok('添加成功！');
+                grid.reload();
+            } else {
+                msg.warning('添加失败！');
+                MessageOrRedirect(d);
+            }
+        });
     }
 };

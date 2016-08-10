@@ -96,17 +96,7 @@
             </div>
             <div class="card_kind_area">
                 <ul class="card_kind_list">
-                    <li>50元</li>
-                    <li>100元</li>
-                    <li>200元</li>
-                    <li>300元</li>
                 </ul>
-            </div>
-            <div>
-               <ul>
-                   <li><span>剩余数量：</span><span id="remain_cards">0</span> 张</li>
-                   <li><span>优惠价格：</span>￥<span id="sale_price">0.00</span></li>
-               </ul>                
             </div>
             <div class="weui_btn_area">
                 <a class="weui_btn weui_btn_primary" href="javascript:">购买</a>

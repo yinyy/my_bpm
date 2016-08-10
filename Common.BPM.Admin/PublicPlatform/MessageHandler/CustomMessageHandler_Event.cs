@@ -143,13 +143,13 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                             if (coins >= 500)
                             {
                                 message.Content = string.Format(
-@"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/PayWash.aspx?appid={0}&board={1}&card=true'>这里</a>。
+@"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
 
-微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/PayWash.aspx?appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
+微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
                             }
                             else
                             {
-                                message.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/PayWash.aspx?appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
+                                message.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
                             }
                         }
                     }
@@ -218,22 +218,25 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 wxconsume.KeyId = WasherWeChatConsumeBll.Instance.Add(wxconsume);
                 #endregion
 
-                //#region 获取微信用户详细信息
-                //WeixinUserInfoResult result = CommonApi.GetUserInfo(dept.Appid, WeixinOpenId);
-                //if(result.errcode == Senparc.Weixin.ReturnCode.请求成功)
-                //{
-                //    wxconsume.NickName = result.nickname;
-                //    wxconsume.Gender = result.sex == 1 ? "男" : result.sex == 2 ? "女" : "未知";
-                //    wxconsume.Country = result.country;
-                //    wxconsume.Province = result.province;
-                //    wxconsume.City = result.city;
-                //    wxconsume.UnionId = result.unionid;
-                //}
-                //#endregion
-                //#region 更新积分信息
-                //var setting = new { Subscribe = 0, Recharge = new int[] { 0, 0, 0 }, PointKind = "", Level = new int[] { 0, 0, 0, 0, 0 } };//{"Subscribe":1,"Recharge":[2,3,4],"PointKind":"Percent","Level":[5,6,7,8,9]}
-                //setting = JsonConvert.DeserializeAnonymousType(dept.Setting, setting);
+                #region 获取微信用户详细信息
+                WeixinUserInfoResult result = CommonApi.GetUserInfo(dept.Appid, WeixinOpenId);
+                if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
+                {
+                    wxconsume.NickName = result.nickname;
+                    wxconsume.Gender = result.sex == 1 ? "男" : result.sex == 2 ? "女" : "未知";
+                    wxconsume.Country = result.country;
+                    wxconsume.Province = result.province;
+                    wxconsume.City = result.city;
+                    wxconsume.UnionId = result.unionid;
+                }
+                #endregion
 
+                //获取相关设置信息
+                WasherDepartmentSetting setting = WasherDepartmentSetting.Instance;
+                setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+
+
+                //#region 更新积分信息
                 ////先更新积分奖励记录
                 //WasherRewardModel reward = new WasherRewardModel();
                 //reward.ConsumeId = consume.KeyId;
@@ -251,7 +254,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 //#endregion
                 //#endregion
 
-                responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n使用前请先绑定个人信息，享受会员权利。",dept.Brand);
+                responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n使用前请先绑定个人信息，享受会员权利。", dept.Brand);
             }
             else
             {

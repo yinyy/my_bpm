@@ -59,7 +59,7 @@ var List = {
                                     <img class="weui_media_appmsg_thumb" src="./images/icon_card.png" alt="">\
                                 </div>\
                                 <div class="weui_media_bd">\
-                                    <h4 class="weui_media_title">' + obj.No + '</h4>\
+                                    <h4 class="weui_media_title">' + (obj.No.indexOf('Coupon')==0?'优惠券':obj.No) + '</h4>\
                                     <p class="weui_media_desc">洗车币：'+ (obj.Coins / 100.0).toFixed(2) + '<br/>有效期：' + formatDate(obj.ValidateFrom) + ' - ' + formatDate(obj.ValidateEnd) + '</p>\
                                 </div>\
                             </a>';
@@ -76,8 +76,62 @@ var List = {
 }
 
 var Buy = {
+    selected: null,
     init: function () {
-        this.selected = {index: -1, remain: 0, price: 0.00, product: '', value:0};
+        $.ajax({url: actionUrl, type: 'GET', async: 'false', data: {action: 'query'}, dataType: 'json', success: function(d){
+            if (d.Success == true) {
+                $(d.Data).each(function (i, v) {
+                    var o = $('<li><p class="title">' + v.Title + '元</p><p class="price">售价' + v.Price.toFixed(2) + '元</p><p class="remain">剩余' + v.Remain + '张</p></li>');
+                    o.attr('Product', v.Product);
+                    o.attr('Remain', v.Remain);
+                    o.attr('Price', v.Price);
+                    $('div#shopping_region > div.card_kind_area > ul.card_kind_list').append(o);
+
+                    //购买洗车卡：不同金额
+                    o.click(function () {
+                        $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                        Buy.selected = $(this);
+
+                        if (parseInt($(this).attr('Remain')) <= 0) {
+                            Buy.buyButton.disabled();
+                        } else {
+                            Buy.buyButton.enabled();
+                        }
+
+                        ////检查该面值洗车卡数量和实际价格
+                        //Buy.selected.index = $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li').index($(this));
+                        //Buy.selected.value = v.title; //Buy.selected.index == 0 ? 50 : Buy.selected.index == 1 ? 100 : Buy.selected.index == 2 ? 200 : Buy.selected.index == 3 ? 300 : 0;
+                        //$.getJSON(actionUrl, { action: 'query', value: Buy.selected.value }, function (json) {
+                        //    if (json.Success == true) {
+                        //        Buy.selected.remain = json.Remain;
+                        //        Buy.selected.price = json.Price.toFixed(2);
+                        //        Buy.selected.product = json.Product;
+
+                        //        Buy.display();
+
+                        //        if (json.Remain > 0) {
+                        //            Buy.buyButton.enabled();
+                        //        } else {
+                        //            Buy.buyButton.disabled();
+                        //        }
+                        //    } else {
+                        //        Buy.selected.index = -1;
+                        //        Buy.selected.remain = 0;
+                        //        Buy.selected.price = 0.00;
+                        //        Buy.selected.product = '';
+
+                        //        Buy.display();
+
+                        //        alert('发生错误。');
+                        //    }
+                        //});
+                    });
+                });
+            }
+        }});
+       
+        //this.selected = {index: -1, remain: 0, price: 0.00, product: '', value:0};
         this.buyButton = {
             enabled: function () {
                 $('div#shopping_region > div.weui_btn_area > a:first').removeClass('weui_btn_disabled');
@@ -87,102 +141,60 @@ var Buy = {
             }
         };
 
-        //购买洗车卡：不同金额
-        $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li').click(function () {
-            $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
-            $(this).addClass('selected');
-            
-            //检查该面值洗车卡数量和实际价格
-            Buy.selected.index = $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li').index($(this));
-            Buy.selected.value = Buy.selected.index == 0 ? 50 : Buy.selected.index == 1 ? 100 : Buy.selected.index == 2 ? 200 : Buy.selected.index == 3 ? 300 : 0;
-            $.getJSON(actionUrl, { action: 'query', value: Buy.selected.value }, function (json) {
-                if (json.Success == true) {
-                    Buy.selected.remain = json.Remain;
-                    Buy.selected.price = json.Price.toFixed(2);
-                    Buy.selected.product = json.Product;
-
-                    Buy.display();
-
-                    if (json.Remain > 0) {
-                        Buy.buyButton.enabled();
-                    } else {
-                        Buy.buyButton.disabled();
-                    }
-                } else {
-                    Buy.selected.index = -1;
-                    Buy.selected.remain = 0;
-                    Buy.selected.price = 0.00;
-                    Buy.selected.product = '';
-
-                    Buy.display();
-
-                    alert('发生错误。');
-                }
-            });
-        });
-
         //购买洗车卡：购买和取消
-        $('div#shopping_region > div.weui_btn_area > a').each(function (idx, obj) {
-            if (idx == 0) {
-                $(this).click(function () {
-                    if (Buy.selected.remain > 0) {
-                        Buy.buyButton.disabled();
-                        
-                        Pay.prepay({ body: '购买洗车卡', pay: parseInt(parseFloat(Buy.selected.price) * 100), attach: Buy.selected.product },
-                           function () {
-                               Buy.buyButton.enabled();
+        $('div#shopping_region > div.weui_btn_area > a:first').click(function () {
+            if (parseInt(Buy.selected.attr('Remain')) > 0) {
+                Buy.buyButton.disabled();
 
-                               alert('支付成功。');
+                Pay.prepay({ body: '购买洗车卡', pay: parseInt(parseFloat(Buy.selected.attr('Price')) * 100), attach: Buy.selected.attr('Product') },
+                   function () {
+                       Buy.buyButton.enabled();
 
-                               $.post(actionUrl, { action: 'payBind', value: Buy.selected.value}, function (res) {
-                                   if (res.Success == true) {
-                                       List.show();
-                                   }
-                                   else {
-                                       alert('绑定失败。');
-                                   }
-                               }, 'json');
-                           },
-                           function () {
-                               Buy.buyButton.enabled();
+                       alert('支付成功。');
 
-                               alert('支付失败。');
-                           },
-                           function () {
-                               Buy.buyButton.enabled();
-                           });
-                    } 
-                });
-            } else if (idx == 1) {
-                $(this).click(function () {
-                    List.show();
-                });
+                       $.post(actionUrl, { action: 'payBind', value: Buy.selected.attr('Price') }, function (res) {
+                           if (res.Success == true) {
+                               List.show();
+                           }
+                           else {
+                               alert('绑定失败。');
+                           }
+                       }, 'json');
+                   },
+                   function () {
+                       Buy.buyButton.enabled();
+
+                       alert('支付失败。');
+                   },
+                   function () {
+                       Buy.buyButton.enabled();
+                   });
             }
         });
+        $('div#shopping_region > div.weui_btn_area > a:last').click(function () {
+            $(this).click(function () {
+                List.show();
+            });
+        });
     },
 
-    display: function(){
-        $('span#remain_cards').text(Buy.selected.remain);
-        $('span#sale_price').text(Buy.selected.price);
-    },
+    //clear: function(){
+    //    $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
 
-    clear: function(){
-        $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
+    //    Buy.selected.index = -1;
+    //    Buy.selected.remain = 0;
+    //    Buy.selected.price = 0.00;
+    //    Buy.selected.product = '';
 
-        Buy.selected.index = -1;
-        Buy.selected.remain = 0;
-        Buy.selected.price = 0.00;
-        Buy.selected.product = '';
-
-        this.display();
-    },
+    //    //this.display();
+    //},
 
     show: function () {
         hideAll();
 
         $('div#shopping_region > div.weui_btn_area > a').removeClass('weui_btn_disabled');
 
-        this.clear();
+        //this.clear();
         $('div#shopping_region').show();
         this.buyButton.disabled();
     }
