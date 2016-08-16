@@ -1,4 +1,6 @@
 ﻿using BPM.Common;
+using BPM.Core.Bll;
+using BPM.Core.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
+using System.Web.SessionState;
 using Washer.Bll;
+using Washer.Extension;
 using Washer.Model;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
@@ -15,7 +19,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
     /// <summary>
     /// VcodeHandler 的摘要说明
     /// </summary>
-    public class VcodeHandler : IHttpHandler
+    public class VcodeHandler : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
@@ -34,10 +38,14 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 }
                 else
                 {
-                    string cid = "HxaWuiiIhLLu";
-                    string uid = "crmUAROrBnL7";
-                    string pas = "5maafaja";
-                    string url = "http://api.weimi.cc/2/sms/send.html";
+                    string appid = context.Session["appid"].ToString();
+                    Department dept = DepartmentBll.Instance.GetByAppid(appid);
+                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+
+                    string cid = setting.Sms.Cid;
+                    string uid = setting.Sms.Uid;
+                    string pas = setting.Sms.Pas;
+                    string url = setting.Sms.Url;
                     byte[] byteArray = Encoding.UTF8.GetBytes("mob=" + telphone + "&cid=" + cid + "&uid=" + uid + "&pas=" + pas + "&p1=" + vcode.Vcode + "&type=json");
 
                     HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(new Uri(url));

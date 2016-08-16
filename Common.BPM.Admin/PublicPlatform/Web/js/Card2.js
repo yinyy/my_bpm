@@ -80,12 +80,20 @@ var Buy = {
     init: function () {
         $.ajax({url: actionUrl, type: 'GET', async: 'false', data: {action: 'query'}, dataType: 'json', success: function(d){
             if (d.Success == true) {
+                var ul;
+
                 $(d.Data).each(function (i, v) {
-                    var o = $('<li><p class="title">' + v.Title + '元</p><p class="price">售价' + v.Price.toFixed(2) + '元</p><p class="remain">剩余' + v.Remain + '张</p></li>');
+                    if (i % 3 == 0) {
+                        ul = $('<ul class="card_kind_list"></ul>');
+                        $('div#shopping_region > div.card_kind_area').append(ul);
+                    }
+
+                    var o = $('<li><p class="value">' + v.Value + '元</p><p class="price">售价' + v.Price.toFixed(2) + '元</p><p class="remain">剩余' + v.Remain + '张</p></li>');
                     o.attr('Product', v.Product);
                     o.attr('Remain', v.Remain);
                     o.attr('Price', v.Price);
-                    $('div#shopping_region > div.card_kind_area > ul.card_kind_list').append(o);
+                    o.attr('Value', v.Value);
+                    ul.append(o);
 
                     //购买洗车卡：不同金额
                     o.click(function () {
@@ -152,7 +160,7 @@ var Buy = {
 
                        alert('支付成功。');
 
-                       $.post(actionUrl, { action: 'payBind', value: Buy.selected.attr('Price') }, function (res) {
+                       $.post(actionUrl, { action: 'payBind', value: Buy.selected.attr('Value') }, function (res) {
                            if (res.Success == true) {
                                List.show();
                            }

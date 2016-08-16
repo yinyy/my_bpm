@@ -40,7 +40,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
             string filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"ConsumeId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[]}}", consume.KeyId);
             string fields = " Started, Kind, convert(decimal(5,2), PayCoins/100.0) as PayCoins, Address ";
-            context.Response.Write(WasherDeviceLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order, fields));
+            context.Response.Write(WasherDeviceLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, "Started", "Desc", fields));
 
             context.Response.Flush();
             context.Response.End();

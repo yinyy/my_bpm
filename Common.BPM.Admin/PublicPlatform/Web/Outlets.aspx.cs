@@ -26,7 +26,7 @@ namespace BPM.Admin.PublicPlatform.Web
                     Department dept = DepartmentBll.Instance.GetByAppid(appid);
                     if (dept != null)
                     {
-                         devices = WasherDeviceBll.Instance.GetByDepartment(dept.KeyId);
+                        devices = WasherDeviceBll.Instance.GetByDepartment(dept.KeyId);
                         devices = devices.Where(d => !string.IsNullOrWhiteSpace(d.Address) && !string.IsNullOrWhiteSpace(d.IpAddress) && d.UpdateTime != null).ToList();
                     }
                 }

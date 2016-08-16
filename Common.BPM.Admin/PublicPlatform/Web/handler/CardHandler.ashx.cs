@@ -98,9 +98,9 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     foreach(WasherDepartmentSettingBuy b in setting.Buy)
                     {
                         JObject jobj = new JObject();
-                        jobj.Add("Title", b.Card);
+                        jobj.Add("Value", b.Value);
                         jobj.Add("Price", b.Price);
-                        jobj.Add("Remain", WasherCardBll.Instance.GetCardCountByValue(dept.KeyId, b.Card * 100));
+                        jobj.Add("Remain", WasherCardBll.Instance.GetCardCountByValue(dept.KeyId, b.Value * 100));
                         jobj.Add("Product", b.Product);
 
                         array.Add(jobj);
@@ -118,7 +118,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     JArray array = jobj.GetValue("Buy") as JArray;
                     foreach (JObject o in array)
                     {
-                        if (Convert.ToInt32(o.GetValue("Card")) == value)
+                        if (Convert.ToInt32(o.GetValue("Value")) == value)
                         {
                             price = Convert.ToSingle(o.GetValue("Price"));
                             product = o.GetValue("Product").ToString();
@@ -139,7 +139,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     JArray array = jobj.GetValue("Buy") as JArray;
                     foreach (JObject o in array)
                     {
-                        if (Convert.ToInt32(o.GetValue("Card")) == value)
+                        if (Convert.ToInt32(o.GetValue("Value")) == value)
                         {
                             int score = Convert.ToInt32(o.GetValue("Score"));
                             //积分大于0时再增加积分

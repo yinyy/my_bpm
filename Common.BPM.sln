@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.BoardListenerLib", "BPM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListeningWatcher", "ListeningWatcher\ListeningWatcher.csproj", "{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "主板模拟程序", "主板模拟程序\主板模拟程序.csproj", "{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,18 @@ Global
 		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Win32.ActiveCfg = Release|Any CPU
 		{D87FDC70-3F17-487A-9B42-71EE36C3BFAE}.Release|Win32.Build.0 = Release|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Debug|Win32.Build.0 = Debug|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -48,6 +48,15 @@
                 <li><label>Token：</label><input type="text" id="txt_Token" name="Token" style="width: 500px;"/></li>
            </ul>
         </div>
+        <h1>短信接口参数设置</h1>
+        <div class="c">
+            <ul>
+                <li><label>cid：</label><input type="text" id="txt_SmsCid" name="SmsCid" style="width: 500px;"/></li>
+                <li><label>uid：</label><input type="text" id="txt_SmsUid" name="SmsUid" style="width: 500px;"/></li>
+                <li><label>pas：</label><input type="text" id="txt_SmsPas" name="SmsPas" style="width: 500px;"/></li>
+                <li><label>url：</label><input type="text" id="txt_SmsUrl" name="SmsUrl" style="width: 500px;"/></li>
+           </ul>
+        </div>
         <h1>品牌</h1>
         <div class="c">
             <ul>

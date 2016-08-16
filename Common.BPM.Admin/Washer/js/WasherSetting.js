@@ -104,6 +104,12 @@ $(function () {
         //json.Introduction = intro;
 
         json.Setting = {
+            Sms:{
+                Cid: $('#txt_SmsCid').val(),
+                Uid: $('#txt_SmsUid').val(),
+                Pas: $('#txt_SmsPas').val(),
+                Url: $('#txt_SmsUrl').val()
+            },
             Point: {
                 WashCar: parseInt($('#txt_WashCar').val()),
                 Subscribe: parseInt($('#txt_Subscribe').val()),
@@ -119,10 +125,10 @@ $(function () {
                 Coins: parseInt($('#txt_Coupon').val()),
                 Time: parseInt($('#txt_CouponTime').val())
             }, Buy: [
-                { Card: 50, Price: parseFloat($('#txt_Card50').val()), Day: parseInt($('#txt_Day50').val()), Product: '50元洗车卡', Score: parseInt($('#txt_Score50').val()) },
-                { Card: 100, Price: parseFloat($('#txt_Card100').val()), Day: parseInt($('#txt_Day100').val()), Product: '100元洗车卡', Score: parseInt($('#txt_Score100').val()) },
-                { Card: 200, Price: parseFloat($('#txt_Card200').val()), Day: parseInt($('#txt_Day200').val()), Product: '200元洗车卡', Score: parseInt($('#txt_Score200').val()) },
-                { Card: 300, Price: parseFloat($('#txt_Card300').val()), Day: parseInt($('#txt_Day300').val()), Product: '300元洗车卡', Score: parseInt($('#txt_Score300').val()) }
+                { Value: 50, Price: parseFloat($('#txt_Card50').val()), Day: parseInt($('#txt_Day50').val()), Product: '50元洗车卡', Score: parseInt($('#txt_Score50').val()) },
+                { Value: 100, Price: parseFloat($('#txt_Card100').val()), Day: parseInt($('#txt_Day100').val()), Product: '100元洗车卡', Score: parseInt($('#txt_Score100').val()) },
+                { Value: 200, Price: parseFloat($('#txt_Card200').val()), Day: parseInt($('#txt_Day200').val()), Product: '200元洗车卡', Score: parseInt($('#txt_Score200').val()) },
+                { Value: 300, Price: parseFloat($('#txt_Card300').val()), Day: parseInt($('#txt_Day300').val()), Product: '300元洗车卡', Score: parseInt($('#txt_Score300').val()) }
             ]
         };
         json.Setting = JSON.stringify(json.Setting);
@@ -167,6 +173,13 @@ $(function () {
         $('#txt_Point50, #txt_Point100, #txt_Point200').each(function (idx, obj) {
             $(this).val(setting.Point.Recharge[idx]);
         });
+
+        if (setting.Sms!=null) {
+            $('#txt_SmsCid').val(setting.Sms.Cid);
+            $('#txt_SmsUid').val(setting.Sms.Uid);
+            $('#txt_SmsPas').val(setting.Sms.Pas);
+            $('#txt_SmsUrl').val(setting.Sms.Url);
+        }
 
         if (setting.Point.Referers.Kind == 'Point') {
             $('#rb_Kind_Point').click();

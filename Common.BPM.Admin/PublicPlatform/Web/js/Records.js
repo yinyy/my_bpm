@@ -3,22 +3,7 @@ var pageindex = 1;
 var pagesize = 10;
 
 $(document).ready(function () {
-    $('a#previous').click(function () {
-        var css = $(this).attr('class');
-        if (css.indexOf('weui_btn_disabled') != -1) {
-            return;
-        }
-
-        pageindex--;
-        fillRecords();
-    });
-
-    $('a#next').click(function () {
-        var css = $(this).attr('class');
-        if (css.indexOf('weui_btn_disabled') != -1) {
-            return;
-        }
-
+    $('div.weui_panel > a.weui_panel_ft').click(function () {
         pageindex++;
         fillRecords();
     });
@@ -29,31 +14,43 @@ $(document).ready(function () {
 function fillRecords() {
     $.post(actionUrl + '?page=' + pageindex + '&rows=' + pagesize, function (res) {
         if (res.total <= 0) {
-            $('div#no_record').show();
-            $('div#record_list').hide();
-        } else {
-            var container = $('div#record_list > div:eq(1)');
-            container.html('');
+            var d = new Date();
+            var y = d.getFullYear();
+            var m = d.getMonth() + 1;
+            if (m < 10) {
+                m = '0' + m;
+            }
+            var date = d.getDate();
+            if (date < 10) {
+                date = '0' + date;
+            }
+            var h = d.getHours();
+            if (h < 10) {
+                h = '0' + h;
+            }
+            var mm = d.getMinutes();
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var s = d.getSeconds();
+            if (s < 10) {
+                s = '0' + s;
+            }
 
+            var o = $('<div class="weui_media_box weui_media_text"><h4 class="weui_media_title">没有找到洗车记录。快去给爱车洗个澡吧！</h4><p class="weui_media_desc">想知道哪里有自助洗车机吗？微信公众号下“我要”-“查看网点”即可找到。</p><ul class="weui_media_info"><li class="weui_media_info_meta">更新时间：' + (y + '年' + m + '月' + date + '日 ' + h + ':' + mm + ':' + s) + '</li></ul></div>');
+            $('div.weui_panel > div.weui_panel_bd').append(o);
+
+            $('div.weui_panel > a.weui_panel_ft').hide();
+        } else {
             $(res.rows).each(function (i, r) {
-                var o = $('<a class="weui_cell" href="javascript:;"><div class="weui_cell_bd weui_cell_primary"><p class="omit_text">' + r.Address + '</p><p>' + r.Started + '</p></div><div>￥' + r.PayCoins + '</div></a>');
-                container.append(o);
+                var o = $('<div class="weui_media_box weui_media_text"><h4 class="weui_media_title">'+r.Address + '</h4><ul class="weui_media_info"><li class="weui_media_info_meta">洗车时间：'+r.Started + '</li><li class="weui_media_info_meta weui_media_info_meta_extra">消费洗车币：'+r.PayCoins.toFixed(2) +'</li></ul></div>');
+                $('div.weui_panel > div.weui_panel_bd').append(o);
             });
 
-            var pages = Math.floor(res.total / pagesize) + (res.total % pagesize == 0 ? 0 : 1);
-            if (pageindex <= 1) {
-                $('a#previous').addClass('weui_btn_disabled');
-            } else {
-                $('a#previous').removeClass('weui_btn_disabled');
+            var displayed = $('div.weui_panel > div.weui_panel_bd > div').size();
+            if (displayed >= res.total) {
+                $('div.weui_panel > a.weui_panel_ft').hide();
             }
-            if (pageindex >= pages) {
-                $('a#next').addClass('weui_btn_disabled');
-            } else {
-                $('a#next').removeClass('weui_btn_disabled');
-            }
-
-            $('div#record_list').show();
-            $('div#no_record').hide();
         }
     }, 'json');
 }

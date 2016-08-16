@@ -5,6 +5,7 @@ using BPM.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,13 @@ namespace Washer.Bll
             {
                 dobj.Success = false;
                 dobj.Message = "洗车卡不存在、洗车卡未绑定、洗车卡超过了有效期、洗车卡余额为零";
+                return dobj;
+            }
+
+            if(password!=null && card.BinderId == null)
+            {
+                dobj.Success = false;
+                dobj.Message = "验证卡号+密码，但是未绑定用户。";
                 return dobj;
             }
 

@@ -114,7 +114,7 @@ namespace Washer.Bll
 
         public bool Bind(WasherConsumeModel consume, int value)
         {
-            WasherCardModel card = WasherCardDal.Instance.GetWhere(new { DepartmentId = consume.DepartmentId, Coins = value, Sale = true }).Where(a => a.BinderId == null && a.ValidateEnd.CompareTo(DateTime.Now) > 0).FirstOrDefault();
+            WasherCardModel card = WasherCardDal.Instance.GetWhere(new { DepartmentId = consume.DepartmentId, Coins = value, Kind = "Sale"}).Where(a => a.BinderId == null && a.ValidateEnd.CompareTo(DateTime.Now) > 0).FirstOrDefault();
             if (card == null)
             {
                 return false;

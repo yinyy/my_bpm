@@ -123,7 +123,7 @@ namespace BPM.Common.Data
             
         }
 
-        public string JsonDataForEasyUIdataGrid(string tablename, int pageindex, int pagesize, string filterJson, string sort = "keyid", string order = "asc", string fields=" * ")
+        public string JsonDataForEasyUIdataGrid(string tablename, int pageindex, int pagesize, string filterJson, string sort = "keyid", string order = "desc", string fields=" * ")
         {
             string sortorder = sort + " " + order;
 
@@ -138,7 +138,6 @@ namespace BPM.Common.Data
             int recordCount;
             DataTable dt = GetPageWithSp(pcp, out recordCount);
             return JSONhelper.FormatJSONForEasyuiDataGrid(recordCount, dt);
-
         }
 
 

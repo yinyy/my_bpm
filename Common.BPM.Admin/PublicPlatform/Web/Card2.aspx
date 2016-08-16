@@ -95,8 +95,7 @@
                 <img src="./images/icon_wash_car.png" width="100%" />
             </div>
             <div class="card_kind_area">
-                <ul class="card_kind_list">
-                </ul>
+                
             </div>
             <div class="weui_btn_area">
                 <a class="weui_btn weui_btn_primary" href="javascript:">购买</a>

@@ -21,7 +21,7 @@ ul.card_kind_list li{
     text-align: center;
 }
 
-ul.card_kind_list li p.title{
+ul.card_kind_list li p.value{
     font-size: 1em;
 }
 

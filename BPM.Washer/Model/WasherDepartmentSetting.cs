@@ -8,6 +8,7 @@ namespace Washer.Model
 {
     public class WasherDepartmentSetting
     {
+        public WasherDepartmentSettingSms Sms { get; set; }
         public WasherDepartmentSettingPoint Point { get; set; }
         public WasherDepartmentSettingCoin Coin { get; set; }
         public WasherDepartmentSettingCoupon Coupon { get; set; }
@@ -51,6 +52,14 @@ namespace Washer.Model
         }
     }
 
+    public class WasherDepartmentSettingSms
+    {
+        public string Cid { get; set; }
+        public string Uid { get; set; }
+        public string Pas { get; set; }
+        public string Url { get; set; }
+    }
+
     public class WasherDepartmentSettingPoint
     {
         public int WasherCar { get; set; }
@@ -79,7 +88,7 @@ namespace Washer.Model
 
     public class WasherDepartmentSettingBuy
     {
-        public int Card { get; set; }
+        public int Value { get; set; }
         public float Price { get; set; }
         public int Day { get; set; }
         public string Product { get; set; }

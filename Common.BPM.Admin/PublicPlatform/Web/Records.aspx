@@ -15,24 +15,14 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div id="record_list" style="display:none;">
-            <div class="weui_cells_title">洗车记录</div>
-            <div class="weui_cells weui_cells_access">
-                
+        <div class="weui_panel weui_panel_access">
+            <div class="weui_panel_hd">洗车记录</div>
+            <div class="weui_panel_bd">
+                    
             </div>
-            <div class="weui_btn_area">
-                <ul>
-                    <li><a class="weui_btn weui_btn_primary weui_btn_disabled" href="javascript:" id="previous">上一页</a></li>
-                    <li></li>
-                    <li><a class="weui_btn weui_btn_primary weui_btn_disabled" href="javascript:" id="next">下一页</a></li>
-                </ul>
-            </div>
-
+            <a href="javascript:void(0);" class="weui_panel_ft">查看更多</a>
         </div>
-
-        <div id="no_record" style="display:none;">
-            没有找到洗车记录。
-        </div>
+        <br />
     </form>
 </body>
 </html>
