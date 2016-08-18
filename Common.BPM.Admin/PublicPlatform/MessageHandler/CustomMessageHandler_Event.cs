@@ -15,6 +15,7 @@ using Washer.Bll;
 using Newtonsoft.Json;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs;
+using System.Threading;
 
 namespace BPM.Admin.PublicPlatform.MessageHandler
 {
@@ -111,7 +112,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
             if (!string.IsNullOrEmpty(requestMessage.EventKey))
             {
                 string senceId = requestMessage.EventKey;
-                if (senceId.StartsWith("9"))
+                if (senceId.StartsWith("9"))//设备二维码以9开头
                 {
                     WasherDeviceModel device;
                     WasherWeChatConsumeModel wxconsume;
@@ -154,7 +155,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                         }
                     }
                 }
-                else if (senceId.StartsWith("8"))
+                else if (senceId.StartsWith("7"))
                 {
                     //什么也不做
                 }
@@ -192,20 +193,29 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
             Department dept = DepartmentBll.Instance.Get(deptId);
             int refererId = -1;
+            WasherWeChatConsumeModel wxconsume;
 
-            if (requestMessage.EventKey.StartsWith("consume"))
+            if (!string.IsNullOrEmpty(requestMessage.EventKey))
             {
-                //消费者的推广码
-                refererId = Convert.ToInt32(requestMessage.EventKey.Substring(7));
-                WasherWeChatConsumeModel referer = WasherWeChatConsumeBll.Instance.Get(refererId);
-                if (referer == null)
+                string senceId = requestMessage.EventKey;
+                if (senceId.StartsWith("qrscene"))
                 {
-                    refererId = -1;
+                    senceId = senceId.Substring(8);
+                }
+
+                if (senceId.StartsWith("7"))//推广用户编号以7开头
+                {
+                    int keyid = Convert.ToInt32(senceId.Substring(1));
+                    wxconsume = WasherWeChatConsumeBll.Instance.Get(keyid);
+                    if (wxconsume != null)
+                    {
+                        refererId = wxconsume.KeyId;
+                    }
                 }
             }
 
             //判断数据库中是否有这个消费者的记录
-            WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, WeixinOpenId);
+            wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, WeixinOpenId);
             if (wxconsume == null)
             {
                 #region 这是不存在的消费者，将其加入到消费者表中
@@ -218,41 +228,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 wxconsume.KeyId = WasherWeChatConsumeBll.Instance.Add(wxconsume);
                 #endregion
 
-                #region 获取微信用户详细信息
-                WeixinUserInfoResult result = CommonApi.GetUserInfo(dept.Appid, WeixinOpenId);
-                if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
-                {
-                    wxconsume.NickName = result.nickname;
-                    wxconsume.Gender = result.sex == 1 ? "男" : result.sex == 2 ? "女" : "未知";
-                    wxconsume.Country = result.country;
-                    wxconsume.Province = result.province;
-                    wxconsume.City = result.city;
-                    wxconsume.UnionId = result.unionid;
-                }
-                #endregion
-
-                //获取相关设置信息
-                WasherDepartmentSetting setting = WasherDepartmentSetting.Instance;
-                setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
-
-
-                //#region 更新积分信息
-                ////先更新积分奖励记录
-                //WasherRewardModel reward = new WasherRewardModel();
-                //reward.ConsumeId = consume.KeyId;
-                //reward.Kind = WasherRewardBll.Kind.Subscribe;
-                //reward.Memo = "";
-                //reward.Points = setting.Subscribe;
-                //reward.Memo = "";
-                //reward.Time = DateTime.Now;
-                //#region 再更新个人积分
-                //if (WasherRewardBll.Instance.Add(reward) > 0)
-                //{
-                //    consume.Points += setting.Subscribe;
-                //    WasherConsumeBll.Instance.Update(consume);
-                //}
-                //#endregion
-                //#endregion
+                AsyncHandleOtherThings(wxconsume.KeyId);
 
                 responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n使用前请先绑定个人信息，享受会员权利。", dept.Brand);
             }
@@ -262,6 +238,62 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
             }
 
             return responseMessage;
+        }
+
+        private void AsyncHandleOtherThings(int wxid)
+        {
+            new Thread(() => {
+                WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(wxid);
+                Department dept = DepartmentBll.Instance.Get(wxconsume.DepartmentId);
+
+                #region 获取微信用户详细信息
+                WeixinUserInfoResult result = CommonApi.GetUserInfo(dept.Appid, wxconsume.OpenId);
+                if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
+                {
+                    wxconsume.NickName = result.nickname;
+                    wxconsume.Gender = result.sex == 1 ? "男" : result.sex == 2 ? "女" : "未知";
+                    wxconsume.Country = result.country;
+                    wxconsume.Province = result.province;
+                    wxconsume.City = result.city;
+                    wxconsume.UnionId = result.unionid;
+
+                    WasherWeChatConsumeBll.Instance.Update(wxconsume);
+                }
+                #endregion
+
+                //获取相关设置信息
+                WasherDepartmentSetting setting = WasherDepartmentSetting.Instance;
+                setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+
+                string newopenid = wxconsume.OpenId;
+                int refererid = wxconsume.RefererId;
+                WasherConsumeModel consume;
+                int index = -1;
+                while ((++index < setting.Point.Referers.Level.Count()) && refererid != -1)
+                {
+                    if ((consume = WasherConsumeBll.Instance.GetByBinderId(refererid)) != null)
+                    {
+                        WasherRewardModel reward = new WasherRewardModel();
+                        reward.ConsumeId = consume.KeyId;
+                        reward.Kind = "新用户关注公众号，老用户送积分。";
+                        reward.Memo = string.Format("openid:{0}", newopenid);
+                        reward.Points = setting.Point.Referers.Level[index];
+                        reward.Time = DateTime.Now;
+                        reward.Used = 0;
+                        WasherRewardBll.Instance.Add(reward);
+                    }
+
+                    wxconsume = WasherWeChatConsumeBll.Instance.Get(refererid);
+                    if (wxconsume != null)
+                    {
+                        refererid = wxconsume.RefererId;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }).Start();
         }
 
         /// <summary>

@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WeChat.Utils;
+﻿using BPM.Core.Bll;
+using BPM.Core.Model;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.AdvancedAPIs;
+using Senparc.Weixin.MP.CommonAPIs;
+using System;
+using Washer.Bll;
+using Washer.Extension;
+using Washer.Model;
+using WeChat.Utils;
 
 namespace BPM.Admin.PublicPlatform.Web
 {
@@ -15,24 +17,41 @@ namespace BPM.Admin.PublicPlatform.Web
         {
             if (!IsPostBack)
             {
-                KeyLabel.Text = Request.Params["k"];
+                string appid = Session["appid"].ToString();
+                string openid = Session["openid"].ToString();
 
-                string message = WeChatToolkit.SendCommand("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + WeChatToolkit.AccessToken,
-                    "{\"expire_seconds\": 300, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": " + Request.Params["k"] + "}}}");
-                if (!string.IsNullOrWhiteSpace(message))
+                Department dept = DepartmentBll.Instance.GetByAppid(appid);
+                WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
+                
+                //生成带微信用户编号的临时二维码，有效时间不超过一周
+                string accessToken = AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret);
+                var result = QrCodeApi.Create(accessToken, 604800, Convert.ToInt32(string.Format("7{0}", wxconsume.KeyId)));
+                if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
                 {
-                    try
-                    {
-                        var msg = new { ticket = "", expire_seconds = 0, url = "" };
-                        msg = JsonConvert.DeserializeAnonymousType(message, msg);
-
-                        CodeImage.ImageUrl = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + msg.ticket;
-                    }
-                    catch (Exception ex)
-                    {
-                        Response.Write("获取二维码错误。" + ex.Message);
-                    }
+                    CodeImage.ImageUrl = string.Format("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={0}", result.ticket);
                 }
+                else
+                {
+                    code_div.Visible = false;
+                    nocode_div.Visible = true;
+                }
+                
+                //string message = WeChatToolkit.SendCommand("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret) ,
+                //    "{\"expire_seconds\": 604800, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": " + string.Format("") + "}}}");
+                //if (!string.IsNullOrWhiteSpace(message))
+                //{
+                //    try
+                //    {
+                //        var msg = new { ticket = "", expire_seconds = 0, url = "" };
+                //        msg = JsonConvert.DeserializeAnonymousType(message, msg);
+
+                //        CodeImage.ImageUrl = 
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Response.Write("获取二维码错误。" + ex.Message);
+                //    }
+                //}
             }
         }
     }

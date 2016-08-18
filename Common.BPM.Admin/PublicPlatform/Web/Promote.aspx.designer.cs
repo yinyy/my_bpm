@@ -13,22 +13,22 @@ namespace BPM.Admin.PublicPlatform.Web {
     public partial class Promote {
         
         /// <summary>
-        /// form1 控件。
+        /// uiform 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.HtmlControls.HtmlForm uiform;
         
         /// <summary>
-        /// KeyLabel 控件。
+        /// code_div 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label KeyLabel;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl code_div;
         
         /// <summary>
         /// CodeImage 控件。
@@ -38,5 +38,14 @@ namespace BPM.Admin.PublicPlatform.Web {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image CodeImage;
+        
+        /// <summary>
+        /// nocode_div 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nocode_div;
     }
 }

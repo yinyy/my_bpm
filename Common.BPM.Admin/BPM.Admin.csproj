@@ -2857,6 +2857,8 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="PublicPlatform\Web\Authorize.html" />
+    <Content Include="PublicPlatform\Web\css\Promote.css" />
+    <Content Include="PublicPlatform\Web\Error.html" />
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
@@ -4049,7 +4051,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>9590</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9582/</IISUrl>
+          <IISUrl>http://127.0.0.1:9582/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

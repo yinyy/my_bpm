@@ -34,7 +34,7 @@ namespace 模拟微信服务器
 
 
             //string url = string.Format("http://139.129.43.203/PublicPlatform/Index.ashx?tag=69");
-            string url = string.Format("http://localhost:9582/PublicPlatform/Index.ashx?tag=69");
+            string url = string.Format("http://127.0.0.1:9582/PublicPlatform/Index.ashx?tag=70");
             //string url = string.Format("http://139.129.43.203//PublicPlatform/DefaultHandler.ashx");
 
             try
@@ -85,7 +85,7 @@ namespace 模拟微信服务器
 
         private void button4_Click(object sender, EventArgs e)
         {
-            rtbMessage.Text = "<xml><ToUserName><![CDATA[gh_e94577a0a594]]></ToUserName> <FromUserName><![CDATA[oIC6ejjI1izi372jxZ0R7LnD8p5o]]></FromUserName> <CreateTime>1457225307</CreateTime> <MsgType><![CDATA[event]]></MsgType> <Event><![CDATA[subscribe]]></Event> <EventKey><![CDATA[consume14]]></EventKey> <Ticket><![CDATA[gQFB8ToAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzBIVUExalRtQ0JseHZGMXpCVjNrAAIEDbjBVgMEAAAAAA==]]></Ticket> </xml>";
+            rtbMessage.Text ="<xml><ToUserName><![CDATA[gh_1da67f251bfc]]></ToUserName><FromUserName><![CDATA[oiVK2uH3zgJLC6iGMoB6iuDKDW1M]]></FromUserName><CreateTime>1471512373</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[subscribe]]></Event><EventKey><![CDATA[qrscene_76]]></EventKey><Ticket><![CDATA[gQFs8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL0pFTjRrVHZsYVRFUV95N09BVzFOAAIEZnq1VwMEgDoJAA==]]></Ticket></xml>";
             btnSend_Click(null, null);
         }
 
@@ -150,7 +150,7 @@ namespace 模拟微信服务器
 
         private void button11_Click(object sender, EventArgs e)
         {
-            string url = string.Format("http://localhost:9582/PublicPlatform/Web/PaymentCallback.ashx");
+            string url = string.Format("http://127.0.0.1:9582/PublicPlatform/Web/PaymentCallback.ashx");
 
             MessageBox.Show(rtbMessage.Text.Length+"");
 

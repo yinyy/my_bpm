@@ -30,5 +30,10 @@ namespace Washer.Bll
         {
             return WasherWeChatConsumeDal.Instance.Insert(consume);
         }
+
+        public int Update(WasherWeChatConsumeModel wxconsume)
+        {
+            return WasherWeChatConsumeDal.Instance.Update(wxconsume);
+        }
     }
 }

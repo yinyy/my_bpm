@@ -16,6 +16,7 @@ namespace Washer.Model
         public string Kind { get; set; }
 
         public int Points{ get; set; }
+        public int Used { get; set; }
         public string Memo { get; set; }
     }
 }
