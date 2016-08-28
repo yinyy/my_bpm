@@ -49,28 +49,32 @@ var List = {
         $.getJSON(actionUrl, { action: 'list' }, function (json) {
             Loading.hide();
 
-            if (json.count == 0) {
-                $('div#no_cards_region').show();
-            } else {
-                $('div#show_cards_region > div.weui_panel_bd').empty();
-                $(json.data).each(function (idx, obj) {
-                    var s = '   <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">\
+            if (json.binded == false) {
+                location.href = 'Profile.aspx';
+            }else{
+                if (json.count == 0) {
+                    $('div#no_cards_region').show();
+                } else {
+                    $('div#show_cards_region > div.weui_panel_bd').empty();
+                    $(json.data).each(function (idx, obj) {
+                        var s = '   <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">\
                                 <div class="weui_media_hd">\
                                     <img class="weui_media_appmsg_thumb" src="./images/icon_card.png" alt="">\
                                 </div>\
                                 <div class="weui_media_bd">\
-                                    <h4 class="weui_media_title">' + (obj.No.indexOf('Coupon')==0?'优惠券':obj.No) + '</h4>\
+                                    <h4 class="weui_media_title">' + (obj.No.indexOf('Coupon') == 0 ? '优惠券' : obj.No) + '</h4>\
                                     <p class="weui_media_desc">洗车币：'+ (obj.Coins / 100.0).toFixed(2) + '<br/>有效期：' + formatDate(obj.ValidateFrom) + ' - ' + formatDate(obj.ValidateEnd) + '</p>\
                                 </div>\
                             </a>';
 
-                    $('div#show_cards_region > div.weui_panel_bd').append($(s));
-                });
+                        $('div#show_cards_region > div.weui_panel_bd').append($(s));
+                    });
 
-                $('div#show_cards_region').show();
+                    $('div#show_cards_region').show();
+                }
+
+                $('div#button_region').show();
             }
-
-            $('div#button_region').show();
         });
     }
 }
@@ -275,7 +279,9 @@ var Bind = {
 $(document).ready(function () {
     vcode = new Vcode($('a#GetVcode'), $('input#Telphone'));
     $.getJSON(actionUrl, { action: 'telphone' }, function (json) {
-        $('input#Telphone').val(json.Message);
+        if (json.Binded) {
+            $('input#Telphone').val(json.Message);
+        }
     });
 
     List.init();

@@ -48,7 +48,7 @@ namespace BPM.Admin.Washer.ashx
                 //余额支付洗车
                 string boardNumber = context.Request.Params["board"];
 
-                dynamic dobj = WasherValidatorBll.Instance.ValidateWxConsume(boardNumber, wxconsume.KeyId);
+                dynamic dobj = WasherValidatorBll.Instance.ValidateWxConsume(dept.KeyId, boardNumber, wxconsume.KeyId);
                 if (dobj.Success == true)
                 {
                     ReplyMessageBase replyMessage = new ReplyValidateMessage(boardNumber)
@@ -114,8 +114,9 @@ namespace BPM.Admin.Washer.ashx
                 string boardNumber = context.Request.Params["boardNumber"];
                 string cardNo = context.Request.Params["cardNo"];
                 string password = context.Request.Params["password"];
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
 
-                dynamic dobj = WasherValidatorBll.Instance.ValidateCard(boardNumber, cardNo, password);
+                dynamic dobj = WasherValidatorBll.Instance.ValidateCard(deptId, boardNumber, cardNo, password);
                 if (dobj.Success == true)
                 {
                     jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
@@ -137,8 +138,9 @@ namespace BPM.Admin.Washer.ashx
             {
                 string boardNumber = context.Request.Params["boardNumber"];
                 string cardNo = context.Request.Params["cardNo"];
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
 
-                dynamic dobj = WasherValidatorBll.Instance.ValidateCard(boardNumber, cardNo);
+                dynamic dobj = WasherValidatorBll.Instance.ValidateCard(deptId, boardNumber, cardNo);
                 if (dobj.Success == true)
                 {
                     jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
@@ -161,8 +163,9 @@ namespace BPM.Admin.Washer.ashx
                 string boardNumber = context.Request.Params["boardNumber"];
                 string phone = context.Request.Params["phone"];
                 string password = context.Request.Params["password"];
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
 
-                dynamic dobj = WasherValidatorBll.Instance.ValidatePhone(boardNumber, phone, password);
+                dynamic dobj = WasherValidatorBll.Instance.ValidatePhone(deptId, boardNumber, phone, password);
                 if (dobj.Success == true)
                 {
                     jobj.Add("Kind", (int)TcpMessageBase.CardKind.Normal);
@@ -185,13 +188,15 @@ namespace BPM.Admin.Washer.ashx
                 string boardNumber = context.Request.Params["boardNumber"];
                 string clientIp = context.Request.Params["clientIp"];
                 string listenerIp = context.Request.Params["listenerIp"];
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
+                int port = Convert.ToInt32(context.Request.Params["port"]);
 
-                WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+                WasherDeviceModel device = WasherDeviceBll.Instance.Get(deptId, boardNumber);
                 if (device != null)
                 {
                     device.UpdateTime = DateTime.Now;
                     device.IpAddress = clientIp;
-                    device.ListenerIp = listenerIp;
+                    device.ListenerIp = string.Format("{0}:{1}", listenerIp, port);
 
                     WasherDeviceBll.Instance.Update(device);
 
@@ -214,7 +219,9 @@ namespace BPM.Admin.Washer.ashx
             else if (action == "ReaderSetting")
             {
                 string boardNumber = context.Request.Params["boardNumber"];
-                WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
+
+                WasherDeviceModel device = WasherDeviceBll.Instance.Get(deptId, boardNumber);
                 if (device == null)
                 {
                     jobj.Add("ErrorCode", 1);
@@ -278,6 +285,7 @@ namespace BPM.Admin.Washer.ashx
             else if (action == "UploadStatus")
             {
                 string boardNumber = context.Request.Params["boardNumber"];
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
                 string status = "";
 
                 using (Stream stream = context.Request.InputStream)
@@ -287,7 +295,7 @@ namespace BPM.Admin.Washer.ashx
                     status = Encoding.UTF8.GetString(buffer);
                 }
 
-                WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+                WasherDeviceModel device = WasherDeviceBll.Instance.Get(deptId, boardNumber);
                 if (device != null)
                 {
                     device.Status = status;
@@ -307,8 +315,9 @@ namespace BPM.Admin.Washer.ashx
                 int ticks = Convert.ToInt32(context.Request.Params["ticks"]);
                 int balanceId = Convert.ToInt32(context.Request.Params["balanceId"]);
                 int payment = Convert.ToInt32(context.Request.Params["payment"]);
-
-                jobj.Add("Remain", WasherDeviceLogBll.Instance.Clearing(ticks, boardNumber, balanceId, payment));
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
+                
+                jobj.Add("Remain", WasherDeviceLogBll.Instance.Clearing(deptId, ticks, boardNumber, balanceId, payment));
                 jobj.Add("BalanceId", balanceId);
 
                 context.Response.Write(JSONhelper.ToJson(jobj));

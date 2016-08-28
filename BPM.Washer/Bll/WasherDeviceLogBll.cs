@@ -20,9 +20,9 @@ namespace Washer.Bll
             return deviceLog.KeyId = WasherDeviceLogDal.Instance.Insert(deviceLog);
         }
 
-        public int Clearing(int ticks, string boardNumber, int balanceId, int cost)
+        public int Clearing(int departmentId, int ticks, string boardNumber, int balanceId, int cost)
         {
-            WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber);
+            WasherDeviceModel device = WasherDeviceBll.Instance.Get(departmentId, boardNumber);
             WasherDeviceLogModel balance = Get(balanceId);
             if (balance == null || device==null || balance.DeviceId!=device.KeyId || balance.Ticks!=null)
             {

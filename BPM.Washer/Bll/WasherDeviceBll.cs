@@ -54,9 +54,9 @@ namespace Washer.Bll
             return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
         }
 
-        public WasherDeviceModel GetByBoardNumber(string boardNumber)
+        public WasherDeviceModel Get(int departmentId, string boardNumber)
         {
-            return WasherDeviceDal.Instance.GetWhere(new {BoardNumber=boardNumber}).FirstOrDefault();
+            return WasherDeviceDal.Instance.GetWhere(new {DepartmentId=departmentId, BoardNumber=boardNumber}).FirstOrDefault();
         }
 
         public WasherDeviceModel GetBySerialNumber(string serialNumber)

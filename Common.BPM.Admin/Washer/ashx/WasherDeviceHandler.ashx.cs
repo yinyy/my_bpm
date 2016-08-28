@@ -51,7 +51,7 @@ namespace BPM.Admin.Washer.ashx
 
                     if (WasherDeviceBll.Instance.GetBySerialNumber(model.SerialNumber) == null)
                     {
-                        if (WasherDeviceBll.Instance.GetByBoardNumber(model.BoardNumber) == null)
+                        if (WasherDeviceBll.Instance.Get(departmentId, model.BoardNumber) == null)
                         {
                             model.Province = "";
                             model.City = "";
@@ -89,7 +89,7 @@ namespace BPM.Admin.Washer.ashx
                     WasherDeviceModel d2;
                     if ((d2 = WasherDeviceBll.Instance.GetBySerialNumber(model.SerialNumber)) == null || model.KeyId == d2.KeyId)
                     {
-                        if ((d2 = WasherDeviceBll.Instance.GetByBoardNumber(model.BoardNumber)) == null || model.KeyId == d2.KeyId)
+                        if ((d2 = WasherDeviceBll.Instance.Get(departmentId, model.BoardNumber)) == null || model.KeyId == d2.KeyId)
                         {
                             model.DeliveryTime = rpm.Entity.DeliveryTime;
                             model.ProductionTime = rpm.Entity.ProductionTime;

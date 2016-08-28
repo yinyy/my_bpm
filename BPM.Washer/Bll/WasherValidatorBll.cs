@@ -20,10 +20,10 @@ namespace Washer.Bll
             get { return SingletonProvider<WasherValidatorBll>.Instance; }
         }
 
-        public object ValidateCard(string boardNumber, string cardNo, string password = null)
+        public object ValidateCard(int departmentId, string boardNumber, string cardNo, string password = null)
         {
             dynamic dobj = new ExpandoObject();
-            if (string.IsNullOrWhiteSpace(boardNumber) || string.IsNullOrWhiteSpace( cardNo ))
+            if (string.IsNullOrWhiteSpace(boardNumber) || string.IsNullOrWhiteSpace(cardNo))
             {
                 dobj.Success = false;
                 dobj.Message = "参数错误";
@@ -31,7 +31,7 @@ namespace Washer.Bll
             }
 
             WasherDeviceModel device;
-            if ((device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber)) == null)
+            if ((device = WasherDeviceBll.Instance.Get(departmentId, boardNumber)) == null)
             {
                 dobj.Success = false;
                 dobj.Message = "设备不存在";
@@ -39,7 +39,7 @@ namespace Washer.Bll
             }
 
             WasherCardModel card;
-            if ((card = WasherCardBll.Instance.Get(device.DepartmentId, cardNo)) == null ||
+            if ((card = WasherCardBll.Instance.Get(departmentId, cardNo)) == null ||
                 card.ValidateEnd.Date.CompareTo(DateTime.Now.Date) <= 0 ||
                 card.Coins <= 0)
             {
@@ -48,7 +48,7 @@ namespace Washer.Bll
                 return dobj;
             }
 
-            if(password!=null && card.BinderId == null)
+            if (password != null && card.BinderId == null)
             {
                 dobj.Success = false;
                 dobj.Message = "验证卡号+密码，但是未绑定用户。";
@@ -119,10 +119,10 @@ namespace Washer.Bll
         /// <param name="boardNumber">主板号</param>
         /// <param name="wxid">微信用户编号</param>
         /// <returns>返回：BalanceId, RemainConis, ListenerIp, OpenId, DepartmentId</returns>
-        public object ValidateWxConsume(string boardNumber, int wxid)
+        public object ValidateWxConsume(int departmentId, string boardNumber, int wxid)
         {
             dynamic dobj = new ExpandoObject();
-            if (string.IsNullOrWhiteSpace( boardNumber )|| wxid < 0)
+            if (string.IsNullOrWhiteSpace(boardNumber) || wxid < 0)
             {
                 dobj.Success = false;
                 dobj.Message = "参数错误";
@@ -130,7 +130,7 @@ namespace Washer.Bll
             }
 
             WasherDeviceModel device;
-            if ((device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber)) == null)
+            if ((device = WasherDeviceBll.Instance.Get(departmentId, boardNumber)) == null)
             {
                 dobj.Success = false;
                 dobj.Message = "设备不存在";
@@ -180,7 +180,7 @@ namespace Washer.Bll
 
             Department dept = DepartmentBll.Instance.Get(device.DepartmentId);
             dobj.Success = true;
-            dobj.BalanceId = balance.KeyId ;
+            dobj.BalanceId = balance.KeyId;
             dobj.RemainCoins = balance.RemainCoins;
             dobj.ListenerIp = device.ListenerIp;
             dobj.OpenId = wxconsume.OpenId;
@@ -193,7 +193,7 @@ namespace Washer.Bll
         {
             dynamic dobj = new ExpandoObject();
             WasherOrderModel order;
-            if (string.IsNullOrWhiteSpace( serial )|| (order = WasherOrderBll.Instance.Get(serial)) == null)
+            if (string.IsNullOrWhiteSpace(serial) || (order = WasherOrderBll.Instance.Get(serial)) == null)
             {
                 dobj.Success = false;
                 dobj.Message = "订单不存在";
@@ -207,7 +207,7 @@ namespace Washer.Bll
                 return dobj;
             }
 
-            WasherDeviceModel device = WasherDeviceBll.Instance.GetByBoardNumber(order.Memo);
+            WasherDeviceModel device = WasherDeviceBll.Instance.Get(order.DepartmentId, order.Memo);
             WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(order.DepartmentId, order.OpenId);
             WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinder(wxconsume);
 
@@ -242,18 +242,19 @@ namespace Washer.Bll
             return dobj;
         }
 
-        public object ValidatePhone(string boardNumber, string phone, string password)
+        public object ValidatePhone(int departmentId, string boardNumber, string phone, string password)
         {
             dynamic dobj = new ExpandoObject();
 
-            if (string.IsNullOrWhiteSpace(boardNumber)|| string.IsNullOrWhiteSpace(phone) || string.IsNullOrWhiteSpace(password)){
+            if (string.IsNullOrWhiteSpace(boardNumber) || string.IsNullOrWhiteSpace(phone) || string.IsNullOrWhiteSpace(password))
+            {
                 dobj.Success = false;
                 dobj.Message = "参数错误";
                 return dobj;
             }
-            
+
             WasherDeviceModel device;
-            if ((device = WasherDeviceBll.Instance.GetByBoardNumber(boardNumber) )== null)
+            if ((device = WasherDeviceBll.Instance.Get(departmentId, boardNumber)) == null)
             {
                 dobj.Success = false;
                 dobj.Message = "设备不存在";
@@ -261,7 +262,7 @@ namespace Washer.Bll
             }
 
             WasherConsumeModel consume;
-            if ((consume = WasherConsumeBll.Instance.Get(device.DepartmentId, phone) )== null || consume.Password != password)
+            if ((consume = WasherConsumeBll.Instance.Get(device.DepartmentId, phone)) == null || consume.Password != password)
             {
                 dobj.Success = false;
                 dobj.Message = "用户不存在、密码错误";

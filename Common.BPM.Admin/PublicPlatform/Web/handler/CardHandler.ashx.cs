@@ -32,8 +32,14 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
             if (action == "list")
             {
-                var q = WasherCardBll.Instance.GetValidCards(consume.KeyId).Select(a => new { No = a.CardNo, Coins = a.Coins, ValidateFrom = string.Format("{0:yyyy-MM-dd}", a.ValidateFrom), ValidateEnd = string.Format("{0:yyyy-MM-dd}", a.ValidateEnd) }).ToArray();
-                context.Response.Write(JSONhelper.ToJson(new { count = q.Count(), data = q }));
+                if (consume == null)
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { binded = false }));
+                }
+                else {
+                    var q = WasherCardBll.Instance.GetValidCards(consume.KeyId).Select(a => new { No = a.CardNo, Coins = a.Coins, ValidateFrom = string.Format("{0:yyyy-MM-dd}", a.ValidateFrom), ValidateEnd = string.Format("{0:yyyy-MM-dd}", a.ValidateEnd) }).ToArray();
+                    context.Response.Write(JSONhelper.ToJson(new { binded = true, count = q.Count(), data = q }));
+                }
             }
             else if (action == "bind")
             {
@@ -167,7 +173,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 }
             }else if (action == "telphone")
             {
-                context.Response.Write(JSONhelper.ToJson(new { Success = true, Message = consume.Telphone }));
+                context.Response.Write(JSONhelper.ToJson(new { Success = true, Binded = consume != null, Message = consume.Telphone }));
             }
             else
             {

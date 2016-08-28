@@ -156,7 +156,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             }
             else
             {
-                WeixinUserInfoResult userInfo = CommonApi.GetUserInfo(AccessTokenContainer.GetAccessToken(appid), openid);
+                WeixinUserInfoResult userInfo = CommonApi.GetUserInfo(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid);
                 consume = WasherConsumeBll.Instance.GetByBinder(wxconsume);
 
                 if (wxconsume == null)
@@ -165,7 +165,16 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 }
                 else
                 {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = true, Binded = consume != null, Image = userInfo.headimgurl, Nickname = userInfo.nickname }));
+
+                    context.Response.Write(JSONhelper.ToJson(new
+                    {
+                        Success = true,
+                        Binded = consume != null,
+                        Image = userInfo.headimgurl,
+                        Nickname = userInfo.nickname,
+                        Coins = consume == null ? 0 : WasherCardBll.Instance.GetValidCoins(consume.KeyId) / 100.0,
+                        Reward = consume == null ? 0 : WasherRewardBll.Instance.GetRemainReward(consume.KeyId)
+                    }));
                 }
             }
 

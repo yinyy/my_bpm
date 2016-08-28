@@ -27,5 +27,21 @@ namespace Washer.Bll
         {
             return WasherRewardDal.Instance.Insert(model);
         }
+
+        public IEnumerable<WasherRewardModel> GetValidRewards(int consumeId)
+        {
+            return WasherRewardDal.Instance.GetWhere(new { ConsumeId = consumeId, Expired = false });
+        }
+
+        public int GetRemainReward(int consumeId)
+        {
+            int points = 0;
+            foreach(var r in GetValidRewards(consumeId))
+            {
+                points += r.Points - r.Used;
+            }
+
+            return points;
+        }
     }
 }

@@ -117,9 +117,10 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                     WasherDeviceModel device;
                     WasherWeChatConsumeModel wxconsume;
                     WasherConsumeModel consume;
+
                     //如果主板编号错误或者微信用户错误，提示参数错误
-                    if ((device = WasherDeviceBll.Instance.GetByBoardNumber(senceId.Substring(1))) == null ||
-                        (wxconsume = WasherWeChatConsumeBll.Instance.Get(device.DepartmentId, requestMessage.FromUserName)) == null)
+                    if ((device = WasherDeviceBll.Instance.Get(deptId, senceId.Substring(1))) == null ||
+                        (wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, requestMessage.FromUserName)) == null)
                     {
                         message.Content = "参数错误！";
                     }
@@ -228,9 +229,9 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 wxconsume.KeyId = WasherWeChatConsumeBll.Instance.Add(wxconsume);
                 #endregion
 
-                AsyncHandleOtherThings(wxconsume.KeyId);
-
                 responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n使用前请先绑定个人信息，享受会员权利。", dept.Brand);
+
+                AsyncHandleOtherThings(wxconsume.KeyId);
             }
             else
             {
@@ -243,6 +244,8 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
         private void AsyncHandleOtherThings(int wxid)
         {
             new Thread(() => {
+                Thread.Sleep(2000);
+
                 WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(wxid);
                 Department dept = DepartmentBll.Instance.Get(wxconsume.DepartmentId);
 
@@ -280,6 +283,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                         reward.Points = setting.Point.Referers.Level[index];
                         reward.Time = DateTime.Now;
                         reward.Used = 0;
+                        reward.Expired = false;
                         WasherRewardBll.Instance.Add(reward);
                     }
 

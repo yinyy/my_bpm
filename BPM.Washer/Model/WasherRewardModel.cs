@@ -17,6 +17,8 @@ namespace Washer.Model
 
         public int Points{ get; set; }
         public int Used { get; set; }
+
+        public bool Expired { get; set; }
         public string Memo { get; set; }
     }
 }

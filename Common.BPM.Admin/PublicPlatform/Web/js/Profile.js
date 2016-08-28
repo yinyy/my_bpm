@@ -13,6 +13,8 @@ $(document).ready(function () {
         } else {
             $('#user_photo').attr('src', res.Image);
             $('#nick_name').text(res.Nickname);
+            $('#coins_remain').text(res.Coins.toFixed(2));
+            $('#reward_remain').text(res.Reward);
 
             $('div#info_region').show();
             $('div#not_subscribe_region, div#bind_region').hide();

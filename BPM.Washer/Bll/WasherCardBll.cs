@@ -134,5 +134,10 @@ namespace Washer.Bll
         {
             return string.Format("Coupon_{0}_{1:x}", deptId, DateTime.Now.Ticks);
         }
+
+        public int GetValidCoins(int consumeId)
+        {
+            return GetValidCards(consumeId).Select(a => a.Coins).Sum();
+        }
     }
 }
