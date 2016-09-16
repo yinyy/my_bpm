@@ -58,10 +58,24 @@ namespace BPM.BoardListener
 
             string local = ConfigurationManager.AppSettings["local"];
             string values = ConfigurationManager.AppSettings["departments"];
+            bool syncHeartBeat = false, showHeartBeat = false;
+            int heartBeatThreshold = 10;
+
+            try
+            {
+                showHeartBeat = Convert.ToBoolean(ConfigurationManager.AppSettings["show_heartbeat"]);
+                syncHeartBeat = Convert.ToBoolean(ConfigurationManager.AppSettings["save_heartbeat"]);
+                heartBeatThreshold = Convert.ToInt32(ConfigurationManager.AppSettings["heartbeat_threshold"]);
+            }
+            catch(Exception ee)
+            {
+                PrintDebug("获取配置参数错误。", true);
+            }
+            
             foreach(string ps in values.Split(';'))
             {
                 string[] p = ps.Split(',');
-                BoardListenerThread t = new BoardListenerThread(this, local, p[2], Convert.ToInt32(p[1]), Convert.ToInt32(p[0]));
+                BoardListenerThread t = new BoardListenerThread(this, local, p[2], Convert.ToInt32(p[1]), Convert.ToInt32(p[0]), showHeartBeat, syncHeartBeat, heartBeatThreshold);
                 listenerThreads.Add(t);
                 t.Start();
             }
@@ -130,6 +144,7 @@ namespace BPM.BoardListener
                 lvi.SubItems.Add(serial);
                 lvi.SubItems.Add(board);
                 lvi.SubItems.Add(ip);
+                lvi.SubItems.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 lvi.SubItems.Add(department);
                 lvi.SubItems.Add(address);
 
@@ -168,6 +183,27 @@ namespace BPM.BoardListener
                 foreach (ListViewItem t in deviceList.Items)
                 {
                     t.Text = ++index + "";
+                }
+            }
+        }
+
+        delegate void UpdateDeviceDelegate(string ip);
+        public void UpdateDevice(string ip)
+        {
+            if (deviceList.InvokeRequired)
+            {
+                RemoveDeviceDelegate d = new RemoveDeviceDelegate(UpdateDevice);
+                Invoke(d, new object[] { ip });
+            }
+            else {
+                for (int i = deviceList.Items.Count - 1; i >= 0; i--)
+                {
+                    if (deviceList.Items[i].SubItems[3].Text == ip)
+                    {
+                        deviceList.Items[i].SubItems[4].Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                        break;
+                    }
                 }
             }
         }

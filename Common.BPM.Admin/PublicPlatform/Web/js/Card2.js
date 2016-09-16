@@ -234,11 +234,11 @@ var Bind = {
                 return;
             }
 
-            if (vc == '') {
-                alert('请输入验证码。');
-                Binder.controller.Vcode.focus();
-                return;
-            }
+            //if (vc == '') {
+            //    alert('请输入验证码。');
+            //    Binder.controller.Vcode.focus();
+            //    return;
+            //}
 
             Loading.show();
             $.getJSON(actionUrl, { action: 'bind', card: cardNo, password: password, vcode: vc, telphone: $('input#Telphone').val() }, function (json) {

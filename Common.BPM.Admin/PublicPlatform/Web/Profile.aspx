@@ -56,14 +56,14 @@
                 <div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">密码</label></div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input id="Password" class="weui_input" type="password" placeholder="请输入密码"/>
+                        <input id="Password" class="weui_input" type="password" pattern="[0-9]*" placeholder="请输入密码"/>
                     </div>
                 </div>
 
                 <div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">确认密码</label></div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input id="Repassword" class="weui_input" type="password" placeholder="请输入确认密码"/>
+                        <input id="Repassword" class="weui_input" type="password" pattern="[0-9]*" placeholder="请输入确认密码"/>
                     </div>
                 </div>
             </div>
@@ -99,6 +99,13 @@
                     <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
                     <div class="weui_cell_bd weui_cell_primary">
                         <p>洗车记录</p>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+                </a>
+                <a class="weui_cell" href="./ChangePassword.aspx">
+                    <div class="weui_cell_hd"><img src="./images/icon_card.png" alt="" style="width:20px;margin-left:5px;margin-right:15px;display:block"></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>重置密码</p>
                     </div>
                     <div class="weui_cell_ft"></div>
                 </a>

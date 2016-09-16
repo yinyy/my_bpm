@@ -2857,8 +2857,10 @@
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
     <Content Include="PublicPlatform\Web\Authorize.html" />
+    <Content Include="PublicPlatform\Web\ChangePassword.aspx" />
     <Content Include="PublicPlatform\Web\css\Promote.css" />
     <Content Include="PublicPlatform\Web\Error.html" />
+    <Content Include="PublicPlatform\Web\js\ChangePassword.js" />
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
@@ -3444,6 +3446,7 @@
     <Content Include="PublicPlatform\Web\handler\VcodeHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\AuthorizeTestHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\RecordHandler.ashx" />
+    <Content Include="PublicPlatform\Web\handler\ChangePassword.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3721,6 +3724,13 @@
     <Compile Include="PublicPlatform\Web\Card2.aspx.designer.cs">
       <DependentUpon>Card2.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PublicPlatform\Web\ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PublicPlatform\Web\handler\AuthorizeHandler.ashx.cs">
       <DependentUpon>AuthorizeHandler.ashx</DependentUpon>
     </Compile>
@@ -3729,6 +3739,9 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\CardHandler.ashx.cs">
       <DependentUpon>CardHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\handler\ChangePassword.ashx.cs">
+      <DependentUpon>ChangePassword.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\handler\ProfileHandler.ashx.cs">
       <DependentUpon>ProfileHandler.ashx</DependentUpon>

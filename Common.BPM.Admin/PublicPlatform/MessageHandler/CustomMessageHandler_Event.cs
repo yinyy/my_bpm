@@ -127,7 +127,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                     //检查该微信用户是否已经登记个人信息，如果没有登记，则提示用户先绑定信息
                     else if ((consume = WasherConsumeBll.Instance.GetByBinder(wxconsume)) == null)
                     {
-                        message.Content = "请先绑定个人信息";
+                        message.Content = "请先在“个人中心-我的账户”中完成个人信息绑定，享受会员权益。";
                     }
                     else {
                         //检查主板是否处于可用状态
@@ -140,7 +140,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                         {
                             int coins = WasherConsumeBll.Instance.GetValidCoins(consume.KeyId);
                             Department dept = DepartmentBll.Instance.Get(wxconsume.DepartmentId);
-
+                            
                             //如果其卡内还有超过5元的洗车比，则提示其可用直接启动机器
                             if (coins >= 500)
                             {
@@ -229,7 +229,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 wxconsume.KeyId = WasherWeChatConsumeBll.Instance.Add(wxconsume);
                 #endregion
 
-                responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n使用前请先绑定个人信息，享受会员权利。", dept.Brand);
+                responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n请先在“个人中心-我的账户”中完成个人信息绑定，享受会员权益。", dept.Brand);
 
                 AsyncHandleOtherThings(wxconsume.KeyId);
             }

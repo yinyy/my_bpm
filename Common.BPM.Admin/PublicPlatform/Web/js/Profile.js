@@ -58,6 +58,13 @@ $(document).ready(function () {
             return;
         }
 
+        if (password.length < 6) {
+            $('input#Password').focus();
+            alert('密码长度需大于6位。');
+
+            return;
+        }
+
         if (password != repassword) {
             $('input#Repassword').focus();
             alert('两次输入的密码不一致。请重新输入。');

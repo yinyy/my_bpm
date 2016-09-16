@@ -23,14 +23,20 @@ namespace BPM.BoardListener
         private ManualResetEvent resetEvent = new ManualResetEvent(false);
         private Dictionary<string, Socket> clients = new Dictionary<string, Socket>();
         private List<BoardClient> boards = new List<BoardClient>();
+        private bool showHeartBeat, saveHeartBeat;
+        private int heartBeatCount = 0;
+        private int heartBeatThreshold;
 
-        public BoardListenerThread(IPresenter presenter, string localAddress, string serverAddress, int port, int departmentId)
+        public BoardListenerThread(IPresenter presenter, string localAddress, string serverAddress, int port, int departmentId, bool showHeartBeat, bool saveHeartBeat, int heartBeatThreshold)
         {
             this.presenter = presenter;
             this.localAddress = localAddress;
             this.serverAddress = serverAddress;
             this.port = port;
             this.departmentId = departmentId;
+            this.showHeartBeat = showHeartBeat;
+            this.saveHeartBeat = saveHeartBeat;
+            this.heartBeatThreshold = heartBeatThreshold;
         }
 
         public void Start()
@@ -84,7 +90,7 @@ namespace BPM.BoardListener
             }
             catch (Exception exp)
             {
-                presenter.PrintDebug(string.Format("【{0:######}】异常：{1}。", departmentId, exp.Message), true);
+                presenter.PrintDebug(string.Format("【{0:######}】异常位置1：{1}。\n{2}", departmentId, exp.Message, exp.StackTrace), true);
             }
         }
 
@@ -106,7 +112,13 @@ namespace BPM.BoardListener
                         byte[] bs = so.buffer.Take(len).ToArray();
 
                         ReceivedMessageBase receivedMessage = ReceivedMessageBase.Parse(bs);
-                        presenter.PrintDebug(string.Format("【{0:######}】{1}。", departmentId, receivedMessage.ToString()), true);
+
+                        if ((receivedMessage.Command != TcpMessageBase.CommandType.HeartBeat) || showHeartBeat)
+                        {
+                            presenter.PrintDebug(string.Format("【{0:######}】{1}", departmentId, receivedMessage.ToString()),
+                                (receivedMessage.Command != TcpMessageBase.CommandType.HeartBeat) || saveHeartBeat);
+                        }
+
 
                         try
                         {
@@ -124,12 +136,26 @@ namespace BPM.BoardListener
                                     if (clients.ContainsKey(receivedMessage.BoardNumber))
                                     {
                                         Socket clt = clients[receivedMessage.BoardNumber];
-                                        if (clt.Connected)
+
+                                        try
+                                        {
+                                            clt.Send(new byte[] { });
+                                        }
+                                        catch
+                                        {
+                                            presenter.PrintDebug(string.Format("【{0:######}】连接可能已经断开", departmentId), true);
+                                        }
+                                        
+                                        if (clt != null && clt.Connected)
                                         {
                                             //clt.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(SendCallback), clt);
                                             clt.Send(buffer);//由异步改为同步
 
-                                            presenter.PrintDebug(string.Format("【{0:######}】{1}。", departmentId, replyMessage.ToString()), true);
+                                            presenter.PrintDebug(string.Format("【{0:######}】{1}", departmentId, replyMessage.ToString()), true);
+                                        }
+                                        else
+                                        {
+                                            presenter.PrintDebug(string.Format("【{0:######}】连接可能已经断开2。", departmentId), true);
                                         }
                                     }
                                 }
@@ -140,8 +166,68 @@ namespace BPM.BoardListener
                                     {
                                         //心跳包
                                         replyMessage = new ReplyHeartBeatMessage() { Address = ipaddress };
+
+                                        presenter.UpdateDevice(ipaddress);
+
+                                        heartBeatCount++;
+                                        if (heartBeatCount >= heartBeatThreshold)
+                                        {
+                                            heartBeatThreshold = 0;
+
+                                            new Thread(() =>
+                                            {
+                                                SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&clientIp={2}&deptId={3}",
+                                                serverAddress, "HeartBeat", (client.RemoteEndPoint as IPEndPoint).Address.ToString(), departmentId));
+                                            }).Start();
+                                        }
                                     }
-                                    else if (receivedMessage.Command == TcpMessageBase.CommandType.ReaderSetting)
+                                    else if (receivedMessage.Command == TcpMessageBase.CommandType.TimeSync)
+                                    {
+                                        //时间同步
+                                        //把设备号和Socket放到字典中
+                                        string boardNumber = receivedMessage.BoardNumber;
+                                        if (clients.ContainsKey(boardNumber))
+                                        {
+                                            Socket clt = clients[boardNumber];
+                                            if (clt != client)
+                                            {
+                                                try
+                                                {
+                                                    clt.Close();
+                                                }
+                                                catch
+                                                {
+
+                                                }
+
+                                                clients.Remove(boardNumber);
+
+                                                presenter.PrintDebug(string.Format("【{0:######}】主板（{1}）时间同步，服务器主动关闭之前的TCP连接。", departmentId, boardNumber), true);
+                                            }
+                                        }
+
+                                        if (!clients.ContainsKey(boardNumber))
+                                        {
+                                            clients.Add(boardNumber, client);
+                                        }
+
+                                        replyMessage = new ReplyTimeSyncMessage(boardNumber);
+
+                                        new Thread(() =>
+                                        {
+                                            byte[] buffer = SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&boardNumber={2}&clientIp={3}&listenerIp={4}&port={5}&deptId={6}",
+                                            serverAddress, "TimeSync", boardNumber, (client.RemoteEndPoint as IPEndPoint).Address.ToString(), localAddress, port, departmentId));
+                                            string str = Encoding.UTF8.GetString(buffer);
+
+                                            var obj = new { Success = false, BoardNumber = "", Serial = "", Address = "", DepartmentName = "", IP = "" };
+                                            obj = JsonConvert.DeserializeAnonymousType(str, obj);
+
+                                            if (obj.Success == true)
+                                            {
+                                                presenter.AddDevice(obj.Serial, obj.BoardNumber, obj.IP, obj.DepartmentName, obj.Address);
+                                            }
+                                        }).Start();
+                                    }else if (receivedMessage.Command == TcpMessageBase.CommandType.ReaderSetting)
                                     {
                                         byte[] buffer = SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&boardNumber={2}&deptId={3}",
                                             serverAddress, "ReaderSetting", receivedMessage.BoardNumber, departmentId));
@@ -197,38 +283,6 @@ namespace BPM.BoardListener
                                             };
                                         }
                                     }
-                                    else if (receivedMessage.Command == TcpMessageBase.CommandType.TimeSync)
-                                    {
-                                        //时间同步
-                                        //把设备号和Socket放到字典中
-                                        string boardNumber = receivedMessage.BoardNumber;
-                                        if (clients.ContainsKey(boardNumber) && !clients[boardNumber].Connected)
-                                        {
-                                            clients.Remove(boardNumber);
-                                        }
-
-                                        if (!clients.ContainsKey(boardNumber))
-                                        {
-                                            clients.Add(boardNumber, client);
-                                        }
-
-                                        replyMessage = new ReplyTimeSyncMessage(boardNumber);
-
-                                        new Thread(() =>
-                                        {
-                                            byte[] buffer = SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&boardNumber={2}&clientIp={3}&listenerIp={4}&port={5}&deptId={6}",
-                                            serverAddress, "TimeSync", boardNumber, (client.RemoteEndPoint as IPEndPoint).Address.ToString(), localAddress, port, departmentId));
-                                            string str = Encoding.UTF8.GetString(buffer);
-
-                                            var obj = new { Success = false, BoardNumber = "", Serial = "", Address = "", DepartmentName = "", IP = "" };
-                                            obj = JsonConvert.DeserializeAnonymousType(str, obj);
-
-                                            if (obj.Success == true)
-                                            {
-                                                presenter.AddDevice(obj.Serial, obj.BoardNumber, obj.IP, obj.DepartmentName, obj.Address);
-                                            }
-                                        }).Start();
-                                    }
                                     else if (receivedMessage.Command == TcpMessageBase.CommandType.UploadStatus)
                                     {
                                         ReceivedUploadStatusMessage rusm = receivedMessage as ReceivedUploadStatusMessage;
@@ -278,14 +332,18 @@ namespace BPM.BoardListener
                                         //client.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(SendCallback), client);
                                         client.Send(buffer);
 
-                                        presenter.PrintDebug(string.Format("【{0:######}】{1}。", departmentId, replyMessage.ToString()), true);
+                                        if ((replyMessage.Command != TcpMessageBase.CommandType.HeartBeat) || showHeartBeat)
+                                        {
+                                            presenter.PrintDebug(string.Format("【{0:######}】{1}", departmentId, replyMessage.ToString()),
+                                                (replyMessage.Command != TcpMessageBase.CommandType.HeartBeat) || saveHeartBeat);
+                                        }
                                     }
                                 }
                             }
                         }
                         catch (Exception eee)
                         {
-                            presenter.PrintDebug(string.Format("【{0:######}】异常：{1}。", departmentId, eee.Message), true);
+                            presenter.PrintDebug(string.Format("【{0:######}】异常位置2：{1}。\n{2}", departmentId, eee.Message, eee.StackTrace), true);
                         }
                     }).Start();
                 }
@@ -305,17 +363,34 @@ namespace BPM.BoardListener
                     }
                     //client.Close();
                 }
+
+                //TODO:放到这里不知道是否会存在问题
+                if (client != null && client.Connected)
+                {
+                    client.BeginReceive(so.buffer, 0, StateObject.BufferSize, SocketFlags.None, new AsyncCallback(ReceiveCallback), so);
+                }
+                else
+                {
+                    if (clients.ContainsValue(client))
+                    {
+                        string key = clients.Where(p=> { return p.Value == client; }).Select(p=>p.Key).FirstOrDefault();
+                        if (key != null)
+                        {
+                            clients.Remove(key);
+                        }
+                    }
+                }
             }
             catch (Exception exp)
             {
                 //client.Close();
-                presenter.PrintDebug(string.Format("【{0:######}】异常：{1}。", departmentId, exp.Message), true);
+                presenter.PrintDebug(string.Format("【{0:######}】异常位置3：{1}。\n{2}", departmentId, exp.Message, exp.StackTrace), true);
             }
 
-            if (client != null && client.Connected)
-            {
-                client.BeginReceive(so.buffer, 0, StateObject.BufferSize, SocketFlags.None, new AsyncCallback(ReceiveCallback), so);
-            }
+            //if (client != null && client.Connected)
+            //{
+            //    client.BeginReceive(so.buffer, 0, StateObject.BufferSize, SocketFlags.None, new AsyncCallback(ReceiveCallback), so);
+            //}
         }
 
         //private void SendCallback(IAsyncResult ar)
@@ -359,7 +434,7 @@ namespace BPM.BoardListener
             }
             catch (Exception e)
             {
-                presenter.PrintDebug(string.Format("【{0:######}】异常：{1}。", departmentId, e.Message), true);
+                presenter.PrintDebug(string.Format("【{0:######}】异常位置4：{1}。\n{2}", departmentId, e.Message, e.StackTrace), true);
             }
 
             return null;

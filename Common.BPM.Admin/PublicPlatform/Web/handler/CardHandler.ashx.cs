@@ -48,19 +48,19 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 string vcode = context.Request.Params["vcode"];
                 string telphone = context.Request.Params["telphone"];
 
-                WasherVcodeModel code = WasherVcodeBll.Instance.Get(telphone);
-                if (code == null || code.Validated != null||code.Vcode!=vcode)
-                {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码错误。" }));
-                }
-                else if (code.Created.AddMinutes(3) < DateTime.Now)
-                {
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码已过期。" }));
-                }
-                else
-                {
-                    code.Validated = DateTime.Now;
-                    WasherVcodeBll.Instance.Update(code);
+                //WasherVcodeModel code = WasherVcodeBll.Instance.Get(telphone);
+                //if (code == null || code.Validated != null || code.Vcode != vcode)
+                //{
+                //    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码错误。" }));
+                //}
+                //else if (code.Created.AddMinutes(3) < DateTime.Now)
+                //{
+                //    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码已过期。" }));
+                //}
+                //else
+                //{
+                //    code.Validated = DateTime.Now;
+                //    WasherVcodeBll.Instance.Update(code);
 
                     WasherCardModel card = WasherCardBll.Instance.Get(dept.KeyId, no);
                     if (card == null)
@@ -92,7 +92,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                             context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡绑定失败。" }));
                         }
                     }
-                }
+                //}
             }
             else if (action == "query")
             {

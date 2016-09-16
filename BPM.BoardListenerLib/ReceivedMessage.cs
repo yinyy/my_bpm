@@ -130,7 +130,7 @@ namespace BPM.BoardListenerLib
                     case CommandType.ValidatePhoneAndPassword:
                         ReceivedValidatePhoneAndPasswordMessage rvppm = mo as ReceivedValidatePhoneAndPasswordMessage;
 
-                        rvppm.Phone = string.Format("{0:00000000000}", ((long)bs[11] << 40) + ((long)bs[12] << 32) + (bs[13] << 24) + (bs[14] << 16) + (bs[15] << 8) + bs[16]);
+                        rvppm.Phone = string.Format("{0:00000000000}", ((long)bs[11] << 40) + ((long)bs[12] << 32) + ((long)bs[13] << 24) + ((long)bs[14] << 16) + ((long)bs[15] << 8) + (long)bs[16]);
                         rvppm.Password = string.Format("{0:000000}", (bs[17] << 24) + (bs[18] << 16) + (bs[19] << 8) + bs[20]);
                         break;
                     case CommandType.TimeSync:

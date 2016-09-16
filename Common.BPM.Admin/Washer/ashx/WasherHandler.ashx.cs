@@ -322,6 +322,17 @@ namespace BPM.Admin.Washer.ashx
 
                 context.Response.Write(JSONhelper.ToJson(jobj));
             }
+            else if (action == "HeartBeat")
+            {
+                int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
+                string clientIp = context.Request.Params["clientIp"];
+
+                WasherDeviceBll.Instance.DeviceHeartBeat(deptId, clientIp);
+            }
+
+
+
+            
 
             context.Response.Flush();
             context.Response.End();
@@ -337,14 +348,21 @@ namespace BPM.Admin.Washer.ashx
 
         private void SendData(string ip, byte[] buffer)
         {
+            int port = 6000;
+            if (ip.IndexOf(':') != -1)
+            {
+                port = Convert.ToInt32(ip.Substring(ip.IndexOf(':') + 1));
+                ip = ip.Substring(0, ip.IndexOf(':'));   
+            }
+
             new Thread(() =>
             {
                 try
                 {
-                    IPAddress localhost = IPAddress.Parse(ip);
+                    //IPAddress localhost = IPAddress.Parse(ip);
                     using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                     {
-                        socket.Connect(IPAddress.Parse(ip), 6000);
+                        socket.Connect(IPAddress.Parse(ip), port);
                         socket.Send(buffer);
                     }
                 }
