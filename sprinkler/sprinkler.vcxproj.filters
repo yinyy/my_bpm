@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.sprinkler.vsarduino.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CardReaderHelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -25,6 +22,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SimHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="__vm\.sprinkler.vsarduino.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CardReaderHelper2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -36,6 +39,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SimHelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CardReaderHelper2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
