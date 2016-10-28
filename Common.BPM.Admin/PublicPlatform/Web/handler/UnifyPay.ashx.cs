@@ -42,10 +42,10 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             switch (action)
             {
                 case "prepay":
-                    string appid = context.Session["appid"].ToString();
+                    int deptId =Convert.ToInt16( context.Session["deptId"].ToString());
                     string openid = context.Session["openid"].ToString();
 
-                    Department dept = DepartmentBll.Instance.GetByAppid(appid);
+                    Department dept = DepartmentBll.Instance.Get(deptId);
                     WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
                     if (wxconsume == null ||dept == null)
                     {

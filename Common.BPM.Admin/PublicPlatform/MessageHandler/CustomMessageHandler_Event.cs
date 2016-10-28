@@ -145,13 +145,13 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                             if (coins >= 500)
                             {
                                 message.Content = string.Format(
-@"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
+@"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
 
-微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
+微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
                             }
                             else
                             {
-                                message.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.Appid, device.BoardNumber);
+                                message.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
                             }
                         }
                     }

@@ -23,10 +23,10 @@ namespace BPM.Admin.PublicPlatform.Web.handler
         public void ProcessRequest(HttpContext context)
         {
             string action = context.Request.Params["action"];
-            string appid = context.Session["appid"].ToString();
+            int deptId=Convert.ToInt16( context.Session["deptId"].ToString());
             string openid = context.Session["openid"].ToString();
 
-            Department dept = DepartmentBll.Instance.GetByAppid(appid);
+            Department dept = DepartmentBll.Instance.Get(deptId);
             WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
             WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinder(wxconsume);
 
@@ -177,7 +177,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             }
             else
             {
-                context.Response.Write(JSONhelper.ToJson(new { Appid = appid, Openid = openid }));
+                context.Response.Write(JSONhelper.ToJson(new { Appid = dept.Appid, Openid = openid }));
             }
 
             context.Response.Flush();

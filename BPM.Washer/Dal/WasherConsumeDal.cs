@@ -1,5 +1,6 @@
 ﻿using BPM.Common;
 using BPM.Common.Data;
+using BPM.Common.Data.Filter;
 using BPM.Common.Provider;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,24 @@ namespace Washer.Dal
             }
 
             return JSONhelper.ToJson(list);
+        }
+
+        internal DataTable Export(string filter, string sort, string order)
+        {
+            string sortorder = sort + " " + order;
+            string showfiels = "Name as 姓名, Gender as 性别, OpenId as 微信OpenId, NickName as 昵称, Telphone as 电话, Country as 国家, Province as 省份, City as 城市, ValidCoins as 可用洗车币, WillExpireCoins as 即将过期, Points as 积分";
+
+            var pcp = new ProcCustomPage("V_Consumes")
+            {
+                PageIndex = 1,
+                PageSize = Int32.MaxValue,
+                OrderFields = sortorder,
+                WhereString = FilterTranslator.ToSql(filter),
+                ShowFields = showfiels
+            };
+            int recordCount;
+
+            return GetPageWithSp(pcp, out recordCount);
         }
     }
 }

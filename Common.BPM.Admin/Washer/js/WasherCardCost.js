@@ -8,6 +8,17 @@ $(function () {
     $('#a_search').click(function () {
         search.go('list');
     });
+    //导出
+    $('#a_export').click(function () {
+        var o = { action: 'export', keyid: 0 };
+        var query = "json=" + JSON.stringify(o);
+
+        if ($('body').data('where') != null && $('body').data('where') != '') {
+            query = query + "&filter=" + $('body').data('where');
+        }
+
+        window.open(actionURL + '?' + query);
+    });
 });
 
 var grid = {
@@ -15,7 +26,7 @@ var grid = {
         $('#list').datagrid({
             url: actionURL + '?' + "json=" + JSON.stringify({ action: 'cost'}),
             toolbar: '#toolbar',
-            title: "刷卡记录",
+            title: "洗车卡消费记录",
             iconCls: 'icon icon-list',
             width: winSize.width,
             height: winSize.height,
@@ -27,14 +38,15 @@ var grid = {
             frozenColumns: [[]],
             columns: [[
 		    {
-		        title: '刷卡时间', field: 'Time', width: 200, align: 'center', formatter(v, r, i) {
+		        title: '刷卡时间', field: 'Time', width: 180, align: 'center', formatter(v, r, i) {
 		            return v.substring(0, 19);
 		        }},
-            { title: '持卡人', field: 'Name', width: 150, align: 'center' },
-            { title: '卡号', field: 'CardNo', width: 150, align: 'center' },
+            { title: '持卡人', field: 'Name', width: 120, align: 'center' },
+            { title: '卡号', field: 'CardNo', width: 200, align: 'center' },
+            { title: '卡类型', field: 'Kind', width: 150, align: 'center'},
             {
-                title: '洗车币', field: 'Coins', width: 100, align: 'right', formatter(v, r, i) {
-                    return (-1 * v / 100.0).toFixed(2);
+                title: '消费（洗车币）', field: 'Coins', width: 105, align: 'right', formatter(v, r, i) {
+                    return (v / 100.0).toFixed(2);
                 }
             },
             {
@@ -44,9 +56,9 @@ var grid = {
             ]],
             pagination: true,
             pageSize: PAGESIZE,
-            pageList: [20, 40, 50],
+            pageList: [20, 40, 50]/*,
             sortName: 'KeyId',
-            sortOrder: 'asc'
+            sortOrder: 'desc'*/
         });
     },
     getSelectedRow: function () {

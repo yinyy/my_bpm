@@ -62,6 +62,7 @@ namespace BPM.Admin.Washer.ashx
                             model.Memo2 = "";
                             model.Setting = string.Format("{{\"Coin\": 0, \"Params\":[{0}]}}", ConfigurationManager.AppSettings["board_default_setting"]);
                             model.ListenerIp = "139.129.43.203";
+                            model.Coordinate = "";
 
                             context.Response.Write(WasherDeviceBll.Instance.Add(model));
                         }
@@ -119,6 +120,7 @@ namespace BPM.Admin.Washer.ashx
                     model.Region = rpm.Entity.Region.Substring(rpm.Entity.Region.IndexOf('_') + 1);
                     model.Address = rpm.Entity.Address;
                     model.Setting = rpm.Entity.Setting;
+                    model.Coordinate = rpm.Entity.Coordinate;
 
                     model.Memo2 = rpm.Entity.Memo2;
 

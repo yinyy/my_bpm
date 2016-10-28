@@ -26,8 +26,15 @@ namespace BPM.Admin.PublicPlatform
             string tag = context.Request["tag"];
 
             int deptId = Convert.ToInt32(tag);
+
+            using (StreamWriter writer = new StreamWriter(context.Server.MapPath("~/App_Data/Params-" + DateTime.Now.Ticks + ".txt")))
+            {
+                writer.WriteLine(string.Format("signature={0}&timestamp={1}&nonce={2}&echostr={3}&tag={4}", signature, timestamp, nonce, echostr, tag));
+            }
+
             string token = null;
             Department dept = DepartmentBll.Instance.Get(deptId);
+
             if (dept != null)
             {
                 token = dept.Token;
@@ -37,12 +44,11 @@ namespace BPM.Admin.PublicPlatform
                     AccessTokenContainer.Register(dept.Appid, dept.Secret);
                 }
             }
+            else
+            {
+                return;
+            }
 
-            //using (StreamWriter writer = new StreamWriter(context.Server.MapPath("~/App_Data/00" + DateTime.Now.Ticks + ".txt")))
-            //{
-            //    writer.WriteLine(string.Format("signature={0}&timestamp={1}&nonce={2}&echostr={3}&token={5}", signature, timestamp, nonce, echostr, tag, token));
-            //}
-            
             if (context.Request.HttpMethod.ToUpper() == "GET")
             {
                 if (CheckSignature.Check(signature, timestamp, nonce, token))

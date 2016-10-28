@@ -2856,12 +2856,15 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
-    <Content Include="PublicPlatform\Web\Authorize.html" />
+    <Content Include="Extra\WashCar.aspx" />
+    <Content Include="PublicPlatform\Web\Authorize.aspx" />
     <Content Include="PublicPlatform\Web\ChangePassword.aspx" />
     <Content Include="PublicPlatform\Web\css\Promote.css" />
     <Content Include="PublicPlatform\Web\Error.html" />
     <Content Include="PublicPlatform\Web\js\ChangePassword.js" />
+    <Content Include="PublicPlatform\Web\Luck.aspx" />
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
+    <Content Include="PublicPlatform\Web\Promotion.aspx" />
     <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="PublicPlatform\Web\Card2.aspx" />
@@ -3435,6 +3438,8 @@
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
     <Content Include="ashx\UploadHandler.ashx" />
+    <Content Include="Extra\url.data" />
+    <Content Include="Extra\ValidateUser.ashx" />
     <None Include="Properties\PublishProfiles\本地.pubxml" />
     <Content Include="PublicPlatform\Index.ashx" />
     <None Include="Properties\PublishProfiles\远程.pubxml" />
@@ -3662,6 +3667,16 @@
     <Compile Include="ashx\UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Extra\ValidateUser.ashx.cs">
+      <DependentUpon>ValidateUser.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Extra\WashCar.aspx.cs">
+      <DependentUpon>WashCar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Extra\WashCar.aspx.designer.cs">
+      <DependentUpon>WashCar.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PublicPlatform\Download\CodeRecord.cs" />
     <Compile Include="PublicPlatform\Download\Config.cs" />
     <Compile Include="PublicPlatform\Download\ConfigHelper.cs" />
@@ -3755,6 +3770,13 @@
     <Compile Include="PublicPlatform\Web\handler\VcodeHandler.ashx.cs">
       <DependentUpon>VcodeHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="PublicPlatform\Web\Luck.aspx.cs">
+      <DependentUpon>Luck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Luck.aspx.designer.cs">
+      <DependentUpon>Luck.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PublicPlatform\Web\OrderDetail.aspx.cs">
       <DependentUpon>OrderDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3789,6 +3811,13 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\Promote.aspx.designer.cs">
       <DependentUpon>Promote.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Promotion.aspx.cs">
+      <DependentUpon>Promotion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Promotion.aspx.designer.cs">
+      <DependentUpon>Promotion.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\Records.aspx.cs">
       <DependentUpon>Records.aspx</DependentUpon>

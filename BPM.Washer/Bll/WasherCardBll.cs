@@ -70,17 +70,29 @@ namespace Washer.Bll
             WasherCardModel card = WasherCardBll.Instance.Get(cardId);
             if (card.Coins > 0)
             {
+                WasherCardLogModel cl = new WasherCardLogModel()
+                {
+                    CardId = card.KeyId,
+                    Memo = string.Format("{0}", ticks),
+                    Time = DateTime.Now                   
+                };
+
                 if (card.Coins >= cost)
                 {
+                    cl.Coins = cost;
+
                     card.Coins -= cost;
                     cost = 0;
                 }
                 else {
+                    cl.Coins = card.Coins;
+
                     cost -= card.Coins;
                     card.Coins = 0;
                 }
-                //card.Memo = string.Format("{0}", ticks);
+
                 WasherCardBll.Instance.Update(card);
+                WasherCardLogBll.Instance.Insert(cl);
             }
 
             if (cost > 0 && card.BinderId!=null)
@@ -88,23 +100,34 @@ namespace Washer.Bll
                 var cards = WasherCardBll.Instance.GetValidCards(card.BinderId.Value).Where(a => a.Coins > 0).OrderBy(a => a.ValidateEnd);
                 foreach (WasherCardModel c in cards)
                 {
+                    WasherCardLogModel cl = new WasherCardLogModel()
+                    {
+                        CardId = c.KeyId,
+                        Memo = string.Format("{0}", ticks),
+                        Time = DateTime.Now
+                    };
+
                     if (c.Coins >= cost)
                     {
+                        cl.Coins = cost;
+
                         c.Coins -= cost;
                         cost = 0;
-
-                        c.Memo = string.Format("{0}", ticks);
-                        WasherCardBll.Instance.Update(c);
-
-                        break;
                     }
                     else
                     {
+                        cl.Coins = c.Coins;
+
                         c.Coins = 0;
                         cost -= c.Coins;
+                    }
 
-                        c.Memo = string.Format("{0}", ticks);
-                        WasherCardBll.Instance.Update(c);
+                    WasherCardLogBll.Instance.Insert(cl);
+                    WasherCardBll.Instance.Update(c);
+
+                    if (cost <= 0)
+                    {
+                        break;
                     }
                 }
             }
@@ -134,6 +157,12 @@ namespace Washer.Bll
         {
             return string.Format("Coupon_{0}_{1:x}", deptId, DateTime.Now.Ticks);
         }
+
+        public static string GetNextCouponCardNo(string prefix,int deptId, string openid)
+        {
+            return string.Format("{0}_{1}_{2:x}_{3}", prefix, deptId, DateTime.Now.Ticks, openid);
+        }
+
 
         public int GetValidCoins(int consumeId)
         {

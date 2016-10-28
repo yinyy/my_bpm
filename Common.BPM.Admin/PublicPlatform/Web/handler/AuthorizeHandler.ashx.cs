@@ -24,25 +24,32 @@ namespace BPM.Admin.PublicPlatform.Web.handler
         public void ProcessRequest(HttpContext context)
         {
             string code = context.Request.Params["code"];
-            string appid = context.Request.Params["appid"];
-            Department dept = DepartmentBll.Instance.GetByAppid(appid);
+            int deptId = Convert.ToInt16(context.Request.Params["appid"]);
+            Department dept = DepartmentBll.Instance.Get(deptId);
 
-            OAuthAccessTokenResult result = OAuthApi.GetAccessToken(dept.Appid, dept.Secret, code);
-            if (result.errcode != ReturnCode.请求成功)
+            if (string.IsNullOrEmpty(code))
             {
-                context.Response.Write(JSONhelper.ToJson(new { Success = false }));
+                context.Response.Write(JSONhelper.ToJson(new { Success = true, Appid=dept.Appid }));
             }
             else
             {
-                context.Session["appid"] = appid;
-                context.Session["openid"] = result.openid;
+                OAuthAccessTokenResult result = OAuthApi.GetAccessToken(dept.Appid, dept.Secret, code);
+                if (result.errcode != ReturnCode.请求成功)
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false }));
+                }
+                else
+                {
+                    context.Session["deptId"] = dept.KeyId;
+                    context.Session["openid"] = result.openid;
 
-                //context.Session["appid"] = "wx2d8bcab64b53be3a";
-                //context.Session["openid"] = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";
+                    //context.Session["appid"] = "wx2d8bcab64b53be3a";
+                    //context.Session["openid"] = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";
 
-                context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = result.openid }));
-                //WeixinUserInfoResult userInfo = CommonApi.GetUserInfo(AccessTokenContainer.GetAccessToken(dept.Appid), result.openid);
-                //context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = userInfo.openid }));
+                    context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = result.openid }));
+                    //WeixinUserInfoResult userInfo = CommonApi.GetUserInfo(AccessTokenContainer.GetAccessToken(dept.Appid), result.openid);
+                    //context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = userInfo.openid }));
+                }
             }
 
             context.Response.Flush();

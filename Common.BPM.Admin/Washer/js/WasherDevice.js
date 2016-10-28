@@ -72,9 +72,7 @@ var grid = {
                     }
                 }},
             {
-                title: '当前状态', field: 'Status', width: 100, align: 'center', formatter: function (v, r, i) {
-                    return '等待解析';
-                }},
+                title: '地理坐标', field: 'Coordinate', width: 150, align: 'center'},
             {
                 title: 'IP地址', field: 'IpAddress', width: 110, align: 'center', formatter: function (v, r, i) {
                     if (v=='') {
@@ -252,7 +250,7 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '设置', width: 800, height: 374, href: setDeviceUrl, iconCls: 'icon-edit',
+                title: '设置', width: 800, height: 410, href: setDeviceUrl, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_Province').combobox({
                         url: "/Washer/ashx/WasherDistrictHandler.ashx?action=province",
@@ -311,6 +309,7 @@ var CRUD = {
                         }
                     });
                     top.$('#txt_Address').val(row.Address);
+                    top.$('#txt_Coordinate').val(row.Coordinate);
                     top.$('#txt_Memo2').val(row.Memo2);
 
                     var setting = eval("(" + row.Setting + ")");

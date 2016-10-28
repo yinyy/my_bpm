@@ -15,7 +15,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
         public void ProcessRequest(HttpContext context)
         {
-            context.Session["appid"] = "wx2d8bcab64b53be3a";
+            context.Session["deptId"] = "70";
             context.Session["openid"] = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";
 
             context.Response.Write(JSONhelper.ToJson(new { Success = true, Openid = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M" }));

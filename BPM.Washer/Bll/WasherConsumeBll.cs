@@ -1,6 +1,7 @@
 ﻿using BPM.Common.Provider;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using Washer.Dal;
@@ -43,6 +44,11 @@ namespace Washer.Bll
         public WasherConsumeModel Get(int departmentId, string telphone)
         {
             return WasherConsumeDal.Instance.GetWhere(new { DepartmentId = departmentId, Telphone = telphone }).FirstOrDefault();
+        }
+
+        public DataTable Export(string filter, string sort="KeyId", string order="asc")
+        {
+            return WasherConsumeDal.Instance.Export(filter, sort, order);
         }
 
         public WasherConsumeModel GetByBinder(WasherWeChatConsumeModel wxconsume)

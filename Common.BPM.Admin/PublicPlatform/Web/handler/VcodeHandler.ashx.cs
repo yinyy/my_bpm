@@ -38,8 +38,8 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 }
                 else
                 {
-                    string appid = context.Session["appid"].ToString();
-                    Department dept = DepartmentBll.Instance.GetByAppid(appid);
+                    int deptId= Convert.ToInt16( context.Session["deptId"].ToString());
+                    Department dept = DepartmentBll.Instance.Get(deptId);
                     WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
 
                     string cid = setting.Sms.Cid;

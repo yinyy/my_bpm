@@ -11,7 +11,7 @@
 				{
 					"type":"view",
 					"name":"查看网点",
-					"url":"http://xc.senlanjidian.com/PublicPlatform/Web/Outlets.aspx?appid=wx2d8bcab64b53be3a"
+					"url":"http://xc.senlanjidian.com/PublicPlatform/Web/Outlets.aspx?appid=72"
 				}
 			]
 		},
@@ -21,17 +21,17 @@
                 {
                     "type": "view", 
                     "name": "我的账户", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?appid=wx2d8bcab64b53be3a&next=Profile.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=72&next=Profile.aspx"
                 }, 
                 {
                     "type": "view", 
-                    "name": "充值办卡", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?appid=wx2d8bcab64b53be3a&next=Card2.aspx"
+                    "name": "注册/充值", 
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=72&next=Card2.aspx"
                 }, 
                 {
                     "type": "view", 
-                    "name": "推广有理", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?appid=wx2d8bcab64b53be3a&next=Promote.aspx"
+                    "name": "推荐有礼", 
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=72&next=Promote.aspx"
                 }
             ]
         }, 
@@ -41,7 +41,7 @@
                 {
                     "type": "view", 
                     "name": "优惠活动", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Promotion.aspx?appid=wx2d8bcab64b53be3a"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Promotion.aspx?appid=72"
                 }, 
                 {
                     "type": "view", 
@@ -51,7 +51,7 @@
                 {
                     "type": "view", 
                     "name": "大转盘", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.html?appid=wx2d8bcab64b53be3a&next=Promote.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=72&next=Luck.aspx"
                 }
             ]
         }

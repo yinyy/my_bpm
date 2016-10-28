@@ -43,6 +43,17 @@ namespace BPM.Admin.Washer.ashx
 
             switch (rpm.Action)
             {
+                case "export":
+                    if (user.IsAdmin)
+                    {
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherConsumeBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
+                    }
+                    else
+                    {
+                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherConsumeBll.Instance.Export(filter, rpm.Sort, rpm.Order));
+                    }
+                    break;
                 default:
                     if (user.IsAdmin)
                     {

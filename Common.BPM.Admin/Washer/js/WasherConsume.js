@@ -10,6 +10,17 @@ $(function () {
     $('#a_search').click(function () {
         search.go('list');
     });
+    //导出
+    $('#a_export').click(function () {
+        var o = { action: 'export', keyid: 0 };
+        var query = "json=" + JSON.stringify(o);
+
+        if ($('body').data('where') != null && $('body').data('where') != '') {
+            query = query + "&filter=" + $('body').data('where');
+        }
+
+        window.open(actionURL + '?' + query);
+    });
 });
 
 var grid = {

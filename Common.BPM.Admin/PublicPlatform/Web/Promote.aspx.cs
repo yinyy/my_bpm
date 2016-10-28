@@ -17,10 +17,10 @@ namespace BPM.Admin.PublicPlatform.Web
         {
             if (!IsPostBack)
             {
-                string appid = Session["appid"].ToString();
+                int  deptId = Convert.ToInt16( Session["deptId"].ToString());
                 string openid = Session["openid"].ToString();
 
-                Department dept = DepartmentBll.Instance.GetByAppid(appid);
+                Department dept = DepartmentBll.Instance.Get(deptId);
                 WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
                 
                 //生成带微信用户编号的临时二维码，有效时间不超过一周

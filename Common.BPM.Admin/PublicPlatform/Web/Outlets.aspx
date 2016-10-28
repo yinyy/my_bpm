@@ -27,12 +27,12 @@
                 <div class="weui_panel_bd">
                     <%foreach (var device in devices)
                         {%>
-                        <div class="weui_media_box weui_media_text">
+                        <div class="weui_media_box weui_media_text" <%=(string.IsNullOrWhiteSpace(device.Coordinate)?"":"onclick=\"document.location.href='http://api.map.baidu.com/marker?location="+string.Format("{0},{1}",device.Coordinate.Split(',')[1], device.Coordinate.Split(',')[0])+"&title=洗车机位置&content="+device.Address+"&output=html'\"") %>>
                             <h4 class="weui_media_title"><%=device.Address %></h4>
                             <p class="weui_media_desc"><%=string.Format("{0} {1} {2}", device.Province, device.City, device.Region) %></p>
                             <ul class="weui_media_info">
-                                <li class="weui_media_info_meta"><%=string.Format("设备状态：{0}", device.Enabled?"工作中":"维护中") %></li>
-                                <li class="weui_media_info_meta weui_media_info_meta_extra"><%=string.Format("更新时间：{0:yyyy年MM月dd日 HH:mm:ss}", device.UpdateTime) %></li>
+                                <li class="weui_media_info_meta"><%=string.Format("设备数量：{0} 台", device.Count) %></li>
+                                <li class="weui_media_info_meta weui_media_info_meta_extra"><%=string.Format("更新时间：{0:yyyy年MM月dd日 HH:mm:ss}", device.Update) %></li>
                             </ul>
                         </div>
                     <%} %>

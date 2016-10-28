@@ -9,9 +9,20 @@
         }
 
         if (access_code == null) {
-            var fromurl = location.href;//获取授权code的回调地址，获取到code，直接返回到当前页  
-            var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_base&state=0#wechat_redirect';
-            location.href = url;
+            var o = eval('(' + $.ajax('/PublicPlatform/Web/handler/AuthorizeHandler.ashx',
+                {
+                    async: false,
+                    data: { appid: appid },
+                    dataType: 'json'
+                }).responseText + ')');
+
+            if (o.Success) {
+                appid = o.Appid;
+
+                var fromurl = location.href;//获取授权code的回调地址，获取到code，直接返回到当前页  
+                var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_base&state=0#wechat_redirect';
+                location.href = url;
+            }
 
             return null;
         } else {

@@ -16,7 +16,7 @@ namespace Washer.Extension
             return DepartmentDal.Instance.GetWhere(new { MerchantId = merchantId }).Select(d => d.MerchantKey).FirstOrDefault();
         }
 
-        public static Department GetByAppid(this DepartmentBll bll, string appid)
+        public static Department GetByAppid0(this DepartmentBll bll, string appid)
         {
             return DepartmentDal.Instance.GetWhere(new { Appid = appid }).FirstOrDefault();
         }

@@ -27,10 +27,10 @@ namespace BPM.Admin.PublicPlatform.Web.handler
         {
             context.Response.ContentType = "text/plain";
             string action = context.Request.Params["action"];
-            string appid = context.Session["appid"].ToString();
             string openid = context.Session["openid"].ToString();
+            int deptId = Convert.ToInt16(context.Session["deptId"]);
 
-            Department dept = DepartmentBll.Instance.GetByAppid(appid);
+            Department dept = DepartmentBll.Instance.Get(deptId);
             WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
             WasherConsumeModel consume ;
 
