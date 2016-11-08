@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,32 +39,50 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxMin">
-      <HintPath>..\packages\AjaxMin.4.84.4790.14417\lib\net40\AjaxMin.dll</HintPath>
+    <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Combres">
-      <HintPath>..\packages\combres.2.2.2.17\lib\net35\Combres.dll</HintPath>
+    <Reference Include="Combres, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\combres.2.3.0.4\lib\net40\Combres.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="dotless.Core">
-      <HintPath>..\packages\dotless.1.3.1.0\lib\dotless.Core.dll</HintPath>
+    <Reference Include="dotless.Core, Version=1.4.1.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
+      <HintPath>..\packages\dotless.1.4.1.0\lib\dotless.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EcmaScript.NET.modified">
-      <HintPath>..\packages\YUICompressor.NET.1.7.1.0\lib\net35\EcmaScript.NET.modified.dll</HintPath>
+    <Reference Include="EcmaScript.NET, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EcmaScript.Net.1.0.1.0\lib\net20\EcmaScript.NET.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Fasterflect">
-      <HintPath>..\packages\fasterflect.2.1.0\lib\net40\Fasterflect.dll</HintPath>
+    <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
+      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\dll\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\DotNet\数据访问\ValueInjecter\Omu.ValueInjecter.dll</HintPath>
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Senparc.Weixin, Version=4.9.0.988, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.4.9.0\lib\net40\Senparc.Weixin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=14.3.104.988, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.MP.14.3.104\lib\net40\Senparc.Weixin.MP.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -85,11 +104,31 @@
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
     </Reference>
-    <Reference Include="Yahoo.Yui.Compressor">
-      <HintPath>..\packages\YUICompressor.NET.1.7.1.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Yahoo.Yui.Compressor, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YUICompressor.NET.2.7.0.0\lib\NET20\Yahoo.Yui.Compressor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Agriculture\AgricultureDevice.aspx" />
+    <Content Include="Agriculture\AgricultureMap.aspx" />
+    <Content Include="Agriculture\html\AgricultureDevice.html" />
+    <Content Include="Agriculture\images\map\dust.png" />
+    <Content Include="Agriculture\images\map\humidity.png" />
+    <Content Include="Agriculture\images\map\on.png" />
+    <Content Include="Agriculture\images\map\off.png" />
+    <Content Include="Agriculture\images\map\temperature.png" />
+    <Content Include="Agriculture\images\map\water.png" />
+    <Content Include="Agriculture\js\AgricultureDevice.js" />
+    <Content Include="Agriculture\js\AgricultureMap.js" />
+    <Content Include="Agriculture\js\SensorValve.js" />
+    <Content Include="Agriculture\js\SensorPm25.js" />
+    <Content Include="Agriculture\js\SensorHumidity.js" />
+    <Content Include="Agriculture\js\SensorTemperature.js" />
     <Content Include="App_Data\combres.xml" />
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
@@ -2833,6 +2872,19 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
+    <Content Include="PublicPlatform\Download\readme.txt" />
+    <Content Include="PublicPlatform\Web\css\style.css" />
+    <Content Include="PublicPlatform\Web\css\WeUI\style\weui.css" />
+    <Content Include="PublicPlatform\Web\css\WeUI\style\weui.min.css" />
+    <Content Include="PublicPlatform\Web\Device.aspx" />
+    <Content Include="PublicPlatform\Web\images\humidity.png" />
+    <Content Include="PublicPlatform\Web\images\dust.png" />
+    <Content Include="PublicPlatform\Web\images\switcher.png" />
+    <Content Include="PublicPlatform\Web\images\iot.png" />
+    <Content Include="PublicPlatform\Web\images\temperature.png" />
+    <Content Include="PublicPlatform\Web\images\unknown.png" />
+    <Content Include="PublicPlatform\Web\images\water.png" />
+    <Content Include="PublicPlatform\Web\js\Device.js" />
     <Content Include="qqloading.html" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
     <Content Include="scripts\alertify\alertify.core.css" />
@@ -3323,9 +3375,14 @@
     <Content Include="theme\bootstrap\style.css" />
     <Content Include="theme\metro\style.css" />
     <Content Include="welcome.html" />
-    <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
-    <None Include="Properties\PublishProfiles\bpm.pubxml" />
+    <Content Include="combres.readme" />
+    <Content Include="Agriculture\ashx\AgricultureDeviceHandler.ashx" />
+    <Content Include="Agriculture\ashx\AgricultureMapHandler.ashx" />
+    <None Include="Properties\PublishProfiles\本地.pubxml" />
+    <Content Include="PublicPlatform\Index.ashx" />
+    <None Include="Properties\PublishProfiles\远程.pubxml" />
+    <Content Include="PublicPlatform\Web\ashx\DeviceHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3529,6 +3586,20 @@
     <Content Include="sys\ashx\DataBaseHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agriculture\AgricultureDevice.aspx.cs">
+      <DependentUpon>AgricultureDevice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Agriculture\AgricultureDevice.aspx.designer.cs">
+      <DependentUpon>AgricultureDevice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Agriculture\ashx\AgricultureDeviceHandler.ashx.cs">
+      <DependentUpon>AgricultureDeviceHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Agriculture\ashx\AgricultureMapHandler.ashx.cs">
+      <DependentUpon>AgricultureMapHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\Combres.cs" />
     <Compile Include="ashx\ExportExcel.aspx.cs">
       <DependentUpon>ExportExcel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3566,6 +3637,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicPlatform\Download\CodeRecord.cs" />
+    <Compile Include="PublicPlatform\Download\Config.cs" />
+    <Compile Include="PublicPlatform\Download\ConfigHelper.cs" />
+    <Compile Include="PublicPlatform\Index.ashx.cs">
+      <DependentUpon>Index.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageContext.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageHandler.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageHandler_Event.cs" />
+    <Compile Include="PublicPlatform\Utilities\Server.cs" />
+    <Compile Include="PublicPlatform\Web\ashx\DeviceHandler.ashx.cs">
+      <DependentUpon>DeviceHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3686,6 +3770,10 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.Agriculture\BPM.Agriculture.csproj">
+      <Project>{34b5783d-b05d-45e3-ac8a-51cdcad7f384}</Project>
+      <Name>BPM.Agriculture</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>

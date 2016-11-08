@@ -1,0 +1,32 @@
+﻿<form id="uiform">
+    <table class="grid">
+        <tr><td style="width: 80px; " align="right">MAC：</td><td><input type="text" data-options="missingMessage:'请输入设备MAC地址'" class="txt03 easyui-validatebox required" name="Mac" id="txt_Mac" style="width:300px"/></td></tr>
+        <tr><td align="right">设备描述：</td><td><input type="text" class="txt03 easyui-validatebox required" name="Title" id="txt_Title" data-options="missingMessage:'请输入设备描述'" style="width:300px"/></td></tr>
+        <tr><td align="right">设备类型：</td><td>
+            <select id="txt_Kind" class="easyui-combobox" name="Kind" style="width:306px;" data-options="editable:false">
+                <option value="开关控制器">开关控制器</option>
+                <option value="温湿度传感器">温湿度传感器</option>
+                <option value="土壤湿度传感器">土壤湿度传感器</option>
+                <option value="PM2.5传感器">PM2.5传感器</option>
+                <option value="电动阀控制器">电动阀控制器</option>
+            </select>
+        </td></tr>
+        <tr><td align="right">组号：</td><td>
+            <select id="txt_GroupId" class="easyui-combobox" name="GroupId" style="width:306px;" data-options="editable:false">
+                <option value="0">默认组</option>
+                <option value="1">组1</option>
+                <option value="2">组2</option>
+                <option value="3">组3</option>
+                <option value="4">组4</option>
+                <option value="5">组5</option>
+                <option value="6">组6</option>
+                <option value="7">组7</option>
+                <option value="8">组8</option>
+                <option value="9">组9</option>
+            </select>
+        </td></tr>
+        <tr><td align="right">坐标：</td><td><input type="text" class="txt03 easyui-validatebox" name="Coordinate" id="txt_Coordinate" style="width:300px"/></td></tr>
+        <tr><td align="right">报警阈值：</td><td><textarea style="width: 300px;height: 100px;" class="txt03" name="Threshold" id="txt_Threshold" /></td></tr>
+        <tr><td align="right">备注：</td><td><textarea style="width: 300px;height: 100px;" class="txt03" name="Memo" id="txt_Memo" /></td></tr>
+    </table>
+</form>

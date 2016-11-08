@@ -11,7 +11,7 @@
   <resourceSets url="~/combres.axd"
                 defaultDuration="30"
                 defaultVersion="auto"
-                defaultDebugEnabled="false"
+                defaultDebugEnabled="true"
                 defaultIgnorePipelineWhenDebug="true"
                 localChangeMonitorInterval="30"
                 remoteChangeMonitorInterval="60"
@@ -23,7 +23,7 @@
       <resource path="~/css/icon.css" />
     </resourceSet>
 
-     <!--皮肤-->
+    <!--皮肤-->
     <resourceSet name="metro" type="css">
       <resource path="~/theme/metro/style.css" />
       <resource path="~/Scripts/easyui/themes/metro/easyui.css" />
@@ -48,8 +48,8 @@
       <resource path="~/theme/metro/style.css" />
       <resource path="~/Scripts/easyui/themes/metro/metro-red.css" />
     </resourceSet>
-    
-    
+
+
     <resourceSet name="default" type="css">
       <resource path="~/theme/default/style.css" />
       <resource path="~/Scripts/easyui/themes/default/easyui.css" />
@@ -79,7 +79,7 @@
       <resource path="~/Scripts/jQuery.cookie.js" />
       <resource path="~/Scripts/alertify/alertify.min.js" />
     </resourceSet>
-    
+
     <resourceSet name="siteJs" type="js">
       <resource path="~/scripts/qqmsg/jQuery.qqmsg.js" />
       <resource path="~/Scripts/easyui/jquery.easyui.min.js" />
