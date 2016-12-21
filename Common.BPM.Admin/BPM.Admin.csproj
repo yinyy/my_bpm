@@ -2824,12 +2824,14 @@
     <Content Include="images\cross.png" />
     <Content Include="images\datagrid_title_bg.png" />
     <Content Include="images\directory.png" />
+    <Content Include="images\empty.jpg" />
     <Content Include="images\group-collapse.gif" />
     <Content Include="images\group-expand.gif" />
     <Content Include="images\headbg.png" />
     <Content Include="images\head_bg.gif" />
     <Content Include="images\inputstyle.gif" />
     <Content Include="images\layout-browser-hd-bg.gif" />
+    <Content Include="images\little.png" />
     <Content Include="images\loading32.gif" />
     <Content Include="images\loginbg.gif" />
     <Content Include="images\logincircle.gif" />
@@ -2865,6 +2867,7 @@
     <Content Include="PublicPlatform\Web\Luck.aspx" />
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
+    <Content Include="Washer\html\WasherReply.html" />
     <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="PublicPlatform\Web\Card2.aspx" />
@@ -3415,6 +3418,7 @@
     <Content Include="Washer\html\WasherCard.html" />
     <Content Include="Washer\html\WasherDeviceSet.html" />
     <Content Include="Washer\html\WasherDeviceAdd.html" />
+    <Content Include="Washer\js\WasherReply.js" />
     <Content Include="Washer\js\WasherCardIncome.js" />
     <Content Include="Washer\js\WasherCardCost.js" />
     <Content Include="Washer\js\WasherOrder.js" />
@@ -3432,6 +3436,7 @@
     <Content Include="Washer\WasherConsume.aspx" />
     <Content Include="Washer\WasherDevice.aspx" />
     <Content Include="Washer\WasherOrder.aspx" />
+    <Content Include="Washer\WasherReply.aspx" />
     <Content Include="Washer\WasherSendNews.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
     <Content Include="welcome.html" />
@@ -3442,6 +3447,7 @@
     <Content Include="Extra\ValidateUser.ashx" />
     <None Include="Properties\PublishProfiles\本地.pubxml" />
     <Content Include="PublicPlatform\Index.ashx" />
+    <None Include="Properties\PublishProfiles\测试.pubxml" />
     <None Include="Properties\PublishProfiles\远程.pubxml" />
     <Content Include="scripts\fine-uploader\LICENSE" />
     <Content Include="PublicPlatform\Web\handler\ProfileHandler.ashx" />
@@ -3662,6 +3668,7 @@
     <Content Include="Washer\ashx\WasherCardLogHandler.ashx" />
     <Content Include="Washer\ashx\WasherSendNewsHandler.ashx" />
     <Content Include="Washer\ashx\WasherOrderHandler.ashx" />
+    <Content Include="Washer\ashx\WasherReplyHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\UploadHandler.ashx.cs">
@@ -3954,6 +3961,9 @@
     <Compile Include="Washer\ashx\WasherOrderHandler.ashx.cs">
       <DependentUpon>WasherOrderHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherReplyHandler.ashx.cs">
+      <DependentUpon>WasherReplyHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\ashx\WasherSendNewsHandler.ashx.cs">
       <DependentUpon>WasherSendNewsHandler.ashx</DependentUpon>
     </Compile>
@@ -4008,6 +4018,13 @@
     </Compile>
     <Compile Include="Washer\WasherOrder.aspx.designer.cs">
       <DependentUpon>WasherOrder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherReply.aspx.cs">
+      <DependentUpon>WasherReply.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherReply.aspx.designer.cs">
+      <DependentUpon>WasherReply.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherSendNews.aspx.cs">
       <DependentUpon>WasherSendNews.aspx</DependentUpon>

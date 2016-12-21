@@ -25,6 +25,8 @@ namespace BPM.BoardListener
     
     public partial class Form1 : Form,IPresenter
     {
+        public static List<string> blackBoardList = new List<string>();
+
         private class DeviceSorter : IComparer
         {
             public int Compare(object x, object y)
@@ -50,6 +52,9 @@ namespace BPM.BoardListener
         
         private void miStart_Click(object sender, EventArgs e)
         {
+            //获取黑名单列表
+            GetBlackList();
+
             miStart.Enabled = false;
             miStop.Enabled = true;
             miQuit.Enabled = false;
@@ -250,6 +255,26 @@ namespace BPM.BoardListener
                     log.Debug(message);
                 }
             }
+        }
+
+        private void GetBlackList()
+        {
+            blackBoardList.Clear();
+            
+            using (StreamReader reader = new StreamReader(Application.StartupPath + "\\blacklist.txt"))
+            {
+                string line;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    blackBoardList.Add(line);
+                }
+            }
+        }
+
+        private void 黑名单ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetBlackList();
         }
     }
 }

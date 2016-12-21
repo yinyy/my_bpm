@@ -24,7 +24,7 @@ namespace BPM.BoardListener
         private Dictionary<string, Socket> clients = new Dictionary<string, Socket>();
         private List<BoardClient> boards = new List<BoardClient>();
         private bool showHeartBeat, saveHeartBeat;
-        private int heartBeatCount = 0;
+        private Dictionary<string, int> heartBeatCount = new Dictionary<string, int>();
         private int heartBeatThreshold;
 
         public BoardListenerThread(IPresenter presenter, string localAddress, string serverAddress, int port, int departmentId, bool showHeartBeat, bool saveHeartBeat, int heartBeatThreshold)
@@ -83,6 +83,7 @@ namespace BPM.BoardListener
             {
                 Socket client = server.EndAccept(ar);
                 string remoteIP = (client.RemoteEndPoint as IPEndPoint).Address.ToString();
+
                 presenter.PrintDebug(string.Format("【{0:######}】{1} 已经接入。", departmentId, remoteIP), true);
 
                 StateObject so = new StateObject() { WorkSocket = client };
@@ -118,7 +119,6 @@ namespace BPM.BoardListener
                             presenter.PrintDebug(string.Format("【{0:######}】{1}", departmentId, receivedMessage.ToString()),
                                 (receivedMessage.Command != TcpMessageBase.CommandType.HeartBeat) || saveHeartBeat);
                         }
-
 
                         try
                         {
@@ -169,15 +169,23 @@ namespace BPM.BoardListener
 
                                         presenter.UpdateDevice(ipaddress);
 
-                                        heartBeatCount++;
-                                        if (heartBeatCount >= heartBeatThreshold)
+                                        if (heartBeatCount.ContainsKey(ipaddress))
                                         {
-                                            heartBeatThreshold = 0;
+                                            heartBeatCount[ipaddress]++;
+                                        }
+                                        else
+                                        {
+                                            heartBeatCount.Add(ipaddress, 1);
+                                        }
+
+                                        if (heartBeatCount[ipaddress]> heartBeatThreshold)
+                                        {
+                                            heartBeatCount[ipaddress] = 0;
 
                                             new Thread(() =>
                                             {
                                                 SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&clientIp={2}&deptId={3}",
-                                                serverAddress, "HeartBeat", (client.RemoteEndPoint as IPEndPoint).Address.ToString(), departmentId));
+                                                serverAddress, "HeartBeat", ipaddress/*(client.RemoteEndPoint as IPEndPoint).Address.ToString()*/, departmentId));
                                             }).Start();
                                         }
                                     }
@@ -186,47 +194,54 @@ namespace BPM.BoardListener
                                         //时间同步
                                         //把设备号和Socket放到字典中
                                         string boardNumber = receivedMessage.BoardNumber;
-                                        if (clients.ContainsKey(boardNumber))
+                                        if (!Form1.blackBoardList.Contains(boardNumber))
                                         {
-                                            Socket clt = clients[boardNumber];
-                                            if (clt != client)
+                                            if (clients.ContainsKey(boardNumber))
                                             {
-                                                try
+                                                Socket clt = clients[boardNumber];
+                                                if (clt != client)
                                                 {
-                                                    clt.Close();
+                                                    try
+                                                    {
+                                                        clt.Close();
+                                                    }
+                                                    catch
+                                                    {
+
+                                                    }
+
+                                                    clients.Remove(boardNumber);
+
+                                                    presenter.PrintDebug(string.Format("【{0:######}】主板（{1}）时间同步，服务器主动关闭之前的TCP连接。", departmentId, boardNumber), true);
                                                 }
-                                                catch
-                                                {
-
-                                                }
-
-                                                clients.Remove(boardNumber);
-
-                                                presenter.PrintDebug(string.Format("【{0:######}】主板（{1}）时间同步，服务器主动关闭之前的TCP连接。", departmentId, boardNumber), true);
                                             }
-                                        }
 
-                                        if (!clients.ContainsKey(boardNumber))
-                                        {
-                                            clients.Add(boardNumber, client);
-                                        }
-
-                                        replyMessage = new ReplyTimeSyncMessage(boardNumber);
-
-                                        new Thread(() =>
-                                        {
-                                            byte[] buffer = SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&boardNumber={2}&clientIp={3}&listenerIp={4}&port={5}&deptId={6}",
-                                            serverAddress, "TimeSync", boardNumber, (client.RemoteEndPoint as IPEndPoint).Address.ToString(), localAddress, port, departmentId));
-                                            string str = Encoding.UTF8.GetString(buffer);
-
-                                            var obj = new { Success = false, BoardNumber = "", Serial = "", Address = "", DepartmentName = "", IP = "" };
-                                            obj = JsonConvert.DeserializeAnonymousType(str, obj);
-
-                                            if (obj.Success == true)
+                                            if (!clients.ContainsKey(boardNumber))
                                             {
-                                                presenter.AddDevice(obj.Serial, obj.BoardNumber, obj.IP, obj.DepartmentName, obj.Address);
+                                                clients.Add(boardNumber, client);
                                             }
-                                        }).Start();
+
+                                            replyMessage = new ReplyTimeSyncMessage(boardNumber);
+
+                                            new Thread(() =>
+                                            {
+                                                byte[] buffer = SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&boardNumber={2}&clientIp={3}&listenerIp={4}&port={5}&deptId={6}",
+                                                serverAddress, "TimeSync", boardNumber, ipaddress, localAddress, port, departmentId));
+                                                string str = Encoding.UTF8.GetString(buffer);
+
+                                                var obj = new { Success = false, BoardNumber = "", Serial = "", Address = "", DepartmentName = "", IP = "" };
+                                                obj = JsonConvert.DeserializeAnonymousType(str, obj);
+
+                                                if (obj.Success == true)
+                                                {
+                                                    presenter.AddDevice(obj.Serial, obj.BoardNumber, obj.IP, obj.DepartmentName, obj.Address);
+                                                }
+                                            }).Start();
+                                        }
+                                        else
+                                        {
+                                            presenter.PrintDebug(string.Format("【{0:######}】黑名单主板（{1}）[{2}]尝试时间同步。", departmentId, boardNumber, ipaddress), false);
+                                        }
                                     }else if (receivedMessage.Command == TcpMessageBase.CommandType.ReaderSetting)
                                     {
                                         byte[] buffer = SendMessageToServer(string.Format("http://{0}/Washer/ashx/WasherHandler.ashx?action={1}&boardNumber={2}&deptId={3}",

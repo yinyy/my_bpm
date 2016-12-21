@@ -56,9 +56,9 @@ var grid = {
             ]],
             pagination: true,
             pageSize: PAGESIZE,
-            pageList: [20, 40, 50]/*,
+            pageList: [20, 40, 50],
             sortName: 'KeyId',
-            sortOrder: 'desc'*/
+            sortOrder: 'desc'
         });
     },
     getSelectedRow: function () {

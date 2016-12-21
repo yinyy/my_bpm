@@ -1,0 +1,26 @@
+﻿<form id="uiform">
+    <table class="grid">
+        <tr><td align="right">标题：</td><td><input type="text" id="txt_Title" name="Title" class="txt03" required="required" style="width:330px;" /></td></tr>
+        <tr><td align="right">描述：</td><td><input type="text" id="txt_Description" name="Description" class="txt03" required="required" style="width:330px;" /></td></tr>
+        <tr>
+            <td align="right" rowspan="3">地址：</td>
+            <td>
+                <input type="radio" id="rb_Coin" name="UrlType" value="Coin" />
+                <label for="rb_Coin">洗车币支付链接</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" id="rb_Pay" name="UrlType" value="Pay" />
+                <label for="rb_Pay">微信支付链接</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" id="rb_Normal" name="UrlType" value="Normal" />
+                <label for="rb_Normal">普通链接</label>&nbsp;&nbsp;
+                <input type="text" id="txt_Url" name="Url" class="txt03" required="required" style="width:245px;" />
+            </td>
+        </tr>
+    </table>
+</form>

@@ -17,12 +17,12 @@ namespace BPM.Admin.PublicPlatform.Web
         {
             if (!IsPostBack)
             {
-                int  deptId = Convert.ToInt16( Session["deptId"].ToString());
+                int deptId = Convert.ToInt16(Session["deptId"].ToString());
                 string openid = Session["openid"].ToString();
 
                 Department dept = DepartmentBll.Instance.Get(deptId);
                 WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
-                
+
                 //生成带微信用户编号的临时二维码，有效时间不超过一周
                 string accessToken = AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret);
                 var result = QrCodeApi.Create(accessToken, 604800, Convert.ToInt32(string.Format("7{0}", wxconsume.KeyId)));
@@ -35,7 +35,7 @@ namespace BPM.Admin.PublicPlatform.Web
                     code_div.Visible = false;
                     nocode_div.Visible = true;
                 }
-                
+
                 //string message = WeChatToolkit.SendCommand("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret) ,
                 //    "{\"expire_seconds\": 604800, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": " + string.Format("") + "}}}");
                 //if (!string.IsNullOrWhiteSpace(message))

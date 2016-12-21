@@ -21,6 +21,14 @@ namespace BPM.Admin.PublicPlatform.MessageHandler
 {
     public partial class CustomMessageHandler
     {
+        class ReplyNews
+        {
+            public string title { get; set; }
+            public string url { get; set; }
+            public string picture { get; set; }
+            public string description { get; set; }
+        }
+
         private string GetWelcomeInfo()
         {
             //获取Senparc.Weixin.MP.dll版本信息
@@ -108,7 +116,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
         public override IResponseMessageBase OnEvent_ScanRequest(RequestMessageEvent_Scan requestMessage)
         {
-            ResponseMessageText message = CreateResponseMessage<ResponseMessageText>();
+            ResponseMessageBase message = null;
             if (!string.IsNullOrEmpty(requestMessage.EventKey))
             {
                 string senceId = requestMessage.EventKey;
@@ -122,47 +130,112 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                     if ((device = WasherDeviceBll.Instance.Get(deptId, senceId.Substring(1))) == null ||
                         (wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, requestMessage.FromUserName)) == null)
                     {
-                        message.Content = "参数错误！";
+                        var msg = CreateResponseMessage<ResponseMessageText>();
+                        msg.Content = "参数错误！";
+                        message = msg;
                     }
                     //检查该微信用户是否已经登记个人信息，如果没有登记，则提示用户先绑定信息
                     else if ((consume = WasherConsumeBll.Instance.GetByBinder(wxconsume)) == null)
                     {
-                        message.Content = "请先在“个人中心-我的账户”中完成个人信息绑定，享受会员权益。";
+                        var msg = CreateResponseMessage<ResponseMessageText>();
+                        msg.Content = "请先在“个人中心-我的账户”中完成个人信息绑定，享受会员权益。";
+                        message = msg;
                     }
                     else {
                         //检查主板是否处于可用状态
                         var setting = JsonConvert.DeserializeAnonymousType(device.Setting, new { Coins = 0, Params = new int[32] });
                         if ((setting.Params[31] & 0x01) == 0x00)
                         {
-                            message.Content = "洗车机不可用。";
+                            var msg = CreateResponseMessage<ResponseMessageText>();
+                            msg.Content = "洗车机不可用。";
+                            message = msg;
                         }
                         else
                         {
                             int coins = WasherConsumeBll.Instance.GetValidCoins(consume.KeyId);
                             Department dept = DepartmentBll.Instance.Get(wxconsume.DepartmentId);
-                            
-                            //如果其卡内还有超过5元的洗车比，则提示其可用直接启动机器
-                            if (coins >= 500)
+                            WasherReplyModel reply = WasherReplyBll.Instance.Get(dept.KeyId, "SCAN");
+                            if (reply == null)
                             {
-                                message.Content = string.Format(
-@"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
+                                var msg = CreateResponseMessage<ResponseMessageText>();
+                                //如果其卡内还有超过5元的洗车比，则提示其可用直接启动机器
+                                if (coins >= 500)
+                                {
+                                    msg.Content = string.Format(
+    @"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
 
 微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
+                                }
+                                else
+                                {
+                                    msg.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
+                                }
+
+                                message = msg;
                             }
                             else
                             {
-                                message.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
+                                string body = reply.Body;
+                                ReplyNews[] ns = JsonConvert.DeserializeObject<ReplyNews[]>(body);
+
+                                var msg = CreateResponseMessage<ResponseMessageNews>();
+
+                                string url =HttpContext.Current.Request.Url.AbsoluteUri;
+                                string prefix = url.Substring(0, url.IndexOf(HttpContext.Current.Request.Url.AbsolutePath));
+
+                                foreach (ReplyNews n in ns)
+                                {
+                                    Article a = new Article();
+                                    a.Description = n.description;
+                                    a.PicUrl = prefix + n.picture;
+                                    a.Title = n.title;
+
+                                    if (n.url == "#Pay")
+                                    {
+                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}", dept.KeyId, device.BoardNumber);
+                                        msg.Articles.Add(a);
+                                    }
+                                    else if (n.url == "#Coin" && (coins >= 500))
+                                    {
+                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'", dept.KeyId, device.BoardNumber);
+                                        msg.Articles.Add(a);
+                                    }
+                                    else
+                                    {
+                                        a.Url = n.url;
+                                        msg.Articles.Add(a);
+                                    }
+                                }
+
+                                message = msg;
                             }
                         }
                     }
                 }
                 else if (senceId.StartsWith("7"))
                 {
-                    //什么也不做
+                    WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, WeixinOpenId);
+                    if (wxconsume.RefererId == -1)
+                    {
+                        wxconsume.RefererId = Convert.ToInt32(senceId.Substring(1));
+                        WasherWeChatConsumeBll.Instance.Update(wxconsume);
+
+                        var msg = CreateResponseMessage<ResponseMessageText>();
+                        msg.Content = "成功的更新了推荐者。";
+                        message = msg;
+                    }
+                    else
+                    {
+                        var msg = CreateResponseMessage<ResponseMessageText>();
+                        msg.Content = "已经更新过推荐者了。";
+                        message = msg;
+                    }
                 }
                 else
                 {
-                    message.Content = "参数错误！";
+                    var msg = CreateResponseMessage<ResponseMessageText>();
+                    msg.Content = "参数错误！";
+                    message = msg;
                 }
             }
 
