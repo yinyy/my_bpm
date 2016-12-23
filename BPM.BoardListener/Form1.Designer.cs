@@ -116,45 +116,45 @@
             // miStart
             // 
             this.miStart.Name = "miStart";
-            this.miStart.Size = new System.Drawing.Size(152, 22);
+            this.miStart.Size = new System.Drawing.Size(128, 22);
             this.miStart.Text = "启动(&S)";
             this.miStart.Click += new System.EventHandler(this.miStart_Click);
             // 
             // miStop
             // 
             this.miStop.Name = "miStop";
-            this.miStop.Size = new System.Drawing.Size(152, 22);
+            this.miStop.Size = new System.Drawing.Size(128, 22);
             this.miStop.Text = "停止(&E)";
             this.miStop.Click += new System.EventHandler(this.miStop_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(125, 6);
             // 
             // 黑名单ToolStripMenuItem
             // 
             this.黑名单ToolStripMenuItem.Name = "黑名单ToolStripMenuItem";
-            this.黑名单ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.黑名单ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.黑名单ToolStripMenuItem.Text = "黑名单(&B)";
             this.黑名单ToolStripMenuItem.Click += new System.EventHandler(this.黑名单ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(125, 6);
             // 
             // miClear
             // 
             this.miClear.Name = "miClear";
-            this.miClear.Size = new System.Drawing.Size(152, 22);
+            this.miClear.Size = new System.Drawing.Size(128, 22);
             this.miClear.Text = "清空(&C)";
             this.miClear.Click += new System.EventHandler(this.miClear_Click);
             // 
             // 测试ToolStripMenuItem
             // 
             this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
-            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.测试ToolStripMenuItem.Text = "测试";
             this.测试ToolStripMenuItem.Click += new System.EventHandler(this.测试ToolStripMenuItem_Click);
             // 
