@@ -192,12 +192,12 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
                                     if (n.url == "#Pay")
                                     {
-                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}", dept.KeyId, device.BoardNumber);
+                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
                                         msg.Articles.Add(a);
                                     }
                                     else if (n.url == "#Coin" && (coins >= 500))
                                     {
-                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'", dept.KeyId, device.BoardNumber);
+                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}&card=true'", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
                                         msg.Articles.Add(a);
                                     }
                                     else

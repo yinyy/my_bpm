@@ -42,17 +42,40 @@
 
                     //判断确实支付成功了，然后再开启设备
                     //alert(pi.Serial);
-                    $.post(Pay.url, { action: 'validate', serial: Pay.pi.Serial }, function (res) {
-                        if (res.Success) {
-                            if (Pay.success != null) {
-                                Pay.success(Pay.pi);
+                    //$.post(Pay.url, { action: 'validate', serial: Pay.pi.Serial }, function (res) {
+                    //    if (res.Success) {
+                    //        if (Pay.success != null) {
+                    //            Pay.success(Pay.pi);
+                    //        }
+                    //    } else {
+                    //        if (Pay.failure != null) {
+                    //            Pay.failure();
+                    //        }
+                    //    }
+                    //}, 'json');
+                    //var socket = new WebSocket('ws://139.129.43.203:5500');
+                    var socket = new WebSocket('ws://127.0.0.1:5500');
+                    socket.onerror = function (event) {
+                        alert("error at 2.");
+                    };
+                    socket.onopen = function (event) {
+                        var o = { Action: 'wx_pay', Data: JSON.stringify({Serial: Pay.pi.Serial}) };
+                        socket.send(JSON.stringify(o));
+
+                        socket.onmessage = function (event) {
+                            var code = event.data;
+                            if (code == 'pay_success') {
+                                //操作成功
+                                if (Pay.success != nul) {
+                                    Pay.success(Pay.pi);
+                                }
+                            } else {
+                                if (Pay.failure != null) {
+                                    Pay.failure();
+                                }
                             }
-                        } else {
-                            if (Pay.failure != null) {
-                                Pay.failure();
-                            }
-                        }
-                    }, 'json');
+                        };
+                    };
                 } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
                     if (Pay.cancel != null) {
                         Pay.cancel();

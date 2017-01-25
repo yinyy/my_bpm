@@ -29,5 +29,6 @@ namespace Washer.Model
         public DateTime ValidateEnd { get; set; }
         public int Coins { get; set; }
         public string Memo { get; set; }
+        public DateTime? Locked { get; set; }
     }
 }

@@ -21,5 +21,7 @@ namespace Washer.Model
         public int RemainCoins { get; set; }
         public int PayCoins { get; set; }
         public int? Ticks { get; set; }
+        public DateTime TempTime { get; set; }
+        public int? TempCoins { get; set; }
     }
 }

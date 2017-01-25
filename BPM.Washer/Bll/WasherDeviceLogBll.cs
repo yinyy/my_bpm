@@ -61,5 +61,10 @@ namespace Washer.Bll
         {
             return WasherDeviceLogDal.Instance.GetJson(pageindex, pagesize, filter, sort, order, fields);
         }
+
+        public int Update(WasherDeviceLogModel balance)
+        {
+            return WasherDeviceLogDal.Instance.Update(balance);
+        }
     }
 }

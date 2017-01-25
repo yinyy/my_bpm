@@ -11,6 +11,7 @@ using BPM.Core.Bll;
 using Newtonsoft.Json;
 using System.Web.SessionState;
 using Washer.Extension;
+using System.Net.WebSockets;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
 {
@@ -62,36 +63,36 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 //    code.Validated = DateTime.Now;
                 //    WasherVcodeBll.Instance.Update(code);
 
-                    WasherCardModel card = WasherCardBll.Instance.Get(dept.KeyId, no);
-                    if (card == null)
+                WasherCardModel card = WasherCardBll.Instance.Get(dept.KeyId, no);
+                if (card == null)
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡不存在。" }));
+                }
+                else if (card.Password != password)
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "密码错误。" }));
+                }
+                else if (card.BinderId != null)
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡已被其他用户绑定。" }));
+                }
+                else if (DateTime.Now > card.ValidateEnd)
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡以过期。" }));
+                }
+                else
+                {
+                    card.BinderId = consume.KeyId;
+                    card.Binded = DateTime.Now;
+                    if (WasherCardBll.Instance.Update(card) > 0)
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡不存在。" }));
-                    }
-                    else if (card.Password != password)
-                    {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "密码错误。" }));
-                    }
-                    else if (card.BinderId != null)
-                    {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡已被其他用户绑定。" }));
-                    }
-                    else if (DateTime.Now > card.ValidateEnd)
-                    {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡以过期。" }));
+                        context.Response.Write(JSONhelper.ToJson(new { Success = true }));
                     }
                     else
                     {
-                        card.BinderId = consume.KeyId;
-                        card.Binded = DateTime.Now;
-                        if (WasherCardBll.Instance.Update(card) > 0)
-                        {
-                            context.Response.Write(JSONhelper.ToJson(new { Success = true }));
-                        }
-                        else
-                        {
-                            context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡绑定失败。" }));
-                        }
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车卡绑定失败。" }));
                     }
+                }
                 //}
             }
             else if (action == "query")
@@ -99,9 +100,9 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 if (string.IsNullOrEmpty(context.Request.Params["value"]))
                 {
                     WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
-                    
+
                     JArray array = new JArray();
-                    foreach(WasherDepartmentSettingBuy b in setting.Buy)
+                    foreach (WasherDepartmentSettingBuy b in setting.Buy)
                     {
                         JObject jobj = new JObject();
                         jobj.Add("Value", b.Value);
@@ -171,9 +172,52 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "绑定洗车卡失败。" }));
                 }
-            }else if (action == "telphone")
+            }
+            else if (action == "payBind2")
+            {
+                int value = Convert.ToInt32(context.Request.Params["value"]);
+                string card = context.Request.Params["card"];
+                if (WasherCardBll.Instance.Bind(consume, card))
+                {
+                    //增加积分
+                    JObject jobj = JObject.Parse(dept.Setting);
+                    JArray array = jobj.GetValue("Buy") as JArray;
+                    foreach (JObject o in array)
+                    {
+                        if (Convert.ToInt32(o.GetValue("Value")) == value)
+                        {
+                            int score = Convert.ToInt32(o.GetValue("Score"));
+                            //积分大于0时再增加积分
+                            if (score > 0)
+                            {
+                                WasherRewardModel reward = new WasherRewardModel()
+                                {
+                                    ConsumeId = consume.KeyId,
+                                    Kind = WasherRewardBll.Kind.BuyCard,
+                                    Memo = "",
+                                    Points = score,
+                                    Time = DateTime.Now
+                                };
+                                WasherRewardBll.Instance.Add(reward);
+                            }
+                            break;
+                        }
+                    }
+
+                    context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                }
+                else
+                {
+                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "绑定洗车卡失败。" }));
+                }
+            }
+            else if (action == "telphone")
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = true, Binded = consume != null, Message = consume.Telphone }));
+            }
+            else if (action == "lock")
+            {
+                
             }
             else
             {

@@ -141,7 +141,18 @@ var grid = {
             { title: '支付方式', field: 'Kind', width: 150, align: 'center' },
             { title: '支付卡号', field: 'CardNo', width: 150, align: 'center' },
             { title: '支付凭证', field: 'Ticks', width: 150, align: 'center' },
-            { title: '所属客户', field: 'DepartmentName', width: 200, align: 'center' }
+            { title: '所属客户', field: 'DepartmentName', width: 200, align: 'center' },
+            {
+                title: '实时消费', field: 'TempTime', width: 200, align: 'center', formatter(v, r, i) {
+                    if (v == null) {
+                        return '';
+                    }
+
+                    var str = r.TempTime.substring(0, 19) + '<br/>' + r.TempCoins;
+
+                    return str;
+                }
+            }
             ]],
             pagination: true,
             pageSize: PAGESIZE,

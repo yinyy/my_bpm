@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
+using Washer.Bll;
 using Washer.Extension;
+using Washer.Model;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
 {
@@ -24,7 +26,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
         public void ProcessRequest(HttpContext context)
         {
             string code = context.Request.Params["code"];
-            int deptId = Convert.ToInt16(context.Request.Params["appid"]);
+            int deptId = Convert.ToInt32(context.Request.Params["appid"]);
             Department dept = DepartmentBll.Instance.Get(deptId);
 
             if (string.IsNullOrEmpty(code))
@@ -42,6 +44,11 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 {
                     context.Session["deptId"] = dept.KeyId;
                     context.Session["openid"] = result.openid;
+
+                    WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, result.openid);
+                    WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinderId(wxconsume.KeyId);
+
+                    context.Session["consumeId"] = consume.KeyId;
 
                     //context.Session["appid"] = "wx2d8bcab64b53be3a";
                     //context.Session["openid"] = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";

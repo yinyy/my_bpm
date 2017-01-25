@@ -21,6 +21,7 @@ using System.IO;
 using System.Text;
 using System.Web.SessionState;
 using Washer.Extension;
+using WebSocket4Net;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -39,7 +40,7 @@ namespace BPM.Admin.Washer.ashx
 
             if (action == "PayCoins")
             {
-                int deptId =Convert.ToInt16( context.Session["deptId"].ToString());
+                int deptId =Convert.ToInt32(context.Session["deptId"].ToString());
                 string openid = context.Session["openid"].ToString();
 
                 Department dept = DepartmentBll.Instance.Get(deptId);
@@ -84,21 +85,37 @@ namespace BPM.Admin.Washer.ashx
                 dynamic dobj = WasherValidatorBll.Instance.ValidatePaySerial(serial);
                 if (dobj.Success == true)
                 {
-                    ReplyMessageBase replyMessage = new ReplyValidateMessage(dobj.BoardNumber)
+                    //ReplyMessageBase replyMessage = new ReplyValidateMessage(dobj.BoardNumber)
+                    //{
+                    //    BalanceId = dobj.BalanceId,
+                    //    Kind = TcpMessageBase.CardKind.Normal,
+                    //    Money = dobj.RemainCoins,
+                    //    Status = TcpMessageBase.CardStatus.Regular
+                    //};
+
+                    //byte[] buffer = replyMessage.ToByteArray();
+                    //buffer[4] = 0xff;
+
+                    //if (!string.IsNullOrWhiteSpace(dobj.ListenerIp))
+                    //{
+                    //    SendData(dobj.ListenerIp, buffer);
+                    //}
+
+                    var o = new
                     {
-                        BalanceId = dobj.BalanceId,
-                        Kind = TcpMessageBase.CardKind.Normal,
-                        Money = dobj.RemainCoins,
-                        Status = TcpMessageBase.CardStatus.Regular
+                        Action = "start_machine",
+                        Data = JsonConvert.SerializeObject(new
+                        {
+                            DepartmentId = Convert.ToInt32(context.Session["deptId"].ToString()),
+                            BoardNumber = dobj.Boardumber,
+                            BalanceId = dobj.BalanceId,
+                            Coins = dobj.RemainCoins
+                        })
                     };
 
-                    byte[] buffer = replyMessage.ToByteArray();
-                    buffer[4] = 0xff;
-
-                    if (!string.IsNullOrWhiteSpace(dobj.ListenerIp))
-                    {
-                        SendData(dobj.ListenerIp, buffer);
-                    }
+                    //WebSocket webSocket = new WebSocket("ws://139.129.43.203:5500");
+                    WebSocket webSocket = new WebSocket("ws://127.0.0.1:5500");
+                    webSocket.Send(JsonConvert.SerializeObject(o));
 
                     CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "机器已经启动");
 
@@ -327,12 +344,26 @@ namespace BPM.Admin.Washer.ashx
                 int deptId = Convert.ToInt32(context.Request.Params["deptId"]);
                 string clientIp = context.Request.Params["clientIp"];
 
-                WasherDeviceBll.Instance.DeviceHeartBeat(deptId, clientIp);
+                WasherDeviceBll.Instance.UpdateOnlineTime(deptId, clientIp);
+            }else if (action == "Validate")
+            {
+                double scanTime = Convert.ToDouble(context.Request.Params["ts"]);
+                double overTime = (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now.AddMinutes(-5)) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds;
+                if (overTime <= scanTime)
+                {
+                    context.Response.Write(1);
+                }
+                else
+                {
+                    int deptId = Convert.ToInt16(context.Session["deptId"].ToString());
+                    string openid = context.Session["openid"].ToString();
+                    Department dept = DepartmentBll.Instance.Get(deptId);
+                    
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, "请求已过期，请重新扫码。");
+
+                    context.Response.Write(0);
+                }
             }
-
-
-
-            
 
             context.Response.Flush();
             context.Response.End();

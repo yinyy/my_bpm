@@ -14,6 +14,9 @@
     <script src="js/Pay.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/Card2.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/Vcode.js?t=<%=DateTime.Now.Ticks %>"></script>
+    <script type="text/javascript">
+        var cid = <%=Session["consumeId"].ToString()%>;
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">

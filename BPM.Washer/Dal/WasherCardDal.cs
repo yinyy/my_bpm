@@ -21,5 +21,10 @@ namespace Washer.Dal
             return base.JsonDataForEasyUIdataGrid("V_Cards", pageindex, pagesize, filterJson,
                                                   sort, order);
         }
+
+        public WasherCardModel Get(int departmentId, string cardNo)
+        {
+            return GetWhere(new { departmentId = departmentId, CardNo = cardNo }).FirstOrDefault();
+        }
     }
 }

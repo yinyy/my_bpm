@@ -64,12 +64,24 @@ namespace Washer.Bll
             return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
         }
 
-        public void DeviceHeartBeat(int deptId, string clientIp)
+        public void UpdateOnlineTime(int deptId, string clientIp)
         {
             var devices = WasherDeviceDal.Instance.GetWhere(new { DepartmentId = deptId, IpAddress = clientIp });
             foreach(WasherDeviceModel device in devices)
             {
                 device.UpdateTime = DateTime.Now;
+
+                WasherDeviceBll.Instance.Update(device);
+            }
+        }
+
+        public void UpdateOnlineTime(int deptId, string serial, string clientIp)
+        {
+            var devices = WasherDeviceDal.Instance.GetWhere(new { DepartmentId = deptId, BoardNumber=serial });
+            foreach (WasherDeviceModel device in devices)
+            {
+                device.UpdateTime = DateTime.Now;
+                device.IpAddress = clientIp;
 
                 WasherDeviceBll.Instance.Update(device);
             }
