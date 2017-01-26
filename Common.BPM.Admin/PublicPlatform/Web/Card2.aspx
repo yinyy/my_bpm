@@ -100,6 +100,11 @@
             <div class="card_kind_area">
                 
             </div>
+            <div class="cell">
+                <p>说明：</p>
+                <p>1、洗车卡成功购买后，自动与微信用户绑定。</p>
+                <p style="color:red;font-weight: bolder;">2、支付成功后，请在本页面等待确认支付结果。若30秒内无响应，请联系客服。</p>
+            </div>
             <div class="weui_btn_area">
                 <a class="weui_btn weui_btn_primary" href="javascript:">购买</a>
                 <a class="weui_btn weui_btn_warn" href="javascript:">取消</a>

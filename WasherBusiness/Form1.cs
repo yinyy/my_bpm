@@ -35,6 +35,7 @@ namespace WasherBusiness
         private List<BoardAppServer> boardAppServers;
 
         private LoopThread loopThread;
+        private SessionCheckThread sessionCheckThread;
 
         private class DeviceComparator : IComparer
         {
@@ -65,6 +66,16 @@ namespace WasherBusiness
 
         private void 启动服务器SToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            #region 启动循环线程
+            loopThread = new LoopThread();
+            loopThread.Start();
+            #endregion
+
+            #region 启动检查线程
+            sessionCheckThread = new WasherBusiness.SessionCheckThread();
+            sessionCheckThread.Start();
+            #endregion
+
             #region 启动WebSocket
             string ip = ConfigurationManager.AppSettings["ip"];
             string webSocketPort = ConfigurationManager.AppSettings["web_socket_port"];
@@ -149,11 +160,9 @@ namespace WasherBusiness
             };
             #endregion
 
-            #region 启动循环线程
-            loopThread = new LoopThread();
-            loopThread.Start();
-            #endregion
-            
+            sessionCheckThread.Add(webSocketServer);
+
+
             #region 启动主板监听程序
             this.boardAppServers = new List<BoardAppServer>();
 
@@ -224,6 +233,8 @@ namespace WasherBusiness
                             break;
                     }
                 };
+
+                sessionCheckThread.Add(boardAppServer);
             }
             #endregion
 

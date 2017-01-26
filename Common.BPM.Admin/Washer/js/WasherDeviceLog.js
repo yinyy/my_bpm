@@ -102,20 +102,25 @@ var grid = {
                 }
             },
             {
-                title: '洗车时间', field: 'Started', width: 250, align: 'center', formatter(v, r, i) {
+                title: '洗车时间', field: 'Started', width: 150, align: 'right', formatter(v, r, i) {
                     if (v == null) {
                         return '';
                     }
 
-                    var str = r.Started.substring(0, 19);
-                    if (r.Ended != null) {
-                        str += ' - ' + r.Ended.substring(11, 19);
+                    var str = r.Started.substring(0, 19) + '<br/>';
+                    if (r.Ended == null) {
+                        str += '<span style="color:red;">未结算</span>';
+                    } else {
+                        str += r.Ended.substring(11, 19);
                     }
 
                     return str;
                 }
             },
-		    { title: '洗车机序列号', field: 'SerialNumber', width: 150, align: 'center' },
+		    {
+		        title: '编号', field: 'SerialNumber', width: 150, align: 'left', formatter: function (v, r, i) {
+		            return '序列号：' + r.SerialNumber + '<br/>' + '主板号：' + r.BoardNumber;
+		        }},
             {
                 title: '洗车地点', field: 'Address', width: 220, align: 'center', formatter: function (v, r, i) {
                     if (v == null) {
@@ -130,15 +135,20 @@ var grid = {
                 }
             },
             {
-                title: '洗车币', field: 'PayCoins', width: 100, align: 'right', formatter: function (v, r, i) {
+                title: '初始洗车币', field: 'RemainCoins', width: 70, align: 'right', formatter: function (v, r, i) {
+                    return (v / 100.0).toFixed(2);
+                }
+            },
+            {
+                title: '结算洗车币', field: 'PayCoins', width: 70, align: 'right', formatter: function (v, r, i) {
                     if (v == null) {
                         return '';
                     } else {
-                        return (v/100.0).toFixed(2);
+                        return (v / 100.0).toFixed(2);
                     }
                 }
             },
-            { title: '支付方式', field: 'Kind', width: 150, align: 'center' },
+            { title: '支付方式', field: 'Kind', width: 100, align: 'center' },
             { title: '支付卡号', field: 'CardNo', width: 150, align: 'center' },
             { title: '支付凭证', field: 'Ticks', width: 150, align: 'center' },
             { title: '所属客户', field: 'DepartmentName', width: 200, align: 'center' },

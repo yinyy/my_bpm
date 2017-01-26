@@ -53,20 +53,18 @@
                     //        }
                     //    }
                     //}, 'json');
-                    //var socket = new WebSocket('ws://139.129.43.203:5500');
-                    var socket = new WebSocket('ws://127.0.0.1:5500');
+                    var socket = new WebSocket('ws://139.129.43.203:5500');
+                    //var socket = new WebSocket('ws://127.0.0.1:5500');
                     socket.onerror = function (event) {
                         alert("error at 2.");
                     };
                     socket.onopen = function (event) {
                         var o = { Action: 'wx_pay', Data: JSON.stringify({Serial: Pay.pi.Serial}) };
-                        socket.send(JSON.stringify(o));
-
                         socket.onmessage = function (event) {
                             var code = event.data;
                             if (code == 'pay_success') {
                                 //操作成功
-                                if (Pay.success != nul) {
+                                if (Pay.success != null) {
                                     Pay.success(Pay.pi);
                                 }
                             } else {
@@ -75,6 +73,7 @@
                                 }
                             }
                         };
+                        socket.send(JSON.stringify(o));
                     };
                 } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
                     if (Pay.cancel != null) {

@@ -158,8 +158,8 @@ var Buy = {
 
             if (parseInt(Buy.selected.attr('Remain')) > 0) {
                 //锁定洗车卡
-                //var socket = new WebSocket('ws://139.129.43.203:5500');
-                var socket = new WebSocket('ws://127.0.0.1:5500');
+                var socket = new WebSocket('ws://139.129.43.203:5500');
+                //var socket = new WebSocket('ws://127.0.0.1:5500');
                 socket.onerror = function (event) {
                     alert("error:" + event);
                 };

@@ -27,10 +27,10 @@ namespace BPM.Admin.PublicPlatform
 
             int deptId = Convert.ToInt32(tag);
 
-            using (StreamWriter writer = new StreamWriter(context.Server.MapPath("~/App_Data/Params-" + DateTime.Now.Ticks + ".txt")))
-            {
-                writer.WriteLine(string.Format("signature={0}&timestamp={1}&nonce={2}&echostr={3}&tag={4}", signature, timestamp, nonce, echostr, tag));
-            }
+            //using (StreamWriter writer = new StreamWriter(context.Server.MapPath("~/App_Data/Params-" + DateTime.Now.Ticks + ".txt")))
+            //{
+            //    writer.WriteLine(string.Format("signature={0}&timestamp={1}&nonce={2}&echostr={3}&tag={4}", signature, timestamp, nonce, echostr, tag));
+            //}
 
             string token = null;
             Department dept = DepartmentBll.Instance.Get(deptId);
@@ -97,17 +97,17 @@ namespace BPM.Admin.PublicPlatform
                 try
                 {
                     //测试时可开启此记录，帮助跟踪数据，使用前请确保App_Data文件夹存在，且有读写权限。 
-                    messageHandler.RequestDocument.Save(
-                        context.Server.MapPath("~/App_Data/" + DateTime.Now.Ticks + "_Request_" +
-                                       messageHandler.RequestMessage.FromUserName + ".txt"));
+                    //messageHandler.RequestDocument.Save(
+                    //    context.Server.MapPath("~/App_Data/" + DateTime.Now.Ticks + "_Request_" +
+                    //                   messageHandler.RequestMessage.FromUserName + ".txt"));
 
                     //执行微信处理过程 
                     messageHandler.Execute();
 
                     //测试时可开启，帮助跟踪数据 
-                    messageHandler.ResponseDocument.Save(
-                         context.Server.MapPath("~/App_Data/" + DateTime.Now.Ticks + "_Response_" +
-                                        messageHandler.ResponseMessage.ToUserName + ".txt"));
+                    //messageHandler.ResponseDocument.Save(
+                    //     context.Server.MapPath("~/App_Data/" + DateTime.Now.Ticks + "_Response_" +
+                    //                    messageHandler.ResponseMessage.ToUserName + ".txt"));
 
                     context.Response.Write(messageHandler.ResponseDocument.ToString());
                     return;

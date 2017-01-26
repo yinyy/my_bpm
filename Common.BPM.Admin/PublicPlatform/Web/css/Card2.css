@@ -2,6 +2,10 @@
     text-align: center;
 }
 
+div.cell {   
+    padding: 10px 10px; 
+}
+
 ul.card_kind_list{
     padding: 10px 0px; 
     margin: 0px;
@@ -42,3 +46,4 @@ ul.card_kind_list li:last-child{
 ul.card_kind_list li.selected{
     border: thin solid #ff0000;
 }
+

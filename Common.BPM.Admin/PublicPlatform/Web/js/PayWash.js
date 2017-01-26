@@ -3,6 +3,12 @@
 
 var actionUrl = "/Washer/ashx/WasherHandler.ashx";
 
+function onBridgeReady() {
+    WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+        alert(res.err_msg);
+    });
+}
+
 $(document).ready(function () {
     var ts = Common.getQueryString('ts');
     $.post(actionUrl, { action: 'Validate', ts: ts == null || ts == '' ? 0 : ts }, function (res) {
@@ -18,9 +24,16 @@ $(document).ready(function () {
                         alert('洗车机已经启动。');
                     }
 
-                    WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-                        alert(res.err_msg);
-                    });
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                        }
+                    } else {
+                        onBridgeReady();
+                    }
                 }, 'json');
             } else {
                 $('#form1').show();
@@ -43,9 +56,16 @@ $(document).ready(function () {
                                            function (pi) {
                                                $.post(actionUrl, { action: 'PayWash', serial: pi.Serial }, function (res1) {
                                                    if (res1.Success) {
-                                                       WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-                                                           alert(res.err_msg);
-                                                       });
+                                                       if (typeof WeixinJSBridge == "undefined") {
+                                                           if (document.addEventListener) {
+                                                               document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                                                           } else if (document.attachEvent) {
+                                                               document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                                               document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                                                           }
+                                                       } else {
+                                                           onBridgeReady();
+                                                       }
                                                    } else {
                                                        alert('命令发送失败。');
                                                    }
@@ -77,9 +97,16 @@ $(document).ready(function () {
         } else {
             alert('请求已过期，请重新扫码。');
 
-            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-                alert(res.err_msg);
-            });
+            if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                }
+            } else {
+                onBridgeReady();
+            }
         }
     }, 'json');
 });
