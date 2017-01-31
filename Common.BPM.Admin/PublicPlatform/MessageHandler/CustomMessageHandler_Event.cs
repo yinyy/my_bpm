@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using System.Threading;
+using Washer.Toolkit;
 
 namespace BPM.Admin.PublicPlatform.MessageHandler
 {
@@ -164,7 +165,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                                     msg.Content = string.Format(
     @"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
 
-微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
+微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId,  device.BoardNumber);
                                 }
                                 else
                                 {
@@ -195,10 +196,13 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                                         a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
                                         msg.Articles.Add(a);
                                     }
-                                    else if (n.url == "#Coin" && (coins >= 500))
+                                    else if (n.url == "#Coin")
                                     {
-                                        a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}&card=true", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
-                                        msg.Articles.Add(a);
+                                        if (coins >= 500)
+                                        {
+                                            a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}&card=true", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
+                                            msg.Articles.Add(a);
+                                        }
                                     }
                                     else
                                     {

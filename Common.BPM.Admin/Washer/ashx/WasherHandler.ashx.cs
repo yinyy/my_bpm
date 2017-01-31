@@ -22,6 +22,7 @@ using System.Text;
 using System.Web.SessionState;
 using Washer.Extension;
 using WebSocket4Net;
+using Washer.Toolkit;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -74,7 +75,7 @@ namespace BPM.Admin.Washer.ashx
                         Data = JsonConvert.SerializeObject(new
                         {
                             DepartmentId = deptId,
-                            BoardNumber = boardNumber,
+                            BoardNumber =Aes.Encrypt( boardNumber),
                             BalanceId = dobj.BalanceId,
                             Coins = dobj.RemainCoins
                         })
@@ -87,10 +88,14 @@ namespace BPM.Admin.Washer.ashx
                     {
                         webSocket.Send(JsonConvert.SerializeObject(o));
                         CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "机器已经启动");
+
+                        try { webSocket.Close(); } catch { }
                     };
                     webSocket.Error += (s0, e0) =>
                     {
                         CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "启动洗车机时发生异常。");
+
+                        try { webSocket.Close(); } catch { }
                     };
                     webSocket.Open();
                     context.Response.Write(JSONhelper.ToJson(new { Success = true }));
@@ -104,6 +109,9 @@ namespace BPM.Admin.Washer.ashx
             {
                 //微信支付洗车
                 string serial = context.Request.Params["serial"];
+                #region 解密Serial
+                serial = Aes.Decrypt(serial);
+                #endregion
 
                 dynamic dobj = WasherValidatorBll.Instance.ValidatePaySerial(serial);
                 if (dobj.Success == true)
@@ -130,7 +138,7 @@ namespace BPM.Admin.Washer.ashx
                         Data = JsonConvert.SerializeObject(new
                         {
                             DepartmentId = dobj.DepartmentId,
-                            BoardNumber = dobj.BoardNumber,
+                            BoardNumber =Aes.Encrypt( dobj.BoardNumber),
                             BalanceId = dobj.BalanceId,
                             Coins = dobj.RemainCoins
                         })
@@ -142,12 +150,13 @@ namespace BPM.Admin.Washer.ashx
                       {
                           webSocket.Send(JsonConvert.SerializeObject(o));
                           CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "机器已经启动");
-                          webSocket.Close();
+
+                          try { webSocket.Close(); } catch { }
                       };
                     webSocket.Error += (s0, e0) =>
                     {
                         CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dobj.Appid, dobj.Secret), dobj.OpenId, "启动洗车机时发生异常。");
-                        webSocket.Close();
+                        try { webSocket.Close(); } catch { }
                     };
                     webSocket.Open();
 

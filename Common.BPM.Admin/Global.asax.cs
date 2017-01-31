@@ -19,8 +19,6 @@ namespace BPM.Admin
     public class Global : System.Web.HttpApplication
     {
         private static ManualResetEvent resetEvent = new ManualResetEvent(false);
-        private static List<Dictionary<WebSocketSession, string>> LockCardSessions = new List<Dictionary<WebSocketSession, string>>();
-
 
         protected void Application_Start(object sender, EventArgs e)
         {

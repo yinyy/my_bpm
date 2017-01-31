@@ -1,4 +1,7 @@
 ﻿var actionURL = '/Washer/ashx/WasherDeviceLogHandler.ashx';
+var balanceUrl = '/Washer/html/WasherBalance.html';
+
+
 //var searchForm = '<form id="uiform"><table class="grid">' +
 //    '<tr>' +
 //        '<td>开始日期：</td>' +
@@ -64,7 +67,7 @@ $(function () {
         var o = { action: 'export', keyid: 0 };
         var query = "json=" + JSON.stringify(o);
 
-        if ($('body').data('where') != null && $('body').data('where') !='') {
+        if ($('body').data('where') != null && $('body').data('where') != '') {
             query = query + "&filter=" + $('body').data('where');
         }
 
@@ -73,6 +76,10 @@ $(function () {
         //jQuery.ajaxjson(actionURL, query, function (json) {
         //    alert(json.Success);
         //});
+    });
+
+    $('#a_balance').click(function () {
+        CRUD.balance();
     });
 });
 
@@ -110,8 +117,10 @@ var grid = {
                     var str = r.Started.substring(0, 19) + '<br/>';
                     if (r.Ended == null) {
                         str += '<span style="color:red;">未结算</span>';
-                    } else {
+                    } else if(r.Started.substring(0, 10)==r.Ended.substring(0, 10)){
                         str += r.Ended.substring(11, 19);
+                    } else {
+                        str += r.Ended.substring(0, 19);
                     }
 
                     return str;
@@ -120,14 +129,15 @@ var grid = {
 		    {
 		        title: '编号', field: 'SerialNumber', width: 150, align: 'left', formatter: function (v, r, i) {
 		            return '序列号：' + r.SerialNumber + '<br/>' + '主板号：' + r.BoardNumber;
-		        }},
+		        }
+		    },
             {
                 title: '洗车地点', field: 'Address', width: 220, align: 'center', formatter: function (v, r, i) {
                     if (v == null) {
                         return '';
                     }
 
-                    if (v== '') {
+                    if (v == '') {
                         return '未安装';
                     } else {
                         return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
@@ -153,12 +163,12 @@ var grid = {
             { title: '支付凭证', field: 'Ticks', width: 150, align: 'center' },
             { title: '所属客户', field: 'DepartmentName', width: 200, align: 'center' },
             {
-                title: '实时消费', field: 'TempTime', width: 200, align: 'center', formatter(v, r, i) {
+                title: '实时消费', field: 'TempTime', width: 200, align: 'left', formatter(v, r, i) {
                     if (v == null) {
                         return '';
                     }
 
-                    var str = r.TempTime.substring(0, 19) + '<br/>' + r.TempCoins;
+                    var str = '时&nbsp;&nbsp;&nbsp;间：' + r.TempTime.substring(0, 19) + '<br/>洗车币：' + (r.TempCoins / 100.0).toFixed(2);
 
                     return str;
                 }
@@ -177,14 +187,14 @@ var grid = {
                 for (var i = 0; i < rows.length; i++) {
                     amount += rows[i].PayCoins;
                 }
-                
+
                 var rowIndex = rows.length;
 
                 $('#list').datagrid('appendRow', {
                     ConsumeName: '<b>消费合计</b>',
                     PayCoins: amount
-                }); 
-                $('#list').datagrid('mergeCells', {index: rowIndex, field: 'ConsumeName', rowspan: 1, colspan: 4});
+                });
+                $('#list').datagrid('mergeCells', { index: rowIndex, field: 'ConsumeName', rowspan: 1, colspan: 4 });
             }
         });
     },
@@ -195,3 +205,53 @@ var grid = {
         $('#list').datagrid('clearSelections').datagrid('reload', { filter: '' });
     }
 };
+
+function createParam(action, keyid) {
+    var o = {};
+    var query = top.$('#uiform').serializeArray();
+    query = convertArray(query);
+    o.jsonEntity = JSON.stringify(query);
+    o.action = action;
+    o.keyid = keyid;
+    return "json=" + JSON.stringify(o);
+}
+
+var CRUD = {
+    balance: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            var isEnd = row.Ended != null;
+            if (isEnd) {
+                msg.warning('当前选中的行已经完成结算。');
+            } else {
+                var hDialog = top.jQuery.hDialog({
+                    title: '手动结算', width: 300, height: 125, href: balanceUrl, iconCls: 'icon-coins', submit: function () {
+                        if (top.$('#uiform').form('validate')) {
+                            var query = createParam('balance', row.KeyId);
+                            jQuery.ajaxjson(actionURL, query, function (d) {
+                                if (parseInt(d) > 0) {
+                                    msg.ok('手动结算成功！');
+                                    hDialog.dialog('close');
+                                    grid.reload();
+                                } else {
+                                    MessageOrRedirect(d);
+                                }
+                            });
+                        }
+                        return false;
+                    }, onLoad: function () {
+                        if (row.TempCoins != null) {
+                            top.$('#txt_PayCoins').numberbox('setValue', row.TempCoins);
+                        } else {
+                            top.$('#txt_PayCoins').numberbox('setValue', row.RemainCoins > 500 ? 500 : row.RemainCoins);
+                        }
+                    }
+                });
+
+                top.$('#uiform').validate();
+            }
+        } else {
+            msg.warning('请选择要结算的行。');
+        }
+    }
+}

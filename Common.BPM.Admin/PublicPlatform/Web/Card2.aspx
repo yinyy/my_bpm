@@ -9,7 +9,7 @@
     <title>我的洗车卡</title>
     <link href="css/WeUI/style/weui.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
-    <link href="css/Card2.css" rel="stylesheet" />
+    <link href="css/Card2.css?d=<%=DateTime.Now.Ticks %>" rel="stylesheet" />
     <script src="js/jquery-2_2_1_min.js"></script>
     <script src="js/Pay.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/Card2.js?d=<%=DateTime.Now.Ticks %>"></script>

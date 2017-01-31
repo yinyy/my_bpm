@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Web.SessionState;
 using Washer.Extension;
 using System.Net.WebSockets;
+using Washer.Toolkit;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
 {
@@ -177,6 +178,9 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             {
                 int value = Convert.ToInt32(context.Request.Params["value"]);
                 string card = context.Request.Params["card"];
+                #region 解密卡号
+                card = Aes.Decrypt(card);
+                #endregion
                 if (WasherCardBll.Instance.Bind(consume, card))
                 {
                     //增加积分

@@ -35,6 +35,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.退出QToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.日志LToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清空CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.lvDevices = new System.Windows.Forms.ListView();
@@ -47,7 +48,8 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.清空CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -106,10 +108,19 @@
             // 日志LToolStripMenuItem
             // 
             this.日志LToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.清空CToolStripMenuItem});
+            this.清空CToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.测试ToolStripMenuItem});
             this.日志LToolStripMenuItem.Name = "日志LToolStripMenuItem";
             this.日志LToolStripMenuItem.Size = new System.Drawing.Size(58, 21);
             this.日志LToolStripMenuItem.Text = "日志(&L)";
+            // 
+            // 清空CToolStripMenuItem
+            // 
+            this.清空CToolStripMenuItem.Name = "清空CToolStripMenuItem";
+            this.清空CToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.清空CToolStripMenuItem.Text = "清空(&C)";
+            this.清空CToolStripMenuItem.Click += new System.EventHandler(this.清空CToolStripMenuItem_Click);
             // 
             // tabControl1
             // 
@@ -214,12 +225,17 @@
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
-            // 清空CToolStripMenuItem
+            // toolStripMenuItem2
             // 
-            this.清空CToolStripMenuItem.Name = "清空CToolStripMenuItem";
-            this.清空CToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.清空CToolStripMenuItem.Text = "清空(&C)";
-            this.清空CToolStripMenuItem.Click += new System.EventHandler(this.清空CToolStripMenuItem_Click);
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // 测试ToolStripMenuItem
+            // 
+            this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
+            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.测试ToolStripMenuItem.Text = "测试";
+            this.测试ToolStripMenuItem.Click += new System.EventHandler(this.测试ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -264,6 +280,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ToolStripMenuItem 清空CToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem 测试ToolStripMenuItem;
     }
 }
 

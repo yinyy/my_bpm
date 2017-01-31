@@ -21,6 +21,7 @@ using System.Xml.Linq;
 using Washer.Bll;
 using Washer.Extension;
 using Washer.Model;
+using Aes2 = Washer.Toolkit;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
 {
@@ -78,7 +79,8 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                         {
                             string prepayId = match.Groups[1].Value;
                             JObject jobj = GetPrepayInfo(prepayId);
-                            jobj.Add("Serial", orderSerial);
+                            //jobj.Add("Serial", orderSerial);
+                            jobj.Add("Serial", Aes2.Aes.Encrypt(orderSerial));
 
                             context.Response.Write(JSONhelper.ToJson(new { Success = true, PrepayInfo = jobj.ToString() }));
                         }

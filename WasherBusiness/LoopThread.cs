@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Washer.Bll;
 using Washer.Model;
+using Washer.Toolkit;
 
 namespace WasherBusiness
 {
@@ -90,7 +91,10 @@ namespace WasherBusiness
                         string cardNo = WasherCardBll.Instance.Lock(consume.DepartmentId, lci.CardValue);
                         if (!string.IsNullOrEmpty(cardNo))
                         {
-                            lci.Session.Send(cardNo);
+                            #region 加密发送数据
+                            lci.Session.Send(Aes.Encrypt(cardNo));
+                            #endregion
+                            //lci.Session.Send(cardNo);
                         }
                         else
                         {

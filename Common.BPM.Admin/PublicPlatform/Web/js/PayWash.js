@@ -1,15 +1,11 @@
 ﻿//http://www.tuicool.com/articles/beEN3m7
 //https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_4
+//https://mp.weixin.qq.com/wiki 
+//JS-SDK
 
 var actionUrl = "/Washer/ashx/WasherHandler.ashx";
 
 function onBridgeReady() {
-    WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-        alert(res.err_msg);
-    });
-}
-
-$(document).ready(function () {
     var ts = Common.getQueryString('ts');
     $.post(actionUrl, { action: 'Validate', ts: ts == null || ts == '' ? 0 : ts }, function (res) {
         if (res == 1) {
@@ -24,16 +20,7 @@ $(document).ready(function () {
                         alert('洗车机已经启动。');
                     }
 
-                    if (typeof WeixinJSBridge == "undefined") {
-                        if (document.addEventListener) {
-                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                        } else if (document.attachEvent) {
-                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-                        }
-                    } else {
-                        onBridgeReady();
-                    }
+                    wx.closeWindow();
                 }, 'json');
             } else {
                 $('#form1').show();
@@ -56,16 +43,7 @@ $(document).ready(function () {
                                            function (pi) {
                                                $.post(actionUrl, { action: 'PayWash', serial: pi.Serial }, function (res1) {
                                                    if (res1.Success) {
-                                                       if (typeof WeixinJSBridge == "undefined") {
-                                                           if (document.addEventListener) {
-                                                               document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                                                           } else if (document.attachEvent) {
-                                                               document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                                                               document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-                                                           }
-                                                       } else {
-                                                           onBridgeReady();
-                                                       }
+                                                       wx.closeWindow();
                                                    } else {
                                                        alert('命令发送失败。');
                                                    }
@@ -97,16 +75,20 @@ $(document).ready(function () {
         } else {
             alert('请求已过期，请重新扫码。');
 
-            if (typeof WeixinJSBridge == "undefined") {
-                if (document.addEventListener) {
-                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                } else if (document.attachEvent) {
-                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-                }
-            } else {
-                onBridgeReady();
-            }
+            wx.closeWindow();
         }
     }, 'json');
+};
+
+$(document).ready(function () {
+    if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    } else {
+        onBridgeReady();
+    }
 });

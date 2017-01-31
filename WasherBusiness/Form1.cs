@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Washer.Bll;
 using Washer.Model;
+using Washer.Toolkit;
 
 namespace WasherBusiness
 {
@@ -130,21 +131,26 @@ namespace WasherBusiness
                     var o2 = new { Serial = "" };
                     o2 = JsonConvert.DeserializeAnonymousType(o.Data, o2);
 
-                    ValidatePayInfo vpi = new ValidatePayInfo(session, o2.Serial);
+                    ValidatePayInfo vpi = new ValidatePayInfo(session, Aes.Decrypt(o2.Serial));
                     loopThread.Add(vpi);
-                }else if (o.Action == "start_machine")
+
+                    PrintLogger(string.Format("【WebSocket】解密数据。支付编号：{0}。", vpi.Serial), true);
+                }
+                else if (o.Action == "start_machine")
                 {
                     var o2 = new { DepartmentId=0, BalanceId=0, Coins=0, BoardNumber="" };
                     o2 = JsonConvert.DeserializeAnonymousType(o.Data, o2);
-                    
-                    foreach(var svr in boardAppServers)
+
+                    PrintLogger(string.Format("【WebSocket】解密数据。主板编号：{0}。", Aes.Decrypt( o2.BoardNumber)), true);
+
+                    foreach (var svr in boardAppServers)
                     {
                         if (svr.DepartmentId == o2.DepartmentId)
                         {
-                            var sn = svr.GetSessions(s => s.BoardNumber == o2.BoardNumber).FirstOrDefault();
+                            var sn = svr.GetSessions(s => s.BoardNumber == Aes.Decrypt( o2.BoardNumber)).FirstOrDefault();
                             if(sn!=null && sn.Connected)
                             {
-                                byte[] buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, o2.BoardNumber, o2.BalanceId, o2.Coins);
+                                byte[] buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, Aes.Decrypt( o2.BoardNumber), o2.BalanceId, o2.Coins);
                                 sn.Send(buffer, 0, buffer.Length);
                             }
                             break;
@@ -589,10 +595,10 @@ namespace WasherBusiness
             {
                 PrintLogger(string.Format("【{0}】消费结算，验证。非法消费编号。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
-            else if (balance.Ticks != null)
-            {
-                PrintLogger(string.Format("【{0}】消费结算，验证。已被结算，凭证：{1}。", ((BoardAppServer)s.AppServer).DepartmentId, balance.Ticks), true);
-            }
+            //else if (balance.Ticks != null)
+            //{
+            //    PrintLogger(string.Format("【{0}】消费结算，验证。已被结算，凭证：{1}。", ((BoardAppServer)s.AppServer).DepartmentId, balance.Ticks), true);
+            //}
             else if (r.Payment < 0)
             {
                 PrintLogger(string.Format("【{0}】消费结算，验证。结算金额小于0。", ((BoardAppServer)s.AppServer).DepartmentId), true);
@@ -905,6 +911,15 @@ namespace WasherBusiness
         private void 清空CToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rtbLog.Clear();
+        }
+
+        private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string card = "201400990099";
+            string enc = Aes.Encrypt(card);
+            Console.WriteLine(enc);
+
+            Console.WriteLine(Aes.Decrypt(enc));
         }
     }
 }

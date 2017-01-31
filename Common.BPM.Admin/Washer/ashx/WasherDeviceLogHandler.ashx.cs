@@ -28,10 +28,10 @@ namespace BPM.Admin.Washer.ashx
             int departmentId = user.DepartmentId;
 
             var json = HttpContext.Current.Request["json"];
-            var rpm = new RequestParamModel<WasherCardModel>(context) { CurrentContext = context };
+            var rpm = new RequestParamModel<WasherDeviceLogModel>(context) { CurrentContext = context };
             if (!string.IsNullOrEmpty(json))
             {
-                rpm = JSONhelper.ConvertToObject<RequestParamModel<WasherCardModel>>(json);
+                rpm = JSONhelper.ConvertToObject<RequestParamModel<WasherDeviceLogModel>>(json);
                 rpm.CurrentContext = context;
             }
 
@@ -41,13 +41,38 @@ namespace BPM.Admin.Washer.ashx
                 case "export":
                     if (user.IsAdmin)
                     {
-                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls",  WasherDeviceLogBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
                     }
                     else
                     {
                         filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
                         GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(filter, rpm.Sort, rpm.Order));
                     }
+                    break;
+                case "balance":
+                    WasherDeviceLogModel balance = WasherDeviceLogBll.Instance.Get(rpm.KeyId);
+                    int ticks = (int)(DateTime.Now - DateTime.Parse("1970-01-01")).TotalSeconds;
+
+                    if (balance.CardId == 0)/*这代表的是微信支付*/
+                    {
+                        balance.PayCoins = rpm.Entity.PayCoins;
+                    }
+                    else
+                    {
+                        balance.PayCoins = WasherCardBll.Instance.Deduction(balance.CardId, rpm.Entity.PayCoins, ticks);
+                    }
+                    balance.Ticks = ticks;
+                    balance.Ended = DateTime.Now;
+
+                    if (WasherDeviceLogBll.Instance.Update(balance) < 0)
+                    {
+                        context.Response.Write(-1);
+                    }
+                    else
+                    {
+                        context.Response.Write(balance.KeyId);
+                    }
+
                     break;
                 default:
                     if (user.IsAdmin)

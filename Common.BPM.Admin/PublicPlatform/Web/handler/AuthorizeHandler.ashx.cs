@@ -48,7 +48,10 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, result.openid);
                     WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinderId(wxconsume.KeyId);
 
-                    context.Session["consumeId"] = consume.KeyId;
+                    if (consume != null)
+                    {
+                        context.Session["consumeId"] = consume.KeyId;
+                    }
 
                     //context.Session["appid"] = "wx2d8bcab64b53be3a";
                     //context.Session["openid"] = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";

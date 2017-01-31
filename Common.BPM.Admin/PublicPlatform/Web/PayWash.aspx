@@ -11,6 +11,7 @@
     <link href="css/style.css" rel="stylesheet" />
     <link href="css/PayWash.css" rel="stylesheet" />
     <script src="js/jquery-2_2_1_min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="js/common.js"></script>
     <script src="js/Pay.js?t=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/PayWash.js?t=<%=DateTime.Now.Ticks %>"></script>
