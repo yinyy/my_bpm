@@ -2893,11 +2893,18 @@
     <Content Include="Extra\WashCar.aspx" />
     <Content Include="PublicPlatform\Web\Authorize.aspx" />
     <Content Include="PublicPlatform\Web\ChangePassword.aspx" />
+    <Content Include="PublicPlatform\Web\css\Personal.css" />
     <Content Include="PublicPlatform\Web\css\Promote.css" />
     <Content Include="PublicPlatform\Web\Error.html" />
+    <Content Include="PublicPlatform\Web\images\icon_personal.png" />
+    <Content Include="PublicPlatform\Web\images\icon_record.png" />
+    <Content Include="PublicPlatform\Web\images\icon_card.png" />
+    <Content Include="PublicPlatform\Web\images\icon_password.png" />
     <Content Include="PublicPlatform\Web\js\ChangePassword.js" />
+    <Content Include="PublicPlatform\Web\js\Personal.js" />
     <Content Include="PublicPlatform\Web\Luck.aspx" />
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
+    <Content Include="PublicPlatform\Web\Personal.aspx" />
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
     <Content Include="Washer\html\WasherReply.html" />
@@ -2913,7 +2920,6 @@
     <Content Include="PublicPlatform\Web\css\WeUI\style\weui.min.css" />
     <Content Include="images\PublicPlatform\card_background.png" />
     <Content Include="images\PublicPlatform\default_logo.png" />
-    <Content Include="PublicPlatform\Web\images\icon_card.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_article.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_button.png" />
     <Content Include="PublicPlatform\Web\images\icon_nav_cell.png" />
@@ -3493,6 +3499,7 @@
     <Content Include="PublicPlatform\Web\handler\AuthorizeTestHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\RecordHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\ChangePassword.ashx" />
+    <Content Include="PublicPlatform\Web\handler\Personal.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3802,6 +3809,9 @@
     <Compile Include="PublicPlatform\Web\handler\ChangePassword.ashx.cs">
       <DependentUpon>ChangePassword.ashx</DependentUpon>
     </Compile>
+    <Compile Include="PublicPlatform\Web\handler\Personal.ashx.cs">
+      <DependentUpon>Personal.ashx</DependentUpon>
+    </Compile>
     <Compile Include="PublicPlatform\Web\handler\ProfileHandler.ashx.cs">
       <DependentUpon>ProfileHandler.ashx</DependentUpon>
     </Compile>
@@ -3841,6 +3851,13 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\PayWash.aspx.designer.cs">
       <DependentUpon>PayWash.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Personal.aspx.cs">
+      <DependentUpon>Personal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Web\Personal.aspx.designer.cs">
+      <DependentUpon>Personal.aspx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Web\Profile.aspx.cs">
       <DependentUpon>Profile.aspx</DependentUpon>

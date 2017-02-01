@@ -2,6 +2,7 @@
 using BPM.Common.Provider;
 using BPM.Core.Bll;
 using BPM.Core.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -161,6 +162,9 @@ namespace Washer.Bll
                 return dobj;
             }
 
+            var o = new { MaxPayCoins = 0 };
+            o = JsonConvert.DeserializeAnonymousType(consume.Setting, o);
+
             WasherDeviceLogModel balance = new WasherDeviceLogModel();
             balance.CardId = WasherCardBll.Instance.GetValidCards(consume.KeyId).OrderBy(a => a.ValidateEnd).FirstOrDefault().KeyId;
             balance.ConsumeId = consume.KeyId;
@@ -168,7 +172,7 @@ namespace Washer.Bll
             balance.Kind = "余额洗车";
             balance.Memo = "";
             balance.PayCoins = 0;
-            balance.RemainCoins = coins;
+            balance.RemainCoins = o.MaxPayCoins == 0 ? coins : Math.Min(o.MaxPayCoins, coins);
             balance.Started = DateTime.Now;
 
             if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) < 0)

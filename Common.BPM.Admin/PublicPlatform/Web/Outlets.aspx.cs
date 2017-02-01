@@ -45,7 +45,7 @@ namespace BPM.Admin.PublicPlatform.Web
                                 Province = g.Key.Province,
                                 City = g.Key.City,
                                 Region = g.Key.Region,
-                                Address = g.Key.Address,
+                                Address =string.Format("{0} ---- 导航过去", g.Key.Address),
                                 Count = g.Count(),
                                 Update = g.Select(d => d.UpdateTime).OrderByDescending(t => t).FirstOrDefault(),
                                 Coordinate = g.Key.Coordinate

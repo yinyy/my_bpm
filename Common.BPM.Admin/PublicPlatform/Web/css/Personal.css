@@ -1,0 +1,32 @@
+﻿body{
+    background-color: #ebebeb;
+}
+
+div.line {
+    clear: both;
+}
+
+div.photo_container{
+    background-color: #00ffff;
+    height: 110px;
+    clear: both;
+}
+
+div.photo_container div.cell {
+    width: 50%;
+    float: left;
+    height: 110px;
+}
+
+div.photo_container div.left img {
+    margin: 15px auto;
+    display: block;
+}
+
+div.photo_container div.right{
+    margin-top: 18px;
+}
+
+div.photo_container div.right p{
+    font-size: 0.9em;
+}

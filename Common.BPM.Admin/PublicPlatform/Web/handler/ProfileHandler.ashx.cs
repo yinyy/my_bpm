@@ -70,6 +70,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                         consume.Telphone = telphone;
                         consume.Password = password;
                         consume.Name = name;
+                        consume.Setting = JSONhelper.ToJson(new { MaxPayCoins = 500 });
 
                         if ((consume.KeyId = WasherConsumeBll.Instance.Add(consume)) > 0)
                         {
