@@ -69,8 +69,8 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Omu.ValueInjecter">
@@ -139,6 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ApplicationError.aspx" />
     <Content Include="App_Data\combres.xml" />
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
@@ -2906,6 +2907,7 @@
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="PublicPlatform\Web\Personal.aspx" />
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
+    <Content Include="Test.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
     <Content Include="Washer\html\WasherReply.html" />
     <Content Include="Washer\js\menu.txt" />
@@ -3715,6 +3717,13 @@
     <Content Include="supersocket.cmd" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationError.aspx.cs">
+      <DependentUpon>ApplicationError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ApplicationError.aspx.designer.cs">
+      <DependentUpon>ApplicationError.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ashx\UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
@@ -3990,6 +3999,13 @@
     </Compile>
     <Compile Include="sys\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\ashx\WasherCardLogHandler.ashx.cs">
       <DependentUpon>WasherCardLogHandler.ashx</DependentUpon>

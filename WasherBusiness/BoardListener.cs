@@ -41,12 +41,12 @@ namespace WasherBusiness
     {
         private long ByteToInt64(byte b)
         {
-            return (b + 0x00000000000000ff) % 0x00000000000000ff;
+            return (b + 256) % 256;
         }
 
         private int ByteToInt32(byte b)
         {
-            return (b + 0x000000ff) % 0x000000ff;
+            return (b + 256) % 256;
         }
 
         public override BoardRequestInfo Filter(byte[] readBuffer, int offset, int length, bool toBeCopied, out int rest)
@@ -81,7 +81,7 @@ namespace WasherBusiness
                     (ByteToInt32(readBuffer[offset + 1]) << 16) +
                     (ByteToInt32(readBuffer[offset + 2]) << 8) +
                     ByteToInt32(readBuffer[offset + 3]);
-                string serial = string.Format("{0:000000}", (ByteToInt64(readBuffer[offset + 7]) << 24) +
+                string boardNumber = string.Format("{0:000000}", (ByteToInt64(readBuffer[offset + 7]) << 24) +
                     (ByteToInt64(readBuffer[offset + 8]) << 16) +
                     (ByteToInt64(readBuffer[offset + 9]) << 8) +
                    ByteToInt64(readBuffer[offset + 10]));
@@ -91,7 +91,7 @@ namespace WasherBusiness
                     Ticks = ticks,
                     Command = commad,
                     Key = Enum.GetName(typeof(RequestCommand), commad),
-                    BoardNumber = serial
+                    BoardNumber = boardNumber
                 };
 
                 if (commad == RequestCommand.Upload)
