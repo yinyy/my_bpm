@@ -586,15 +586,20 @@ namespace WasherBusiness
         {
             PrintLogger(string.Format("【{0}】消费结算，接收。IP：{1}，主板编号：{2}，消费编号：{3}，结算金额：{4:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, s.RemoteEndPoint.Address.ToString(), r.BoardNumber, r.BalanceId, r.Payment / 100.0), true);
 
+            byte[] buffer = CreateBuffer2(RequestCommand.Balance, 12, r.BoardNumber, r.BalanceId, 0);
             WasherDeviceModel device;
             WasherDeviceLogModel balance;
 
             if ((device = WasherDeviceBll.Instance.Get(((BoardAppServer)s.AppServer).DepartmentId, r.BoardNumber)) == null)
             {
+                s.Send(buffer, 0, buffer.Length);
+
                 PrintLogger(string.Format("【{0}】消费结算，验证。非法主板编号。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
             else if ((balance = WasherDeviceLogBll.Instance.Get(r.BalanceId)) == null)
             {
+                s.Send(buffer, 0, buffer.Length);
+
                 PrintLogger(string.Format("【{0}】消费结算，验证。非法消费编号。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
             //else if (balance.Ticks != null)
@@ -603,6 +608,8 @@ namespace WasherBusiness
             //}
             else if (r.Payment < 0)
             {
+                s.Send(buffer, 0, buffer.Length);
+
                 PrintLogger(string.Format("【{0}】消费结算，验证。结算金额小于0。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
             else
@@ -620,11 +627,13 @@ namespace WasherBusiness
 
                 if (WasherDeviceLogBll.Instance.Update(balance) < 0)
                 {
+                    s.Send(buffer, 0, buffer.Length);
+
                     PrintLogger(string.Format("【{0}】消费结算，验证。操作失败。", ((BoardAppServer)s.AppServer).DepartmentId), true);
                 }
                 else
                 {
-                    byte[] buffer = CreateBuffer2(RequestCommand.Balance, 12, r.BoardNumber, r.BalanceId, balance.PayCoins);
+                    buffer = CreateBuffer2(RequestCommand.Balance, 12, r.BoardNumber, r.BalanceId, balance.PayCoins);
 
                     PrintLogger(string.Format("【{0}】消费结算，验证。消费编号：{1}，实际消费：{2:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, r.BalanceId, balance.PayCoins / 100.0), true);
 

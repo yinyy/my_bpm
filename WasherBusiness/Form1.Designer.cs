@@ -37,6 +37,8 @@
             this.日志LToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清空CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.自动滚动ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -50,8 +52,6 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.自动滚动ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -130,6 +130,21 @@
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // 自动滚动ToolStripMenuItem
+            // 
+            this.自动滚动ToolStripMenuItem.Checked = true;
+            this.自动滚动ToolStripMenuItem.CheckOnClick = true;
+            this.自动滚动ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.自动滚动ToolStripMenuItem.Name = "自动滚动ToolStripMenuItem";
+            this.自动滚动ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.自动滚动ToolStripMenuItem.Text = "自动滚动";
+            this.自动滚动ToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.自动滚动ToolStripMenuItem_CheckStateChanged);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
             // 
             // 测试ToolStripMenuItem
             // 
@@ -240,21 +255,6 @@
             this.rtbLog.Size = new System.Drawing.Size(1105, 539);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
-            // 
-            // 自动滚动ToolStripMenuItem
-            // 
-            this.自动滚动ToolStripMenuItem.Checked = true;
-            this.自动滚动ToolStripMenuItem.CheckOnClick = true;
-            this.自动滚动ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.自动滚动ToolStripMenuItem.Name = "自动滚动ToolStripMenuItem";
-            this.自动滚动ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.自动滚动ToolStripMenuItem.Text = "自动滚动";
-            this.自动滚动ToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.自动滚动ToolStripMenuItem_CheckStateChanged);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
             // 
             // Form1
             // 
