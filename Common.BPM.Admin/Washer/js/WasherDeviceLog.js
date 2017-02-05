@@ -81,6 +81,10 @@ $(function () {
     $('#a_balance').click(function () {
         CRUD.balance();
     });
+
+    $('#a_hide').click(function () {
+        CRUD.hide();
+    });
 });
 
 var grid = {
@@ -192,9 +196,15 @@ var grid = {
 
                 $('#list').datagrid('appendRow', {
                     ConsumeName: '<b>消费合计</b>',
-                    PayCoins: amount
+                    PayCoins: amount,
+                    IsShow: true
                 });
-                $('#list').datagrid('mergeCells', { index: rowIndex, field: 'ConsumeName', rowspan: 1, colspan: 4 });
+                $('#list').datagrid('mergeCells', { index: rowIndex, field: 'ConsumeName', rowspan: 1, colspan: 5 });
+            },
+            rowStyler: function (index, row) {
+                if (!row.IsShow) {
+                    return 'color:#ff00ff;';
+                }
             }
         });
     },
@@ -252,6 +262,24 @@ var CRUD = {
             }
         } else {
             msg.warning('请选择要结算的行。');
+        }
+    },
+    hide: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            if (confirm(row.IsShow ? "其他用户也可能看到当前记录。是否隐藏？" : "其他用户不能查看当前记录。是否显示？")) {
+                var query = createParam('show', row.KeyId);
+                jQuery.ajaxjson(actionURL, query, function (d) {
+                    if (parseInt(d) > 0) {
+                        msg.ok('操作成功！');
+                        grid.reload();
+                    } else {
+                        MessageOrRedirect(d);
+                    }
+                });
+            }
+        } else {
+            msg.warning('请选择要操作的行。');
         }
     }
 }

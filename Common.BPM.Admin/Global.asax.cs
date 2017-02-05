@@ -53,7 +53,7 @@ namespace BPM.Admin
         {
             //在出现未处理的错误时运行的代码
             Exception erroy = Server.GetLastError();
-            string err = "出错页面：" + Request.Url.ToString() + "</br>";
+            string err = "出错页面：" + Request.Url.PathAndQuery + "</br>";
             err += "异常信息：" + erroy.Message + "</br>";
             //err += "Source:" + erroy.Source + "</br>";
             //err += "StackTrace:" + erroy.StackTrace + "</br>";

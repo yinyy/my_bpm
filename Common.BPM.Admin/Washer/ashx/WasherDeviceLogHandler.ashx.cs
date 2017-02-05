@@ -35,20 +35,19 @@ namespace BPM.Admin.Washer.ashx
                 rpm.CurrentContext = context;
             }
 
+            bool isDepartmentAdmin = false;
+            foreach (Role r in user.Roles)
+            {
+                if (r.RoleName == "大客户管理员")
+                {
+                    isDepartmentAdmin = true;
+                    break;
+                }
+            }
+
             string filter;
             switch (rpm.Action)
             {
-                case "export":
-                    if (user.IsAdmin)
-                    {
-                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
-                    }
-                    else
-                    {
-                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
-                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(filter, rpm.Sort, rpm.Order));
-                    }
-                    break;
                 case "balance":
                     WasherDeviceLogModel balance = WasherDeviceLogBll.Instance.Get(rpm.KeyId);
                     int ticks = (int)(DateTime.Now - DateTime.Parse("1970-01-01")).TotalSeconds;
@@ -74,6 +73,36 @@ namespace BPM.Admin.Washer.ashx
                     }
 
                     break;
+                case "show":
+                    if(user.IsAdmin || isDepartmentAdmin)
+                    {
+                        WasherDeviceLogModel dl = WasherDeviceLogBll.Instance.Get(rpm.KeyId);
+                        dl.IsShow = !dl.IsShow;
+
+                        context.Response.Write(WasherDeviceLogBll.Instance.Update(dl));
+                    }else
+                    {
+                        context.Response.Write(-1);
+                    }
+                    break;
+                case "export":
+                    if (user.IsAdmin)
+                    {
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
+                    }
+                    else
+                    {
+                        if (isDepartmentAdmin) {
+                            filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                            GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(filter, rpm.Sort, rpm.Order));
+                        }
+                        else
+                        {
+                            filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}},{{\"field\":\"IsShow\",\"op\":\"eq\",\"data\":\"1\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                            GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherDeviceLogBll.Instance.Export(filter, rpm.Sort, rpm.Order));
+                        }
+                    }
+                    break;
                 default:
                     if (user.IsAdmin)
                     {
@@ -81,8 +110,15 @@ namespace BPM.Admin.Washer.ashx
                     }
                     else
                     {
-                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}",departmentId, rpm.Filter);
-                        context.Response.Write(WasherDeviceLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
+                        if (isDepartmentAdmin)
+                        {
+                            filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                            context.Response.Write(WasherDeviceLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
+                        }else
+                        {
+                            filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}, {{\"field\":\"IsShow\",\"op\":\"eq\",\"data\":\"1\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                            context.Response.Write(WasherDeviceLogBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, filter, rpm.Sort, rpm.Order));
+                        }
                     }
                     break;
             }

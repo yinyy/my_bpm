@@ -16,7 +16,7 @@
     <div id="toolbar"><%= base.BuildToolbar()%></div>
 
     <!-- datagrid 列表 -->
-    <table id="list" ></table>  
+    <table id="list" style="text-decoration: dotted" ></table>  
 
     <!-- 引入多功能查询js -->
     <script src="../../scripts/Business/Search.js"></script>

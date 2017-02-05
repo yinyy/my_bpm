@@ -34,14 +34,8 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
             if (action == "list")
             {
-                if (consume == null)
-                {
-                    context.Response.Write(JSONhelper.ToJson(new { binded = false }));
-                }
-                else {
-                    var q = WasherCardBll.Instance.GetValidCards(consume.KeyId).Select(a => new { No = a.CardNo, Coins = a.Coins, ValidateFrom = string.Format("{0:yyyy-MM-dd}", a.ValidateFrom), ValidateEnd = string.Format("{0:yyyy-MM-dd}", a.ValidateEnd) }).ToArray();
-                    context.Response.Write(JSONhelper.ToJson(new { binded = true, count = q.Count(), data = q }));
-                }
+                var q = WasherCardBll.Instance.GetValidCards(consume.KeyId).Select(a => new { No = a.CardNo, Coins = a.Coins, ValidateFrom = string.Format("{0:yyyy-MM-dd}", a.ValidateFrom), ValidateEnd = string.Format("{0:yyyy-MM-dd}", a.ValidateEnd) }).ToArray();
+                context.Response.Write(JSONhelper.ToJson(new { binded = true, count = q.Count(), data = q }));
             }
             else if (action == "bind")
             {
@@ -116,7 +110,8 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
                     context.Response.Write(JSONhelper.ToJson(new { Success = true, Data = array }));
                 }
-                else {
+                else
+                {
                     int value = Convert.ToInt32(context.Request.Params["value"]);
                     int remain = WasherCardBll.Instance.GetCardCountByValue(dept.KeyId, value * 100);
                     float price = 0;
@@ -217,11 +212,11 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             }
             else if (action == "telphone")
             {
-                context.Response.Write(JSONhelper.ToJson(new { Success = true, Binded = consume != null, Message = consume.Telphone }));
+                context.Response.Write(JSONhelper.ToJson(new { Success = true, Binded = consume != null, Message = consume != null ? consume.Telphone : "" }));
             }
             else if (action == "lock")
             {
-                
+
             }
             else
             {

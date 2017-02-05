@@ -38,6 +38,8 @@ namespace WasherBusiness
         private LoopThread loopThread;
         private SessionCheckThread sessionCheckThread;
 
+        private bool isAutoRoll = false;
+
         private class DeviceComparator : IComparer
         {
             public int Compare(object x, object y)
@@ -760,7 +762,11 @@ namespace WasherBusiness
                 }
 
                 rtbLog.AppendText(string.Format("[{0:yyyy/MM/dd HH:mm:ss:sss}]{1}\r\n", DateTime.Now, message));
-                rtbLog.ScrollToCaret();
+
+                if (isAutoRoll)
+                {
+                    rtbLog.ScrollToCaret();
+                }
 
                 if (saveLog)
                 {
@@ -920,6 +926,11 @@ namespace WasherBusiness
             Console.WriteLine(enc);
 
             Console.WriteLine(Aes.Decrypt(enc));
+        }
+
+        private void 自动滚动ToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            isAutoRoll = 自动滚动ToolStripMenuItem.Checked;
         }
     }
 }

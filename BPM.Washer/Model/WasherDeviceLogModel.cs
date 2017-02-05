@@ -23,5 +23,6 @@ namespace Washer.Model
         public int? Ticks { get; set; }
         public DateTime TempTime { get; set; }
         public int? TempCoins { get; set; }
+        public bool IsShow { get; set; }
     }
 }

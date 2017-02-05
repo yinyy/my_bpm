@@ -49,15 +49,12 @@ var List = {
         $.getJSON(actionUrl, { action: 'list' }, function (json) {
             Loading.hide();
 
-            if (json.binded == false) {
-                location.href = 'Profile.aspx';
-            }else{
-                if (json.count == 0) {
-                    $('div#no_cards_region').show();
-                } else {
-                    $('div#show_cards_region > div.weui_panel_bd').empty();
-                    $(json.data).each(function (idx, obj) {
-                        var s = '   <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">\
+            if (json.count == 0) {
+                $('div#no_cards_region').show();
+            } else {
+                $('div#show_cards_region > div.weui_panel_bd').empty();
+                $(json.data).each(function (idx, obj) {
+                    var s = '   <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">\
                                 <div class="weui_media_hd">\
                                     <img class="weui_media_appmsg_thumb" src="./images/icon_card.png" alt="">\
                                 </div>\
@@ -67,14 +64,13 @@ var List = {
                                 </div>\
                             </a>';
 
-                        $('div#show_cards_region > div.weui_panel_bd').append($(s));
-                    });
+                    $('div#show_cards_region > div.weui_panel_bd').append($(s));
+                });
 
-                    $('div#show_cards_region').show();
-                }
-
-                $('div#button_region').show();
+                $('div#show_cards_region').show();
             }
+
+            $('div#button_region').show();
         });
     }
 }
@@ -313,84 +309,24 @@ var Bind = {
 
 
 $(document).ready(function () {
-    vcode = new Vcode($('a#GetVcode'), $('input#Telphone'));
-    $.getJSON(actionUrl, { action: 'telphone' }, function (json) {
-        if (json.Binded) {
-            $('input#Telphone').val(json.Message);
-        }
-    });
+    if (cid == null) {
+        location.href = 'Profile.aspx';
+    } else {
+        vcode = new Vcode($('a#GetVcode'), $('input#Telphone'));
+        $.getJSON(actionUrl, { action: 'telphone' }, function (json) {
+            if (json.Binded) {
+                $('input#Telphone').val(json.Message);
 
-    List.init();
-    Buy.init();
-    Bind.init();
-    
-    List.show();
+                List.init();
+                Buy.init();
+                Bind.init();
+
+                List.show();
+            }
+        });
+    }
 });
-
 
 function formatDate(d) {
     return d.substring(0, 4) + '年' + d.substring(5, 7) + '月' + d.substring(8, 10) + '日';
 }
-
-//var Pay = {
-//    prepay: function () {
-//        $.post(payUrl, { action: 'prepay', body: '购买洗车卡', pay: parseInt(parseFloat(Buy.bo.price) * 100), wxid: ps.wxid, attach: '洗车卡' + Buy.bo.card }, function (res) {
-//            if (res.Success == true) {
-//                pi = eval('(' + res.PrepayInfo + ')');
-
-//                if (typeof WeixinJSBridge == "undefined") {
-//                    if (document.addEventListener) {
-//                        document.addEventListener('WeixinJSBridgeReady', Pay.onBridgeReady, false);
-//                    } else if (document.attachEvent) {
-//                        document.attachEvent('WeixinJSBridgeReady', Pay.onBridgeReady);
-//                        document.attachEvent('onWeixinJSBridgeReady', Pay.onBridgeReady);
-//                    }
-//                } else {
-//                    Pay.onBridgeReady();
-//                }
-//            }
-//        }, 'json');
-//    },
-
-//    onBridgeReady: function () {
-//        //alert(pi.AppID + "\t" + pi.Timestamp + "\t" + pi.Noncestr + "\t" + pi.Package + "\t" + pi.PaySign);
-//        WeixinJSBridge.invoke(
-//            'getBrandWCPayRequest', {
-//                "appId": pi.AppID,     //公众号名称，由商户传入     
-//                "timeStamp": pi.Timestamp,         //时间戳，自1970年以来的秒数     
-//                "nonceStr": pi.Noncestr, //随机串     
-//                "package": pi.Package,
-//                "signType": "MD5",         //微信签名方式：     
-//                "paySign": pi.PaySign //微信签名 
-//            },
-//            function (res) {
-//                //alert(res.err_code + "\r\n" + res.err_desc + "\r\n" + res.err_msg);
-//                if (res.err_msg == "get_brand_wcpay_request:ok") {
-//                    //alert('dfadsfasdf');
-//                    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。 
-
-//                    //判断确实支付成功了，然后再开启设备
-//                    //alert(pi.Serial);
-//                    $.post(payUrl, { action: 'validate', serial: pi.Serial }, function (res) {
-//                        if (res.Success) {
-//                            alert('支付成功。');
-
-//                            $.post(actionUrl, { action: 'payBind', wxid: ps.wxid, value: Buy.bo.card == 0 ? 50 : Buy.bo.card == 1 ? 100 : Buy.bo.card == 2 ? 200 : 300 }, function (res) {
-//                                if (res.Success == true) {
-//                                    List.show();
-//                                }
-//                                else {
-//                                    alert('绑定失败。');
-//                                }
-//                            }, 'json');
-//                        } else {
-//                            alert('支付失败。');
-//                        }
-//                    }, 'json');
-//                } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
-//                    alert('按钮可用');
-//                }
-//            }
-//        );
-//    }
-//}
