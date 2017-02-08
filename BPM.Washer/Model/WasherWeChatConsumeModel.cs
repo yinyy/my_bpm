@@ -21,5 +21,7 @@ namespace Washer.Model
         public string Province { get; set; }
         public string City { get; set; }
         public string Memo { get; set; }
+
+        public string Coordinate { get; set; }
     }
 }

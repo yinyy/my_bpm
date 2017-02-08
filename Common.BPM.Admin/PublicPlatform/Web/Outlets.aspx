@@ -28,7 +28,7 @@
                     <%foreach (var device in devices)
                         {%>
                         <div class="weui_media_box weui_media_text" <%=(string.IsNullOrWhiteSpace(device.Coordinate)?"":"onclick=\"document.location.href='http://api.map.baidu.com/marker?location="+string.Format("{0},{1}",device.Coordinate.Split(',')[1], device.Coordinate.Split(',')[0])+"&title=洗车机位置&content="+device.Address+"&output=html'\"") %>>
-                            <h4 class="weui_media_title"><%=device.Address %></h4>
+                            <h4 class="weui_media_title"><%=string.Format("{0}[{1}]", device.Address, device.Distance==int.MaxValue?"未知":device.Distance<=1000?device.Distance+"米":(device.Distance/1000.0).ToString("0.0")+"公里") %></h4>
                             <p class="weui_media_desc"><%=string.Format("{0} {1} {2}", device.Province, device.City, device.Region) %></p>
                             <ul class="weui_media_info">
                                 <li class="weui_media_info_meta"><%=string.Format("设备数量：{0} 台", device.Count) %></li>
