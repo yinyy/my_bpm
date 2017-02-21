@@ -162,14 +162,10 @@ namespace WasherBusiness
 
     public class BoardAppSession : AppSession<BoardAppSession, BoardRequestInfo>
     {
-        public int HeartBeatCount { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
         public string BoardNumber { get; set; }
 
-        public BoardAppSession()
-        {
-            HeartBeatCount = 0;
-        }
     }
 
     public class BoardAppServer : AppServer<BoardAppSession, BoardRequestInfo>

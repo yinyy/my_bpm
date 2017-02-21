@@ -21,5 +21,6 @@ namespace Washer.Model
         public string Status { get; set; }
         public string TransactionId { get; set; }
         public string Memo { get; set; }
+        public int? ConsumeId { get; set; }
     }
 }

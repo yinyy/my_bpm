@@ -14,6 +14,9 @@ using System.Net;
 using System.Configuration;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs;
+using Washer.Toolkit;
+using WebSocket4Net;
+using Newtonsoft.Json;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -195,6 +198,22 @@ namespace BPM.Admin.Washer.ashx
                     socket.Close();
 
                     context.Response.Write("1");
+                    break;
+                case "send_params":
+                    var o = new { Action = "download_params", Data = string.Format("{0}", rpm.KeyId) };
+
+                    WebSocket webSocket = new WebSocket("ws://139.129.43.203:5500");
+                    webSocket.Opened += (s0, e0) =>
+                    {
+                        webSocket.Send(JsonConvert.SerializeObject(o));
+                        try { webSocket.Close(); } catch { }
+                    };
+                    webSocket.Error += (s0, e0) =>
+                    {
+                        try { webSocket.Close(); } catch { }
+                    };
+                    webSocket.Open();
+
                     break;
                 default:
                     if (user.IsAdmin)

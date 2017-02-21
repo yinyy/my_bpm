@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -21,7 +20,7 @@ using System.Xml.Linq;
 using Washer.Bll;
 using Washer.Extension;
 using Washer.Model;
-using Aes2 = Washer.Toolkit;
+using Washer.Toolkit;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
 {
@@ -43,12 +42,12 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             switch (action)
             {
                 case "prepay":
-                    int deptId =Convert.ToInt16( context.Session["deptId"].ToString());
+                    int deptId = Convert.ToInt16(context.Session["deptId"].ToString());
                     string openid = context.Session["openid"].ToString();
 
                     Department dept = DepartmentBll.Instance.Get(deptId);
                     WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
-                    if (wxconsume == null ||dept == null)
+                    if (wxconsume == null || dept == null)
                     {
                         context.Response.Write("ERROR");
                         context.Response.End();
@@ -80,7 +79,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                             string prepayId = match.Groups[1].Value;
                             JObject jobj = GetPrepayInfo(prepayId);
                             //jobj.Add("Serial", orderSerial);
-                            jobj.Add("Serial", Aes2.Aes.Encrypt(orderSerial));
+                            jobj.Add("Serial", Aes.Encrypt(orderSerial));
 
                             context.Response.Write(JSONhelper.ToJson(new { Success = true, PrepayInfo = jobj.ToString() }));
                         }
@@ -123,7 +122,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 default:
                     String notifyData = GetNotifyData(context.Request.InputStream);
                     notifyData = notifyData.Substring(notifyData.IndexOf("<"));
-                    
+
                     var res = XDocument.Parse(notifyData);
                     Dictionary<string, string> dics = new Dictionary<string, string>();
                     foreach (XElement xe in res.Element("xml").Elements())
@@ -131,7 +130,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                         dics.Add(xe.Name.ToString(), xe.Value);
                     }
 
-                    //设置支付参数
+                    //设置返回参数
                     RequestHandler requestHandler = new RequestHandler(context);
                     //通信成功
                     if (dics["return_code"] == "SUCCESS" && dics["result_code"] == "SUCCESS")
@@ -148,6 +147,10 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                                 {
                                     requestHandler.SetParameter("return_code", "SUCCESS");
                                     requestHandler.SetParameter("return_msg", "OK");
+
+                                    #region 进入验证流程
+                                    UnifyPayExecutor.Execute(om.Serial);
+                                    #endregion
                                 }
                             }
                             catch
@@ -169,10 +172,11 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     }
 
                     string data = requestHandler.ParseXML();
-                    using (StreamWriter writer = new StreamWriter(context.Server.MapPath(string.Format("~/log/{0}-callback.txt", DateTime.Now))))
-                    {
-                        writer.Write(TenPayV3.Unifiedorder(data));
-                    }
+                    //using (StreamWriter writer = new StreamWriter(context.Server.MapPath("~/App_Data/" + DateTime.Now.Ticks + ".txt")))
+                    //{
+                    //    writer.Write(data+"   " + TenPayV3.Unifiedorder(data));
+                    //}
+                    context.Response.Write(data);
 
                     break;
             }
@@ -201,6 +205,13 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             order.Time = DateTime.Now;
             order.TransactionId = "";
             order.Serial = string.Format("{0:yyyyMMdd}{1:0000}{2:00000}", DateTime.Now, deptId, (DateTime.Now - DateTime.Now.Date).TotalSeconds);
+
+            try {
+                WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, openid);
+                WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinderId(wxconsume.KeyId);
+
+                order.ConsumeId = consume.KeyId;
+            } catch { }
 
             if (WasherOrderBll.Instance.Add(order) > 0)
             {
@@ -326,7 +337,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
             str += "&key=" + key;
 
-            MD5 md5 = MD5.Create();
+            System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
             var bs = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
             var sb = new StringBuilder();
             foreach (byte b in bs)

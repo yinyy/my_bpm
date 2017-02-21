@@ -167,17 +167,20 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                             if (reply == null)
                             {
                                 var msg = CreateResponseMessage<ResponseMessageText>();
-                                //如果其卡内还有超过5元的洗车比，则提示其可用直接启动机器
-                                if (coins >= 500)
+                                //如果其卡内还有超过3元的洗车币，则提示其可用直接启动机器
+                                if (coins >= 300)
                                 {
                                     msg.Content = string.Format(
-    @"卡内余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
+    @"会员账户余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
 
 微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId,  device.BoardNumber);
                                 }
                                 else
                                 {
-                                    msg.Content = string.Format(@"微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
+                                    msg.Content = string.Format(
+    @"会员账户余额不足，请先充值。
+
+微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}'>这里</a>。", dept.KeyId, device.BoardNumber);
                                 }
 
                                 message = msg;
@@ -202,21 +205,24 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                                     if (n.url == "#Pay")
                                     {
                                         a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
-                                        msg.Articles.Add(a);
                                     }
                                     else if (n.url == "#Coin")
                                     {
-                                        if (coins >= 500)
+                                        if (coins >= 300)
                                         {
                                             a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}&card=true", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
-                                            msg.Articles.Add(a);
+                                        }else
+                                        {
+                                            a.Title = "会员账户余额不足，请先充值。";
+                                            a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Card2.aspx?appid={0}", dept.KeyId);
                                         }
                                     }
                                     else
                                     {
                                         a.Url = n.url;
-                                        msg.Articles.Add(a);
                                     }
+
+                                    msg.Articles.Add(a);
                                 }
 
                                 message = msg;
@@ -349,39 +355,39 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 }
                 #endregion
 
-                //获取相关设置信息
-                WasherDepartmentSetting setting = WasherDepartmentSetting.Instance;
-                setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+                ////获取相关设置信息
+                //WasherDepartmentSetting setting = WasherDepartmentSetting.Instance;
+                //setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
 
-                string newopenid = wxconsume.OpenId;
-                int refererid = wxconsume.RefererId;
-                WasherConsumeModel consume;
-                int index = -1;
-                while ((++index < setting.Point.Referers.Level.Count()) && refererid != -1)
-                {
-                    if ((consume = WasherConsumeBll.Instance.GetByBinderId(refererid)) != null)
-                    {
-                        WasherRewardModel reward = new WasherRewardModel();
-                        reward.ConsumeId = consume.KeyId;
-                        reward.Kind = "新用户关注公众号，老用户送积分。";
-                        reward.Memo = string.Format("openid:{0}", newopenid);
-                        reward.Points = setting.Point.Referers.Level[index];
-                        reward.Time = DateTime.Now;
-                        reward.Used = 0;
-                        reward.Expired = false;
-                        WasherRewardBll.Instance.Add(reward);
-                    }
+                //string newopenid = wxconsume.OpenId;
+                //int refererid = wxconsume.RefererId;
+                //WasherConsumeModel consume;
+                //int index = -1;
+                //while ((++index < setting.Point.Referers.Level.Count()) && refererid != -1)
+                //{
+                //    if ((consume = WasherConsumeBll.Instance.GetByBinderId(refererid)) != null)
+                //    {
+                //        WasherRewardModel reward = new WasherRewardModel();
+                //        reward.ConsumeId = consume.KeyId;
+                //        reward.Kind = "新用户关注公众号，老用户送积分。";
+                //        reward.Memo = string.Format("openid:{0}", newopenid);
+                //        reward.Points = setting.Point.Referers.Level[index];
+                //        reward.Time = DateTime.Now;
+                //        reward.Used = 0;
+                //        reward.Expired = false;
+                //        WasherRewardBll.Instance.Add(reward);
+                //    }
 
-                    wxconsume = WasherWeChatConsumeBll.Instance.Get(refererid);
-                    if (wxconsume != null)
-                    {
-                        refererid = wxconsume.RefererId;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                //    wxconsume = WasherWeChatConsumeBll.Instance.Get(refererid);
+                //    if (wxconsume != null)
+                //    {
+                //        refererid = wxconsume.RefererId;
+                //    }
+                //    else
+                //    {
+                //        break;
+                //    }
+                //}
             }).Start();
         }
 

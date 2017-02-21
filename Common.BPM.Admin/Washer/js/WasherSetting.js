@@ -94,43 +94,62 @@ $(function () {
         json.Token = $('#txt_Token').val();
         json.Brand = $('#txt_Brand').val();
         json.Logo = $('#txt_Logo').val();
+        json.Setting = {};
 
-        //json.CardColor = $("#txt_Color").spectrum("get").toHexString();
+        //处理微信支付选项
+        var vs = [];
+        if($.trim($('#txt_WxPayOption').val())!=''){
+            $($.trim($('#txt_WxPayOption').val()).split(',')).each(function (i, v) {
+                vs[vs.length] = parseInt(v);
+            });
+            json.Setting.WxPayOption = vs;
+        }
 
-        //var intro = editor.getSource();
-        //intro.replace('\\', '\\\\');
-        //intro.replace('"', '\"');
-        //intro.replace("'", "\'");
-        //json.Introduction = intro;
-
-        json.Setting = {
-            Sms:{
-                Cid: $('#txt_SmsCid').val(),
-                Uid: $('#txt_SmsUid').val(),
-                Pas: $('#txt_SmsPas').val(),
-                Url: $('#txt_SmsUrl').val()
-            },
-            Point: {
-                WashCar: parseInt($('#txt_WashCar').val()),
-                Subscribe: parseInt($('#txt_Subscribe').val()),
-                Recharge: [parseInt($('#txt_Point50').val()), parseInt($('#txt_Point100').val()), parseInt($('#txt_Point200').val())],
-                Referers:{
-                    Kind: $('#rb_Kind_Point').attr('checked') ? 'Point' : 'Percent',
-                    Level: [parseInt($('#txt_Level1').val()), parseInt($('#txt_Level2').val()), parseInt($('#txt_Level3').val()), parseInt($('#txt_Level4').val()), parseInt($('#txt_Level5').val())]
-                }
-            }, Coin: {
-                Exchange: parseInt($('#txt_Exchange').val()),
-                Recharge: [parseInt($('#txt_Coin50').val()), parseInt($('#txt_Coin100').val()), parseInt($('#txt_Coin200').val())]
-            }, Coupon: {
-                Coins: parseInt($('#txt_Coupon').val()),
-                Time: parseInt($('#txt_CouponTime').val())
-            }, Buy: [
-                { Value: 50, Price: parseFloat($('#txt_Card50').val()), Day: parseInt($('#txt_Day50').val()), Product: '50元洗车卡', Score: parseInt($('#txt_Score50').val()) },
-                { Value: 100, Price: parseFloat($('#txt_Card100').val()), Day: parseInt($('#txt_Day100').val()), Product: '100元洗车卡', Score: parseInt($('#txt_Score100').val()) },
-                { Value: 200, Price: parseFloat($('#txt_Card200').val()), Day: parseInt($('#txt_Day200').val()), Product: '200元洗车卡', Score: parseInt($('#txt_Score200').val()) },
-                { Value: 300, Price: parseFloat($('#txt_Card300').val()), Day: parseInt($('#txt_Day300').val()), Product: '300元洗车卡', Score: parseInt($('#txt_Score300').val()) }
-            ]
+        //处理短信接口参数
+        json.Setting.Sms = {
+            Cid: $('#txt_SmsCid').val(),
+            Uid: $('#txt_SmsUid').val(),
+            Pas: $('#txt_SmsPas').val(),
+            Url: $('#txt_SmsUrl').val()
         };
+
+        //处理购买洗车卡选项
+        vs = [];
+        if ($.trim($('#txt_Buy_Card_Option').val()) != '') {
+            $($.trim($('#txt_Buy_Card_Option').val()).split(';')).each(function (i, o) {
+                o = $.trim(o);
+                o = o.split(',');
+
+                vs[vs.length] = { Product: o[0], Value: parseInt(o[1]), Price: parseFloat(o[2]), Day: parseInt(o[3]), Score: parseInt(o[4]) };
+            });
+            json.Setting.BuyCardOption = vs;
+        }
+
+        //处理推荐奖励
+        vs = [];
+        if($.trim($('#txt_GiftLevel').val())!=''){
+            $($.trim($('#txt_GiftLevel').val()).split(',')).each(function (i, o) {
+                vs[vs.length] = parseInt(o);
+            });
+            json.Setting.GiftLevel = vs
+        }
+
+        //处理注册赠送
+        json.Setting.Register = {
+            Coupon: parseInt($('#txt_RegisterCoupon').val()), CouponDay: parseInt($('#txt_RegisterCouponDay').val()), Point: parseInt($('#txt_RegisterPoint').val())
+        };
+
+        //处理洗车积分
+        json.Setting.PayWashCar = {
+            Wx: parseInt($('#txt_Pay_Wash_Card_Wx').val()), Vip: parseInt($('#txt_Pay_Wash_Card_Vip').val()), Coupon: 0
+        };
+
+        //处理文章转发
+        json.Setting.Relay = {
+            Friend: parseInt($('#txt_Relay_Friend').val()),
+            Moment: parseInt($('#txt_Relay_Moment').val())
+        };
+
         json.Setting = JSON.stringify(json.Setting);
 
         $.post('ashx/WasherSettingHandler.ashx', json, function (d) {
@@ -161,53 +180,62 @@ $(function () {
     $('#txt_Brand').val(json.Brand);
     $('#txt_Logo').val(json.Logo);
     $('#Logo').attr('src', json.Logo);
-    //$("input#txt_Color").spectrum('set', json.CardColor);
-    //editor.setSource(json.Introduction);
-
     if (json.Setting != null) {
         var setting = eval("(" + json.Setting + ")");
+        if (setting.WxPayOption != null) {
+            //处理微信支付选项
+            var vs = [];
+            $(setting.WxPayOption).each(function (i, v) {
+                vs[vs.length] = parseInt(v); 
+            });
+            $('#txt_WxPayOption').val(vs.join(','));
+        }
 
-        $('#txt_WashCar').val(setting.Point.WashCar);
-        $('#txt_Subscribe').val(setting.Point.Subscribe);
-
-        $('#txt_Point50, #txt_Point100, #txt_Point200').each(function (idx, obj) {
-            $(this).val(setting.Point.Recharge[idx]);
-        });
-
-        if (setting.Sms!=null) {
+        if (setting.Sms != null) {
+            //处理短信接口参数
             $('#txt_SmsCid').val(setting.Sms.Cid);
             $('#txt_SmsUid').val(setting.Sms.Uid);
             $('#txt_SmsPas').val(setting.Sms.Pas);
             $('#txt_SmsUrl').val(setting.Sms.Url);
         }
 
-        if (setting.Point.Referers.Kind == 'Point') {
-            $('#rb_Kind_Point').click();
-        } else {
-            $('#rb_Kind_Percent').click();
+        if (setting.BuyCardOption != null) {
+            //处理购买洗车卡选项
+            vs = [];
+            $(setting.BuyCardOption).each(function (i, o) {
+                var v = [o.Product, o.Value, o.Price, o.Day, o.Score];
+                vs[vs.length] = v.join(',');
+            });
+            $('#txt_Buy_Card_Option').val(vs.join(';\r\n'));
         }
 
-        $('#txt_Level1, #txt_Level2, #txt_Level3, #txt_Level4, #txt_Level5').each(function(idx, obj){
-            $(this).val(setting.Point.Referers.Level[idx]);
-        });
+        if (setting.GiftLevel != null) {
+            //处理推荐奖励
+            vs = [];
+            $(setting.GiftLevel).each(function (i, o) {
+                vs[vs.length] = parseInt(o);
+            });
+            $('#txt_GiftLevel').val(vs.join(','));
+        }
 
-        $('#txt_Exchange').val(setting.Coin.Exchange);
-        $('#txt_Coin50, #txt_Coin100, #txt_Coin200').each(function (idx, obj) {
-            $(this).val(setting.Coin.Recharge[idx]);
-        });
+        if (setting.Register != null) {
+            //处理注册赠送
+            $('#txt_RegisterCoupon').val(setting.Register.Coupon);
+            $('#txt_RegisterCouponDay').val(setting.Register.CouponDay);
+            $('#txt_RegisterPoint').val(setting.Register.Point);
+        }
 
-        $('#txt_Coupon').val(setting.Coupon.Coins);
-        $('#txt_CouponTime').val(setting.Coupon.Time);
+        if (setting.PayWashCar != null) {
+            //处理洗车积分
+            $('#txt_Pay_Wash_Card_Wx').val(setting.PayWashCar.Wx);
+            $('#txt_Pay_Wash_Card_Vip').val(setting.PayWashCar.Vip);
+        }
 
-        $('#txt_Card50, #txt_Card100, #txt_Card200, #txt_Card300').each(function (idx, obj) {
-            $(this).val(setting.Buy[idx].Price);
-        });
-        $('#txt_Day50, #txt_Day100, #txt_Day200, #txt_Day300').each(function (idx, obj) {
-            $(this).val(setting.Buy[idx].Day);
-        });
-        $('#txt_Score50, #txt_Score100, #txt_Score200, #txt_Score300').each(function (idx, obj) {
-            $(this).val(setting.Buy[idx].Score);
-        });
+        if (setting.Relay != null) {
+            //处理文章转发
+            $('#txt_Relay_Friend').val(setting.Relay.Friend);
+            $('#txt_Relay_Moment').val(setting.Relay.Moment);
+        }
     }
 
     $('body').css('overflow', 'auto');

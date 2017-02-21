@@ -133,9 +133,7 @@
             // 
             // 自动滚动ToolStripMenuItem
             // 
-            this.自动滚动ToolStripMenuItem.Checked = true;
             this.自动滚动ToolStripMenuItem.CheckOnClick = true;
-            this.自动滚动ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.自动滚动ToolStripMenuItem.Name = "自动滚动ToolStripMenuItem";
             this.自动滚动ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.自动滚动ToolStripMenuItem.Text = "自动滚动";

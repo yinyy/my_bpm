@@ -1,19 +1,18 @@
-﻿using System;
+﻿using BPM.Core.BasePage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Washer.BasePage;
 
-namespace BPM.Admin.PublicPlatform.Web
+namespace BPM.Admin.Washer
 {
-    public partial class Card2 : AuthorizeBasePage
+    public partial class WasherReward : BpmBasePage
     {
-        
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
         }
     }
 }

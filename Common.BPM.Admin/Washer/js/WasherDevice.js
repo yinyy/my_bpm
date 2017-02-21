@@ -41,29 +41,6 @@ var grid = {
 		    {title: '序列号', field: 'SerialNumber', width: 120, align: 'center'},
 		    { title: '主板号', field: 'BoardNumber', width: 120, align: 'center' },
             {
-                title: '生产时间', field: 'ProductionTime', width: 90, align: 'center', formatter: function (v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
-                        return v.substring(0, 10);
-                    }
-                }},
-            {
-                title: '出厂时间', field: 'DeliveryTime', width: 90, align: 'center', formatter: function (v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
-                        return v.substring(0, 10);
-                    }
-                }
-            },
-            {
-                title: '客户名称', field: 'DepartmentId', width: 180, align: 'center', formatter: function (v, r, i) {
-                    return r.DepartmentName;
-                }
-            },
-            { title: '备注', field: 'Memo', width: 180, align: 'left' },
-            {
                 title: '安装地点', field: 'Address', width: 200, align: 'center', formatter: function (v, r, i) {
                     if (r.Province == '') {
                         return '未安装';
@@ -73,30 +50,44 @@ var grid = {
                 }},
             {
                 title: '地理坐标', field: 'Coordinate', width: 150, align: 'center'},
+            { title: '联机时间', field: 'UpdateTime', width: 110, align: 'center' },
+            { title: 'IP地址', field: 'IpAddress', width: 110, align: 'center' },
             {
-                title: 'IP地址', field: 'IpAddress', width: 110, align: 'center', formatter: function (v, r, i) {
-                    if (v=='') {
-                        return '未知';
+                title: '当前状态', field: 'Field0', width: 80, align: 'center', formatter(v, r, i) {
+                    var t = new Date();
+                    t = (t.getTime() - (new Date(r.UpdateTime)).getTime()) / 60 / 1000;
+
+                    if (t > 2) {
+                        return '<font color="red">离线</font>';
                     } else {
-                        return r.UpdateTime + '<br/>' + v;
+                        return '在线';
                     }
                 }},
             {
-                title: '参数设置', field: 'Setting', width: 150, align: 'center', formatter: function (v, r, i) {
-                    var s = JSON.parse(v);
-                    var str = '';
-
-                    if (s.Coin != null) {
-                        if (str != '') {
-                            str += '<br/>';
-                        }
-                        str += '单价：' + s.Coin + '元';
+                title: '生产时间', field: 'ProductionTime', width: 90, align: 'center', formatter: function (v, r, i) {
+                    if (v == null) {
+                        return '';
+                    } else {
+                        return v.substring(0, 10);
                     }
-
-                    return str;
                 }
             },
-            { title: '客户备注', field: 'Memo2', width: 180, align: 'left' }
+            {
+                title: '出厂时间', field: 'DeliveryTime', width: 90, align: 'center', formatter: function (v, r, i) {
+                    if (v == null) {
+                        return '';
+                    } else {
+                        return v.substring(0, 10);
+                    }
+                }
+            },
+            { title: '出厂备注', field: 'Memo', width: 180, align: 'left' },
+            { title: '客户备注', field: 'Memo2', width: 180, align: 'left' },
+            {
+                title: '运营商', field: 'DepartmentId', width: 130, align: 'center', formatter: function (v, r, i) {
+                    return r.DepartmentName;
+                }
+            }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
@@ -335,31 +326,50 @@ var CRUD = {
                         top.$('#paramsbit_1, #paramsbit_2, #paramsbit_3').attr('disabled', 'disabled');
                     }
                 },
-                submit: function () {
-                    if (top.$('#uiform').form('validate')) {
-                        var ps = [];
-                        top.$("input[name='params']").each(function (idx) {
-                            ps[ps.length] = parseInt($(this).val());
-                        });
-                        ps[ps.length] = 0;
-                        ps[ps.length] = parseInt((top.$('#paramsbit_3').attr('checked') == 'checked' ? "1" : "0") +
-                            (top.$('#paramsbit_2').attr('checked') == 'checked' ? "1" : "0") +
-                            (top.$('#paramsbit_1').attr('checked') == 'checked' ? "0" : "1"), 2);
-
-                        top.$('#txt_Setting').val(JSON.stringify({ Coin: 0, Params: ps }));
-                        var query = createParam('set', row.KeyId);
+                buttons:[{
+                    text:'下载参数',
+                    iconCls:'icon-email_go',
+                    handler:function(){
+                        var query = createParam('send_params', row.KeyId);
                         jQuery.ajaxjson(actionURL, query, function (d) {
-                            if (parseInt(d) > 0) {
-                                msg.ok('修改成功！');
-                                hDialog.dialog('close');
-                                grid.reload();
-                            } else {
-                                MessageOrRedirect(d);
-                            }
+                            alert('参数已经下载。');
                         });
                     }
-                    return false;
-                }
+                },{
+                    text:'保存',
+                    iconCls:'icon-save',
+                    handler: function () {
+                        if (top.$('#uiform').form('validate')) {
+                            var ps = [];
+                            top.$("input[name='params']").each(function (idx) {
+                                ps[ps.length] = parseInt($(this).val());
+                            });
+                            ps[ps.length] = 0;
+                            ps[ps.length] = parseInt((top.$('#paramsbit_3').attr('checked') == 'checked' ? "1" : "0") +
+                                (top.$('#paramsbit_2').attr('checked') == 'checked' ? "1" : "0") +
+                                (top.$('#paramsbit_1').attr('checked') == 'checked' ? "0" : "1"), 2);
+
+                            top.$('#txt_Setting').val(JSON.stringify({ Coin: 0, Params: ps }));
+                            var query = createParam('set', row.KeyId);
+                            jQuery.ajaxjson(actionURL, query, function (d) {
+                                if (parseInt(d) > 0) {
+                                    msg.ok('修改成功！');
+                                    //hDialog.dialog('close');
+                                    grid.reload();
+                                } else {
+                                    MessageOrRedirect(d);
+                                }
+                            });
+                        }
+                        return false;
+                    }
+                }, {
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                    handler: function () {
+                        hDialog.dialog('close');
+                    }
+                }]
             });
         } else {
             msg.warning('请选择要设置的行。');

@@ -1,3 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<xml>
-  <ToUserName><![CDATA[gh_e94577a0a594]]></ToUserName> <FromUserName><![CDATA[oIC6ejjI1izi372jxZ0R7LnD8p5o]]></FromUserName> <CreateTime>1457225307</CreateTime> <MsgType><![CDATA[event]]></MsgType> <Event><![CDATA[subscribe]]></Event> <EventKey><![CDATA[channel69]]></EventKey> <Ticket><![CDATA[gQFB8ToAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzBIVUExalRtQ0JseHZGMXpCVjNrAAIEDbjBVgMEAAAAAA==]]></Ticket> </xml>

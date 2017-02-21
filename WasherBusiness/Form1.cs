@@ -35,7 +35,6 @@ namespace WasherBusiness
         private WebSocketServer webSocketServer;
         private List<BoardAppServer> boardAppServers;
 
-        private LoopThread loopThread;
         private SessionCheckThread sessionCheckThread;
 
         private bool isAutoRoll = false;
@@ -69,11 +68,6 @@ namespace WasherBusiness
 
         private void 启动服务器SToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            #region 启动循环线程
-            loopThread = new LoopThread();
-            loopThread.Start();
-            #endregion
-
             #region 启动检查线程
             sessionCheckThread = new WasherBusiness.SessionCheckThread();
             sessionCheckThread.Start();
@@ -121,24 +115,7 @@ namespace WasherBusiness
 
                 var o = new { Action = "", Data="" };
                 o = JsonConvert.DeserializeAnonymousType(message, o);
-                if (o.Action == "lock_card")
-                {
-                    var o2 = new { CID = 0, Value = 0 };
-                    o2 = JsonConvert.DeserializeAnonymousType(o.Data, o2);
-
-                    LockCardInfo lci = new LockCardInfo(session, o2.CID, o2.Value);
-                    loopThread.Add(lci);
-                }else if (o.Action == "wx_pay")
-                {
-                    var o2 = new { Serial = "" };
-                    o2 = JsonConvert.DeserializeAnonymousType(o.Data, o2);
-
-                    ValidatePayInfo vpi = new ValidatePayInfo(session, Aes.Decrypt(o2.Serial));
-                    loopThread.Add(vpi);
-
-                    PrintLogger(string.Format("【WebSocket】解密数据。支付编号：{0}。", vpi.Serial), true);
-                }
-                else if (o.Action == "start_machine")
+                if (o.Action == "start_machine")
                 {
                     var o2 = new { DepartmentId=0, BalanceId=0, Coins=0, BoardNumber="" };
                     o2 = JsonConvert.DeserializeAnonymousType(o.Data, o2);
@@ -160,6 +137,20 @@ namespace WasherBusiness
                     }
 
                     session.Close();
+                }else if (o.Action == "download_params")
+                {
+                    WasherDeviceModel device = WasherDeviceBll.Instance.Get(Convert.ToInt32(o.Data));
+                    foreach(var svr in boardAppServers)
+                    {
+                        if (svr.DepartmentId == device.DepartmentId)
+                        {
+                            var sn = svr.GetSessions(s => s.BoardNumber == device.BoardNumber).FirstOrDefault();
+                            if (sn != null && sn.Connected)
+                            {
+                                HandleConfig(sn, null, device);
+                            }
+                        }
+                    }
                 }
             };
             this.webSocketServer.SessionClosed += (session, reason) =>
@@ -204,7 +195,7 @@ namespace WasherBusiness
                 };
                 boardAppServer.SessionClosed += (session, reason) =>
                 {
-                    RemoveDevice(session.RemoteEndPoint.Address.ToString());
+                    RemoveDevice(session.BoardNumber);
 
                     PrintLogger(string.Format("【{0}】客户端关闭。IP：{1}。", deptId, session.RemoteEndPoint.Address.ToString()), false);
                 };
@@ -323,6 +314,8 @@ namespace WasherBusiness
 
                 s.Send(buffer, 0, buffer.Length);
 
+                s.LastUpdateTime = DateTime.Now;
+
                 //更新数据库的状态
                 WasherDeviceBll.Instance.UpdateOnlineTime(((BoardAppServer)s.AppServer).DepartmentId, r.BoardNumber, s.RemoteEndPoint.Address.ToString());
 
@@ -369,6 +362,7 @@ namespace WasherBusiness
                 balance.PayCoins = 0;
                 balance.RemainCoins = coins;
                 balance.Started = DateTime.Now;
+                balance.IsShow = true;
 
                 if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) <= 0)
                 {
@@ -392,31 +386,33 @@ namespace WasherBusiness
             PrintLogger(string.Format("【{0}】心跳同步，接收。IP：{1}。", ((BoardAppServer)s.AppServer).DepartmentId, s.RemoteEndPoint.Address.ToString()), true);
 
             s.Send(new byte[] { 0x00 }, 0, 1);
-            s.HeartBeatCount++;
 
-            if (s.HeartBeatCount >= 60)
+            if (s.LastUpdateTime != null && s.LastUpdateTime.AddMinutes(1).AddSeconds(30).CompareTo(DateTime.Now) < 0)
             {
-                s.HeartBeatCount = 0;
-                PrintLogger(string.Format("【{0}】心跳同步，发送。更新服务器。", ((BoardAppServer)s.AppServer).DepartmentId), true);
-
-                //更新设备的最后更新时间
-                WasherDeviceBll.Instance.UpdateOnlineTime(((BoardAppServer)s.AppServer).DepartmentId, s.RemoteEndPoint.Address.ToString());
+                s.LastUpdateTime = DateTime.Now;
 
                 //更新列表中的时间
-                UpdateDevice(s.RemoteEndPoint.Address.ToString());
+                UpdateDevice(s.BoardNumber, s.RemoteEndPoint.Address.ToString());
+
+                //更新设备的最后更新时间
+                WasherDeviceBll.Instance.UpdateOnlineTime(((BoardAppServer)s.AppServer).DepartmentId, s.BoardNumber);
+            }
+
+            PrintLogger(string.Format("【{0}】心跳同步，回复。", ((BoardAppServer)s.AppServer).DepartmentId), true);
+        }
+        private void HandleConfig(BoardAppSession s, BoardRequestInfo r, WasherDeviceModel device=null)
+        {
+            if (r != null)
+            {
+                PrintLogger(string.Format("【{0}】读取设置，接收。IP：{1}，主板编号：{2}。", ((BoardAppServer)s.AppServer).DepartmentId, s.RemoteEndPoint.Address.ToString(), r.BoardNumber), true);
             }
             else
             {
-                PrintLogger(string.Format("【{0}】心跳同步，回复。", ((BoardAppServer)s.AppServer).DepartmentId), true);
+                PrintLogger(string.Format("【{0}】读取设置，接收。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
-        }
-
-        private void HandleConfig(BoardAppSession s, BoardRequestInfo r)
-        {
-            PrintLogger(string.Format("【{0}】读取设置，接收。IP：{1}，主板编号：{2}。", ((BoardAppServer)s.AppServer).DepartmentId, s.RemoteEndPoint.Address.ToString(), r.BoardNumber), true);
 
             byte[] buffer = CreateBuffer(RequestCommand.Config, 1);
-            WasherDeviceModel device = WasherDeviceBll.Instance.Get(((BoardAppServer)s.AppServer).DepartmentId, r.BoardNumber);
+            device = device ?? WasherDeviceBll.Instance.Get(((BoardAppServer)s.AppServer).DepartmentId, r.BoardNumber);
             if (device == null)
             {
                 PrintLogger(string.Format("【{0}】读取设置，验证。非法主板编号。", ((BoardAppServer)s.AppServer).DepartmentId), true);
@@ -427,7 +423,7 @@ namespace WasherBusiness
                 {
                     var o = new { Coin = 0, Params = new int[1] };
                     o = JsonConvert.DeserializeAnonymousType(device.Setting, o);
-                    buffer = CreateBuffer(RequestCommand.Config, 68, r.BoardNumber);
+                    buffer = CreateBuffer(RequestCommand.Config, 68, device.BoardNumber);
 
                     for (int i = 0; i < 32; i++)
                     {
@@ -498,6 +494,7 @@ namespace WasherBusiness
                 balance.PayCoins = 0;
                 balance.RemainCoins = card.Coins;
                 balance.Started = DateTime.Now;
+                balance.IsShow = true;
 
                 if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) <= 0)
                 {
@@ -564,6 +561,7 @@ namespace WasherBusiness
                 balance.PayCoins = 0;
                 balance.RemainCoins = card.Coins;
                 balance.Started = DateTime.Now;
+                balance.IsShow = true;
 
                 if ((balance.KeyId = WasherDeviceLogBll.Instance.Add(balance)) <= 0)
                 {
@@ -640,6 +638,50 @@ namespace WasherBusiness
                     s.Send(buffer, 0, buffer.Length);
 
                     PrintLogger(string.Format("【{0}】消费结算，回复。", ((BoardAppServer)s.AppServer).DepartmentId), true);
+
+                    #region 余额支付洗车送积分
+                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(DepartmentBll.Instance.Get(device.DepartmentId).Setting);
+                    int point = 0;
+                    if ((balance.Kind == "余额洗车" || balance.Kind == "电话密码" || balance.Kind == "卡号密码" || balance.Kind == "刷卡")
+                        && balance.ConsumeId != null
+                        && (point = balance.PayCoins * setting.PayWashCar.Vip / 100 / 100) > 0)
+                    {
+                        WasherRewardModel reward = new WasherRewardModel();
+                        reward.ConsumeId = balance.ConsumeId.Value;
+                        reward.Expired = false;
+                        reward.Kind = "会员洗车送积分";
+                        reward.Memo = JSONhelper.ToJson(new { BalanceId = balance.KeyId, Kind= balance.Kind, Money = string.Format("{0:0.00}", balance.PayCoins / 100.0), Percent = setting.PayWashCar.Vip });
+                        reward.Points = point;
+                        reward.Time = DateTime.Now;
+                        reward.Used = 0;
+
+                        reward.KeyId = WasherRewardBll.Instance.Add(reward);
+                    }
+                    #endregion
+
+                    #region 如果是外部服务，则需要根据设置判断是否需要回调
+                    if (balance.Kind.StartsWith("外部服务"))
+                    {
+                        var o= new { Desc="",Tag="",Echostr="",Rid=""};
+                        o = JsonConvert.DeserializeAnonymousType(balance.Memo, o);
+
+                        WasherOutsiderModel outsider = WasherOutsiderBll.Instance.Get(device.DepartmentId, o.Tag);
+                        if (!string.IsNullOrEmpty(outsider.Url))
+                        {
+                            new Thread(() =>
+                            {
+                                string url = string.Format("{0}{1}echostr={2}&rid={3}", outsider.Url, outsider.Url.IndexOf('?') == -1 ? "?" : "&", o.Echostr, o.Rid);
+
+                                System.Net.WebRequest wReq = System.Net.WebRequest.Create(url);
+                                System.Net.WebResponse wResp = wReq.GetResponse();
+                                System.IO.Stream respStream = wResp.GetResponseStream();
+
+                                respStream.Close();
+                                wResp.Close();
+                            }).Start();
+                        }
+                    }
+                    #endregion
                 }
             }
         }
@@ -808,7 +850,7 @@ namespace WasherBusiness
                 lvi.Text = "";
                 lvi.SubItems.Add(serial);
                 lvi.SubItems.Add(code);
-                lvi.SubItems.Add(ip);
+                lvi.SubItems.Add(ip.Split('.').Select(a=>string.Format("   {0}",a)).Select(a=>a.Substring(a.Length-3)).Aggregate((a, b) => string.Format("{0}.{1}", a, b)));
                 lvi.SubItems.Add(time);
                 lvi.SubItems.Add(belonged);
                 lvi.SubItems.Add(address);
@@ -824,20 +866,20 @@ namespace WasherBusiness
             }
         }
 
-        delegate void UpdateDeviceDelegate(string ip);
-        public void UpdateDevice(string ip)
+        delegate void UpdateDeviceDelegate(string board, string ip);
+        public void UpdateDevice(string  board, string ip)
         {
             if (rtbLog.InvokeRequired)
             {
                 UpdateDeviceDelegate d = new UpdateDeviceDelegate(UpdateDevice);
-                Invoke(d, new object[] { ip });
+                Invoke(d, new object[] {board, ip });
             }
             else
             {
                 ListViewItem current = null;
                 for (int i = 0; i < lvDevices.Items.Count; i++)
                 {
-                    if (lvDevices.Items[i].SubItems[3].Text == ip)
+                    if (lvDevices.Items[i].SubItems[2].Text == board)
                     {
                         current = lvDevices.Items[i];
                         break;
@@ -846,24 +888,25 @@ namespace WasherBusiness
 
                 if (current != null)
                 {
+                    current.SubItems[3].Text = ip.Split('.').Select(a => string.Format("   {0}", a)).Select(a => a.Substring(a.Length - 3)).Aggregate((a, b) => string.Format("{0}.{1}", a, b));
                     current.SubItems[4].Text = DateTime.Now.ToString("yyyy年MM月dd日 HH:mm:ss");
                 }
             }
         }
 
-        delegate void RemoveDeviceDelegate(string ip);
-        public void RemoveDevice(string ip)
+        delegate void RemoveDeviceDelegate(string board);
+        public void RemoveDevice(string board)
         {
             if (rtbLog.InvokeRequired)
             {
                 RemoveDeviceDelegate d = new RemoveDeviceDelegate(RemoveDevice);
-                Invoke(d, new object[] { ip });
+                Invoke(d, new object[] { board });
             }
             else
             {
                 for (int i = 0; i < lvDevices.Items.Count; i++)
                 {
-                    if (lvDevices.Items[i].SubItems[3].Text == ip)
+                    if (lvDevices.Items[i].SubItems[2].Text == board)
                     {
                         lvDevices.Items.RemoveAt(i);
                         break;
@@ -879,8 +922,6 @@ namespace WasherBusiness
 
         private void 关闭服务器CToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            loopThread.Stop();
-
             if (this.boardAppServers != null)
             {
                 foreach(var svr in this.boardAppServers)

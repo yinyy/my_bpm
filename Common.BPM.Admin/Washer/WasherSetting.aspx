@@ -46,6 +46,12 @@
                 <li><label>secret：</label><input type="text" id="txt_Secret" name="Secret" style="width: 500px;"/></li>
                 <li><label>aeskey：</label><input type="text" id="txt_Aeskey" name="Aeskey" style="width: 500px;"/></li>
                 <li><label>Token：</label><input type="text" id="txt_Token" name="Token" style="width: 500px;"/></li>
+                <li>
+                    <label>洗车支付选项：</label><input type="text" id="txt_WxPayOption" name="WxPayOption" style="width: 500px;"/>
+                </li>
+                <li> 
+                    <label>&nbsp;</label>注：在微信洗车支付界面的固定额度（单位为分）。例如：600,800,1000。则在用户界面上显示固定的6元、8元、10元。留空，则用户可以支付任意金额。
+                </li>
            </ul>
         </div>
         <h1>短信接口参数设置</h1>
@@ -64,96 +70,69 @@
                 <li><label style="display: inline-block; vertical-align: middle;">商标：</label><img id="Logo" src="/images/PublicPlatform/default_logo.png" alt="Logo" style="display: inline-block; vertical-align: middle;"/><input type="hidden" id="txt_Logo" name="Logo"/><a href="#" id="Upload" class="alertify-button alertify-button-ok" style="margin: 0px 0px 0px 15px; display: inline-block; vertical-align: middle;">上传</a><label style="display: inline-block; vertical-align: middle;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用48x48像素的png图片</label></li>
            </ul>
         </div>
-        <h1>洗车卡</h1>
+        <h1>注册信息</h1>
         <div class="c">
             <ul>
                 <li>
-                    <label>购买洗车卡：</label>
-                    <ul>
-                        <li><label>50元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card50" name="Card50"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day50" name="Day50"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score50" /><label>&nbsp;积分。</label></li>
-                        <li><label>100元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card100" name="Card100"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day100" name="Day100"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score100" /><label>&nbsp;积分。</label></li>
-                        <li><label>200元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card200" name="Card200"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day200" name="Day200"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score200" /><label>&nbsp;积分。</label></li>
-                        <li><label>300元&nbsp;卖&nbsp;</label><input type="text" id="txt_Card300" name="Card300"/><label>&nbsp;元，有效期&nbsp;</label><input type="text" id="txt_Day300" name="Day300"/><label>&nbsp;天，送&nbsp;</label><input type="text" id="txt_Score300" /><label>&nbsp;积分。</label></li>
-                    </ul>
+                    <label>&nbsp;</label>送&nbsp;<input type="text" id="txt_RegisterCoupon" name="RegisterCoupon" style="width:50px;text-align:center;"/>&nbsp;洗车币（元）的优惠卡（填“0”不启用），有效期&nbsp;<input type="text" id="txt_RegisterCouponDay" name="RegisterCouponDay" style="width:50px;text-align:center;" />&nbsp;天。
+                </li>
+                <li><label>&nbsp;</label><label>或</label></li>
+                <li>
+                    <label>&nbsp;</label>送&nbsp;<input type="text" id="txt_RegisterPoint" name="RegisterPoint" style="width:50px;text-align:center;"/>&nbsp;积分（填“0”不启用）
                 </li>
            </ul>
         </div>
-        <h1>洗车币</h1>
+        <h1>购买洗车卡</h1>
         <div class="c">
             <ul>
                 <li>
-                    <label>兑换：</label>
-                    <ul>
-                        <li><label>1元=&nbsp;</label><input type="text" id="txt_Exchange" name="Exchange"/><label>&nbsp;&nbsp;洗车币</label></li>
-                    </ul>
+                    <label for="txt_Buy_Card_Option">分类：</label><textarea id="txt_Buy_Card_Option" rows="5" cols="100" style="display: inline-block;vertical-align: middle;"></textarea>
                 </li>
-                <li>
-                    <label>充值送币：</label>
-                    <ul>
-                        <li><label>50元&nbsp;&nbsp;</label><input type="text" id="txt_Coin50" name="Coin50"/><label>&nbsp;&nbsp;洗车币</label></li>
-                        <li><label>100元&nbsp;&nbsp;</label><input type="text" id="txt_Coin100" name="Coin100"/><label>&nbsp;&nbsp;洗车币</label></li>
-                        <li><label>200元&nbsp;&nbsp;</label><input type="text" id="txt_Coin200" name="Coin200"/><label>&nbsp;&nbsp;洗车币</label></li>
-                    </ul>
-                </li>
+                <li><label>&nbsp;</label>格式：洗车卡名称,洗车卡面值（元）,洗车卡售价（元）,洗车卡有效期（天）,购买洗车卡赠送的积分。多种面值的洗车卡用“;”隔开。</li>
            </ul>
         </div>
-        <h1>优惠券</h1>
-        <div class="c">
-            <ul>
-                <li>
-                    <label>注册个人信息：</label>
-                    <ul>
-                        <li><label>送&nbsp;&nbsp;</label><input type="text" id="txt_Coupon" name="Coupon"/><label>&nbsp;&nbsp;洗车币的优惠价，有效期&nbsp;&nbsp;</label><input type="text" id="txt_CouponTime" name="CouponTime" />&nbsp;&nbsp;天。</li>
-                    </ul>
-                </li>
-           </ul>
-        </div>
-        <h1>积分</h1>
+        <h1>洗车</h1>
         <div class="c">
             <ul>                
                 <li>
-                    <label>洗车：</label>
-                    <ul>
-                        <li><label>&nbsp;&nbsp;</label><input type="text" id="txt_WashCar" name="WashCar"/><label>&nbsp;&nbsp;积分</label></li>
-                    </ul>
+                    <label>微信支付：</label><label>送支付金额&nbsp;</label><input type="text" id="txt_Pay_Wash_Card_Wx" name="txt_Pay_Wash_Card_Wx" style="text-align:center;width: 50px;"/><label>&nbsp;%的积分。</label>
                 </li>
                 <li>
-                    <label>注册个人信息：</label>
-                    <ul>
-                        <li><label>&nbsp;&nbsp;</label><input type="text" id="txt_Subscribe" name="Subscribe"/><label>&nbsp;&nbsp;积分</label></li>
-                    </ul>
+                    <label>会员支付：</label><label>送结算金额&nbsp;</label><input type="text" id="txt_Pay_Wash_Card_Vip" name="txt_Pay_Wash_Card_Vip" style="text-align:center;width: 50px;"/><label>&nbsp;%的积分。（包括：手机号+密码支付、卡号+密码支付和刷卡支付）</label>
                 </li>
                 <li>
-                    <label>充值：</label>
-                    <ul>
-                        <li><label>50元&nbsp;&nbsp;</label><input type="text" id="txt_Point50" name="Point50"/><label>&nbsp;&nbsp;积分</label></li>
-                        <li><label>100元&nbsp;&nbsp;</label><input type="text" id="txt_Point100" name="Point100"/><label>&nbsp;&nbsp;积分</label></li>
-                        <li><label>200元&nbsp;&nbsp;</label><input type="text" id="txt_Point200" name="Point200"/><label>&nbsp;&nbsp;积分</label></li>
-                    </ul>
-                </li>
-                <li>
-                    <label>推荐奖励：</label>
-                    <ul style="width: 210px;">
-                        <li><label>一级&nbsp;&nbsp;</label><input type="text" id="txt_Level1" name="Level1"/><label>&nbsp;&nbsp;积分</label></li>
-                        <li><label>二级&nbsp;&nbsp;</label><input type="text" id="txt_Level2" name="Level2"/><label>&nbsp;&nbsp;积分</label></li>
-                        <li><label>三级&nbsp;&nbsp;</label><input type="text" id="txt_Level3" name="Level3"/><label>&nbsp;&nbsp;积分</label></li>
-                        <li><label>四级&nbsp;&nbsp;</label><input type="text" id="txt_Level4" name="Level4"/><label>&nbsp;&nbsp;积分</label></li>
-                        <li><label>五级&nbsp;&nbsp;</label><input type="text" id="txt_Level5" name="Level5"/><label>&nbsp;&nbsp;积分</label></li>
-                    </ul>
-                    <ul>
-                        <li><input name="Point_Kind" id="rb_Kind_Point" type="radio" style="width: auto; margin-left: 20px;" checked="checked"/><label for="rb_Kind_Point" style="text-align: left;">送积分</label></li>
-                        <li><input name="Point_Kind" id="rb_Kind_Percent" type="radio" style="width: auto; margin-left: 20px;" /><label for="rb_Kind_Percent" style="text-align: left;">送充值金额的百分比</label></li>
-                    </ul>
+                    <label>优惠卡支付：</label><label>不送积分。</label>
                 </li>
             </ul>
         </div>
-        <!--h1>会员卡</!--h1>
+        <h1>推荐奖励<span style="color:#ff0000;">（仅限购买洗车卡和微信支付洗车）</span></h1>
         <div class="c">
             <ul>
-                <li><label style="display:block; float:left;">背景色：</label><input type="text" id="txt_Color" name="Color"/></li>
-                <li style="margin-top: 10px;"><label style="vertical-align: middle; display: inline-block;">用卡须知：</label><textarea id="txt_Intro" name="Intro" cols="100" rows="30" style="vertical-align: middle;"></textarea></li>
+                <li>
+                    <label>积分比例：</label><input type="text" id="txt_GiftLevel" name="Levels" style="width:814px;"/>
+                </li>
+                <li>
+                    <label>&nbsp;</label>用户消费，给其推荐者的奖励。
+                </li>
+                <li>
+                    <label>&nbsp;</label>格式：一级奖励（百分比）,二级奖励（百分比）,三级奖励（百分比）,四级奖励（百分比）,五级奖励（百分比）。奖励等级一般不超过五级。
+                </li>
+                <li>
+                    <label>&nbsp;</label>例如：50,10,1,0,0。表示消费金额*50%的积分奖励给一级推荐者，消费金额*10%的积分奖励给二级推荐者，消费金额*1%的积分奖励给三级推荐者，四级、五级无奖励。
+                </li>
            </ul>
-        </div-->
+        </div>
+        <h1>分享奖励</h1>
+        <div class="c">
+            <ul>
+                <li>
+                    <label>给朋友：</label>送&nbsp;<input type="text" id="txt_Relay_Friend" name="RelayFriend" style="width:50px;text-align:center;"/>&nbsp;积分。
+                </li>
+                <li>
+                    <label>到朋友圈：</label>送&nbsp;<input type="text" id="txt_Relay_Moment" name="RelayMoment" style="width:50px;text-align:center;"/>&nbsp;积分。
+                </li>
+           </ul>
+        </div>
     </div>
 
 

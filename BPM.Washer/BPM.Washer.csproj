@@ -49,6 +49,30 @@
       <HintPath>..\packages\Senparc.Weixin.MP.13.6.10\lib\net45\Senparc.Weixin.MP.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SuperSocket.Facility, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Facility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SuperSocket.SocketBase, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.SocketBase.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SuperSocket.SocketService, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SuperSocket.WebSocket, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.WebSocket.1.6.6.1\lib\net45\SuperSocket.WebSocket.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -58,6 +82,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebSocket4Net, Version=0.14.1.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasePage\AuthorizeBasePage.cs">
@@ -68,12 +96,12 @@
     <Compile Include="Bll\WasherConsumeBll.cs" />
     <Compile Include="Bll\WasherDeviceLogBll.cs" />
     <Compile Include="Bll\WasherDeviceBll.cs" />
+    <Compile Include="Bll\WasherOutsiderBll.cs" />
     <Compile Include="Bll\WasherReplyBll.cs" />
     <Compile Include="Bll\WasherOrderBll.cs" />
     <Compile Include="Bll\WasherReceivedMessageBll.cs" />
     <Compile Include="Bll\WasherRewardBll.cs" />
     <Compile Include="Bll\WasherSendNewsBll.cs" />
-    <Compile Include="Bll\WasherValidatorBll.cs" />
     <Compile Include="Bll\WasherVcodeBll.cs" />
     <Compile Include="Bll\WasherWeChatConsumeBll.cs" />
     <Compile Include="Dal\WasherCardLogDal.cs" />
@@ -81,6 +109,7 @@
     <Compile Include="Dal\WasherConsumeDal.cs" />
     <Compile Include="Dal\WasherDeviceLogDal.cs" />
     <Compile Include="Dal\WasherDeviceDal.cs" />
+    <Compile Include="Dal\WasherOutsiderDal.cs" />
     <Compile Include="Dal\WasherReplyDal.cs" />
     <Compile Include="Dal\WasherOrderDal.cs" />
     <Compile Include="Dal\WasherRewardDal.cs" />
@@ -94,6 +123,7 @@
     <Compile Include="Model\WasherDepartmentSetting.cs" />
     <Compile Include="Model\WasherDeviceLogModel.cs" />
     <Compile Include="Model\WasherDeviceModel.cs" />
+    <Compile Include="Model\WasherOutsiderModel.cs" />
     <Compile Include="Model\WasherReplyModel.cs" />
     <Compile Include="Model\WasherOrderModel.cs" />
     <Compile Include="Model\WasherRewardModel.cs" />
@@ -103,12 +133,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolkit\Aes.cs" />
     <Compile Include="Toolkit\GridView2Excel.cs" />
+    <Compile Include="Toolkit\LoopThread.cs" />
+    <Compile Include="Toolkit\UnifyPayExecutor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BPM.BoardListenerLib\BPM.BoardListenerLib.csproj">
-      <Project>{67511094-dde4-4899-b4b6-d81f3f1014e2}</Project>
-      <Name>BPM.BoardListenerLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
       <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
       <Name>BPM.Core</Name>
@@ -120,7 +148,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Config\log4net.config" />
+    <None Include="Config\log4net.unix.config" />
     <None Include="packages.config" />
+    <None Include="supersocket.cmd" />
+    <None Include="supersocket.sh" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

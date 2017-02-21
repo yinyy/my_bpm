@@ -20,47 +20,6 @@ $(function () {
     //高级查询
     $('#a_search').click(function () {
         search.go('list');
-        //var hDialog = top.jQuery.hDialog({
-        //    title: '查询',
-        //    width: 350,
-        //    height: 150,
-        //    content: searchForm,
-        //    iconCls: 'icon-search',
-        //    buttons: [
-        //        {
-        //            text: '确定', iconCls: 'icon-ok', handler: function () {
-        //                if (top.$('#uiform').form('validate')) {
-        //                    var filter = '{"groupOp":"AND","rules":[{"field":"Started","op":"ge","data":"' +
-        //                        top.$('#txt_Time_Start').datebox('getValue') + '"}, {"field":"Started","op":"le","data":"' +
-        //                        top.$('#txt_Time_End').datebox('getValue') + '"}],"groups":[]}';
-
-        //                    $('#list').datagrid('reload', { filter: filter });
-        //                    $('body').data('where', filter);//.replace('Time', '加水时间').replace('Name', '姓名').replace('Plate', '车牌号')
-        //                    //hDialog.dialog('close');
-        //                }
-        //                return false;
-        //            }
-        //        },
-        //        {
-        //            text: '清空', iconCls: 'icon-clear', handler: function () {
-        //                $('#list').datagrid('reload', { filter: '' });
-        //                $('body').data('where', '');
-        //                //hDialog.dialog('close');
-        //            }
-        //        },
-        //        {
-        //            text: '关闭', iconCls: 'icon-cancel', handler: function () {
-        //                hDialog.dialog('close');
-        //            }
-        //        }
-        //    ]
-        //});
-
-        //top.$('#txt_Time_Start, #txt_Time_End').datebox({
-        //    required: true,
-        //    editable: false
-        //});
-        //top.$('#uiform').validate();
     });
 
     $('#a_export').click(function () {
@@ -72,10 +31,6 @@ $(function () {
         }
 
         window.open(actionURL + '?' + query);
-
-        //jQuery.ajaxjson(actionURL, query, function (json) {
-        //    alert(json.Success);
-        //});
     });
 
     $('#a_balance').click(function () {
@@ -113,20 +68,23 @@ var grid = {
                 }
             },
             {
-                title: '洗车时间', field: 'Started', width: 150, align: 'right', formatter(v, r, i) {
+                title: '开始时间', field: 'Started', width: 150, align: 'center', formatter(v, r, i) {
                     if (v == null) {
                         return '';
                     }
 
-                    var str = r.Started.substring(0, 19) + '<br/>';
-                    if (r.Ended == null) {
-                        str += '<span style="color:red;">未结算</span>';
-                    } else if(r.Started.substring(0, 10)==r.Ended.substring(0, 10)){
-                        str += r.Ended.substring(11, 19);
-                    } else {
-                        str += r.Ended.substring(0, 19);
-                    }
-
+                    var str = v.substring(0, 19);
+                    return str;
+                }
+            },
+            {
+                title: '结束时间', field: 'Ended', width: 70, align: 'center', formatter(v, r, i) {
+                    var str = '';
+                    if (v == null) {
+                        str = '<span style="color:red;">未结算</span>';
+                    } else  {
+                        str = v.substring(11, 19);
+                    } 
                     return str;
                 }
             },
@@ -176,7 +134,8 @@ var grid = {
 
                     return str;
                 }
-            }
+            },
+            { title: '备注', field: 'Memo', width: 300, align: 'left' },
             ]],
             pagination: true,
             pageSize: PAGESIZE,

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Washer.Bll;
+using Washer.Model;
 
 namespace Washer.BasePage
 {
@@ -17,31 +19,41 @@ namespace Washer.BasePage
         {
             base.OnInit(e);
 
-            string deptId = Request.Params["appid"];
-            if (string.IsNullOrEmpty(deptId))
+            if (Session["consumeId"] == null)
             {
-                Response.Redirect("/PublicPlatform/Web/Error.html?c=1");
-            }
-
-            Department dept = DepartmentBll.Instance.Get(Convert.ToInt32(deptId));
-            string code = Request.Params["code"];
-            if (string.IsNullOrEmpty(code))
-            {
-                //没有经过验证过来的
-                string url = OAuthApi.GetAuthorizeUrl(dept.Appid, Request.Url.ToString(), "0", Senparc.Weixin.MP.OAuthScope.snsapi_base, "code");
-                Response.Redirect(url);
-            }
-            else
-            {
-                OAuthAccessTokenResult result = OAuthApi.GetAccessToken(dept.Appid, dept.Secret, code);
-                if (result.errcode != ReturnCode.请求成功)
+                string deptId = Session["deptId"] == null ? Request.Params["appid"] : Session["deptId"].ToString();
+                if (string.IsNullOrEmpty(deptId))
                 {
-                    Response.Redirect("/PublicPlatform/Web/Error.html?c=2");
+                    Response.Redirect("/PublicPlatform/Web/Error.html?c=1");
+                }
+
+                Department dept = DepartmentBll.Instance.Get(Convert.ToInt32(deptId));
+                string code = Request.Params["code"];
+                if (string.IsNullOrEmpty(code))
+                {
+                    string url = OAuthApi.GetAuthorizeUrl(dept.Appid, Request.Url.ToString(), "0", Senparc.Weixin.MP.OAuthScope.snsapi_base, "code");
+                    Response.Redirect(url);
                 }
                 else
                 {
-                    Session["deptId"] = dept.KeyId;
-                    Session["openid"] = result.openid;
+                    OAuthAccessTokenResult result = OAuthApi.GetAccessToken(dept.Appid, dept.Secret, code);
+                    if (result.errcode != ReturnCode.请求成功)
+                    {
+                        Response.Redirect("/PublicPlatform/Web/Error.html?c=2");
+                    }
+                    else
+                    {
+                        Session["deptId"] = dept.KeyId;
+                        Session["openid"] = result.openid;
+
+                        WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, result.openid);
+                        WasherConsumeModel consume = WasherConsumeBll.Instance.GetByBinderId(wxconsume.KeyId);
+
+                        if (consume != null)
+                        {
+                            Session["consumeId"] = consume.KeyId;
+                        }
+                    }
                 }
             }
         }

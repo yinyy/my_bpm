@@ -74,33 +74,53 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
                         if ((consume.KeyId = WasherConsumeBll.Instance.Add(consume)) > 0)
                         {
+                            string message = "绑定用户成功";
+
                             WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
-                            if (setting.Coupon.Coins > 0)
+                            if (setting.Register.Coupon > 0)
                             {
                                 WasherCardModel card = new WasherCardModel();
                                 card.Binded = DateTime.Now;
                                 card.BinderId = consume.KeyId;
                                 card.CardNo = WasherCardBll.GetNextCouponCardNo(dept.KeyId);
-                                card.Coins = setting.Coupon.Coins;
+                                card.Coins = setting.Register.Coupon;
                                 card.DepartmentId = dept.KeyId;
                                 card.Kind = "Coupon";
                                 card.Memo = "";
                                 card.Password = "123456";
                                 card.ValidateFrom = DateTime.Now;
-                                card.ValidateEnd = DateTime.Now.AddDays(setting.Coupon.Time);
+                                card.ValidateEnd = DateTime.Now.AddDays(setting.Register.CouponDay);
 
                                 if (WasherCardBll.Instance.Add(card) > 0)
                                 {
-                                    context.Response.Write(JSONhelper.ToJson(new { Success = true }));
+                                    message = string.Format("{0}，{1}", message,"赠送优惠卡");
+                                }else
+                                {
+                                    message = string.Format("{0}，{1}", message, "赠送优惠卡失败");
+                                }
+                            }
+                            if (setting.Register.Point > 0)
+                            {
+                                WasherRewardModel reward = new WasherRewardModel();
+                                reward.ConsumeId = consume.KeyId;
+                                reward.Expired = false;
+                                reward.Kind = "完善个人信息送积分";
+                                reward.Memo = "";
+                                reward.Points = setting.Register.Point;
+                                reward.Time = DateTime.Now;
+                                reward.Used = 0;
+
+                                if ((reward.KeyId = WasherRewardBll.Instance.Add(reward)) > 0)
+                                {
+                                    message = string.Format("{0}，{1}。", message, "增加个人积分");
                                 }
                                 else
                                 {
-                                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message="绑定用户成功，但分配优惠卡错误。" }));
+                                    message = string.Format("{0}，{1}。", message, "增加个人积分失败");
                                 }
                             }
-                            else {
-                                context.Response.Write(JSONhelper.ToJson(new { Success = true }));
-                            }
+
+                            context.Response.Write(JSONhelper.ToJson(new { Success = true, Message = message }));
                         }
                         else
                         {

@@ -15,7 +15,7 @@
     <script src="js/Card2.js?d=<%=DateTime.Now.Ticks %>"></script>
     <script src="js/Vcode.js?t=<%=DateTime.Now.Ticks %>"></script>
     <script type="text/javascript">
-        var cid = <%=Session["consumeId"]==null?"null":Session["consumeId"].ToString()%>;
+        var cid = <%=Session["consumeId"]==null?null:Session["consumeId"].ToString()%>;
     </script>
 </head>
 <body>
@@ -102,7 +102,7 @@
             </div>
             <div class="cell">
                 <p>说明：</p>
-                <p>1、洗车卡成功购买后，自动与微信用户绑定。</p>
+                <p>1、洗车卡成功购买后，自动与用户账户绑定。</p>
                 <p style="color:red;font-weight: bolder;">2、支付成功后，请在本页面等待确认支付结果。若30秒内无响应，请联系客服。</p>
             </div>
             <div class="weui_btn_area">

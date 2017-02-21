@@ -6,17 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Washer.Dal;
 using Washer.Model;
+using System.Web.UI.WebControls;
+using System.Data;
 
 namespace Washer.Bll
 {
     public class WasherRewardBll
     {
-        public static class Kind
-        {
-            public const string Subscribe = "首次关注";
-            public const string WashCar = "洗车";
-            public const string BuyCard = "买卡";
-        }
 
         public static WasherRewardBll Instance
         {
@@ -42,6 +38,21 @@ namespace Washer.Bll
             }
 
             return points;
+        }
+
+        public int Delete(int keyId)
+        {
+            return WasherRewardDal.Instance.Delete(keyId);
+        }
+
+        public string GetJson(int pageindex, int pagesize, string filter, string sort = "Time", string order = "desc")
+        {
+            return WasherRewardDal.Instance.GetJson(pageindex, pagesize, filter, sort, order);
+        }
+
+        public DataTable Export(string filter, string sort, string order)
+        {
+            return WasherRewardDal.Instance.Export(filter, sort??"KeyId", order??"desc");
         }
     }
 }

@@ -8,12 +8,15 @@ namespace Washer.Model
 {
     public class WasherDepartmentSetting
     {
+        public int[] WxPayOption { get; set; }
         public WasherDepartmentSettingSms Sms { get; set; }
-        public WasherDepartmentSettingPoint Point { get; set; }
-        public WasherDepartmentSettingCoin Coin { get; set; }
-        public WasherDepartmentSettingCoupon Coupon { get; set; }
-        public WasherDepartmentSettingBuy[] Buy { get; set; }
-        
+        public WasherDepartmentSettingBuyCardOption[] BuyCardOption { get; set; }
+        public int[] GiftLevel { get; set; }
+        public WasherDepartmentSettingRegister Register { get; set; }
+
+        public WasherDepartmentSettingPayWashCar PayWashCar{get;set;}
+        public WasherDepartmentSettingRelay Relay { get; set; }
+
         private WasherDepartmentSetting()
         {
 
@@ -24,28 +27,13 @@ namespace Washer.Model
             get
             {
                 WasherDepartmentSetting setting = new WasherDepartmentSetting();
-                setting.Point = new WasherDepartmentSettingPoint()
-                {
-                    WasherCar = 0,
-                    Subscribe = 0,
-                    Recharge = new int[3],
-                    Referers = new WasherDepartmentSettingPointReferer()
-                    {
-                        Kind = "",
-                        Level = new int[5]
-                    }
-                };
-                setting.Coin = new WasherDepartmentSettingCoin()
-                {
-                    Exchange = 0,
-                    Recharge = new int[3]
-                };
-                setting.Coupon = new WasherDepartmentSettingCoupon()
-                {
-                    Coins = 0,
-                    Time = 0
-                };
-                setting.Buy = new WasherDepartmentSettingBuy[4];
+                setting.WxPayOption = new int[] { };
+                setting.Sms = new WasherDepartmentSettingSms {Cid="", Pas="", Uid="", Url="" };
+                setting.BuyCardOption = new WasherDepartmentSettingBuyCardOption[] { };
+                setting.GiftLevel = new int[] { };
+                setting.Register = new WasherDepartmentSettingRegister {Coupon=0, CouponDay=0, Point=0 };
+                setting.PayWashCar = new WasherDepartmentSettingPayWashCar { Coupon=0, Vip=0, Wx=0};
+                setting.Relay = new WasherDepartmentSettingRelay() { Friend = 0, Moment = 0 };
 
                 return setting;
             }
@@ -60,38 +48,32 @@ namespace Washer.Model
         public string Url { get; set; }
     }
 
-    public class WasherDepartmentSettingPoint
+    public class WasherDepartmentSettingRegister
     {
-        public int WasherCar { get; set; }
-        public int Subscribe { get; set; }
-        public int[] Recharge { get; set; }
-        public WasherDepartmentSettingPointReferer Referers { get; set; }
+        public int Coupon { get; set; }
+        public int CouponDay { get; set; }
+        public int Point { get; set; }
     }
 
-    public class WasherDepartmentSettingPointReferer
-    {
-        public string Kind { get; set; }
-        public int[] Level { get; set; }
-    }
-
-    public class WasherDepartmentSettingCoin
-    {
-        public int Exchange { get; set; }
-        public int[] Recharge { get; set; }
-    }
-
-    public class WasherDepartmentSettingCoupon
-    {
-        public int Coins { get; set; }
-        public int Time { get; set; }
-    }
-
-    public class WasherDepartmentSettingBuy
+    public class WasherDepartmentSettingBuyCardOption
     {
         public int Value { get; set; }
         public float Price { get; set; }
         public int Day { get; set; }
         public string Product { get; set; }
         public int Score { get; set; }
+    }
+
+    public class WasherDepartmentSettingPayWashCar
+    {
+        public int Wx { get; set; }
+        public int Vip { get; set; }
+        public int Coupon { get; set; }
+    }
+
+    public class WasherDepartmentSettingRelay
+    {
+        public int Friend { get; set; }
+        public int Moment { get; set; }
     }
 }

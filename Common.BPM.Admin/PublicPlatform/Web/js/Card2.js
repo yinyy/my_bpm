@@ -16,14 +16,6 @@ var Loading = {
     }
 };
 
-var Button = {
-    bind: function () {
-        List.button();
-        Bind.button();
-
-    }
-}
-
 var List = {
     init: function(){
         $('div#button_region > a').each(function (index, obj) {
@@ -77,69 +69,7 @@ var List = {
 
 var Buy = {
     selected: null,
-    init: function () {
-        $.ajax({url: actionUrl, type: 'GET', async: 'false', data: {action: 'query'}, dataType: 'json', success: function(d){
-            if (d.Success == true) {
-                var ul;
-
-                $(d.Data).each(function (i, v) {
-                    if (i % 3 == 0) {
-                        ul = $('<ul class="card_kind_list"></ul>');
-                        $('div#shopping_region > div.card_kind_area').append(ul);
-                    }
-
-                    var o = $('<li><p class="value">' + v.Value + '元</p><p class="price">售价' + v.Price.toFixed(2) + '元</p><p class="remain">剩余' + v.Remain + '张</p></li>');
-                    o.attr('Product', v.Product);
-                    o.attr('Remain', v.Remain);
-                    o.attr('Price', v.Price);
-                    o.attr('Value', v.Value);
-                    ul.append(o);
-
-                    //购买洗车卡：不同金额
-                    o.click(function () {
-                        $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
-                        $(this).addClass('selected');
-                        Buy.selected = $(this);
-
-                        if (parseInt($(this).attr('Remain')) <= 0) {
-                            Buy.buyButton.disabled();
-                        } else {
-                            Buy.buyButton.enabled();
-                        }
-
-                        ////检查该面值洗车卡数量和实际价格
-                        //Buy.selected.index = $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li').index($(this));
-                        //Buy.selected.value = v.title; //Buy.selected.index == 0 ? 50 : Buy.selected.index == 1 ? 100 : Buy.selected.index == 2 ? 200 : Buy.selected.index == 3 ? 300 : 0;
-                        //$.getJSON(actionUrl, { action: 'query', value: Buy.selected.value }, function (json) {
-                        //    if (json.Success == true) {
-                        //        Buy.selected.remain = json.Remain;
-                        //        Buy.selected.price = json.Price.toFixed(2);
-                        //        Buy.selected.product = json.Product;
-
-                        //        Buy.display();
-
-                        //        if (json.Remain > 0) {
-                        //            Buy.buyButton.enabled();
-                        //        } else {
-                        //            Buy.buyButton.disabled();
-                        //        }
-                        //    } else {
-                        //        Buy.selected.index = -1;
-                        //        Buy.selected.remain = 0;
-                        //        Buy.selected.price = 0.00;
-                        //        Buy.selected.product = '';
-
-                        //        Buy.display();
-
-                        //        alert('发生错误。');
-                        //    }
-                        //});
-                    });
-                });
-            }
-        }});
-       
-        //this.selected = {index: -1, remain: 0, price: 0.00, product: '', value:0};
+    init: function () {       
         this.buyButton = {
             enabled: function () {
                 $('div#shopping_region > div.weui_btn_area > a:first').removeClass('weui_btn_disabled');
@@ -151,94 +81,85 @@ var Buy = {
 
         //购买洗车卡：购买和取消
         $('div#shopping_region > div.weui_btn_area > a:first').click(function () {
-
             if (parseInt(Buy.selected.attr('Remain')) > 0) {
                 //锁定洗车卡
-                var socket = new WebSocket('ws://139.129.43.203:5500');
-                //var socket = new WebSocket('ws://127.0.0.1:5500');
-                socket.onerror = function (event) {
-                    alert("error:" + event);
-                };
-                socket.onopen = function (event) {
-                    var o = { Action: 'lock_card', Data: JSON.stringify({ CID: cid, Value: parseInt(Buy.selected.attr('Value')) * 100 }) };
-                    socket.send(JSON.stringify(o));
+                Loading.show();
+                $.post(actionUrl, { action: 'lock', value: parseInt(Buy.selected.attr('Value')) }, function (card) {
+                    if (card == '') {
+                        Loading.hide();
+                        alert('请重新打开网页购买洗车卡。');
+                    } else {
+                        Buy.buyButton.disabled();
 
-                    $('#loading_region').show();
+                        Pay.prepay({ body: '购买洗车卡', pay: parseInt(Buy.selected.attr('Price')), attach: JSON.stringify({ Desc: Buy.selected.attr('Product'), Card: card }) },
+                           function (pi) {
+                               Buy.buyButton.enabled();
+                               Loading.hide();
 
-                    socket.onmessage = function (event) {
-                        var card = event.data;
+                               alert('支付成功。');
 
-                        if (card == '') {
-                            $('#loading_region').hide();
-                            alert('请重新打开网页购买洗车卡。');
-                        } else {
-                            Buy.buyButton.disabled();
+                               List.show();
+                           },
+                           function () {
+                               Buy.buyButton.enabled();
+                               Loading.hide();
 
-                            Pay.prepay({ body: '购买洗车卡', pay: parseInt(parseFloat(Buy.selected.attr('Price')) * 100), attach: Buy.selected.attr('Product') },
-                               function () {
-                                   Buy.buyButton.enabled();
-
-                                   $('#loading_region').hide();
-
-                                   alert('支付成功。');
-
-                                   $.post(actionUrl, { action: 'payBind2', value: Buy.selected.attr('Value'), card: card }, function (res) {
-                                       if (res.Success == true) {
-                                           List.show();
-                                       }
-                                       else {
-                                           alert('绑定失败。');
-                                       }
-                                   }, 'json');
-
-                                   //$.post(actionUrl, { action: 'payBind', value: Buy.selected.attr('Value') }, function (res) {
-                                   //    if (res.Success == true) {
-                                   //        List.show();
-                                   //    }
-                                   //    else {
-                                   //        alert('绑定失败。');
-                                   //    }
-                                   //}, 'json');
-                               },
-                               function () {
-                                   Buy.buyButton.enabled();
-                                   $('#loading_region').hide();
-
-                                   alert('支付失败。');
-                               },
-                               function () {
-                                   $('#loading_region').hide();
-                                   Buy.buyButton.enabled();
-                               });
-                        }
-                    };
-                };
+                               alert('支付失败。');
+                           },
+                           function () {
+                               Buy.buyButton.enabled();
+                               Loading.hide();
+                           });
+                    }
+                }, 'text');
             }
         });
         $('div#shopping_region > div.weui_btn_area > a:last').click(function () {
-            $(this).click(function () {
-                List.show();
-            });
+            List.show();
         });
     },
-
-    //clear: function(){
-    //    $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
-
-    //    Buy.selected.index = -1;
-    //    Buy.selected.remain = 0;
-    //    Buy.selected.price = 0.00;
-    //    Buy.selected.product = '';
-
-    //    //this.display();
-    //},
 
     show: function () {
         hideAll();
 
+        $.ajax({
+            url: actionUrl, type: 'GET', async: 'false', data: { action: 'query' }, dataType: 'json', success: function (d) {
+                if (d.Success == true) {
+                    var ul;
+
+                    $('div#shopping_region > div.card_kind_area').empty();
+                    $(d.Data).each(function (i, v) {
+                        if (i % 3 == 0) {
+                            ul = $('<ul class="card_kind_list"></ul>');
+                            $('div#shopping_region > div.card_kind_area').append(ul);
+                        }
+
+                        var o = $('<li><p class="value">' + v.Value + '元</p><p class="price">售价' + v.Price.toFixed(2) + '元</p><p class="remain">剩余' + v.Remain + '张</p></li>');
+                        o.attr('Product', v.Product);
+                        o.attr('Remain', v.Remain);
+                        o.attr('Price', parseInt(v.Price * 100));
+                        o.attr('Value', parseInt(v.Value * 100));
+                        ul.append(o);
+
+                        //购买洗车卡：不同金额
+                        o.click(function () {
+                            $('div#shopping_region > div.card_kind_area > ul.card_kind_list > li.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                            Buy.selected = $(this);
+
+                            if (parseInt($(this).attr('Remain')) <= 0) {
+                                Buy.buyButton.disabled();
+                            } else {
+                                Buy.buyButton.enabled();
+                            }
+                        });
+                    });
+                }
+            }
+        });
+
         $('div#shopping_region > div.weui_btn_area > a').removeClass('weui_btn_disabled');
 
-        //this.clear();
         $('div#shopping_region').show();
         this.buyButton.disabled();
     }

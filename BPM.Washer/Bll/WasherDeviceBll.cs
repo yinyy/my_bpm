@@ -36,7 +36,7 @@ namespace Washer.Bll
 
         public List<WasherDeviceModel> GetByDepartment(int deptId)
         {
-            return WasherDeviceDal.Instance.GetWhere(new { DepartmentId= deptId}).ToList();
+            return WasherDeviceDal.Instance.GetWhere(new { DepartmentId = deptId }).ToList();
         }
 
         public string GetJson(int pageindex, int pagesize, string filterJson, string sort = "Keyid", string order = "asc")
@@ -56,7 +56,7 @@ namespace Washer.Bll
 
         public WasherDeviceModel Get(int departmentId, string boardNumber)
         {
-            return WasherDeviceDal.Instance.GetWhere(new {DepartmentId=departmentId, BoardNumber=boardNumber}).FirstOrDefault();
+            return WasherDeviceDal.Instance.GetWhere(new { DepartmentId = departmentId, BoardNumber = boardNumber }).FirstOrDefault();
         }
 
         public WasherDeviceModel GetBySerialNumber(string serialNumber)
@@ -64,24 +64,13 @@ namespace Washer.Bll
             return WasherDeviceDal.Instance.GetWhere(new { SerialNumber = serialNumber }).FirstOrDefault();
         }
 
-        public void UpdateOnlineTime(int deptId, string clientIp)
+        public void UpdateOnlineTime(int deptId, string board, string clientIp = null)
         {
-            var devices = WasherDeviceDal.Instance.GetWhere(new { DepartmentId = deptId, IpAddress = clientIp });
-            foreach(WasherDeviceModel device in devices)
-            {
-                device.UpdateTime = DateTime.Now;
-
-                WasherDeviceBll.Instance.Update(device);
-            }
-        }
-
-        public void UpdateOnlineTime(int deptId, string serial, string clientIp)
-        {
-            var devices = WasherDeviceDal.Instance.GetWhere(new { DepartmentId = deptId, BoardNumber=serial });
+            var devices = WasherDeviceDal.Instance.GetWhere(new { DepartmentId = deptId, BoardNumber = board });
             foreach (WasherDeviceModel device in devices)
             {
                 device.UpdateTime = DateTime.Now;
-                device.IpAddress = clientIp;
+                device.IpAddress = clientIp ?? device.IpAddress;
 
                 WasherDeviceBll.Instance.Update(device);
             }

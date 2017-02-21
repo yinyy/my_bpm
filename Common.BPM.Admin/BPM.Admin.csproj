@@ -2841,6 +2841,7 @@
     <Content Include="Editor\xhEditor\xheditor_skin\vista\img\wmp.gif" />
     <Content Include="Editor\xhEditor\xheditor_skin\vista\img\wordimg.gif" />
     <Content Include="Editor\xhEditor\xheditor_skin\vista\ui.css" />
+    <Content Include="Extra\Test.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="images\ajax-loader.gif" />
@@ -2891,7 +2892,6 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
-    <Content Include="Extra\WashCar.aspx" />
     <Content Include="PublicPlatform\Web\Authorize.aspx" />
     <Content Include="PublicPlatform\Web\ChangePassword.aspx" />
     <Content Include="PublicPlatform\Web\css\Personal.css" />
@@ -2909,6 +2909,7 @@
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
     <Content Include="Test.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
+    <Content Include="Washer\html\WasherOutsider.html" />
     <Content Include="Washer\html\WasherReply.html" />
     <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
@@ -3459,6 +3460,8 @@
     <Content Include="Washer\html\WasherCard.html" />
     <Content Include="Washer\html\WasherDeviceSet.html" />
     <Content Include="Washer\html\WasherDeviceAdd.html" />
+    <Content Include="Washer\js\WasherReward.js" />
+    <Content Include="Washer\js\WasherOutsider.js" />
     <Content Include="Washer\js\WasherReply.js" />
     <Content Include="Washer\js\WasherCardIncome.js" />
     <Content Include="Washer\js\WasherCardCost.js" />
@@ -3477,17 +3480,19 @@
     <Content Include="Washer\WasherConsume.aspx" />
     <Content Include="Washer\WasherDevice.aspx" />
     <Content Include="Washer\WasherOrder.aspx" />
+    <Content Include="Washer\WasherOutsider.aspx" />
     <Content Include="Washer\WasherReply.aspx" />
+    <Content Include="Washer\WasherReward.aspx" />
     <Content Include="Washer\WasherSendNews.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
     <Content Include="ashx\UploadHandler.ashx" />
-    <Content Include="Extra\url.data" />
-    <Content Include="Extra\ValidateUser.ashx" />
     <Content Include="Config\log4net.unix.config" />
     <Content Include="Config\log4net.config" />
+    <Content Include="Extra\接入方式.docx" />
+    <Content Include="Extra\StandardHandler.ashx" />
     <None Include="Properties\PublishProfiles\本地.pubxml" />
     <Content Include="PublicPlatform\Index.ashx" />
     <None Include="Properties\PublishProfiles\测试.pubxml" />
@@ -3715,6 +3720,8 @@
     <Content Include="Washer\ashx\WasherReplyHandler.ashx" />
     <Content Include="supersocket.sh" />
     <Content Include="supersocket.cmd" />
+    <Content Include="Washer\ashx\WasherOutsiderHandler.ashx" />
+    <Content Include="Washer\ashx\WasherRewardHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationError.aspx.cs">
@@ -3727,15 +3734,8 @@
     <Compile Include="ashx\UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Extra\ValidateUser.ashx.cs">
-      <DependentUpon>ValidateUser.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="Extra\WashCar.aspx.cs">
-      <DependentUpon>WashCar.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Extra\WashCar.aspx.designer.cs">
-      <DependentUpon>WashCar.aspx</DependentUpon>
+    <Compile Include="Extra\StandardHandler.ashx.cs">
+      <DependentUpon>StandardHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="PublicPlatform\Download\CodeRecord.cs" />
     <Compile Include="PublicPlatform\Download\Config.cs" />
@@ -4031,6 +4031,12 @@
     <Compile Include="Washer\ashx\WasherOrderHandler.ashx.cs">
       <DependentUpon>WasherOrderHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherOutsiderHandler.ashx.cs">
+      <DependentUpon>WasherOutsiderHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\ashx\WasherRewardHandler.ashx.cs">
+      <DependentUpon>WasherRewardHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\ashx\WasherReplyHandler.ashx.cs">
       <DependentUpon>WasherReplyHandler.ashx</DependentUpon>
     </Compile>
@@ -4089,12 +4095,26 @@
     <Compile Include="Washer\WasherOrder.aspx.designer.cs">
       <DependentUpon>WasherOrder.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\WasherOutsider.aspx.cs">
+      <DependentUpon>WasherOutsider.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherOutsider.aspx.designer.cs">
+      <DependentUpon>WasherOutsider.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\WasherReply.aspx.cs">
       <DependentUpon>WasherReply.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Washer\WasherReply.aspx.designer.cs">
       <DependentUpon>WasherReply.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherReward.aspx.cs">
+      <DependentUpon>WasherReward.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherReward.aspx.designer.cs">
+      <DependentUpon>WasherReward.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherSendNews.aspx.cs">
       <DependentUpon>WasherSendNews.aspx</DependentUpon>

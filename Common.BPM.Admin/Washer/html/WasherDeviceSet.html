@@ -10,94 +10,159 @@
                 <tr><td style="text-align:right;">备注：</td><td><textarea name="Memo2" id="txt_Memo2" cols="85" rows="5" /></td></tr>
             </table>
         </div>
-        <div title="参数设置" style="padding: 2px">
+        <div title="价格设置" style="padding: 2px">
+            <p>参数01-参数05：设置第1路-第5路的价格。时间模式下，参数表示一元对应的时间（单位0.1秒）；流量模式下，参数表示一元对应的脉冲数，如果流量计是370脉冲，那么设定为370，对应的是1元1升水。</p>
             <table class="grid">
                 <tr>
                     <td style="text-align:center; width: 50px;">参数01</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数02</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数03</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数04</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数05</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                 </tr>
+            </table>
+
+            <p>参数06-参数10：设置第1路-第5路的计费方式。0为按时间计费，1为按流量计费。</p>
+            <table class="grid">
                 <tr>
                     <td style="text-align:center; width: 50px;">参数06</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数07</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数08</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数09</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数10</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                 </tr>
+            </table>
+        </div>
+        <div title="温控1、投币器设置" style="padding: 2px">
+            <p>参数11、参数12：温控1的启动下限、关闭上限温度。</p>
+            <table class="grid">
                 <tr>
                     <td style="text-align:center; width: 50px;">参数11</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数12</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+            </table>
+            <p>参数13：投币器脉冲设定（国内一般为5）。</p>
+            <table class="grid">
+                <tr>
                     <td style="text-align:center; width: 50px;">参数13</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+            </table>
+
+        </div>
+        <div title="灯光设置" style="padding: 2px">
+            <p>参数14：洗车灯的延时时间（秒参位单位）。</p>
+            <table class="grid">
+                <tr>
                     <td style="text-align:center; width: 50px;">参数14</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+            </table>
+
+            <p>参数15、参数16：广告灯的开启时间的小时、分钟部分设定。参数17、参数18：广告灯的关闭时间的小时、分钟部分设定。参数19：等待时间（0.1秒）。</p>
+            <table class="grid">
+                <tr>
                     <td style="text-align:center; width: 50px;">参数15</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
-                </tr>
-                <tr>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数16</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数17</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数18</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数19</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                </tr>
+            </table>
+        </div>
+        <div title="消费上限设置" style="padding: 2px">
+            <p>参数20：按次消费时，每次消费的最大金额（单位0.1元）。参数21：单次消费最大时间（单位秒）。</p>
+            <table class="grid">
+                <tr>
                     <td style="text-align:center; width: 50px;">参数20</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
-                </tr>
-                <tr>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数21</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+            </table>
+            <p>参数22-参数26为备用设置，默认为0。</p>
+            <table class="grid">
+                <tr>
                     <td style="text-align:center; width: 50px;">参数22</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数23</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数24</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                     <td style="text-align:center; width: 50px;">参数25</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td style="text-align:center; width: 50px;">参数26</td>   
+                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
                 </tr>
+            </table>
+        </div>
+        <div title="温控2、投币金额、其它设置" style="padding: 2px">
+            <p>参数27：投币的最小启动金额（单位0.1元）。</p>
+            <table class="grid">
                 <tr>
-                    <td style="text-align:center; width: 50px;">参数26</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
                     <td style="text-align:center; width: 50px;">参数27</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
-                    <td style="text-align:center; width: 50px;">参数28</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
-                    <td style="text-align:center; width: 50px;">参数29</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
-                    <td style="text-align:center; width: 50px;">参数30</td>
-                    <td style="text-align:center;"><input type="text" name="params" class="txt03" style="width:80px" /></td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="8">&nbsp;</td>
                 </tr>
+            </table>
+
+            <p>参数28：停枪停机的延时时间（单位秒）。</p>
+            <table class="grid">
                 <tr>
-                    <td style="text-align:center; width: 50px;"></td>
-                    <td style="text-align:center;"><input type="checkbox" name="paramsbit" id="paramsbit_1" class="txt03" /><label for="paramsbit_1">远程锁机</label></td>
-                    <td style="text-align:center; width: 50px;"></td>
-                    <td style="text-align:center;"><input type="checkbox" name="paramsbit" id="paramsbit_2" class="txt03" /><label for="paramsbit_2">停抢停机</label></td>
-                    <td style="text-align:center; width: 50px;"></td>
-                    <td style="text-align:center;"><input type="checkbox" name="paramsbit" id="paramsbit_3" class="txt03" /><label for="paramsbit_3">按次消费</label></td>
+                    <td style="text-align:center; width: 50px;">参数28</td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+            </table>
+
+            <p>参数29、参数30：温控2的启动下限、关闭上限温度。</p>
+            <table class="grid">
+                <tr>
+                    <td style="text-align:center; width: 50px;">参数29</td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td style="text-align:center; width: 50px;">参数30</td>
+                    <td style="text-align:center; width: 100px"><input type="text" name="params" class="txt03" style="width:80px;text-align:center;" /></td>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+        <div title="功能设置" style="padding: 2px">
+            <table class="grid">
+                <tr>
+                    <td style="text-align:center; width: 50px;">远程锁机</td>
+                    <td style="text-align:center;"><input type="checkbox" name="paramsbit" id="paramsbit_1" class="txt03" /></td>
+                    <td style="text-align:center; width: 50px;">停抢停机</td>
+                    <td style="text-align:center;"><input type="checkbox" name="paramsbit" id="paramsbit_2" class="txt03" /></td>
+                    <td style="text-align:center; width: 50px;">按次消费</td>
+                    <td style="text-align:center;"><input type="checkbox" name="paramsbit" id="paramsbit_3" class="txt03" /></td>
                     <td style="text-align:center; width: 50px;"></td>
                     <td style="text-align:center;"></td>
                     <td style="text-align:center; width: 50px;"></td>
                     <td style="text-align:center;"></td>
                 </tr>
             </table>
-            <input type="hidden" name="Setting" id="txt_Setting"/>
         </div>
+        <input type="hidden" name="Setting" id="txt_Setting" />
     </div>
 </form>
