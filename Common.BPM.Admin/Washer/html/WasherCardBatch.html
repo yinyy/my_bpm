@@ -1,0 +1,10 @@
+﻿<form id="uiform">
+    <table class="grid">
+        <tr><td align="right">卡号规则：</td><td><input type="text" id="txt_CardNo" name="CardNo" class="txt03 easyui-validatebox" required="required" validType="length[10,10]" style="width: 250px;" /></td></tr>
+        <tr><td align="right">起止编号：</td><td><input type="text" id="txt_Start" name="Start" class="easyui-numberbox" data-options="required:true,precision:0" style="width: 116px;" /> - <input type="text" id="txt_End" name="End" class="easyui-numberbox" data-options="required:true,precision:0" style="width: 116px;" /></td></tr>
+        <tr><td align="right">有效期起：</td><td><input type="text" id="txt_ValidateFrom" name="ValidateFrom" style="width:255px" /></td></tr>
+        <tr><td align="right">有效期止：</td><td><input type="text" id="txt_ValidateEnd" name="ValidateEnd" class="txt03" style="width:255px" /></td></tr>
+        <tr><td align="right">洗车币：</td><td><input type="text" id="txt_Coins" name="Coins" class="easyui-numberbox" style="width:200px" data-options="required:true,precision:0"/>&nbsp;单位为分</td></tr>
+        <tr><td align="right">类型：</td><td><select id="txt_Kind" name="Kind"><option value="Inner">内部发行卡</option><option value="Sale">售卖卡</option></select></td></tr>
+    </table>
+</form>

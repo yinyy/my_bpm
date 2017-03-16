@@ -2,6 +2,7 @@
 using BPM.Core;
 using BPM.Core.Bll;
 using BPM.Core.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,6 +97,56 @@ namespace BPM.Admin.Washer.ashx
 
                 //    context.Response.Write(WasherCardBll.Instance.Add(model));
                 //    break;
+                case "batch":
+                    var o = new { Start=0, End=0};
+                    o = JsonConvert.DeserializeAnonymousType(rpm.JsonEntity, o);
+                    string prefix = rpm.Entity.CardNo.Substring(0, rpm.Entity.CardNo.IndexOf('*'));
+                    string suffix = rpm.Entity.CardNo.Substring(rpm.Entity.CardNo.LastIndexOf('*') + 1);
+                    int len = rpm.Entity.CardNo.Length - prefix.Length - suffix.Length;
+                    Random r = new Random();
+                    int count = 0;
+
+                    for(int i = o.Start; i <= o.End && i.ToString().Length<=len; i++)
+                    {
+                        try
+                        {
+                            WasherCardModel card = new WasherCardModel();
+                            card.CardNo = string.Format("{0}{1}{2}", prefix, i.ToString().PadLeft(len, '0'), suffix);
+                            card.Password = (DateTime.Now.Ticks % 1000000).ToString().PadRight(6, (char)(r.Next(10) + '0'));
+                            card.ValidateFrom = rpm.Entity.ValidateFrom;
+                            card.ValidateEnd = rpm.Entity.ValidateEnd;
+                            card.Coins = rpm.Entity.Coins;
+                            card.Binded = null;
+                            card.BinderId = null;
+                            card.DepartmentId = departmentId;
+                            card.Memo = "";
+                            card.Kind = rpm.Entity.Kind;
+                            card.Locked = null;
+
+                            if (WasherCardBll.Instance.Add(card) != -1)
+                            {
+                                count++;
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+
+                    context.Response.Write(count);
+                    break;
+                case "export":
+                    if (user.IsAdmin)
+                    {
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherCardBll.Instance.Export(rpm.Filter, rpm.Sort, rpm.Order));
+                    }
+                    else
+                    {
+                        filter = string.Format("{{\"groupOp\":\"AND\",\"rules\":[{{\"field\":\"DepartmentId\",\"op\":\"eq\",\"data\":\"{0}\"}}],\"groups\":[{1}]}}", departmentId, rpm.Filter);
+                        GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherCardBll.Instance.Export(filter, rpm.Sort, rpm.Order));
+                    }
+                    break;
                 default:
                     if (user.IsAdmin)
                     {

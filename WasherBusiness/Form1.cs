@@ -614,7 +614,8 @@ namespace WasherBusiness
             {
                 if (balance.CardId == 0)/*这代表的是微信支付*/
                 {
-                    balance.PayCoins = r.Payment;
+                    //balance.PayCoins = r.Payment;
+                    balance.PayCoins = balance.RemainCoins;//微信支付时，结算金额无论多少，都按照支付金额结算
                 }
                 else
                 {
@@ -640,22 +641,24 @@ namespace WasherBusiness
                     PrintLogger(string.Format("【{0}】消费结算，回复。", ((BoardAppServer)s.AppServer).DepartmentId), true);
 
                     #region 余额支付洗车送积分
-                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(DepartmentBll.Instance.Get(device.DepartmentId).Setting);
-                    int point = 0;
                     if ((balance.Kind == "余额洗车" || balance.Kind == "电话密码" || balance.Kind == "卡号密码" || balance.Kind == "刷卡")
-                        && balance.ConsumeId != null
-                        && (point = balance.PayCoins * setting.PayWashCar.Vip / 100 / 100) > 0)
+                        && balance.ConsumeId != null)
                     {
-                        WasherRewardModel reward = new WasherRewardModel();
-                        reward.ConsumeId = balance.ConsumeId.Value;
-                        reward.Expired = false;
-                        reward.Kind = "会员洗车送积分";
-                        reward.Memo = JSONhelper.ToJson(new { BalanceId = balance.KeyId, Kind= balance.Kind, Money = string.Format("{0:0.00}", balance.PayCoins / 100.0), Percent = setting.PayWashCar.Vip });
-                        reward.Points = point;
-                        reward.Time = DateTime.Now;
-                        reward.Used = 0;
+                        WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(DepartmentBll.Instance.Get(device.DepartmentId).Setting);
+                        int point = balance.PayCoins * setting.PayWashCar.Vip / 100 / 100;
+                        if (point > 0)
+                        {
+                            WasherRewardModel reward = new WasherRewardModel();
+                            reward.ConsumeId = balance.ConsumeId.Value;
+                            reward.Expired = false;
+                            reward.Kind = "会员洗车送积分";
+                            reward.Memo = JSONhelper.ToJson(new { BalanceId = balance.KeyId, Kind = balance.Kind, Money = string.Format("{0:0.00}", balance.PayCoins / 100.0), Percent = setting.PayWashCar.Vip });
+                            reward.Points = point;
+                            reward.Time = DateTime.Now;
+                            reward.Used = 0;
 
-                        reward.KeyId = WasherRewardBll.Instance.Add(reward);
+                            reward.KeyId = WasherRewardBll.Instance.Add(reward);
+                        }
                     }
                     #endregion
 

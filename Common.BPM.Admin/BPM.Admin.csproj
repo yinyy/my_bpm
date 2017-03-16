@@ -2909,6 +2909,7 @@
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
     <Content Include="Test.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
+    <Content Include="Washer\html\WasherCardBatch.html" />
     <Content Include="Washer\html\WasherOutsider.html" />
     <Content Include="Washer\html\WasherReply.html" />
     <Content Include="Washer\js\menu.txt" />

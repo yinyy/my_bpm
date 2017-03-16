@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Washer.Dal;
 using Washer.Model;
+using System.Web.UI.WebControls;
+using System.Data;
 
 namespace Washer.Bll
 {
@@ -190,6 +192,11 @@ namespace Washer.Bll
             }
 
             return false;
+        }
+
+        public DataTable Export(string filter, string sort = "KeyId", string order = "desc")
+        {
+            return WasherCardDal.Instance.Export(filter, sort, order);
         }
 
         public bool Bind(WasherConsumeModel consume, string cardNo)

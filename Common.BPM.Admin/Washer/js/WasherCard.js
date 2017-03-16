@@ -1,5 +1,6 @@
 ﻿var actionURL = '/Washer/ashx/WasherCardHandler.ashx';
 var formURL = '/Washer/html/WasherCard.html';
+var batchFormURL = '/Washer/html/WasherCardBatch.html';
 
 function showPassword(o) {
     if (window.event.ctrlKey == true) {
@@ -14,7 +15,8 @@ $(function () {
     $('#a_add').click(CRUD.add);
     $('#a_edit').click(CRUD.edit);
     $('#a_delete').click(CRUD.del);
-    $('#a_test').click(CRUD.test);
+    $('#a_batch_create').click(CRUD.batch);
+    $('#a_export').click(CRUD.exp);
 
     //高级查询
     $('#a_search').click(function () {
@@ -300,5 +302,61 @@ var CRUD = {
                 MessageOrRedirect(d);
             }
         });
+    },
+    batch: function () {
+        var hDialog = top.jQuery.hDialog({
+            title: '添加', width: 450, height: 290, href: batchFormURL, iconCls: 'icon-add', submit: function () {
+                var start = top.$('#txt_Start').numberbox('getValue');
+                var end = top.$('#txt_End').numberbox('getValue');
+                if (start >= end) {
+                    alert('起止卡号错误。');
+                    return false;
+                }
+
+                start = top.$('#txt_ValidateFrom').datebox('getValue');
+                end = top.$('#txt_ValidateEnd').datebox('getValue');
+                if (start >= end) {
+                    alert('有效时间错误。');
+                    return false;
+                }
+
+                if (top.$('#uiform').form('validate')) {
+                    var query = createParam('batch', '0');
+                    jQuery.ajaxjson(actionURL, query, function (d) {
+                        if (parseInt(d) > 0) {
+                            msg.ok('批量生成成功！');
+                            hDialog.dialog('close');
+                            grid.reload();
+                        } else if (parseInt(d) <= 0) {
+                            msg.warning('批量生成失败！');
+                        } else {
+                            MessageOrRedirect(d);
+                        }
+                    });
+                }
+                return false;
+            }, onLoad: function () {
+                top.$('#txt_ValidateFrom').datebox({
+                    required: true,
+                    editable: false
+                });
+                top.$('#txt_ValidateEnd').datebox({
+                    required: true,
+                    editable: false
+                });
+            }
+        });
+
+        top.$('#uiform').validate();
+    },
+    exp: function () {
+        var o = { action: 'export', keyid: 0 };
+        var query = "json=" + JSON.stringify(o);
+
+        if ($('body').data('where') != null && $('body').data('where') != '') {
+            query = query + "&filter=" + $('body').data('where');
+        }
+
+        window.open(actionURL + '?' + query);
     }
 };
