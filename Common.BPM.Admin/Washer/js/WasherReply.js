@@ -253,13 +253,10 @@ function editTitle(title, url, desc) {
             text: '删除',
             iconCls: 'icon-delete',
             handler: function () {
-                var index = $('div.big > div.title, div.little td.title').index(title);
-                if (index == 0) {
-                    alert('不能删除封页。');
-                } else {
-                    if (confirm('确认删除 ' + title.text() + ' 吗？')) {
-                        $($('div#setting > div').get(index)).remove();
-                    }
+                var index = $('td.title').index(title);
+                if (confirm('确认删除 ' + title.text() + ' 吗？')) {
+                    $($('div.little').get(index)).remove();
+                    hDialog.dialog('close');
                 }
             }
         }, {

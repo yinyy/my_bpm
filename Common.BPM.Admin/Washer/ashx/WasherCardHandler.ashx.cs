@@ -112,7 +112,7 @@ namespace BPM.Admin.Washer.ashx
                         {
                             WasherCardModel card = new WasherCardModel();
                             card.CardNo = string.Format("{0}{1}{2}", prefix, i.ToString().PadLeft(len, '0'), suffix);
-                            card.Password = (DateTime.Now.Ticks % 1000000).ToString().PadRight(6, (char)(r.Next(10) + '0'));
+                            card.Password = Convert.ToString(r.Next(100000, 999999));
                             card.ValidateFrom = rpm.Entity.ValidateFrom;
                             card.ValidateEnd = rpm.Entity.ValidateEnd;
                             card.Coins = rpm.Entity.Coins;

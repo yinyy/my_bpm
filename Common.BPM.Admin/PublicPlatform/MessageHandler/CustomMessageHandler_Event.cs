@@ -118,9 +118,11 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
             }
 
             //这里是微信客户端（通过微信服务器）自动发送过来的位置信息
-            var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = "success";
-            return responseMessage;//这里也可以返回null（需要注意写日志时候null的问题）
+            //var responseMessage = CreateResponseMessage<ResponseMessageText>();
+            //responseMessage.Content = "success";
+            //return responseMessage;//这里也可以返回null（需要注意写日志时候null的问题）
+            
+            return null;
         }
 
         public override IResponseMessageBase OnEvent_ScanRequest(RequestMessageEvent_Scan requestMessage)
@@ -281,7 +283,8 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
         /// <returns></returns>
         public override IResponseMessageBase OnEvent_SubscribeRequest(RequestMessageEvent_Subscribe requestMessage)
         {
-            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+            //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+            ResponseMessageBase responseMessage = null;
 
             Department dept = DepartmentBll.Instance.Get(deptId);
             int refererId = -1;
@@ -320,13 +323,71 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 wxconsume.KeyId = WasherWeChatConsumeBll.Instance.Add(wxconsume);
                 #endregion
 
-                responseMessage.Content = string.Format("欢迎使用 {0} 洗车机。\r\n请先在“个人中心-我的账户”中完成个人信息绑定，享受会员权益。", dept.Brand);
+                WasherReplyModel reply = WasherReplyBll.Instance.Get(dept.KeyId, "SUBSCRIBE");
+                if (reply == null)
+                {
+                    var msg = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+                    msg.Content = string.Format("欢迎使用 {0} 洗车机。\r\n请先在“个人中心-我的账户”中完成个人信息绑定，享受会员权益。", dept.Brand);
+                    responseMessage = msg;
+                }
+                else
+                {
+                    string body = reply.Body;
+                    ReplyNews[] ns = JsonConvert.DeserializeObject<ReplyNews[]>(body);
+
+                    var msg = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+
+                    string url = HttpContext.Current.Request.Url.AbsoluteUri;
+                    string prefix = url.Substring(0, url.IndexOf(HttpContext.Current.Request.Url.AbsolutePath));
+
+                    foreach (ReplyNews n in ns)
+                    {
+                        Article a = new Article();
+                        a.Description = n.description;
+                        a.PicUrl = prefix + n.picture;
+                        a.Title = n.title;
+                        a.Url = n.url;
+
+                        msg.Articles.Add(a);
+                    }
+
+                    responseMessage = msg;
+                }
 
                 AsyncHandleOtherThings(wxconsume.KeyId);
             }
             else
             {
-                responseMessage.Content = "欢迎再次回来。";
+                WasherReplyModel reply = WasherReplyBll.Instance.Get(dept.KeyId, "SUBSCRIBE");
+                if (reply == null)
+                {
+                    var msg = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+                    msg.Content = "欢迎再次回来。";
+                    responseMessage = msg;
+                }
+                else
+                {
+                    string body = reply.Body;
+                    ReplyNews[] ns = JsonConvert.DeserializeObject<ReplyNews[]>(body);
+
+                    var msg = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+
+                    string url = HttpContext.Current.Request.Url.AbsoluteUri;
+                    string prefix = url.Substring(0, url.IndexOf(HttpContext.Current.Request.Url.AbsolutePath));
+
+                    foreach (ReplyNews n in ns)
+                    {
+                        Article a = new Article();
+                        a.Description = n.description;
+                        a.PicUrl = prefix + n.picture;
+                        a.Title = n.title;
+                        a.Url = n.url;
+
+                        msg.Articles.Add(a);
+                    }
+
+                    responseMessage = msg;
+                }
             }
 
             return responseMessage;

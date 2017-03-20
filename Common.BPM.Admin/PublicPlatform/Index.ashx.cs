@@ -109,7 +109,10 @@ namespace BPM.Admin.PublicPlatform
                     //     context.Server.MapPath("~/App_Data/" + DateTime.Now.Ticks + "_Response_" +
                     //                    messageHandler.ResponseMessage.ToUserName + ".txt"));
 
-                    context.Response.Write(messageHandler.ResponseDocument.ToString());
+                    if (messageHandler.ResponseDocument != null)
+                    {
+                        context.Response.Write(messageHandler.ResponseDocument.ToString());
+                    }
                     return;
                 }
                 catch (Exception ex)
