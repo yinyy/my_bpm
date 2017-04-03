@@ -57,7 +57,7 @@ var grid = {
                     var t = new Date();
                     t = (t.getTime() - (new Date(r.UpdateTime)).getTime()) / 60 / 1000;
 
-                    if (t > 2) {
+                    if (t > 5) {
                         return '<font color="red">离线</font>';
                     } else {
                         return '在线';

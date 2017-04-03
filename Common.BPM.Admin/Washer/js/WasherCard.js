@@ -323,11 +323,13 @@ var CRUD = {
                 if (top.$('#uiform').form('validate')) {
                     var query = createParam('batch', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
-                        if (parseInt(d) > 0) {
+                        if (parseInt(d) >= 0) {
                             msg.ok('批量生成成功！');
                             hDialog.dialog('close');
                             grid.reload();
-                        } else if (parseInt(d) <= 0) {
+
+                            alert('批量生成洗车卡：' + d + '张。');
+                        } else if (parseInt(d) < 0) {
                             msg.warning('批量生成失败！');
                         } else {
                             MessageOrRedirect(d);

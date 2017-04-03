@@ -108,29 +108,32 @@ namespace BPM.Admin.Washer.ashx
 
                     for(int i = o.Start; i <= o.End && i.ToString().Length<=len; i++)
                     {
-                        try
-                        {
-                            WasherCardModel card = new WasherCardModel();
-                            card.CardNo = string.Format("{0}{1}{2}", prefix, i.ToString().PadLeft(len, '0'), suffix);
-                            card.Password = Convert.ToString(r.Next(100000, 999999));
-                            card.ValidateFrom = rpm.Entity.ValidateFrom;
-                            card.ValidateEnd = rpm.Entity.ValidateEnd;
-                            card.Coins = rpm.Entity.Coins;
-                            card.Binded = null;
-                            card.BinderId = null;
-                            card.DepartmentId = departmentId;
-                            card.Memo = "";
-                            card.Kind = rpm.Entity.Kind;
-                            card.Locked = null;
-
-                            if (WasherCardBll.Instance.Add(card) != -1)
+                        string cardNo = string.Format("{0}{1}{2}", prefix, i.ToString().PadLeft(len, '0'), suffix);
+                        if (!WasherCardBll.Instance.Exits(cardNo)) {
+                            try
                             {
-                                count++;
-                            }
-                        }
-                        catch
-                        {
+                                WasherCardModel card = new WasherCardModel();
+                                card.CardNo = cardNo;
+                                card.Password = Convert.ToString(r.Next(100000, 999999));
+                                card.ValidateFrom = rpm.Entity.ValidateFrom;
+                                card.ValidateEnd = rpm.Entity.ValidateEnd;
+                                card.Coins = rpm.Entity.Coins;
+                                card.Binded = null;
+                                card.BinderId = null;
+                                card.DepartmentId = departmentId;
+                                card.Memo = "";
+                                card.Kind = rpm.Entity.Kind;
+                                card.Locked = null;
 
+                                if (WasherCardBll.Instance.Add(card) != -1)
+                                {
+                                    count++;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
                         }
                     }
 

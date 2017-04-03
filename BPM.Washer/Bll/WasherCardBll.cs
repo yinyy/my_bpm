@@ -148,6 +148,11 @@ namespace Washer.Bll
             return cost1;
         }
 
+        public bool Exits(string cardNo)
+        {
+            return WasherCardDal.Instance.GetWhere(new { CardNo = cardNo }).Count() > 0;
+        }
+
         public string Lock(int deptId, int value)
         {
             WasherCardModel card = null; 
