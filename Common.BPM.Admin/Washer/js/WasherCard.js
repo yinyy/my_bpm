@@ -116,7 +116,7 @@ var CRUD = {
                     jQuery.ajaxjson(actionURL, query, function (d) {
                         if (parseInt(d) > 0) {
                             msg.ok('添加成功！');
-                            hDialog.dialog('close');
+                            //hDialog.dialog('close');
                             grid.reload();
                         } else if (parseInt(d) ==-1) {
                             msg.warning('卡号已经存在！');

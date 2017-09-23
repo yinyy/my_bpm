@@ -25,7 +25,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
         public void ProcessRequest(HttpContext context)
         {
             string action = context.Request.Params["action"];
-            int deptId=Convert.ToInt32( context.Session["deptId"].ToString());
+            int deptId=Convert.ToInt32(context.Session["deptId"].ToString());
             string openid = context.Session["openid"].ToString();
 
             Department dept = DepartmentBll.Instance.Get(deptId);

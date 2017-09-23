@@ -66,5 +66,10 @@ namespace Washer.Bll
         {
             return WasherDeviceLogDal.Instance.Update(balance);
         }
+
+        public List<WasherDeviceLogModel> GetByConsumeId(int consumeId)
+        {
+            return WasherDeviceLogDal.Instance.GetWhere(new { ConsumeId = consumeId }).Where(l => l.Ended == null).ToList();
+        }
     }
 }

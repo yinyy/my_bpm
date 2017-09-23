@@ -16,6 +16,17 @@
     <script src="js/Vcode.js?t=<%=DateTime.Now.Ticks %>"></script>
     <script type="text/javascript">
         var cid = <%=Session["consumeId"]==null?null:Session["consumeId"].ToString()%>;
+        <%
+            int deptId=Convert.ToInt32(Session["deptId"].ToString());
+            string openid = Session["openid"].ToString();
+
+            BPM.Core.Model.Department dept = BPM.Core.Bll.DepartmentBll.Instance.Get(deptId);
+            Washer.Model.WasherWeChatConsumeModel wxconsume = Washer.Bll.WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
+            Washer.Model.WasherConsumeModel consume = Washer.Bll.WasherConsumeBll.Instance.GetByBinder(wxconsume);
+
+            Washer.Model.WasherDepartmentSetting setting = Newtonsoft.Json.JsonConvert.DeserializeObject<Washer.Model.WasherDepartmentSetting>(dept.Setting);
+        %>
+
     </script>
 </head>
 <body>

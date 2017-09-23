@@ -164,13 +164,18 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                         else
                         {
                             int coins = WasherConsumeBll.Instance.GetValidCoins(consume.KeyId);
+
+                            //获取该用户设置的最大支付金额
+                            var consumeSetting = new { MaxPayCoins = 1000 };
+                            consumeSetting = JsonConvert.DeserializeAnonymousType(consume.Setting, consumeSetting);
+
                             Department dept = DepartmentBll.Instance.Get(wxconsume.DepartmentId);
                             WasherReplyModel reply = WasherReplyBll.Instance.Get(dept.KeyId, "SCAN");
                             if (reply == null)
                             {
                                 var msg = CreateResponseMessage<ResponseMessageText>();
                                 //如果其卡内还有超过3元的洗车币，则提示其可用直接启动机器
-                                if (coins >= 300)
+                                if (coins>=consumeSetting.MaxPayCoins && coins >= 300)
                                 {
                                     msg.Content = string.Format(
     @"会员账户余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true'>这里</a>。
@@ -210,7 +215,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                                     }
                                     else if (n.url == "#Coin")
                                     {
-                                        if (coins >= 300)
+                                        if (coins>=consumeSetting.MaxPayCoins && coins >= 300)
                                         {
                                             a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}&card=true", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
                                         }else

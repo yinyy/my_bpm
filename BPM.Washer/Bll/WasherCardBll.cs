@@ -235,5 +235,10 @@ namespace Washer.Bll
         {
             return GetValidCards(consumeId).Select(a => a.Coins).Sum();
         }
+
+        public bool InUsed(int keyId)
+        {
+            return WasherDeviceLogDal.Instance.GetWhere(new { CardId = keyId }).Where(l => l.Ended == null).Count() > 0;
+        }
     }
 }

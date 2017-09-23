@@ -2881,6 +2881,8 @@
     <Content Include="images\menuStyles\Tree.png" />
     <Content Include="images\noscript.gif" />
     <Content Include="images\Members.png" />
+    <Content Include="images\Shopping\Sad.png" />
+    <Content Include="images\Shopping\plus.png" />
     <Content Include="images\spin-button-disable.png" />
     <Content Include="images\spin-button.png" />
     <Content Include="images\spin-down-disable.png" />
@@ -2907,12 +2909,22 @@
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="PublicPlatform\Web\Personal.aspx" />
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
+    <Content Include="scripts\uploadify\Change Log.txt" />
+    <Content Include="scripts\uploadify\jquery.uploadify.js" />
+    <Content Include="scripts\uploadify\jquery.uploadify.min.js" />
+    <Content Include="scripts\uploadify\license.txt" />
+    <Content Include="scripts\uploadify\uploadify-cancel.png" />
+    <Content Include="scripts\uploadify\uploadify.css" />
+    <Content Include="scripts\uploadify\uploadify.swf" />
+    <Content Include="scripts\uploadify\__MACOSX\._Change Log.txt" />
+    <Content Include="scripts\uploadify\__MACOSX\._uploadify.swf" />
+    <Content Include="Shopping\html\ShoppingCommodity.html" />
+    <Content Include="Shopping\ShoppingCommodity.aspx" />
     <Content Include="Test.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
     <Content Include="Washer\html\WasherCardBatch.html" />
     <Content Include="Washer\html\WasherOutsider.html" />
     <Content Include="Washer\html\WasherReply.html" />
-    <Content Include="Washer\js\menu.txt" />
     <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="PublicPlatform\Web\Card2.aspx" />
     <Content Include="PublicPlatform\Web\css\Card2.css" />
@@ -3723,6 +3735,11 @@
     <Content Include="supersocket.cmd" />
     <Content Include="Washer\ashx\WasherOutsiderHandler.ashx" />
     <Content Include="Washer\ashx\WasherRewardHandler.ashx" />
+    <Content Include="Shopping\js\ShoppingCommodity.js" />
+    <Content Include="Shopping\ashx\ShoppingCommodityHandler.ashx" />
+    <Content Include="scripts\uploadify\check-exists.php" />
+    <Content Include="scripts\uploadify\index.php" />
+    <Content Include="scripts\uploadify\uploadify.php" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationError.aspx.cs">
@@ -3903,6 +3920,16 @@
     </Compile>
     <Compile Include="PublicPlatform\Web\Test.aspx.designer.cs">
       <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Shopping\ashx\ShoppingCommodityHandler.ashx.cs">
+      <DependentUpon>ShoppingCommodityHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Shopping\ShoppingCommodity.aspx.cs">
+      <DependentUpon>ShoppingCommodity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Shopping\ShoppingCommodity.aspx.designer.cs">
+      <DependentUpon>ShoppingCommodity.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
@@ -4155,10 +4182,6 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BPM.BoardListenerLib\BPM.BoardListenerLib.csproj">
-      <Project>{67511094-dde4-4899-b4b6-d81f3f1014e2}</Project>
-      <Name>BPM.BoardListenerLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BPM.Washer\BPM.Washer.csproj">
       <Project>{e62eb623-f837-4f58-9ca9-4ec850ce94d4}</Project>
       <Name>BPM.Washer</Name>

@@ -63,13 +63,36 @@ namespace Washer.Bll
 
         public int GetValidCoins(int consumeId)
         {
+            int coins = 0;
+
+            #region 根据消费者编号，获取对应的洗车卡的余额
             var cards = WasherCardBll.Instance.GetValidCards(consumeId);
             if (cards.Count()== 0)
             {
-                return 0;
+                coins = 0;
+            }else
+            {
+                coins = cards.Select(a => a.Coins).Aggregate((t, a) => { return t + a; });
+            }
+            #endregion
+
+            //找到该用户尚未完成的订单
+            var deviceLogs = WasherDeviceLogBll.Instance.GetByConsumeId(consumeId);
+            //计算被冻结的金额
+            int lockedCoins;
+            if (deviceLogs.Count == 0)
+            {
+                lockedCoins = 0;
+            }
+            else
+            {
+                lockedCoins = deviceLogs.Select(l => l.RemainCoins).Aggregate((t, a) => { return t + a; });
             }
 
-            return cards.Select(a => a.Coins).Aggregate((t, a) => { return t + a; });
+            //可用洗车币
+            coins -= lockedCoins;
+
+            return coins;
         }
     }
 }

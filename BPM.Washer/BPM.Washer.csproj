@@ -91,6 +91,8 @@
     <Compile Include="BasePage\AuthorizeBasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Bll\ShoppingCommodityBll.cs" />
+    <Compile Include="Bll\ShoppingGalleryBll.cs" />
     <Compile Include="Bll\WasherCardLogBll.cs" />
     <Compile Include="Bll\WasherCardBll.cs" />
     <Compile Include="Bll\WasherConsumeBll.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Bll\WasherSendNewsBll.cs" />
     <Compile Include="Bll\WasherVcodeBll.cs" />
     <Compile Include="Bll\WasherWeChatConsumeBll.cs" />
+    <Compile Include="Dal\ShoppingCommodityDal.cs" />
+    <Compile Include="Dal\ShoppingGalleryDal.cs" />
     <Compile Include="Dal\WasherCardLogDal.cs" />
     <Compile Include="Dal\WasherCardDal.cs" />
     <Compile Include="Dal\WasherConsumeDal.cs" />
@@ -117,6 +121,8 @@
     <Compile Include="Dal\WasherVcodeDal.cs" />
     <Compile Include="Dal\WasherWeChatConsumeDal.cs" />
     <Compile Include="Extension\DepartmentBll.cs" />
+    <Compile Include="Model\ShoppingCommodityModel.cs" />
+    <Compile Include="Model\ShoppingGalleryModel.cs" />
     <Compile Include="Model\WasherCardLogModel.cs" />
     <Compile Include="Model\WasherCardModel.cs" />
     <Compile Include="Model\WasherConsumeModel.cs" />
@@ -134,6 +140,7 @@
     <Compile Include="Toolkit\Aes.cs" />
     <Compile Include="Toolkit\GridView2Excel.cs" />
     <Compile Include="Toolkit\LoopThread.cs" />
+    <Compile Include="Toolkit\ResponseObject.cs" />
     <Compile Include="Toolkit\UnifyPayExecutor.cs" />
   </ItemGroup>
   <ItemGroup>

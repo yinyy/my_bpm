@@ -15,7 +15,6 @@ using Washer.Model;
 using WeChat.Utils;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using BPM.BoardListenerLib;
 using System.Threading;
 using System.IO;
 using System.Text;

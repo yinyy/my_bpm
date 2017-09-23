@@ -126,11 +126,17 @@ namespace WasherBusiness
                     {
                         if (svr.DepartmentId == o2.DepartmentId)
                         {
-                            var sn = svr.GetSessions(s => s.BoardNumber == Aes.Decrypt( o2.BoardNumber)).FirstOrDefault();
-                            if(sn!=null && sn.Connected)
+                            var sn = svr.GetSessions(s => s.BoardNumber == Aes.Decrypt(o2.BoardNumber)).FirstOrDefault();
+                            if (sn != null && sn.Connected)
                             {
-                                byte[] buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, Aes.Decrypt( o2.BoardNumber), o2.BalanceId, o2.Coins);
+                                byte[] buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, Aes.Decrypt(o2.BoardNumber), o2.BalanceId, o2.Coins);
                                 sn.Send(buffer, 0, buffer.Length);
+
+                                PrintLogger(string.Format("【SuperSocket】通信成功。主板编号：{0}。", Aes.Decrypt(o2.BoardNumber)), true);
+                            }
+                            else
+                            {
+                                PrintLogger(string.Format("【SuperSocket】通信失败。主板编号：{0}，原因：{1}。", Aes.Decrypt(o2.BoardNumber), sn == null ? "Session is null" : "Session is closed"), true);
                             }
                             break;
                         }
@@ -479,6 +485,10 @@ namespace WasherBusiness
             {
                 PrintLogger(string.Format("【{0}】刷卡，验证。洗车卡已过有效期。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
+            else if (WasherCardBll.Instance.InUsed(card.KeyId))
+            {
+                PrintLogger(string.Format("【{0}】刷卡，验证。洗车卡正在使用。", ((BoardAppServer)s.AppServer).DepartmentId), true);
+            }
             else if (card.Coins<=0)
             {
                 PrintLogger(string.Format("【{0}】刷卡，验证。余额不足。", ((BoardAppServer)s.AppServer).DepartmentId), true);
@@ -545,6 +555,10 @@ namespace WasherBusiness
             else if (card.ValidateEnd.CompareTo(DateTime.Now) <= 0)
             {
                 PrintLogger(string.Format("【{0}】卡号密码，验证。洗车卡已过有效期。", ((BoardAppServer)s.AppServer).DepartmentId), true);
+            }
+            else if (WasherCardBll.Instance.InUsed(card.KeyId))
+            {
+                PrintLogger(string.Format("【{0}】卡号密码，验证。洗车卡正在使用。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
             else if (card.Coins <= 0)
             {
