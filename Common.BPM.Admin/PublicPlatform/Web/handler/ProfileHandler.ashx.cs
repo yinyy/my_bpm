@@ -56,6 +56,8 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     code.Validated = DateTime.Now;
                     WasherVcodeBll.Instance.Update(code);
 
+                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+
                     consume = WasherConsumeBll.Instance.Get(dept.KeyId, telphone);
                     #region 不存在用户信息的时候，直接绑定，并分配优惠券
                     if (consume == null)
@@ -70,13 +72,13 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                         consume.Telphone = telphone;
                         consume.Password = password;
                         consume.Name = name;
-                        consume.Setting = JSONhelper.ToJson(new { MaxPayCoins = 500 });
+                        //consume.Setting = JSONhelper.ToJson(new { MaxPayCoins = 500 });
+                        consume.Setting = JSONhelper.ToJson(new { MaxPayCoins = setting.PayWashCar.MaxPayCoins });
 
                         if ((consume.KeyId = WasherConsumeBll.Instance.Add(consume)) > 0)
                         {
                             string message = "绑定用户成功";
-
-                            WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+                            
                             if (setting.Register.Coupon > 0)
                             {
                                 WasherCardModel card = new WasherCardModel();
@@ -186,6 +188,11 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 }
                 else
                 {
+                    int coins = consume == null ? 0 : WasherConsumeBll.Instance.GetValidCoins(consume.KeyId);
+                    if (coins < 0)
+                    {
+                        coins = 0;
+                    }
 
                     context.Response.Write(JSONhelper.ToJson(new
                     {
@@ -193,7 +200,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                         Binded = consume != null,
                         Image = userInfo.headimgurl,
                         Nickname = userInfo.nickname,
-                        Coins = consume == null ? 0 : WasherCardBll.Instance.GetValidCoins(consume.KeyId) / 100.0,
+                        Coins = coins/100.0,
                         Reward = consume == null ? 0 : WasherRewardBll.Instance.GetRemainReward(consume.KeyId)
                     }));
                 }

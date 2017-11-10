@@ -22,7 +22,7 @@ namespace BPM.Admin.ashx
             string folder = string.Format("/upload/{0}/{1}/{2}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             if (!Directory.Exists(folder))
             {
-                Directory.CreateDirectory(folder);
+                Directory.CreateDirectory(context.Server.MapPath(folder));
             }
 
             string source = context.Request.Params["source"];

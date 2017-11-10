@@ -69,7 +69,7 @@ namespace Washer.Bll
 
         public List<WasherDeviceLogModel> GetByConsumeId(int consumeId)
         {
-            return WasherDeviceLogDal.Instance.GetWhere(new { ConsumeId = consumeId }).Where(l => l.Ended == null).ToList();
+            return WasherDeviceLogDal.Instance.GetWhere(new { ConsumeId = consumeId }).Where(l=>l.Ticks == null).ToList();
         }
     }
 }

@@ -10,9 +10,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    <%
-        int a = 2 / 5;
-        Response.Write(10 / a); %>
+
     </div>
     </form>
 </body>

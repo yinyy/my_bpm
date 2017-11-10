@@ -2909,6 +2909,7 @@
     <Content Include="PublicPlatform\Web\Outlets.aspx" />
     <Content Include="PublicPlatform\Web\Personal.aspx" />
     <Content Include="PublicPlatform\Web\Promotion.aspx" />
+    <Content Include="RegisterDepartment.aspx" />
     <Content Include="scripts\uploadify\Change Log.txt" />
     <Content Include="scripts\uploadify\jquery.uploadify.js" />
     <Content Include="scripts\uploadify\jquery.uploadify.min.js" />

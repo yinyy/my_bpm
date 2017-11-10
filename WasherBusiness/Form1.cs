@@ -472,6 +472,7 @@ namespace WasherBusiness
             byte[] buffer = CreateBuffer(RequestCommand.CardAndPassword, 10, r.BoardNumber, 0);
             WasherDeviceModel device;
             WasherCardModel card;
+            int coins = 0;
 
             if ((device = WasherDeviceBll.Instance.Get(((BoardAppServer)s.AppServer).DepartmentId, r.BoardNumber)) == null)
             {
@@ -485,11 +486,7 @@ namespace WasherBusiness
             {
                 PrintLogger(string.Format("【{0}】刷卡，验证。洗车卡已过有效期。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
-            else if (WasherCardBll.Instance.InUsed(card.KeyId))
-            {
-                PrintLogger(string.Format("【{0}】刷卡，验证。洗车卡正在使用。", ((BoardAppServer)s.AppServer).DepartmentId), true);
-            }
-            else if (card.Coins<=0)
+            else if ((coins = WasherCardBll.Instance.GetValidCoins(card.KeyId))<=0)
             {
                 PrintLogger(string.Format("【{0}】刷卡，验证。余额不足。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
@@ -502,7 +499,7 @@ namespace WasherBusiness
                 balance.Kind = "刷卡";
                 balance.Memo = "";
                 balance.PayCoins = 0;
-                balance.RemainCoins = card.Coins;
+                balance.RemainCoins = coins;
                 balance.Started = DateTime.Now;
                 balance.IsShow = true;
 
@@ -512,9 +509,9 @@ namespace WasherBusiness
                 }
                 else
                 {
-                    buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, r.BoardNumber, balance.KeyId, card.Coins);
+                    buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, r.BoardNumber, balance.KeyId, coins);
 
-                    PrintLogger(string.Format("【{0}】刷卡，验证。消费编号：{1}，余额：{2:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, balance.KeyId, card.Coins / 100.0), true);
+                    PrintLogger(string.Format("【{0}】刷卡，验证。消费编号：{1}，余额：{2:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, balance.KeyId, coins / 100.0), true);
                 }
             }
 
@@ -531,6 +528,7 @@ namespace WasherBusiness
             WasherDeviceModel device;
             WasherCardModel card = null;
             WasherConsumeModel consume;
+            int coins = 0;
 
             if ((device = WasherDeviceBll.Instance.Get(((BoardAppServer)s.AppServer).DepartmentId, r.BoardNumber)) == null)
             {
@@ -556,11 +554,7 @@ namespace WasherBusiness
             {
                 PrintLogger(string.Format("【{0}】卡号密码，验证。洗车卡已过有效期。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
-            else if (WasherCardBll.Instance.InUsed(card.KeyId))
-            {
-                PrintLogger(string.Format("【{0}】卡号密码，验证。洗车卡正在使用。", ((BoardAppServer)s.AppServer).DepartmentId), true);
-            }
-            else if (card.Coins <= 0)
+            else if ((coins = WasherCardBll.Instance.GetValidCoins(card.KeyId))<= 0)
             {
                 PrintLogger(string.Format("【{0}】卡号密码，验证。余额不足。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
@@ -573,7 +567,7 @@ namespace WasherBusiness
                 balance.Kind = "卡号密码";
                 balance.Memo = "";
                 balance.PayCoins = 0;
-                balance.RemainCoins = card.Coins;
+                balance.RemainCoins = coins;
                 balance.Started = DateTime.Now;
                 balance.IsShow = true;
 
@@ -583,9 +577,9 @@ namespace WasherBusiness
                 }
                 else
                 {
-                    buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, r.BoardNumber, balance.KeyId, card.Coins);
+                    buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, r.BoardNumber, balance.KeyId, coins);
 
-                    PrintLogger(string.Format("【{0}】卡号密码，验证。消费编号：{1}，余额：{2:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, balance.KeyId, card.Coins / 100.0), true);
+                    PrintLogger(string.Format("【{0}】卡号密码，验证。消费编号：{1}，余额：{2:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, balance.KeyId, coins / 100.0), true);
                 }
             }
 

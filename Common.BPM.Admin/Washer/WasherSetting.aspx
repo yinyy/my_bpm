@@ -95,6 +95,10 @@
         <div class="c">
             <ul>                
                 <li>
+                    <label>支付限额：</label>
+                    <input type="text" id="txt_MaxPayCoins" name="MaxPayCoins" style="width: 50px;" value="500"/><label>&nbsp;分。（出于对用户资金的安全管理，建议设置会员单次洗车币支付最大额度，如500分，0为不设置）</label>
+                </li>
+                <li>
                     <label>微信支付：</label><label>送支付金额&nbsp;</label><input type="text" id="txt_Pay_Wash_Card_Wx" name="txt_Pay_Wash_Card_Wx" style="text-align:center;width: 50px;"/><label>&nbsp;%的积分。</label>
                 </li>
                 <li>

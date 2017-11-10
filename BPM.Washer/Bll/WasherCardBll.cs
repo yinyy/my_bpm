@@ -230,15 +230,35 @@ namespace Washer.Bll
             return string.Format("{0}_{1}_{2:x}_{3}", prefix, deptId, DateTime.Now.Ticks, openid);
         }
 
-
-        public int GetValidCoins(int consumeId)
+        public int GetValidCoins(int keyId)
         {
-            return GetValidCards(consumeId).Select(a => a.Coins).Sum();
+            WasherCardModel card = WasherCardDal.Instance.Get(keyId);
+            if (card == null)
+            {
+                return 0;
+            }
+            int coins = card.Coins;
+
+            //查看正在使用的，被冻结的洗车币
+            int lockedCoins;
+            var ls = WasherDeviceLogDal.Instance.GetWhere(new { CardId = keyId }).Where(l => l.Ticks == null);
+            if (ls.Count() == 0)
+            {
+                lockedCoins = 0;
+            }
+            else
+            {
+                lockedCoins = ls.Select(a => a.RemainCoins).Aggregate((t, a) => t + a);
+            }
+            
+            coins -= lockedCoins;
+
+            return coins;
         }
 
-        public bool InUsed(int keyId)
-        {
-            return WasherDeviceLogDal.Instance.GetWhere(new { CardId = keyId }).Where(l => l.Ended == null).Count() > 0;
-        }
+        //public bool InUsed(int keyId)
+        //{
+        //    return WasherDeviceLogDal.Instance.GetWhere(new { CardId = keyId }).Where(l => l.Ticks == null).Count() > 0;
+        //}
     }
 }

@@ -82,7 +82,7 @@
                         </div>
                         <div class="weui_media_bd">
                             <h4 id="nick_name" class="weui_media_title"></h4>
-                            <p class="weui_media_desc">洗车币：<span id="coins_remain"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分：<span id="reward_remain"></span></p>
+                            <p class="weui_media_desc">可用洗车币：<span id="coins_remain"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分：<span id="reward_remain"></span></p>
                         </div>
                     </a>
                 </div>

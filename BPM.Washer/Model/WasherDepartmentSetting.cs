@@ -32,7 +32,7 @@ namespace Washer.Model
                 setting.BuyCardOption = new WasherDepartmentSettingBuyCardOption[] { };
                 setting.GiftLevel = new int[] { };
                 setting.Register = new WasherDepartmentSettingRegister {Coupon=0, CouponDay=0, Point=0 };
-                setting.PayWashCar = new WasherDepartmentSettingPayWashCar { Coupon=0, Vip=0, Wx=0};
+                setting.PayWashCar = new WasherDepartmentSettingPayWashCar { Coupon=0, Vip=0, Wx=0, MaxPayCoins=0};
                 setting.Relay = new WasherDepartmentSettingRelay() { Friend = 0, Moment = 0 };
 
                 return setting;
@@ -69,6 +69,8 @@ namespace Washer.Model
         public int Wx { get; set; }
         public int Vip { get; set; }
         public int Coupon { get; set; }
+
+        public int MaxPayCoins { get; set; }
     }
 
     public class WasherDepartmentSettingRelay

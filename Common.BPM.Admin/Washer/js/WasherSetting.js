@@ -141,7 +141,10 @@ $(function () {
 
         //处理洗车积分
         json.Setting.PayWashCar = {
-            Wx: parseInt($('#txt_Pay_Wash_Card_Wx').val()), Vip: parseInt($('#txt_Pay_Wash_Card_Vip').val()), Coupon: 0
+            Wx: parseInt($('#txt_Pay_Wash_Card_Wx').val()),
+            Vip: parseInt($('#txt_Pay_Wash_Card_Vip').val()),
+            Coupon: 0,
+            MaxPayCoins: parseInt($('#txt_MaxPayCoins').val())
         };
 
         //处理文章转发
@@ -229,6 +232,7 @@ $(function () {
             //处理洗车积分
             $('#txt_Pay_Wash_Card_Wx').val(setting.PayWashCar.Wx);
             $('#txt_Pay_Wash_Card_Vip').val(setting.PayWashCar.Vip);
+            $('#txt_MaxPayCoins').val(setting.PayWashCar.MaxPayCoins);
         }
 
         if (setting.Relay != null) {

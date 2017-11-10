@@ -53,22 +53,27 @@ namespace BPM.Admin.Washer.ashx
                 if (string.IsNullOrWhiteSpace(boardNumber))
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "参数错误" }));
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("参数错误。"));
                 }
                 else if ((device = WasherDeviceBll.Instance.Get(dept.KeyId, boardNumber)) == null)
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "设备不存在" }));
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("扫码设备未登记。"));
                 }
                 else if ((wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid)) == null)
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "微信用户不存在" }));
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("微信用户信息错误。"));
                 }
                 else if ((consume = WasherConsumeBll.Instance.GetByBinder(wxconsume)) == null)
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "未绑定个人信息" }));
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("未绑定个人信息。"));
                 }
                 else if ((coins = WasherConsumeBll.Instance.GetValidCoins(consume.KeyId)) <= 0)
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "洗车币余额小于0" }));
+                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("可用洗车币余额为0。"));
                 }
                 else
                 {
