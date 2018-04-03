@@ -323,6 +323,30 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 wxconsume.KeyId = WasherWeChatConsumeBll.Instance.Add(wxconsume);
                 #endregion
 
+                #region 给推荐者增加积分
+                if (refererId != -1)
+                {
+                    WasherConsumeModel referer = WasherConsumeBll.Instance.Get(refererId);
+                    if (referer != null)
+                    {
+                        WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
+                        if (setting != null && setting.Relay.Friend > 0)
+                        {
+                            WasherRewardModel reward = new WasherRewardModel();
+                            reward.ConsumeId = referer.KeyId;
+                            reward.Time = DateTime.Now;
+                            reward.Kind = "新用户关注公众号，老用户送积分。";
+                            reward.Points = setting.Relay.Friend;
+                            reward.Used = 0;
+                            reward.Expired = false;
+                            reward.Memo = "openid:" + WeixinOpenId;
+
+                            WasherRewardBll.Instance.Add(reward);
+                        }
+                    }
+                }
+                #endregion
+
                 WasherReplyModel reply = WasherReplyBll.Instance.Get(dept.KeyId, "SUBSCRIBE");
                 if (reply == null)
                 {

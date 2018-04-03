@@ -29,6 +29,8 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             string action = context.Request.Params["action"];
             string openid = context.Session["openid"].ToString();
             int deptId = Convert.ToInt16(context.Session["deptId"]);
+            //string openid = context.Request["openid"].ToString();
+            //int deptId = Convert.ToInt16(context.Request["deptId"]);
 
             Department dept = DepartmentBll.Instance.Get(deptId);
             WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(dept.KeyId, openid);
@@ -43,7 +45,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                 string vcode = context.Request.Params["vcode"];
 
                 WasherVcodeModel code = WasherVcodeBll.Instance.Get(telphone);
-                if (code == null || code.Validated != null||code.Vcode!=vcode)
+                if (code == null || code.Validated != null || code.Vcode != vcode)
                 {
                     context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "验证码错误。" }));
                 }
@@ -57,7 +59,6 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     WasherVcodeBll.Instance.Update(code);
 
                     WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
-
                     consume = WasherConsumeBll.Instance.Get(dept.KeyId, telphone);
                     #region 不存在用户信息的时候，直接绑定，并分配优惠券
                     if (consume == null)

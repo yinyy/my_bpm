@@ -5,17 +5,24 @@
 <%@ Import Namespace="BPM.Core.Model" %>
 <%@ Import Namespace="BPM.Core.Bll" %>
 
+<html>
+    <head><title>注册部门</title></head>
+    <body>
 <%
     foreach (Department depart in DepartmentBll.Instance.GetAll())
     {
-        if (!string.IsNullOrWhiteSpace(depart.Appid) && !AccessTokenContainer.CheckRegistered(depart.Appid))
+        if (!string.IsNullOrWhiteSpace(depart.Appid))
         {
             AccessTokenContainer.Register(depart.Appid, depart.Secret);
+%>
+        <p><%=depart.DepartmentName %> 完成注册。</p>
+<%
         }
     }
-
-
-    Department dept = DepartmentBll.Instance.Get(79);
 %>
 
-<%=AccessTokenContainer.CheckRegistered(dept.Appid)%>
+        <script type="text/javascript">
+            JSON.stringify
+        </script>
+    </body>
+</html>

@@ -30,11 +30,14 @@ $(document).ready(function () {
         var password = $.trim($('input#Password').val());
         var repassword = $.trim($('input#Repassword').val());
 
-        if (name == '') {
-            $('input#Name').focus();
-            alert('请输入姓名。');
+        //if (name == '') {
+        //    $('input#Name').focus();
+        //    alert('请输入姓名。');
 
-            return;
+        //    return;
+        //}
+        if (name == '') {
+            name = '未填写';
         }
 
         if (telphone == '') {

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -229,6 +230,13 @@ namespace 主板模拟程序
         private void button7_Click(object sender, EventArgs e)
         {
             HandleData();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            string msg = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名错误]]></return_msg><xml>";
+            Match match = Regex.Match(msg, @"<return_msg><\!\[CDATA\[(\S+)\]\]></return_msg>");
+            Console.WriteLine(match.Success + "    " + match.Groups[1].Value);
         }
     }
 }

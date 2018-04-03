@@ -3521,6 +3521,7 @@
     <Content Include="PublicPlatform\Web\handler\RecordHandler.ashx" />
     <Content Include="PublicPlatform\Web\handler\ChangePassword.ashx" />
     <Content Include="PublicPlatform\Web\handler\Personal.ashx" />
+    <Content Include="PublicPlatform\Web\pay\pay.text" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />

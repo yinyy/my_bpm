@@ -73,8 +73,18 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                     if (orderSerial != "error")
                     {
                         string unifiedorder = GetUnifiedorder(ps.Attach, ps.Body, openid, Convert.ToString(ps.Pay), orderSerial);
+                        using (StreamWriter sw = new StreamWriter(context.Server.MapPath(string.Format("~/PublicPlatform/Web/pay/{0}_{1}.txt", dept.KeyId, DateTime.Now.Ticks))))
+                        {
+                            sw.WriteLine(string.Format("Attach = {0}", ps.Attach));
+                            sw.WriteLine(string.Format("Body = {0}", ps.Body));
+                            sw.WriteLine(string.Format("Openid = {0}", openid));
+                            sw.WriteLine(string.Format("pay = {0}", ps.Pay));
+                            sw.WriteLine(string.Format("serial = {0}", orderSerial));
+                            sw.Write(unifiedorder);
+                        }
+
                         Match match = Regex.Match(unifiedorder, @"<prepay_id><\!\[CDATA\[(wx\S+)\]\]></prepay_id>");
-                        if (match.Groups.Count > 0)
+                        if (match.Success)
                         {
                             string prepayId = match.Groups[1].Value;
                             JObject jobj = GetPrepayInfo(prepayId);
@@ -82,15 +92,15 @@ namespace BPM.Admin.PublicPlatform.Web.handler
                             jobj.Add("Serial", Aes.Encrypt(orderSerial));
 
                             context.Response.Write(JSONhelper.ToJson(new { Success = true, PrepayInfo = jobj.ToString() }));
-                        }
-                        else
+                        }else
                         {
-                            context.Response.Write(JSONhelper.ToJson(new { Success = false }));
+                            match = Regex.Match(unifiedorder, @"<return_msg><\!\[CDATA\[(\S+)\]\]></return_msg>");
+                            context.Response.Write(JSONhelper.ToJson(new { Success = false, Message=match.Groups[1].Value }));
                         }
                     }
                     else
                     {
-                        context.Response.Write(JSONhelper.ToJson(new { Success = false }));
+                        context.Response.Write(JSONhelper.ToJson(new { Success = false, Message="创建本地订单错误。" }));
                     }
 
                     break;

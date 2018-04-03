@@ -25,11 +25,11 @@
                 <div class="weui_cell">
                     <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input id="Name" class="weui_input" type="text" placeholder="请输入姓名"/>
+                        <input id="Name" class="weui_input" type="text" placeholder="请输入姓名，可不填写"/>
                     </div>
                 </div>
             
-                <div class="weui_cell weui_cell_switch">
+                <div class="weui_cell weui_cell_switch" style="visibility:hidden;">
                     <div class="weui_cell_hd weui_cell_primary">性别</div>
                     <div class="weui_cell_ft">
                         <input id="Gender" class="weui_switch" type="checkbox"/>
