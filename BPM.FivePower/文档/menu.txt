@@ -1,0 +1,44 @@
+﻿{
+    "button": [
+		{
+			"name":"五号动力",
+			"sub_button": [
+				{
+					"type":"view",
+					"name":"产品展示",
+					"url":"http://www.soso.com/"
+				},
+				{
+					"type":"view",
+					"name":"在线知识",
+					"url":"http://www.soso.com/"
+				},
+				{
+					"type":"view",
+					"name":"公司介绍",
+					"url":"http://www.soso.com/"
+				}
+			]
+		},
+        {
+			"type":"view",
+			"name":"产品质保",
+			"url":"http://wx.5hdl.com/wx/Web/FivePowerProduct.aspx?tag=69"
+		},
+        {
+			"name":"贴心服务",
+			"sub_button": [
+				{
+					"type":"view",
+					"name":"客户反馈",
+					"url":"http://www.soso.com/"
+				},
+				{
+					"type":"view",
+					"name":"联系方式",
+					"url":"http://www.soso.com/"
+				}
+			]
+		}
+    ]
+}

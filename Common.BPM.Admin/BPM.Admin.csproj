@@ -19,6 +19,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,18 +55,27 @@
     <Reference Include="Fasterflect">
       <HintPath>..\packages\fasterflect.2.1.0\lib\net40\Fasterflect.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\dll\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\DotNet\数据访问\ValueInjecter\Omu.ValueInjecter.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin, Version=4.20.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.4.20.2\lib\net40\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=14.10.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.MP.14.10.13\lib\net40\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -2786,6 +2797,10 @@
     <Content Include="Editor\xhEditor\xheditor_skin\vista\img\wordimg.gif" />
     <Content Include="Editor\xhEditor\xheditor_skin\vista\ui.css" />
     <Content Include="favicon.ico" />
+    <Content Include="FivePower\FivePowerProduct.aspx" />
+    <Content Include="FivePower\FivePowerSetting.aspx" />
+    <Content Include="FivePower\js\FivePowerProduct.js" />
+    <Content Include="FivePower\js\FivePowerSetting.js" />
     <Content Include="Global.asax" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\back.gif" />
@@ -3325,6 +3340,15 @@
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
+    <Content Include="wx\Web\css\jquery-weui.css" />
+    <Content Include="wx\Web\css\Product.css" />
+    <Content Include="wx\Web\css\weui.css" />
+    <Content Include="wx\Web\FivePowerProduct.aspx" />
+    <Content Include="wx\Web\js\jquery-2.1.4.js" />
+    <Content Include="wx\Web\js\jquery-weui.js" />
+    <Content Include="wx\Web\js\Product.js" />
+    <Content Include="FivePower\ashx\FivePowerProductHandler.ashx" />
+    <Content Include="FivePower\ashx\FivePowerSettingHandler.ashx" />
     <None Include="Properties\PublishProfiles\bpm.pubxml" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
@@ -3527,6 +3551,8 @@
     <Content Include="sys\ashx\DicHandler.ashx" />
     <Content Include="sys\ashx\LogHandler.ashx" />
     <Content Include="sys\ashx\DataBaseHandler.ashx" />
+    <Content Include="wx\Index.ashx" />
+    <Content Include="wx\Web\ashx\ProductHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\ExportExcel.aspx.cs">
@@ -3561,6 +3587,26 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FivePower\ashx\FivePowerProductHandler.ashx.cs">
+      <DependentUpon>FivePowerProductHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="FivePower\ashx\FivePowerSettingHandler.ashx.cs">
+      <DependentUpon>FivePowerSettingHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="FivePower\FivePowerProduct.aspx.cs">
+      <DependentUpon>FivePowerProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FivePower\FivePowerProduct.aspx.designer.cs">
+      <DependentUpon>FivePowerProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FivePower\FivePowerSetting.aspx.cs">
+      <DependentUpon>FivePowerSetting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FivePower\FivePowerSetting.aspx.designer.cs">
+      <DependentUpon>FivePowerSetting.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -3663,6 +3709,22 @@
     <Compile Include="sys\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
     </Compile>
+    <Compile Include="wx\Index.ashx.cs">
+      <DependentUpon>Index.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="wx\MessageHandler\CustomMessageContext.cs" />
+    <Compile Include="wx\MessageHandler\CustomMessageHandler.cs" />
+    <Compile Include="wx\MessageHandler\CustomMessageHandler_Event.cs" />
+    <Compile Include="wx\Web\ashx\ProductHandler.ashx.cs">
+      <DependentUpon>ProductHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="wx\Web\FivePowerProduct.aspx.cs">
+      <DependentUpon>FivePowerProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wx\Web\FivePowerProduct.aspx.designer.cs">
+      <DependentUpon>FivePowerProduct.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.Debug.config">
@@ -3679,6 +3741,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dbase\" />
+    <Folder Include="FivePower\html\" />
+    <Folder Include="wx\Web\html\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\jQgrid\gray\images\MSSCCPRJ.SCC" />
@@ -3686,6 +3750,10 @@
     <Content Include="scripts\Selectui\vssver2.scc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM.FivePower\BPM.FivePower.csproj">
+      <Project>{8daa8010-43a5-4f32-b16e-45b0aa58aa35}</Project>
+      <Name>BPM.FivePower</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\BPM.Common.csproj">
       <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
       <Name>BPM.Common</Name>
@@ -3713,7 +3781,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>9590</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

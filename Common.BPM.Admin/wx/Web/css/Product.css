@@ -1,0 +1,11 @@
+﻿.hidden{
+    display: none;
+}
+
+div#not_in_wechat {
+    text-align: center;
+}
+
+div#not_in_wechat p {
+    line-height: 48px;
+}

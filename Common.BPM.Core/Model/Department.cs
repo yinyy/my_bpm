@@ -10,7 +10,7 @@ namespace BPM.Core.Model
 {
     [TableName("Sys_Departments")]
     [Description("部门管理")]
-    public class Department
+    public partial class Department
     {
         [DefaultValue(0)]
         public int KeyId { get; set; }
