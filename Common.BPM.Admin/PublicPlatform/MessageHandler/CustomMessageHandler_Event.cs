@@ -326,7 +326,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 #region 给推荐者增加积分
                 if (refererId != -1)
                 {
-                    WasherConsumeModel referer = WasherConsumeBll.Instance.Get(refererId);
+                    WasherConsumeModel referer = WasherConsumeBll.Instance.GetByBinderId(refererId);
                     if (referer != null)
                     {
                         WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(dept.Setting);
