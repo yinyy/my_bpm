@@ -154,3 +154,13 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/.vs/BPM.Sanitation/v15/Server/sqlite3/db.lock
+/.vs/BPM.Sanitation/v15/Server/sqlite3/storage.ide
+/.vs/BPM.Sanitation/v15/Server/sqlite3/storage.ide-shm
+/.vs/BPM.Sanitation/v15/Server/sqlite3/storage.ide-wal
+/.vs/BPM.Sanitation/v15/Browse.VC.db
+/.vs/BPM.Sanitation/v15/Browse.VC.opendb
+/.vs/BPM.Sanitation/v15/Solution.VC.db
+/.vs/BPM.Sanitation/v15/Solution.VC.db-shm
+/.vs/BPM.Sanitation/v15/Solution.VC.db-shm
+/.vs/BPM.Sanitation/v15/Solution.VC.db-wal

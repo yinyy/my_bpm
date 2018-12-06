@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xml>
+  <ToUserName><![CDATA[oIC6ejjI1izi372jxZ0R7LnD8p5o]]></ToUserName>
+  <FromUserName><![CDATA[gh_e94577a0a594]]></FromUserName>
+  <CreateTime>1461066844</CreateTime>
+  <MsgType><![CDATA[text]]></MsgType>
+  <Content><![CDATA[欢迎使用洗车机。使用前请先绑定个人信息。]]></Content>
+</xml>
