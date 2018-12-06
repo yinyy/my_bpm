@@ -3,6 +3,7 @@ using BPM.Core.Bll;
 using BPM.Core.Model;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.MP.Entities.Request;
 using System;
 using System.IO;

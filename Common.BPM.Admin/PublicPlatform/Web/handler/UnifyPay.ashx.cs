@@ -4,9 +4,10 @@ using BPM.Core.Model;
 using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.Helpers;
-using Senparc.Weixin.MP.TenPayLibV3;
+using Senparc.Weixin.TenPay.V3;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,13 +55,14 @@ namespace BPM.Admin.PublicPlatform.Web.handler
 
                         return;
                     }
-
+                    
                     tenPayV3Info = new TenPayV3Info(
                         dept.Appid,
                         dept.Secret,
                         dept.MerchantId,
                         dept.MerchantKey,
-                        "http://xc.senlanjidian.com/PublicPlatform/Web/handler/UnifyPay.ashx");
+                        "http://xc.senlanjidian.com/PublicPlatform/Web/handler/UnifyPay.ashx", 
+                        null);
 
                     var ps = new
                     {

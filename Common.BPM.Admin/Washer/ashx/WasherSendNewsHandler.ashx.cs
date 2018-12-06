@@ -4,13 +4,11 @@ using BPM.Core.Bll;
 using BPM.Core.Model;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.Media;
-using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Containers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
-using Washer.Bll;
 
 namespace BPM.Admin.Washer.ashx
 {

@@ -5,6 +5,7 @@ using BPM.Core.Model;
 using Newtonsoft.Json;
 using Omu.ValueInjecter;
 using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.MP.Entities;
 using System;
 using System.Collections.Generic;

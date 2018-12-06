@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Routing;
-using System.Web.Security;
-using System.Web.SessionState;
-using Combres;
-using BPM.Core.Bll;
-using Senparc.Weixin.MP.CommonAPIs;
+﻿using BPM.Core.Bll;
 using BPM.Core.Model;
+using Combres;
+using Senparc.CO2NET;
+using Senparc.CO2NET.RegisterServices;
+using Senparc.Weixin;
+using Senparc.Weixin.Entities;
+using Senparc.Weixin.MP.Containers;
+using System;
 using System.Threading;
-using SuperSocket.WebSocket;
-using Newtonsoft.Json;
-using Washer.Bll;
+using System.Web.Routing;
 using Washer.Toolkit;
 
 namespace BPM.Admin
@@ -24,6 +20,14 @@ namespace BPM.Admin
         protected void Application_Start(object sender, EventArgs e)
         {
             RouteTable.Routes.AddCombresRoute("Combres");
+      
+            var isGLobalDebug = true;//设置全局 Debug 状态
+            var senparcSetting = SenparcSetting.BuildFromWebConfig(isGLobalDebug);
+            var register = RegisterService.Start(senparcSetting).UseSenparcGlobal();//CO2NET全局注册，必须！
+
+            var isWeixinDebug = true;//设置微信 Debug 状态
+            var senparcWeixinSetting = SenparcWeixinSetting.BuildFromWebConfig(isWeixinDebug);
+            register.UseSenparcWeixin(senparcWeixinSetting, senparcSetting);////微信全局注册，必须！
 
             //注册所有的公众号的appid和secret
             foreach (Department d in DepartmentBll.Instance.GetAll())

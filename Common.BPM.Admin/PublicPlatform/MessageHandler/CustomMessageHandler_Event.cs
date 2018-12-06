@@ -17,6 +17,8 @@ using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using System.Threading;
 using Washer.Toolkit;
+using Senparc.NeuChar.Entities;
+using System.IO;
 
 namespace BPM.Admin.PublicPlatform.MessageHandler
 {
@@ -175,7 +177,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                                     msg.Content = string.Format(
     @"会员账户余额洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&card=true&ts={2}'>这里</a>。
 
-微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}'>这里</a>。", dept.KeyId,  device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
+微信支付洗车，请点<a href='http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}'>这里</a>。", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
                                 }
                                 else
                                 {
@@ -194,8 +196,9 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
                                 var msg = CreateResponseMessage<ResponseMessageNews>();
 
-                                string url =HttpContext.Current.Request.Url.AbsoluteUri;
+                                string url = HttpContext.Current.Request.Url.AbsoluteUri;
                                 string prefix = url.Substring(0, url.IndexOf(HttpContext.Current.Request.Url.AbsolutePath));
+
 
                                 foreach (ReplyNews n in ns)
                                 {
@@ -213,7 +216,8 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                                         if (coins >= 300)
                                         {
                                             a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?next=PayWash.aspx&appid={0}&board={1}&ts={2}&card=true", dept.KeyId, device.BoardNumber, (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds);
-                                        }else
+                                        }
+                                        else
                                         {
                                             a.Title = "会员账户余额不足，请先充值。";
                                             a.Url = string.Format("http://xc.senlanjidian.com/PublicPlatform/Web/Card2.aspx?appid={0}", dept.KeyId);
@@ -234,7 +238,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
                 }
                 else if (senceId.StartsWith("7"))
                 {
-                    WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, WeixinOpenId);
+                    WasherWeChatConsumeModel wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, OpenId);
                     if (wxconsume.RefererId == -1)
                     {
                         wxconsume.RefererId = Convert.ToInt32(senceId.Substring(1));
@@ -284,7 +288,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
         public override IResponseMessageBase OnEvent_SubscribeRequest(RequestMessageEvent_Subscribe requestMessage)
         {
             //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
-            ResponseMessageBase responseMessage = null;
+            IResponseMessageBase responseMessage = null;
 
             Department dept = DepartmentBll.Instance.Get(deptId);
             int refererId = -1;
@@ -310,12 +314,12 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
             }
 
             //判断数据库中是否有这个消费者的记录
-            wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, WeixinOpenId);
+            wxconsume = WasherWeChatConsumeBll.Instance.Get(deptId, OpenId);
             if (wxconsume == null)
             {
                 #region 这是不存在的消费者，将其加入到消费者表中
                 wxconsume = new WasherWeChatConsumeModel();
-                wxconsume.OpenId = WeixinOpenId;
+                wxconsume.OpenId = OpenId;
                 wxconsume.DepartmentId = deptId;
                 wxconsume.RefererId = refererId;
                 wxconsume.Memo = "";

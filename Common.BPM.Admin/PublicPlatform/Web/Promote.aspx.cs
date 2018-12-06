@@ -2,7 +2,7 @@
 using BPM.Core.Model;
 using Newtonsoft.Json;
 using Senparc.Weixin.MP.AdvancedAPIs;
-using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Containers;
 using System;
 using Washer.Bll;
 using Washer.Extension;
@@ -25,7 +25,7 @@ namespace BPM.Admin.PublicPlatform.Web
 
                 //生成带微信用户编号的临时二维码，有效时间不超过一周
                 string accessToken = AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret);
-                var result = QrCodeApi.Create(accessToken, 604800, Convert.ToInt32(string.Format("7{0}", wxconsume.KeyId)));
+                var result = QrCodeApi.Create(accessToken, 604800, Convert.ToInt32(string.Format("7{0}", wxconsume.KeyId)), Senparc.Weixin.MP.QrCode_ActionName.QR_SCENE);
                 if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
                 {
                     CodeImage.ImageUrl = string.Format("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={0}", result.ticket);

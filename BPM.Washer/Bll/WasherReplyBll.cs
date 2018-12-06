@@ -40,5 +40,10 @@ namespace Washer.Bll
         {
             return WasherReplyDal.Instance.Update(news);
         }
+
+        public int Delete(int kid)
+        {
+            return WasherReplyDal.Instance.Delete(kid);
+        }
     }
 }

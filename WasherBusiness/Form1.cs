@@ -98,16 +98,8 @@ namespace WasherBusiness
             };
             this.webSocketServer.NewDataReceived += (session, buffer) =>
             {
-                PrintLogger(string.Format("【WebSocket】二进制消息。IP：{0}，消息：{1}。", session.RemoteEndPoint.Address.ToString(),
-                    buffer.Select(b => string.Format("{0:X2", b)).Aggregate((a, b) =>
-                    {
-                        if (string.IsNullOrEmpty(a))
-                        {
-                            return b;
-                        }
-
-                        return a + " " + b;
-                    })), true);
+                PrintLogger(string.Format("【WebSocket】二进制消息。IP：{0}，消息：{1}。", 
+                    session.RemoteEndPoint.Address.ToString(), byte2String(buffer)), true);
             };
             this.webSocketServer.NewMessageReceived += (session, message) =>
             {
@@ -132,8 +124,24 @@ namespace WasherBusiness
                                 byte[] buffer = CreateBuffer(RequestCommand.CardAndPassword, 14, Aes.Decrypt(o2.BoardNumber), o2.BalanceId, o2.Coins);
                                 sn.Send(buffer, 0, buffer.Length);
 
+                                #region 为了确保数据通信成功，启动命令发送2次    
+                                new Thread(()=> {
+                                    Thread.Sleep(300);//暂停300毫秒，这里的延迟时间，需要再斟酌
+
+                                    //再发送一次启动命令
+                                    sn.Send(buffer, 0, buffer.Length);
+                                }).Start();
+                                #endregion
+
                                 PrintLogger(string.Format("【SuperSocket】通信成功。主板编号：{0}。", Aes.Decrypt(o2.BoardNumber)), true);
-                            }
+
+                                //#region 将操作写入数据
+                                //BoardCommand boardCommand = new BoardCommand() { Board = Aes.Decrypt(o2.BoardNumber), Command= "卡号+密码验证", Direction="服务器 -> 洗车机", Data = byte2String(buffer)};
+                                //DataClasses1DataContext db = new DataClasses1DataContext();
+                                //db.BoardCommand.InsertOnSubmit(boardCommand);
+                                //db.SubmitChanges();
+                                //#endregion
+                                }
                             else
                             {
                                 PrintLogger(string.Format("【SuperSocket】通信失败。主板编号：{0}，原因：{1}。", Aes.Decrypt(o2.BoardNumber), sn == null ? "Session is null" : "Session is closed"), true);
@@ -618,6 +626,18 @@ namespace WasherBusiness
 
                 PrintLogger(string.Format("【{0}】消费结算，验证。结算金额小于0。", ((BoardAppServer)s.AppServer).DepartmentId), true);
             }
+            else if (balance.Ticks != null)
+                //已经结算过了
+            {
+                buffer = CreateBuffer2(RequestCommand.Balance, 12, r.BoardNumber, r.BalanceId, balance.PayCoins);
+
+                PrintLogger(string.Format("【{0}】消费结算，重复结算（去重）。消费编号：{1}，实际消费：{2:0.00}元。", ((BoardAppServer)s.AppServer).DepartmentId, r.BalanceId, balance.PayCoins / 100.0), true);
+
+                s.Send(buffer, 0, buffer.Length);
+
+                PrintLogger(string.Format("【{0}】消费结算（去重），回复。", ((BoardAppServer)s.AppServer).DepartmentId), true);
+
+            }
             else
             {
                 if (balance.CardId == 0)/*这代表的是微信支付*/
@@ -992,6 +1012,19 @@ namespace WasherBusiness
         private void 自动滚动ToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             isAutoRoll = 自动滚动ToolStripMenuItem.Checked;
+        }
+
+        private String byte2String(byte[] buffer)
+        {
+            return buffer.Select(b => string.Format("{0:X2}", b)).Aggregate((a, b) =>
+            {
+                if (string.IsNullOrEmpty(a))
+                {
+                    return b;
+                }
+
+                return a + " " + b;
+            }).Trim();
         }
     }
 }

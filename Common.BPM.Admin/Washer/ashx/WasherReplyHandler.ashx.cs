@@ -55,6 +55,17 @@ namespace BPM.Admin.Washer.ashx
                     }
 
                     break;
+                case "clear":
+                    reply = WasherReplyBll.Instance.Get(departmentId, rpm.Entity.Kind);
+                    if (reply == null)
+                    {
+                        context.Response.Write(0);
+                    }
+                    else
+                    {
+                        context.Response.Write(WasherReplyBll.Instance.Delete(reply.KeyId));
+                    }
+                    break;
                 default:
                     reply = WasherReplyBll.Instance.Get(departmentId, rpm.Entity.Kind);
                     context.Response.Write(JSONhelper.ToJson(reply));

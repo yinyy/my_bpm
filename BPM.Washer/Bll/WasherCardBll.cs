@@ -76,8 +76,11 @@ namespace Washer.Bll
 
         public int Deduction(int cardId, int cost, int ticks)
         {
+
+            //TODO:这个算法还有必要再优化
             #region 计算折扣金额
-            int cost1 = cost;// = (int)(cost * 0.9);
+            int discountCost = cost;// = (int)(cost * 0.9);
+            int payCost = discountCost;
             #endregion
 
             WasherCardModel card = WasherCardBll.Instance.Get(cardId);
@@ -90,17 +93,17 @@ namespace Washer.Bll
                     Time = DateTime.Now                   
                 };
 
-                if (card.Coins >= cost)
+                if (card.Coins >= payCost)
                 {
-                    cl.Coins = cost;
+                    cl.Coins = payCost;
 
-                    card.Coins -= cost;
-                    cost = 0;
+                    card.Coins -= payCost;
+                    payCost = 0;
                 }
                 else {
                     cl.Coins = card.Coins;
 
-                    cost -= card.Coins;
+                    payCost -= card.Coins;
                     card.Coins = 0;
                 }
 
@@ -108,7 +111,7 @@ namespace Washer.Bll
                 WasherCardLogBll.Instance.Insert(cl);
             }
 
-            if (cost > 0 && card.BinderId!=null)
+            if (payCost > 0 && card.BinderId!=null)
             {
                 var cards = WasherCardBll.Instance.GetValidCards(card.BinderId.Value).Where(a => a.Coins > 0).OrderBy(a => a.ValidateEnd);
                 foreach (WasherCardModel c in cards)
@@ -120,32 +123,32 @@ namespace Washer.Bll
                         Time = DateTime.Now
                     };
 
-                    if (c.Coins >= cost)
+                    if (c.Coins >= payCost)
                     {
-                        cl.Coins = cost;
+                        cl.Coins = payCost;
 
-                        c.Coins -= cost;
-                        cost = 0;
+                        c.Coins -= payCost;
+                        payCost = 0;
                     }
                     else
                     {
                         cl.Coins = c.Coins;
 
+                        payCost -= c.Coins;
                         c.Coins = 0;
-                        cost -= c.Coins;
                     }
 
                     WasherCardLogBll.Instance.Insert(cl);
                     WasherCardBll.Instance.Update(c);
 
-                    if (cost <= 0)
+                    if (payCost <= 0)
                     {
                         break;
                     }
                 }
             }
 
-            return cost1;
+            return discountCost - payCost;
         }
 
         public bool Exits(string cardNo)

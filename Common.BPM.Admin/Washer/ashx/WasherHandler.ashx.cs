@@ -22,6 +22,7 @@ using System.Web.SessionState;
 using Washer.Extension;
 using WebSocket4Net;
 using Washer.Toolkit;
+using Senparc.Weixin.MP.Containers;
 
 namespace BPM.Admin.Washer.ashx
 {

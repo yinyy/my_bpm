@@ -1,4 +1,5 @@
 ﻿using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Containers;
 using System;
 using System.Collections.Generic;
 using System.IO;

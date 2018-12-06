@@ -6,6 +6,7 @@ using System.Web;
 using Senparc.Weixin.MP.Entities;
 using System.IO;
 using Senparc.Weixin.MP.Entities.Request;
+using Senparc.NeuChar.Entities;
 
 namespace BPM.Admin.PublicPlatform.MessageHandler
 {

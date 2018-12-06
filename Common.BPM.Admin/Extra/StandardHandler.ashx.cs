@@ -34,6 +34,7 @@ namespace BPM.Admin.Extra
             string inTag = context.Request.Params["itag"];
             string board = context.Request.Params["board"];
             string rid = context.Request.Params["rid"];
+            string other = context.Request.Params["other"];
 
             Department dept = null;
             WasherOutsiderModel outsider = null;
@@ -41,23 +42,23 @@ namespace BPM.Admin.Extra
             WasherDeviceLogModel balance = null;
             int money = 0;
 
-            bool wsClosed = false;
-
             if (string.IsNullOrWhiteSpace(signature) ||
                 string.IsNullOrWhiteSpace(timestamp) ||
                 string.IsNullOrWhiteSpace(nonce) ||
-                string.IsNullOrEmpty(echostr)||
+                string.IsNullOrEmpty(echostr) ||
                 string.IsNullOrWhiteSpace(moneyStr) ||
-                string.IsNullOrWhiteSpace(outTag)||
-                string.IsNullOrWhiteSpace(inTag)||
-                string.IsNullOrWhiteSpace(board)||
+                string.IsNullOrWhiteSpace(outTag) ||
+                string.IsNullOrWhiteSpace(inTag) ||
+                string.IsNullOrWhiteSpace(board) ||
                 string.IsNullOrWhiteSpace(rid))
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "missing parameter." }));
-            }else if((dept = DepartmentBll.Instance.GetByTag(inTag))==null)
+            }
+            else if ((dept = DepartmentBll.Instance.GetByTag(inTag)) == null)
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "inner tag error." }));
-            }else if((outsider = WasherOutsiderBll.Instance.Get(dept.KeyId, outTag)) == null)
+            }
+            else if ((outsider = WasherOutsiderBll.Instance.Get(dept.KeyId, outTag)) == null)
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "outer tag error." }));
             }/*else if (!CheckTimestamp(Convert.ToInt64(timestamp)))
@@ -67,10 +68,12 @@ namespace BPM.Admin.Extra
             else if (!CheckSignature(signature, outsider.Token, timestamp, nonce))
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "signature error." }));
-            }*/else if((device=WasherDeviceBll.Instance.Get(dept.KeyId, board))==null)
+            }*/
+            else if ((device = WasherDeviceBll.Instance.Get(dept.KeyId, board)) == null)
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "board error." }));
-            }else if ((money=GetMoney(moneyStr)) <= 0)
+            }
+            else if ((money = GetMoney(moneyStr)) <= 0)
             {
                 context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "money error." }));
             }
@@ -82,7 +85,7 @@ namespace BPM.Admin.Extra
                 balance.ConsumeId = null;
                 balance.DeviceId = device.KeyId;
                 balance.Kind = string.Format("外部服务{0}", outTag);
-                balance.Memo = JSONhelper.ToJson(new { Desc="外部服务", Tag=outTag, Echostr=echostr, Rid=rid });
+                balance.Memo = JSONhelper.ToJson(new { Desc = "外部服务", Tag = outTag, Echostr = echostr, Rid = rid, Other = string.IsNullOrWhiteSpace(other)?"无":other });
                 balance.PayCoins = 0;
                 balance.RemainCoins = Convert.ToInt32(moneyStr);
                 balance.Started = DateTime.Now;
@@ -102,13 +105,17 @@ namespace BPM.Admin.Extra
                     })
                 };
 
+
+                string message = JSONhelper.ToJson(new { Success = false, Message = "unknow error." }); ;
+                bool wsClosed = false;
+
                 WebSocket webSocket = new WebSocket("ws://139.129.43.203:5500");
                 webSocket.Opened += (s0, e0) =>
                 {
                     webSocket.Send(JsonConvert.SerializeObject(o));
                     try { webSocket.Close(); } catch { }
 
-                    context.Response.Write(JSONhelper.ToJson(new { Success = true, Message = "ok." }));
+                    message = JSONhelper.ToJson(new { Success = true, Message = "ok." });
 
                     wsClosed = true;
                 };
@@ -116,44 +123,45 @@ namespace BPM.Admin.Extra
                 {
                     try { webSocket.Close(); } catch { }
 
-                    context.Response.Write(JSONhelper.ToJson(new { Success = false, Message = "start error." }));
+                    message = JSONhelper.ToJson(new { Success = false, Message = "start error." });
 
                     wsClosed = true;
                 };
                 webSocket.Open();
 
                 //wsClosed = true;
+
+                while (!wsClosed)
+                {
+                    Thread.Sleep(200);
+                }
+
+                context.Response.Write(message);
+
+                #region 如果是外部服务，则需要根据设置判断是否需要回调
+                if (balance.Kind.StartsWith("外部服务"))
+                {
+                    //var o2 = new { Desc = "", Tag = "", Echostr = "", Rid = "" };
+                    //o2 = JsonConvert.DeserializeAnonymousType(balance.Memo, o2);
+
+                    //outsider = WasherOutsiderBll.Instance.Get(device.DepartmentId, o2.Tag);
+                    if (!string.IsNullOrEmpty(outsider.Url))
+                    {
+                        new Thread(() =>
+                        {
+                            string url = string.Format("{0}{1}echostr={2}&rid={3}", outsider.Url, outsider.Url.IndexOf('?') == -1 ? "?" : "&", echostr, rid);
+
+                            System.Net.WebRequest wReq = System.Net.WebRequest.Create(url);
+                            System.Net.WebResponse wResp = wReq.GetResponse();
+                            System.IO.Stream respStream = wResp.GetResponseStream();
+
+                            respStream.Close();
+                            wResp.Close();
+                        }).Start();
+                    }
+                }
+                #endregion
             }
-
-            while (!wsClosed)
-            {
-                Thread.Sleep(200);
-            }
-
-
-            //#region 如果是外部服务，则需要根据设置判断是否需要回调
-            //if (balance.Kind.StartsWith("外部服务"))
-            //{
-            //    var o = new { Desc = "", Tag = "", Echostr = "", Rid = "" };
-            //    o = JsonConvert.DeserializeAnonymousType(balance.Memo, o);
-
-            //    outsider = WasherOutsiderBll.Instance.Get(device.DepartmentId, o.Tag);
-            //    if (!string.IsNullOrEmpty(outsider.Url))
-            //    {
-            //        new Thread(() =>
-            //        {
-            //            string url = string.Format("{0}{1}echostr={2}&rid={3}", outsider.Url, outsider.Url.IndexOf('?') == -1 ? "?" : "&", o.Echostr, o.Rid);
-
-            //            System.Net.WebRequest wReq = System.Net.WebRequest.Create(url);
-            //            System.Net.WebResponse wResp = wReq.GetResponse();
-            //            System.IO.Stream respStream = wResp.GetResponseStream();
-
-            //            respStream.Close();
-            //            wResp.Close();
-            //        }).Start();
-            //    }
-            //}
-            //#endregion
         }
 
         private int GetMoney(string moneyStr)
@@ -194,7 +202,8 @@ namespace BPM.Admin.Extra
 
             return enText.ToString();
         }
-            //http://127.0.0.1:9582/Extra/StandardHandler.ashx?signature=473c528dbec76e92c41365a7c2e0f186c4834480&timestamp=1486818830&nonce=123&echostr=abc&tag=lwpicc&itag=Senlan&board=100001&money=1000&rid=1
+            
+        //http://127.0.0.1:9582/Extra/StandardHandler.ashx?signature=473c528dbec76e92c41365a7c2e0f186c4834480&timestamp=1486818830&nonce=123&echostr=abc&tag=lwpicc&itag=Senlan&board=100001&money=1000&rid=1
 
         public bool IsReusable
         {

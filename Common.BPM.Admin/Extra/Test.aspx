@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#"  %>
 <%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Linq" %>
 
 <%
     using (StreamWriter writer = new StreamWriter(Server.MapPath("~/App_Data/Params-" + DateTime.Now.Ticks + ".txt")))

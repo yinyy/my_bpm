@@ -12,11 +12,11 @@ using BPM.Core.Dal;
 using System.Net.Sockets;
 using System.Net;
 using System.Configuration;
-using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Washer.Toolkit;
 using WebSocket4Net;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.Containers;
 
 namespace BPM.Admin.Washer.ashx
 {
@@ -136,7 +136,7 @@ namespace BPM.Admin.Washer.ashx
                     
                     //利用设备序列号和公众号生成二维码
                     string accessToken = AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret);
-                    var result = QrCodeApi.CreateByStr(accessToken, string.Format("9{0}", model.BoardNumber));
+                    var result = QrCodeApi.Create(accessToken, 0, 0, Senparc.Weixin.MP.QrCode_ActionName.QR_LIMIT_STR_SCENE, string.Format("9{0}", model.BoardNumber));
                     if (result.errcode == Senparc.Weixin.ReturnCode.请求成功)
                     {
                         context.Response.Write(JSONhelper.ToJson(new

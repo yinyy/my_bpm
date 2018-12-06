@@ -126,6 +126,12 @@ function createTabContent(tab, index) {
     var btnSave = $('<a id="save" href="#">保存</a>');
     divControl.append(btnSave);
 
+    var spanSpace = $("<span>&nbsp;&nbsp;</span>");
+    divControl.append(spanSpace);
+
+    var btnClear = $('<a id="clear" href="#">清空</a>');
+    divControl.append(btnClear);
+
     //-------------------end---------------------//
 
     btnAdd.linkbutton({
@@ -171,6 +177,31 @@ function createTabContent(tab, index) {
                 msg.warning('保存失败！');
             }
         });
+    });
+
+    btnClear.linkbutton({
+        iconCls: 'icon-clear'
+    });
+    btnClear.click(function () {
+        if (confirm('确认清空当前的图文消息吗？')) {
+            var t = { Kind: '' };
+            if (index == 0) {
+                t.Kind = 'SCAN';
+            } else if (index == 1) {
+                t.Kind = 'SUBSCRIBE';
+            } else if (index == 2) {
+                t.Kind = 'OTHER';
+            }
+
+            var query = "json=" + JSON.stringify({ jsonEntity: JSON.stringify(t), action: 'clear' });
+            jQuery.ajaxjson(actionUrl, query, function (d) {
+                if (parseInt(d) > 0) {
+                    msg.ok('清除成功！请关闭当前页面再次重新打开。');
+                } else {
+                    msg.warning('清除失败！');
+                }
+            });
+        }
     });
 }
 

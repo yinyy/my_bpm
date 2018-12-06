@@ -70,15 +70,24 @@ var grid = {
                     return (v/100.0).toFixed(2);
                 }
             },
-            {
-                title: '持卡人', field: 'Name', width: 100, align: 'center', formatter(v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
-                        return r.Name;
+                {
+                    title: '持卡人姓名', field: 'Name', width: 100, align: 'center', formatter(v, r, i) {
+                        if (v == null) {
+                            return '无姓名';
+                        } else {
+                            return r.Name;
+                        }
                     }
-                }
-            },
+                },
+                {
+                    title: '持卡人联系方式', field: 'Telphone', width: 150, align: 'center', formatter(v, r, i) {
+                        if (v == null) {
+                            return '无电话';
+                        } else {
+                            return r.Telphone;
+                        }
+                    }
+                },
             { title: '状态', field: 'Status', width: 80, align: 'center' }
             ]],
             pagination: true,
