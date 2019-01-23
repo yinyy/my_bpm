@@ -23,7 +23,6 @@ namespace BPM.Admin.sys.ashx
 
             UserBll.Instance.CheckUserOnlingState();
 
-            int k;
             var json = HttpContext.Current.Request["json"];
             var rpm = new RequestParamModel<Department>(context) { CurrentContext = context };
             if (!string.IsNullOrEmpty(json))

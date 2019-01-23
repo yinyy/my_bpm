@@ -70,11 +70,14 @@ function login() {
             return isValid;
         },
         success: function (data) {
+            alert(data);
+
             $.hLoading.hide();
             var d = eval('(' + data + ')');
-            if (d.success)
+            if (d.success) {
+                
                 location.href = "/";
-            else {
+            }else {
                 //更新验证码
                 $('#imgValidateCode').click();
                 alert(d.message);

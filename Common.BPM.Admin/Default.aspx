@@ -15,8 +15,6 @@
 	<cb:Include ID="siteCssCtrl" runat="server" SetName="siteCss"/>
 	
 	<script type="text/javascript" src="sys/ashx/ConfigHandler.ashx?action=js"></script>
-	
-
 
 	<script type="text/javascript">
 		var theme = '<%=base.ThemeName %>';

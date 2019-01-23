@@ -63,9 +63,31 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
       <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
+    <Reference Include="Senparc.CO2NET, Version=0.5.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.CO2NET.0.5.1.1\lib\net40\Senparc.CO2NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.CO2NET.APM, Version=0.2.3.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.CO2NET.APM.0.2.3.2\lib\net40\Senparc.CO2NET.APM.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.NeuChar, Version=0.6.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.NeuChar.0.6.0.2\lib\net40\Senparc.NeuChar.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin, Version=6.3.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.6.3.4.2\lib\net40\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=16.6.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.MP.16.6.7\lib\net40\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.Open, Version=4.4.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.Open.4.4.0.2\lib\net40\Senparc.Weixin.Open.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -91,13 +113,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\combres.xml" />
+    <Content Include="App_Data\combres.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
     <Content Include="ashx\ExportExcel.aspx" />
     <Content Include="CheckUserState.aspx" />
-    <Content Include="common\html\loginForm.html" />
-    <Content Include="common\html\search.html" />
+    <Content Include="Common\CommonSetting.aspx" />
+    <Content Include="Common\html\loginForm.html" />
+    <Content Include="Common\html\search.html" />
+    <Content Include="Common\js\CommonSetting.js" />
+    <Content Include="Course\CourseBranch.aspx" />
+    <Content Include="Course\CourseStaffBranch.aspx" />
+    <Content Include="Course\html\CourseStaffBranchAudit.html" />
+    <Content Include="Course\html\CourseBranchAdd.html" />
+    <Content Include="Course\js\CourseStaffBranch.js" />
+    <Content Include="Course\js\CourseBranch.js" />
     <Content Include="css\checkbox.png" />
     <Content Include="css\checkbox1.png" />
     <Content Include="css\chk.png" />
@@ -2834,6 +2866,23 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
+    <Content Include="PublicPlatform\Course\Branch.aspx" />
+    <Content Include="PublicPlatform\Course\BranchChoose.aspx" />
+    <Content Include="PublicPlatform\Course\BranchDetail.aspx" />
+    <Content Include="PublicPlatform\Course\images\branch_small.png" />
+    <Content Include="PublicPlatform\Course\js\BranchChoose.js" />
+    <Content Include="PublicPlatform\Course\js\BranchDetail.js" />
+    <Content Include="PublicPlatform\Course\js\Branch.js" />
+    <Content Include="PublicPlatform\Course\Test2.aspx" />
+    <Content Include="PublicPlatform\images\welcome.png" />
+    <Content Include="PublicPlatform\images\register.jpg" />
+    <Content Include="PublicPlatform\Register.aspx" />
+    <Content Include="PublicPlatform\css\common.css" />
+    <Content Include="PublicPlatform\scripts\Staff.js" />
+    <Content Include="PublicPlatform\scripts\template-web.js" />
+    <Content Include="PublicPlatform\scripts\weui\weui.css" />
+    <Content Include="PublicPlatform\scripts\weui\weui.js" />
+    <Content Include="PublicPlatform\scripts\zepto.js" />
     <Content Include="qqloading.html" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
     <Content Include="scripts\alertify\alertify.core.css" />
@@ -3326,7 +3375,16 @@
     <Content Include="welcome.html" />
     <Content Include="combres.readme" />
     <Content Include="ashx\GlobalHandler.ashx" />
-    <None Include="Properties\PublishProfiles\bpm.pubxml" />
+    <Content Include="Course\ashx\CourseBranchHandler.ashx" />
+    <Content Include="Course\ashx\CourseStaffBranchHandler.ashx" />
+    <Content Include="Common\ashx\CommonSettingHandler.ashx" />
+    <None Include="Properties\PublishProfiles\选课发布.pubxml" />
+    <Content Include="PublicPlatform\Index.ashx" />
+    <Content Include="PublicPlatform\Course\Default.Master" />
+    <Content Include="PublicPlatform\ashx\OAuth2Handler.ashx" />
+    <Content Include="PublicPlatform\Course\ashx\BranchHandler.ashx" />
+    <Content Include="PublicPlatform\Course\ashx\StaffBranchHandler.ashx" />
+    <Content Include="PublicPlatform\ashx\StaffHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3556,6 +3614,36 @@
     <Compile Include="CheckUserState.aspx.designer.cs">
       <DependentUpon>CheckUserState.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Common\ashx\CommonSettingHandler.ashx.cs">
+      <DependentUpon>CommonSettingHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Common\CommonSetting.aspx.cs">
+      <DependentUpon>CommonSetting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Common\CommonSetting.aspx.designer.cs">
+      <DependentUpon>CommonSetting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Course\ashx\CourseBranchHandler.ashx.cs">
+      <DependentUpon>CourseBranchHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Course\ashx\CourseStaffBranchHandler.ashx.cs">
+      <DependentUpon>CourseStaffBranchHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Course\CourseBranch.aspx.cs">
+      <DependentUpon>CourseBranch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Course\CourseBranch.aspx.designer.cs">
+      <DependentUpon>CourseBranch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Course\CourseStaffBranch.aspx.cs">
+      <DependentUpon>CourseStaffBranch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Course\CourseStaffBranch.aspx.designer.cs">
+      <DependentUpon>CourseStaffBranch.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3567,6 +3655,66 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicPlatform\ashx\OAuth2Handler.ashx.cs">
+      <DependentUpon>OAuth2Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\ashx\StaffHandler.ashx.cs">
+      <DependentUpon>StaffHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\ashx\BranchHandler.ashx.cs">
+      <DependentUpon>BranchHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\ashx\StaffBranchHandler.ashx.cs">
+      <DependentUpon>StaffBranchHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\Branch.aspx.cs">
+      <DependentUpon>Branch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\Branch.aspx.designer.cs">
+      <DependentUpon>Branch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\BranchChoose.aspx.cs">
+      <DependentUpon>BranchChoose.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\BranchChoose.aspx.designer.cs">
+      <DependentUpon>BranchChoose.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\BranchDetail.aspx.cs">
+      <DependentUpon>BranchDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\BranchDetail.aspx.designer.cs">
+      <DependentUpon>BranchDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\Default.Master.cs">
+      <DependentUpon>Default.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\Default.Master.designer.cs">
+      <DependentUpon>Default.Master</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\Test2.aspx.cs">
+      <DependentUpon>Test2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Course\Test2.aspx.designer.cs">
+      <DependentUpon>Test2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Index.ashx.cs">
+      <DependentUpon>Index.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageContext.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageHandler.cs" />
+    <Compile Include="PublicPlatform\MessageHandler\CustomMessageHandler_Event.cs" />
+    <Compile Include="PublicPlatform\Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3680,6 +3828,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dbase\" />
+    <Folder Include="Exam\" />
+    <Folder Include="PublicPlatform\Download\" />
+    <Folder Include="PublicPlatform\Exam\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\jQgrid\gray\images\MSSCCPRJ.SCC" />
@@ -3694,6 +3845,14 @@
     <ProjectReference Include="..\Common.BPM.Core\BPM.Core.csproj">
       <Project>{a2ee0c6c-76c5-49c5-bca6-0bc862eca195}</Project>
       <Name>BPM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Course.Common\Course.Common.csproj">
+      <Project>{17a2834f-fd0d-49a9-b9e7-496008f2226a}</Project>
+      <Name>Course.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Course.Core\Course.Core.csproj">
+      <Project>{389b8503-a8f1-43f2-8a07-9e44a2330939}</Project>
+      <Name>Course.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
