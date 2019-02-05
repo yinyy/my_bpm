@@ -2819,6 +2819,7 @@
     <Content Include="Editor\xhEditor\xheditor_skin\vista\img\wordimg.gif" />
     <Content Include="Editor\xhEditor\xheditor_skin\vista\ui.css" />
     <Content Include="Exam\css\ExamExam.css" />
+    <Content Include="Exam\ExamConfirm.aspx" />
     <Content Include="Exam\ExamExam.aspx" />
     <Content Include="Exam\ExamStaffInvigilate.aspx" />
     <Content Include="Exam\html\ExamStaffInvigilateEdit.html" />
@@ -2827,6 +2828,7 @@
     <Content Include="Exam\html\ExamSectionItemEdit.html" />
     <Content Include="Exam\html\ExamSectionEdit.html" />
     <Content Include="Exam\html\ExamEdit.html" />
+    <Content Include="Exam\js\ExamConfirm.js" />
     <Content Include="Exam\js\ExamStaffInvigilate.js" />
     <Content Include="Exam\js\ExamExam.js" />
     <Content Include="favicon.ico" />
@@ -3411,6 +3413,7 @@
     <Content Include="Platform\ashx\PlatformUserTagHandler.ashx" />
     <Content Include="Exam\ashx\ExamExamSectionItemHandler.ashx" />
     <Content Include="Exam\ashx\ExamStaffInvigilateHandler.ashx" />
+    <Content Include="Exam\ashx\ExamConfirmHandler.ashx" />
     <None Include="Properties\PublishProfiles\选课发布.pubxml" />
     <Content Include="PublicPlatform\Index.ashx" />
     <Content Include="PublicPlatform\Course\Default.Master" />
@@ -3687,6 +3690,9 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Exam\ashx\ExamConfirmHandler.ashx.cs">
+      <DependentUpon>ExamConfirmHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Exam\ashx\ExamExamHandler.ashx.cs">
       <DependentUpon>ExamExamHandler.ashx</DependentUpon>
     </Compile>
@@ -3698,6 +3704,13 @@
     </Compile>
     <Compile Include="Exam\ashx\ExamStaffInvigilateHandler.ashx.cs">
       <DependentUpon>ExamStaffInvigilateHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Exam\ExamConfirm.aspx.cs">
+      <DependentUpon>ExamConfirm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Exam\ExamConfirm.aspx.designer.cs">
+      <DependentUpon>ExamConfirm.aspx</DependentUpon>
     </Compile>
     <Compile Include="Exam\ExamExam.aspx.cs">
       <DependentUpon>ExamExam.aspx</DependentUpon>

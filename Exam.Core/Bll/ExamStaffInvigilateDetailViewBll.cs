@@ -30,5 +30,10 @@ namespace Exam.Core.Bll
         {
             return ExamStaffInvigilateDetailViewDal.Instance.GetWhere(new { StaffId = staff.KeyId });
         }
+
+        public IEnumerable<ExamStaffInvigilateDetailViewModel> GetList()
+        {
+            return ExamStaffInvigilateDetailViewDal.Instance.GetAll();
+        }
     }
 }

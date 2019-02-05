@@ -13,7 +13,7 @@ namespace Exam.Core.Model
     {
         public int ExamSectionItemStaffId { get; set; }
         public int StaffId { get; set; }
-        public string StaffName{ get; set; }
+        public string Name{ get; set; }
         public DateTime Started { get; set; }
         public DateTime Ended { get; set; }
         public int ExamSectionItemId { get; set; }
