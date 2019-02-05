@@ -1,0 +1,64 @@
+﻿<style type="text/css">
+    .invigilator, .invigilator_selected {
+        border: 1px solid #cecece;
+        margin: 10px 10px;
+        border-radius: 15px;
+        padding: 5px 0px;
+        width: 100px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .invigilator_selected {
+        background-color: brown;
+        color: #ffffff;
+    }
+
+    .invigilator_wanted {
+        background-color: coral;
+        color: #ffffff;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<form id="uiform">
+    <table class="grid">
+        <tr>
+            <td align="right" style="width: 150px;">考场名称：</td>
+            <td>
+                <label id="Address"></label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">考试科目：</td>
+            <td>
+                <label id="Subject"></label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">监考人数：</td>
+            <td>
+                <label id="TeacherRequired"></label> 人
+            </td>
+        </tr>
+        <tr>
+            <td align="right">已安排：</td>
+            <td style="height: 100px;">
+                <div style="overflow-y: scroll; height: 100%;" id="InvigilatorSelected">
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">可选人员：</td>
+            <td style="height: 470px;">
+                <div style="overflow-y: scroll; height: 100%;" id="InvigilatorList">
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>

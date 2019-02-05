@@ -40,6 +40,7 @@ $(function () {
     $('#bindButton').click(function () {
         var type = $('#type').val();
         var serial = $.trim($('#serial').val());
+        var password = $.trim($('#password').val());
 
         if (type == 'none') {
             weui.alert('请选择用户类型。', {
@@ -59,7 +60,8 @@ $(function () {
         $.getJSON(handler, {
             'action': 'check',
             'serial': serial,
-            'type': type
+            'type': type,
+            'password': password
         }, function (data) {
             if (data.Success) {
                 var p = data.Data;
@@ -70,7 +72,8 @@ $(function () {
                         'action': 'bind',
                         'serial': p.Serial,
                         'name': p.Name,
-                        'type': p.Type
+                        'type': p.Type,
+                        'gender': p.Gender
                     }, function (data) {
                         if (data.Success) {
                             weui.toast('绑定成功。', function () {
@@ -90,7 +93,7 @@ $(function () {
                         title: '提示'
                     });
             } else {
-                weui.alert('未查询到学号或工号所对应的记录。请确认了正确的信息。', {
+                weui.alert('未查询到学号或工号所对应的记录。请确认了正确的信息（学号、工号、密码等）。', {
                     title: '提示'
                 });
                 return;

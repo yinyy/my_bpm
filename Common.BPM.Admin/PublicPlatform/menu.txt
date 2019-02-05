@@ -1,0 +1,52 @@
+﻿ 教师菜单：
+ {
+        "button": [
+            {
+                "name": "功能", 
+                "sub_button": [
+                    {
+                        "type": "view", 
+                        "name": "我的监考", 
+                        "url": "http://course.dyzyxyydwlwsys.cc/PublicPlatform/Exam/InvigilateCalendar.aspx", 
+                        "sub_button": [ ]
+                    }
+                ]
+            }, 
+            {
+                "type": "view", 
+                "name": "个人信息", 
+                "url": "http://course.dyzyxyydwlwsys.cc/PublicPlatform/Register.aspx", 
+                "sub_button": [ ]
+            }
+        ],
+"matchrule":{
+  "tag_id":"100"
+  }
+   }
+
+
+   学生菜单：
+    {
+        "button": [
+            {
+                "name": "功能", 
+                "sub_button": [
+                    {
+                        "type": "view", 
+                        "name": "专业分流", 
+                        "url": "http://course.dyzyxyydwlwsys.cc/PublicPlatform/Course/Branch.aspx", 
+                        "sub_button": [ ]
+                    }
+                ]
+            }, 
+            {
+                "type": "view", 
+                "name": "个人信息", 
+                "url": "http://course.dyzyxyydwlwsys.cc/PublicPlatform/Register.aspx", 
+                "sub_button": [ ]
+            }
+        ],
+"matchrule":{
+  "tag_id":"101"
+  }
+   }

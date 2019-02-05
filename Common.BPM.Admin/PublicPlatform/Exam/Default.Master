@@ -1,0 +1,24 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Default.master.cs" Inherits="BPM.Admin.PublicPlatform.Exam.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../scripts/weui/weui.css" rel="stylesheet" />
+    <link href="../css/common.css" rel="stylesheet" />
+    <script src="../scripts/zepto.js"></script>
+    <script src="../scripts/weui/weui.js"></script>
+    <script src="../scripts/template-web.js"></script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>

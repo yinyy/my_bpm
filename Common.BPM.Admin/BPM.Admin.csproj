@@ -2818,6 +2818,17 @@
     <Content Include="Editor\xhEditor\xheditor_skin\vista\img\wmp.gif" />
     <Content Include="Editor\xhEditor\xheditor_skin\vista\img\wordimg.gif" />
     <Content Include="Editor\xhEditor\xheditor_skin\vista\ui.css" />
+    <Content Include="Exam\css\ExamExam.css" />
+    <Content Include="Exam\ExamExam.aspx" />
+    <Content Include="Exam\ExamStaffInvigilate.aspx" />
+    <Content Include="Exam\html\ExamStaffInvigilateEdit.html" />
+    <Content Include="Exam\html\ExamStaffInvigilateManual.html" />
+    <Content Include="Exam\html\ExamSectionItemImport.html" />
+    <Content Include="Exam\html\ExamSectionItemEdit.html" />
+    <Content Include="Exam\html\ExamSectionEdit.html" />
+    <Content Include="Exam\html\ExamEdit.html" />
+    <Content Include="Exam\js\ExamStaffInvigilate.js" />
+    <Content Include="Exam\js\ExamExam.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="images\ajax-loader.gif" />
@@ -2846,6 +2857,7 @@
     <Content Include="images\logindocbg.gif" />
     <Content Include="images\logindocbg1.gif" />
     <Content Include="images\logo.png" />
+    <Content Include="images\logo_login.jpg" />
     <Content Include="images\menuStyles\Accordion.png" />
     <Content Include="images\menuStyles\Accordion2.png" />
     <Content Include="images\menuStyles\AccordionTree.png" />
@@ -2866,6 +2878,9 @@
     <Content Include="images\tabicons.png" />
     <Content Include="images\zip.gif" />
     <Content Include="login.html" />
+    <Content Include="Platform\html\PlatformUserTagEdit.html" />
+    <Content Include="Platform\js\PlatformUserTag.js" />
+    <Content Include="Platform\PlatformUserTag.aspx" />
     <Content Include="PublicPlatform\Course\Branch.aspx" />
     <Content Include="PublicPlatform\Course\BranchChoose.aspx" />
     <Content Include="PublicPlatform\Course\BranchDetail.aspx" />
@@ -2874,8 +2889,20 @@
     <Content Include="PublicPlatform\Course\js\BranchDetail.js" />
     <Content Include="PublicPlatform\Course\js\Branch.js" />
     <Content Include="PublicPlatform\Course\Test2.aspx" />
+    <Content Include="PublicPlatform\Exam\ExamDetail.aspx" />
+    <Content Include="PublicPlatform\Exam\ExamList.aspx" />
+    <Content Include="PublicPlatform\Exam\images\icon_tabbar_calendar.png" />
+    <Content Include="PublicPlatform\Exam\images\icon_tabbar_list.png" />
+    <Content Include="PublicPlatform\Exam\images\icon_tabbar_info.png" />
+    <Content Include="PublicPlatform\Exam\InvigilateCalendar.aspx" />
+    <Content Include="PublicPlatform\Exam\InvigilateList.aspx" />
+    <Content Include="PublicPlatform\Exam\js\ExamDetail.js" />
+    <Content Include="PublicPlatform\Exam\js\ExamList.js" />
+    <Content Include="PublicPlatform\Exam\js\InvigilateList.js" />
+    <Content Include="PublicPlatform\Exam\js\InvigilateCalendar.js" />
     <Content Include="PublicPlatform\images\welcome.png" />
     <Content Include="PublicPlatform\images\register.jpg" />
+    <Content Include="PublicPlatform\menu.txt" />
     <Content Include="PublicPlatform\Register.aspx" />
     <Content Include="PublicPlatform\css\common.css" />
     <Content Include="PublicPlatform\scripts\Staff.js" />
@@ -2883,6 +2910,7 @@
     <Content Include="PublicPlatform\scripts\weui\weui.css" />
     <Content Include="PublicPlatform\scripts\weui\weui.js" />
     <Content Include="PublicPlatform\scripts\zepto.js" />
+    <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="qqloading.html" />
     <Content Include="scripts\alertify\alertify.bootstrap.css" />
     <Content Include="scripts\alertify\alertify.core.css" />
@@ -3378,6 +3406,11 @@
     <Content Include="Course\ashx\CourseBranchHandler.ashx" />
     <Content Include="Course\ashx\CourseStaffBranchHandler.ashx" />
     <Content Include="Common\ashx\CommonSettingHandler.ashx" />
+    <Content Include="Exam\ashx\ExamExamHandler.ashx" />
+    <Content Include="Exam\ashx\ExamExamSectionHandler.ashx" />
+    <Content Include="Platform\ashx\PlatformUserTagHandler.ashx" />
+    <Content Include="Exam\ashx\ExamExamSectionItemHandler.ashx" />
+    <Content Include="Exam\ashx\ExamStaffInvigilateHandler.ashx" />
     <None Include="Properties\PublishProfiles\选课发布.pubxml" />
     <Content Include="PublicPlatform\Index.ashx" />
     <Content Include="PublicPlatform\Course\Default.Master" />
@@ -3385,6 +3418,8 @@
     <Content Include="PublicPlatform\Course\ashx\BranchHandler.ashx" />
     <Content Include="PublicPlatform\Course\ashx\StaffBranchHandler.ashx" />
     <Content Include="PublicPlatform\ashx\StaffHandler.ashx" />
+    <Content Include="PublicPlatform\Exam\Default.Master" />
+    <Content Include="PublicPlatform\Exam\ashx\ExamHandler.ashx" />
     <None Include="scripts\Linqjs\linq-vsdoc.js" />
     <Content Include="scripts\Linqjs\linq.jquery.js" />
     <Content Include="scripts\Linqjs\linq.js" />
@@ -3586,6 +3621,7 @@
     <Content Include="sys\ashx\DicHandler.ashx" />
     <Content Include="sys\ashx\LogHandler.ashx" />
     <Content Include="sys\ashx\DataBaseHandler.ashx" />
+    <Content Include="GetStaffInfo.hxl" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ashx\ExportExcel.aspx.cs">
@@ -3651,8 +3687,44 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Exam\ashx\ExamExamHandler.ashx.cs">
+      <DependentUpon>ExamExamHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Exam\ashx\ExamExamSectionHandler.ashx.cs">
+      <DependentUpon>ExamExamSectionHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Exam\ashx\ExamExamSectionItemHandler.ashx.cs">
+      <DependentUpon>ExamExamSectionItemHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Exam\ashx\ExamStaffInvigilateHandler.ashx.cs">
+      <DependentUpon>ExamStaffInvigilateHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Exam\ExamExam.aspx.cs">
+      <DependentUpon>ExamExam.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Exam\ExamExam.aspx.designer.cs">
+      <DependentUpon>ExamExam.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Exam\ExamStaffInvigilate.aspx.cs">
+      <DependentUpon>ExamStaffInvigilate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Exam\ExamStaffInvigilate.aspx.designer.cs">
+      <DependentUpon>ExamStaffInvigilate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Platform\ashx\PlatformUserTagHandler.ashx.cs">
+      <DependentUpon>PlatformUserTagHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Platform\PlatformUserTag.aspx.cs">
+      <DependentUpon>PlatformUserTag.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Platform\PlatformUserTag.aspx.designer.cs">
+      <DependentUpon>PlatformUserTag.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicPlatform\ashx\OAuth2Handler.ashx.cs">
@@ -3702,6 +3774,44 @@
     <Compile Include="PublicPlatform\Course\Test2.aspx.designer.cs">
       <DependentUpon>Test2.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PublicPlatform\Exam\ashx\ExamHandler.ashx.cs">
+      <DependentUpon>ExamHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\Default.Master.cs">
+      <DependentUpon>Default.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\Default.Master.designer.cs">
+      <DependentUpon>Default.Master</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\ExamDetail.aspx.cs">
+      <DependentUpon>ExamDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\ExamDetail.aspx.designer.cs">
+      <DependentUpon>ExamDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\ExamList.aspx.cs">
+      <DependentUpon>ExamList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\ExamList.aspx.designer.cs">
+      <DependentUpon>ExamList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\InvigilateCalendar.aspx.cs">
+      <DependentUpon>InvigilateCalendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\InvigilateCalendar.aspx.designer.cs">
+      <DependentUpon>InvigilateCalendar.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\InvigilateList.aspx.cs">
+      <DependentUpon>InvigilateList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Exam\InvigilateList.aspx.designer.cs">
+      <DependentUpon>InvigilateList.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PublicPlatform\Index.ashx.cs">
       <DependentUpon>Index.ashx</DependentUpon>
     </Compile>
@@ -3714,6 +3824,13 @@
     </Compile>
     <Compile Include="PublicPlatform\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicPlatform\Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicPlatform\Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
@@ -3828,9 +3945,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dbase\" />
-    <Folder Include="Exam\" />
     <Folder Include="PublicPlatform\Download\" />
-    <Folder Include="PublicPlatform\Exam\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\jQgrid\gray\images\MSSCCPRJ.SCC" />
@@ -3853,6 +3968,10 @@
     <ProjectReference Include="..\Course.Core\Course.Core.csproj">
       <Project>{389b8503-a8f1-43f2-8a07-9e44a2330939}</Project>
       <Name>Course.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exam.Core\Exam.Core.csproj">
+      <Project>{98890423-0937-41ef-9cf6-afa067ffcf83}</Project>
+      <Name>Exam.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

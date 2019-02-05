@@ -43,9 +43,12 @@ namespace BPM.Admin
             //设置微信 Debug 状态
             var isWeixinDebug = true;
             var senparcWeixinSetting = SenparcWeixinSetting.BuildFromWebConfig(isWeixinDebug);
-
+            
             //微信全局注册，必须！！
             register.UseSenparcWeixin(senparcWeixinSetting, senparcSetting);
+
+            //注册当前appid
+            AccessTokenContainer.Register(senparcWeixinSetting.WeixinAppId, senparcWeixinSetting.WeixinAppSecret);
         }
 
         protected void Session_Start(object sender, EventArgs e)

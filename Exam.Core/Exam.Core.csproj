@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{98890423-0937-41EF-9CF6-AFA067FFCF83}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Exam.Core</RootNamespace>
+    <AssemblyName>Exam.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bll\ExamExamBll.cs" />
+    <Compile Include="Bll\ExamExamSectionBll.cs" />
+    <Compile Include="Bll\ExamExamSectionItemBll.cs" />
+    <Compile Include="Bll\ExamExamSectionItemStaffBll.cs" />
+    <Compile Include="Bll\ExamExamSectionStaffBll.cs" />
+    <Compile Include="Bll\ExamExamSectionViewBll.cs" />
+    <Compile Include="Bll\ExamStaffInvigilateBll.cs" />
+    <Compile Include="Bll\ExamStaffInvigilateDetailViewBll.cs" />
+    <Compile Include="Business\ExamSelectionQueue.cs" />
+    <Compile Include="Dal\ExamExamDal.cs" />
+    <Compile Include="Dal\ExamExamSectionDal.cs" />
+    <Compile Include="Dal\ExamExamSectionItemDal.cs" />
+    <Compile Include="Dal\ExamExamSectionItemStaffDal.cs" />
+    <Compile Include="Dal\ExamExamSectionStaffDal.cs" />
+    <Compile Include="Dal\ExamExamSectionViewDal.cs" />
+    <Compile Include="Dal\ExamStaffInvigilateDal.cs" />
+    <Compile Include="Dal\ExamStaffInvigilateDetailViewDal.cs" />
+    <Compile Include="Model\ExamExamSectionItemModel.cs" />
+    <Compile Include="Model\ExamExamSectionItemStaffModel.cs" />
+    <Compile Include="Model\ExamExamSectionModel.cs" />
+    <Compile Include="Model\ExamExamModel.cs" />
+    <Compile Include="Model\ExamExamSectionStaffModel.cs" />
+    <Compile Include="Model\ExamExamSectionViewModel.cs" />
+    <Compile Include="Model\ExamStaffInvigilateDetailViewModel.cs" />
+    <Compile Include="Model\ExamStaffInvigilateModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Common\BPM.Common.csproj">
+      <Project>{16183c27-23be-4335-ae94-f12bb57421ff}</Project>
+      <Name>BPM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Course.Common\Course.Common.csproj">
+      <Project>{17a2834f-fd0d-49a9-b9e7-496008f2226a}</Project>
+      <Name>Course.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

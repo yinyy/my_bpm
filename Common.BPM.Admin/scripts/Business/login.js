@@ -59,7 +59,6 @@ $(function () {
 
 
 function login() {
-    
     $('#loginForm').form('submit', {
         url: '/ashx/loginhandler.ashx',
         onSubmit: function () {
@@ -70,12 +69,9 @@ function login() {
             return isValid;
         },
         success: function (data) {
-            alert(data);
-
             $.hLoading.hide();
             var d = eval('(' + data + ')');
             if (d.success) {
-                
                 location.href = "/";
             }else {
                 //更新验证码

@@ -8,7 +8,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>项目名称</title>
+	<title>东营职业学院电子信息与传媒学院专业分流管理系统</title>
 	<script type="text/javascript" src="Scripts/jquery-1.8.3.min.js"></script>
    
 	<%=WebExtensions.CombresLink(base.ThemeName) %>
@@ -42,7 +42,7 @@
 	
 
 	<div  region="south" split="false" style="height: 30px; border-top:none; ">
-		<div class="footer">脚注</div>
+		<div class="footer">东营职业学院 - 电子信息教学部</div>
 	</div>
 	<div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden" border="false">
 		<div id="tabs" class="easyui-tabs"  fit="true"  >

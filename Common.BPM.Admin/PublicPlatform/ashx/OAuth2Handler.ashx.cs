@@ -31,7 +31,7 @@ namespace BPM.Admin.PublicPlatform.ashx
                 }
                 else
                 {
-                    context.Response.Write(JsonConvert.SerializeObject(new { Success = false }));
+                    context.Response.Write(JsonConvert.SerializeObject(new { Success = false}));
                 }
             }
             else if (action == "base")

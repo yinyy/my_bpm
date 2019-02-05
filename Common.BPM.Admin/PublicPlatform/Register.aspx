@@ -36,7 +36,7 @@
                             <select class="weui-select" name="type" id="type">
                                 <option value="none">请选择</option>
                                 <option value="student">学生</option>
-                                <option value="teacher">教师</option>
+                                <option value="teacher">教工</option>
                             </select>
                         </div>
                     </div>
@@ -44,6 +44,12 @@
                         <div class="weui-cell__hd"><label class="weui-label">学号工号</label></div>
                         <div class="weui-cell__bd">
                             <input class="weui-input" type="text" placeholder="请输入学号或工号" id="serial">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">确认密码</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" type="password" id="password">
                         </div>
                     </div>
                 </div>

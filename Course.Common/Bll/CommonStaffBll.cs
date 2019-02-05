@@ -39,5 +39,10 @@ namespace Course.Common.Bll
         {
             return CommonStaffDal.Instance.Update(model);
         }
+
+        public CommonStaffModel[] GetTeachers()
+        {
+            return CommonStaffDal.Instance.GetWhere(new { Type = "teacher" }).ToArray();
+        }
     }
 }
