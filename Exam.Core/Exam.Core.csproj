@@ -51,6 +51,7 @@
     <Compile Include="Bll\ExamExamSectionViewBll.cs" />
     <Compile Include="Bll\ExamStaffInvigilateBll.cs" />
     <Compile Include="Bll\ExamStaffInvigilateDetailViewBll.cs" />
+    <Compile Include="Bll\ExamStaffInvigilateViewBll.cs" />
     <Compile Include="Business\ExamSelectionQueue.cs" />
     <Compile Include="Dal\ExamExamDal.cs" />
     <Compile Include="Dal\ExamExamSectionDal.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Dal\ExamExamSectionViewDal.cs" />
     <Compile Include="Dal\ExamStaffInvigilateDal.cs" />
     <Compile Include="Dal\ExamStaffInvigilateDetailViewDal.cs" />
+    <Compile Include="Dal\ExamStaffInvigilateViewDal.cs" />
     <Compile Include="Model\ExamExamSectionItemModel.cs" />
     <Compile Include="Model\ExamExamSectionItemStaffModel.cs" />
     <Compile Include="Model\ExamExamSectionModel.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Model\ExamExamSectionViewModel.cs" />
     <Compile Include="Model\ExamStaffInvigilateDetailViewModel.cs" />
     <Compile Include="Model\ExamStaffInvigilateModel.cs" />
+    <Compile Include="Model\ExamStaffInvigilateViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

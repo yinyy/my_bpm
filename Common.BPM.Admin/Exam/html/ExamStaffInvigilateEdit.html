@@ -1,21 +1,38 @@
 ﻿<form id="uiform">
     <table class="grid">
         <tr>
+            <td align="center" colspan="2">本功能适合于新增外聘监考员或不在本部门、单位的监考员。</td>
+        </tr>
+        <tr>
             <td align="right">教工号：</td>
             <td>
-                <label id="txt_Serial"></label>
+                <input type="text" id="txt_Serial" name="Serial" class="txt03 easyui-validatebox" required="required" style="width: 220px;" />
             </td>
         </tr>
         <tr>
             <td align="right">教工姓名：</td>
             <td>
-                <label id="txt_Name"></label>
+                <input type="text" id="txt_Name" name="Name" class="txt03 easyui-validatebox" required="required" style="width: 220px;" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right">性别：</td>
+            <td>
+                <input type="radio" id="rb_Gender_1" name="Gender" value="男" checked="checked" /><label for="rb_Gender_1">男</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rb_Gender_2" name="Gender" value="女" /><label for="rb_Gender_2">女</label>
             </td>
         </tr>
         <tr>
             <td align="right">监考次数：</td>
             <td>
-                <input type="text" id="txt_Invigilated" name="Invigilated" class="txt03 easyui-validatebox" required="required" style="width: 200px;" /> 次
+                <input type="text" id="txt_Invigilated" name="Invigilated" class="txt03 easyui-validatebox" required="required" style="width: 200px;" value="0" /> 次
+            </td>
+        </tr>
+        <tr>
+            <td align="right">自动安排：</td>
+            <td>
+                <input type="radio" id="rb_AutoArranged_1" name="AutoArranged" value="1" checked="checked" /><label for="rb_AutoArranged_1">是</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rb_AutoArranged_2" name="AutoArranged" value="0" /><label for="rb_AutoArranged_2">否</label>
             </td>
         </tr>
     </table>

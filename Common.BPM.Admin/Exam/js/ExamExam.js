@@ -492,7 +492,7 @@ var ExamSectionItemCrud = {
         var row = ExamSectionGrid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '添加考场信息', width: 460, height: 385, href: ExamSectionItemCrud.form.edit, iconCls: 'icon-add', submit: function () {
+                title: '添加考场信息', width: 460, height: 398, href: ExamSectionItemCrud.form.edit, iconCls: 'icon-add', submit: function () {
                     if (top.$('#uiform').form('validate')) {
                         var query = createParam('add', '0', { 'ExamSectionId': row.KeyId });
                         jQuery.ajaxjson(ExamSectionItemCrud.handler, query, function (d) {
@@ -519,7 +519,7 @@ var ExamSectionItemCrud = {
         var row = ExamSectionItemGrid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '编辑考场信息', width: 460, height: 385, href: ExamSectionItemCrud.form.edit, iconCls: 'icon-edit',
+                title: '编辑考场信息', width: 460, height: 398, href: ExamSectionItemCrud.form.edit, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_Address').val(row.Address);
                     top.$('#txt_Subject').val(row.Subject);
@@ -577,6 +577,9 @@ var ExamSectionItemCrud = {
                                 msg.ok('添加成功！');
                                 hDialog.dialog('close');
                                 ExamSectionItemGrid.reload();
+                            } else if (parseInt(d) == 0) {
+                                msg.warning('没有添加任何数据');
+                                hDialog.dialog('close');
                             } else {
                                 MessageOrRedirect(d);
                             }
@@ -666,7 +669,7 @@ function loadStaffInvigilators() {
 
     //先把想要监考的显示出来
     $(staffInvigilators).each(function (idx, d) {
-        if (d.Wanted) {
+        if (d.Wanted && d.AutoArranged==1) {
             var span = $('<span></span>');
             span.addClass('invigilator');
             span.addClass('invigilator_wanted');
@@ -680,9 +683,23 @@ function loadStaffInvigilators() {
 
     //把其它监考员显示出来
     $(staffInvigilators).each(function (idx, d) {
-        if (!d.Wanted) {
+        if (!d.Wanted && d.AutoArranged==1) {
             var span = $('<span></span>');
             span.addClass('invigilator');
+            span.attr('staffId', d.KeyId);
+            span.attr('serial', d.Serial);
+            span.html(d.Name);
+            span.prop('title', '[' + d.Serial + ']' + d.Name);
+            top.$('#InvigilatorList').append(span);
+        }
+    });
+
+    //把不自动分配的监考员显示出来
+    $(staffInvigilators).each(function (idx, d) {
+        if (d.AutoArranged == 0) {
+            var span = $('<span></span>');
+            span.addClass('invigilator');
+            span.addClass('invigilator_other');
             span.attr('staffId', d.KeyId);
             span.attr('serial', d.Serial);
             span.html(d.Name);
@@ -700,6 +717,7 @@ function loadStaffInvigilators() {
             old.addClass('hidden');
             cloned.removeClass('hidden');
             cloned.removeClass('invigilator_wanted');
+            cloned.removeClass('invigilator_other');
             cloned.addClass('invigilator_selected');
 
             top.$('#InvigilatorSelected').append(cloned);

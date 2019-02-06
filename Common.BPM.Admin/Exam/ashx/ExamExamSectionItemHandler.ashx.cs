@@ -54,34 +54,42 @@ namespace BPM.Admin.Exam.ashx
                 case "import":
                     int count = 0;
 
-                    string data = rpm.Entity.Memo;
-                    string[] list = data.Split('\n');
-                    foreach(string item in list)
+                    string data = rpm.Entity.Memo.Trim();
+                    if (!string.IsNullOrWhiteSpace(data))
                     {
-                        if (string.IsNullOrEmpty(item)){
-                            continue;
+                        string[] list = data.Split('\n');
+                        foreach (string item in list)
+                        {
+                            if (string.IsNullOrEmpty(item))
+                            {
+                                continue;
+                            }
+
+                            string[] datas = item.Trim().Split(',');
+
+                            model = new ExamExamSectionItemModel();
+                            model.ExamSectionId = rpm.Entity.ExamSectionId;
+                            model.Address = datas[1];
+                            model.Subject = datas[0];
+                            model.StudentCount = Convert.ToInt32(datas[2]);
+                            model.TeacherCount = Convert.ToInt32(datas[3]);
+                            model.Memo = "";
+
+                            ExamExamSectionItemBll.Instance.Insert(model);
+
+                            count++;
                         }
 
-                        string[] datas = item.Trim().Split(',');
-
-                        model = new ExamExamSectionItemModel();
-                        model.ExamSectionId = rpm.Entity.ExamSectionId;
-                        model.Address = datas[1];
-                        model.Subject = datas[0];
-                        model.StudentCount = Convert.ToInt32(datas[2]);
-                        model.TeacherCount = Convert.ToInt32(datas[3]);
-                        model.Memo = "";
-
-                        ExamExamSectionItemBll.Instance.Insert(model);
-
-                        count++;
+                        context.Response.Write(count);
                     }
-
-                    context.Response.Write(count);
+                    else
+                    {
+                        context.Response.Write(0);
+                    }
                     break;
                 case "invigilator":
                     //全部监考员
-                    CommonStaffModel[] all = CommonStaffBll.Instance.GetTeachers();
+                    IEnumerable<ExamStaffInvigilateViewModel> all = ExamStaffInvigilateViewBll.Instance.GetList();
                     //本场考试已经安排的监考人员
                     ExamStaffInvigilateDetailViewModel[] arranged = ExamStaffInvigilateDetailViewBll.Instance.GetList(new ExamExamSectionModel() {KeyId = rpm.Entity.ExamSectionId });
                     //有意参加本场监考的人员
@@ -91,12 +99,13 @@ namespace BPM.Admin.Exam.ashx
 
                     var q = all.Select(m => new
                     {
-                        KeyId = m.KeyId,
+                        KeyId = m.StaffId,
                         Serial = m.Serial,
                         Name = m.Name,
-                        Arranged = arranged.Where(a => a.StaffId == m.KeyId).Count() > 0,
-                        Current = current.Where(c => c.ExamSectionItemId == rpm.KeyId && c.StaffId == m.KeyId).Count() > 0,
-                        Wanted = wanted.Where(w => w.StaffId == m.KeyId).Count() > 0
+                        Arranged = arranged.Where(a => a.StaffId == m.StaffId).Count() > 0,
+                        Current = current.Where(c => c.ExamSectionItemId == rpm.KeyId && c.StaffId == m.StaffId).Count() > 0,
+                        Wanted = wanted.Where(w => w.StaffId == m.StaffId).Count() > 0,
+                        AutoArranged = m.AutoArranged
                     });
                     
                     context.Response.Write(JsonConvert.SerializeObject(q.OrderBy(m=>m.Name).ToArray()));

@@ -68,27 +68,36 @@ $(function () {
 
                 //询问用户是否使用当前微信号绑定学号工号和姓名
                 weui.confirm('将当前微信号与 ' + p.Name + ' 绑定吗？', function () {
-                    $.post(handler, {
-                        'action': 'bind',
-                        'serial': p.Serial,
-                        'name': p.Name,
-                        'type': p.Type,
-                        'gender': p.Gender
-                    }, function (data) {
-                        if (data.Success) {
-                            weui.toast('绑定成功。', function () {
-                                document.location.href = './Register.aspx';
-                            }, {
-                                    duration: 3000,
-                                    className: "bears"
-                                });
-                        } else {
-                            weui.alert('用户绑定失败，请稍后重试。', {
-                                title: '提示'
-                            });
-                            return;
-                        }
-                    }, 'json');
+                    //weui中，confirm里面不太好弹出alert
+                    setTimeout(function () {
+                        $.post(handler, {
+                            'action': 'bind',
+                            'serial': p.Serial,
+                            'name': p.Name,
+                            'type': p.Type,
+                            'gender': p.Gender
+                        }, function (data) {
+                            if (data.Success) {
+                                weui.toast('绑定成功。', function () {
+                                    document.location.href = './Register.aspx';
+                                }, {
+                                        duration: 3000,
+                                        className: "bears"
+                                    });
+                            } else {
+                                if (data.Code == -1) {
+                                    weui.alert('学号或工号 ' + data.Data + ' 已经被绑定。请检查输入是否正确，或与管理员联系。', {
+                                        title: '提示'
+                                    });
+                                } else {
+                                    weui.alert('用户绑定失败，请稍后重试。', {
+                                        title: '提示'
+                                    });
+                                }
+                                return;
+                            }
+                        }, 'json');
+                    }, 1000);
                 }, {
                         title: '提示'
                     });
@@ -102,11 +111,17 @@ $(function () {
     });
 
     $('#unbindButton').click(function () {
-        //迅为用户是否解除绑定
+        weui.toast('该功能暂时停用。', {
+            duration: 3000,
+            className: "bears"
+        });
+        return;
+
+        //询问用户是否解除绑定
         weui.confirm('确定解除绑定吗？', function () {
             $.getJSON(handler, { 'action': 'unbind' }, function (data) {
                 if (data.Success) {
-                    weui.toast('绑定成功。', function () {
+                    weui.toast('解除除绑定成功。', function () {
                         document.location.href = './Register.aspx';
                     }, {
                             duration: 3000,

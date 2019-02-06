@@ -44,5 +44,20 @@ namespace Course.Common.Bll
         {
             return CommonStaffDal.Instance.GetWhere(new { Type = "teacher" }).ToArray();
         }
+
+        public CommonStaffModel Get(string serial, string name, string type)
+        {
+            return CommonStaffDal.Instance.GetWhere(new { Serial = serial, Name = name, Type = type }).FirstOrDefault();
+        }
+
+        public int Delete(int keyId)
+        {
+            return CommonStaffDal.Instance.Delete(keyId);
+        }
+
+        public CommonStaffModel GetBySerial(string serial)
+        {
+            return CommonStaffDal.Instance.GetWhere(new { Serial = serial }).FirstOrDefault();
+        }
     }
 }

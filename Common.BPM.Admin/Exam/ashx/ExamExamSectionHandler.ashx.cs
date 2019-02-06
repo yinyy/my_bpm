@@ -103,7 +103,7 @@ namespace BPM.Admin.Exam.ashx
                         ExamExamModel ee = ExamExamBll.Instance.Get(ees.ExamId);
 
                         //监考员id的集合
-                        var wanted = CommonStaffBll.Instance.GetTeachers().Select(m=>m.KeyId);
+                        var wanted = ExamStaffInvigilateViewBll.Instance.GetList().Where(m=>m.AutoArranged==1).Select(m=>m.StaffId);
                         //本场次已经排过的id集合
                         var arranged = ExamStaffInvigilateDetailViewBll.Instance.GetList(ees).Select(m => m.StaffId);
                         //本场次还可以排的id集合
