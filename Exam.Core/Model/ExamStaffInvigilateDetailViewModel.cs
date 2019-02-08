@@ -24,5 +24,6 @@ namespace Exam.Core.Model
         public int ExamSectionId { get; set; }
         public string ExamSectionTitle { get; set; }
         public int Confirmed { get; set; }
+        public string OpenId { get; set; }
     }
 }

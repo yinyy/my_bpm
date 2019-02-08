@@ -45,11 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bll\CommonMessageBll.cs" />
     <Compile Include="Bll\CommonSettingBll.cs" />
     <Compile Include="Bll\CommonStaffBll.cs" />
     <Compile Include="Bll\DepartmentBllExt.cs" />
+    <Compile Include="Dal\CommonMessageDal.cs" />
     <Compile Include="Dal\CommonSettingDal.cs" />
     <Compile Include="Dal\CommonStaffDal.cs" />
+    <Compile Include="Model\CommonMessageModel.cs" />
     <Compile Include="Model\CommonSettingModel.cs" />
     <Compile Include="Model\CommonStaffModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

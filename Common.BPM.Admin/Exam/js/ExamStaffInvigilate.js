@@ -57,8 +57,16 @@ var grid = {
                         if (v == 1) {
                             return '是';
                         } else {
-                            return '否';
+                            return '<span style="color:#ff0000">否</span>';
                         }
+                    }
+                }, {
+                    title: '是否已经完成绑定', field: 'OpenId', width: 150, align: 'center', formatter: function (v, r, i) {
+                        if (v.startsWith('open_')) {
+                            return '<span style="color:#ff0000;">否</span>';
+                        }
+
+                        return '是';
                     }
                 },
             ]],

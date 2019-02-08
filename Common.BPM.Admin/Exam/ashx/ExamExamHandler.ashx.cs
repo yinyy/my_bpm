@@ -34,7 +34,6 @@ namespace BPM.Admin.Exam.ashx
                 case "add":
                     model = new ExamExamModel();
                     model.InjectFrom(rpm.Entity);
-
                     context.Response.Write(ExamExamBll.Instance.Insert(model));
                     break;
                 case "edit":

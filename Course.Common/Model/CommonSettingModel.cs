@@ -9,11 +9,11 @@ namespace Course.Common.Model
 {
     [TableName("Common_Settings")]
     [Description("子系统设置表")]
-
     public class CommonSettingModel
     {
         public int KeyId { get; set; }
         public int DepartmentId { get; set; }
-        
+        public string Keyword { get; set; }
+        public string Value { get; set; }
     }
 }

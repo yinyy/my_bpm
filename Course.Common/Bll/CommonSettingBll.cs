@@ -20,16 +20,6 @@ namespace Course.Common.Bll
             return CommonSettingDal.Instance.GetAll().ToArray();
         }
 
-        /// <summary>
-        /// 根据单位编号获得单位的参数设置
-        /// </summary>
-        /// <param name="departmentId"></param>
-        /// <returns></returns>
-        public CommonSettingModel Get(int departmentId)
-        {
-            return CommonSettingDal.Instance.GetWhere(new { DepartmentId = departmentId }).FirstOrDefault();
-        }
-
         public int Insert(CommonSettingModel settings)
         {
             return CommonSettingDal.Instance.Insert(settings);
@@ -38,6 +28,11 @@ namespace Course.Common.Bll
         public int Update(CommonSettingModel settings)
         {
             return CommonSettingDal.Instance.Update(settings);
+        }
+
+        public CommonSettingModel Get(string keyword)
+        {
+            return CommonSettingDal.Instance.GetWhere(new { Keyword = keyword }).FirstOrDefault();
         }
     }
 }
