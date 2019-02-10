@@ -55,6 +55,12 @@ namespace BPM.Admin.Job
                                 continue;
                             }
 
+                            //只向绑定的用户发送信息
+                            if (staff.OpenId.StartsWith("open_"))
+                            {
+                                continue;
+                            }
+
                             #region 只给我一个人做测试
                             //if (staff.Serial != "2003030")
                             //{
