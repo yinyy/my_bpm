@@ -1,0 +1,2 @@
+﻿部署到服务器时：Install-Package Newtonsoft.Json -Version 5.0.8
+开发时：Install-Package Newtonsoft.Json -Version 12.0.1

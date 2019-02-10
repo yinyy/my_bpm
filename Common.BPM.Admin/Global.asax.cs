@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Routing;
-using System.Web.Security;
-using System.Web.SessionState;
-using BPM.Core.Bll;
-using BPM.Core.Model;
+﻿using BPM.Admin.Job;
 using Combres;
 using Course.Common.Bll;
-using Course.Common.Model;
-using Course.Core.Job;
 using Quartz;
 using Quartz.Impl;
 using Senparc.CO2NET;
@@ -18,6 +8,8 @@ using Senparc.CO2NET.RegisterServices;
 using Senparc.Weixin;
 using Senparc.Weixin.Entities;
 using Senparc.Weixin.MP.Containers;
+using System;
+using System.Web.Routing;
 
 namespace BPM.Admin
 {
@@ -44,10 +36,19 @@ namespace BPM.Admin
         private void CreateScheduleTask()
         {
             scheduler = StdSchedulerFactory.GetDefaultScheduler();
-            IJobDetail job1 = JobBuilder.Create<NextDayScheduleTask>().WithIdentity("NextDayJob", "CourseScheduler").Build();
-            ITrigger trigger1 = TriggerBuilder.Create().WithIdentity("NextDayTrigger", "CourseScheduler").StartNow()
-                .WithSchedule(CronScheduleBuilder.CronSchedule("0 30 11 * * ?")).Build();
-            scheduler.ScheduleJob(job1, trigger1);
+            //IJobDetail job1 = JobBuilder.Create<TeacherClassSchedulerJobTask>().WithIdentity("TomorrowTeacherScheduleJob", "CourseScheduler").Build();
+            //job1.JobDataMap.Put("type", 1);
+            //ITrigger trigger1 = TriggerBuilder.Create().WithIdentity("TomorrowTeacherScheduleJobTrigger", "CourseScheduler").StartNow()
+            //    .WithSchedule(CronScheduleBuilder.CronSchedule("00 30 20 * * ?")).Build();
+            //scheduler.ScheduleJob(job1, trigger1);
+
+            IJobDetail job2 = JobBuilder.Create<TeacherClassSchedulerJobTask>().WithIdentity("TodayTeacherScheduleJob", "CourseScheduler").Build();
+            job2.JobDataMap.Put("type", 2);
+            ITrigger trigger2 = TriggerBuilder.Create().WithIdentity("TodayTeacherScheduleJob", "CourseScheduler").StartNow()
+                .WithSchedule(CronScheduleBuilder.CronSchedule("0 0 7 * * ?")).Build();
+            scheduler.ScheduleJob(job2, trigger2);
+
+            scheduler.Start();
         }
 
         private void RegisterSenparc()

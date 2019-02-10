@@ -3733,6 +3733,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Job\TeacherClassSchedulerJobTask.cs" />
     <Compile Include="Platform\ashx\PlatformSettingHandler.ashx.cs">
       <DependentUpon>PlatformSettingHandler.ashx</DependentUpon>
     </Compile>
@@ -3995,6 +3996,10 @@
     <ProjectReference Include="..\Course.Core\Course.Core.csproj">
       <Project>{389b8503-a8f1-43f2-8a07-9e44a2330939}</Project>
       <Name>Course.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Course.Extension\Course.Extension.csproj">
+      <Project>{f12f559f-7ac1-4830-a2c6-f5587085ceb5}</Project>
+      <Name>Course.Extension</Name>
     </ProjectReference>
     <ProjectReference Include="..\Exam.Core\Exam.Core.csproj">
       <Project>{98890423-0937-41ef-9cf6-afa067ffcf83}</Project>

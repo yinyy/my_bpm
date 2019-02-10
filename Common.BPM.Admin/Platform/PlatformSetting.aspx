@@ -4,7 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div id="sysconfig" style="margin:10px;">
 
-        <h1>消息模板</h1>
+        <h1>监考消息模板</h1>
         <div class="c">
             <ul>
                 <li>
@@ -16,6 +16,22 @@
                 <li>
                     <div>监考温馨提示语：</div>
                     <textarea id="txt_InvigilateReminder" name="InvigilateReminder" cols="55" rows="6"></textarea>
+                </li>
+            </ul>
+        </div>
+
+        <h1>上课提醒消息模板</h1>
+        <div class="c">
+            <ul>
+                <li>
+                    <div>上课提醒消息模板ID：</div>
+                    <input type="text" id="txt_SchedulerTemplateID" name="SchedulerTemplateID" style="width: 405px" />
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div>上课提醒温馨提示语：</div>
+                    <textarea id="txt_SchedulerReminder" name="SchedulerReminder" cols="55" rows="6"></textarea>
                 </li>
             </ul>
         </div>
