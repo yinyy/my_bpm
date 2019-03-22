@@ -62,7 +62,7 @@
         var data = 'TK';
         data += String.fromCharCode((rid >> 8) & 0xFF) + String.fromCharCode(rid & 0xFF);
         data += plate;
-        data += String.fromCharCode((volumn >> 8) & 0xFF) + String.fromCharCode(volumn & 0xFF);;
+        data += String.fromCharCode((volumn >> 8) & 0xFF) + String.fromCharCode(volumn & 0xFF);
 
         return data;
     }
