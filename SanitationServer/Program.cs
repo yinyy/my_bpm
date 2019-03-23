@@ -11,181 +11,196 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace SanitationServer
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// 应用程序的主入口点。
+        /// </summary>
+        [STAThread]
+        static void Main()
         {
-            Console.WriteLine("启动服务器...");
-
-            var app = new MyAppServer();
-            if (!app.Setup(3001))
-            {
-                Console.WriteLine("服务器端口被占用。");
-                return;
-            }
-
-            Console.WriteLine("服务器创建成功。");
-
-            if (!app.Start())
-            {
-                Console.WriteLine("服务器启动失败。");
-                return;
-            }
-
-            Console.WriteLine("服务器启动成功。");
-            Console.WriteLine("停止服务请按‘Q’键。");
-
-            app.NewSessionConnected += App_NewSessionConnected;
-            app.NewRequestReceived += App_NewRequestReceived;
-
-            while (Console.ReadKey().KeyChar != 'Q')
-            {
-                Console.WriteLine("停止服务请按‘Q’键。");
-            }
-
-            app.Stop();
-            Console.WriteLine("服务器已经停止。");
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
         }
 
-        private static void App_NewRequestReceived(MySession session, UploadDataRequestInfo requestInfo)
-        {
-            //SanitationDispatchModel model = new SanitationDispatchModel();
-            //model.DriverId = requestInfo.Person;
-            //model.TrunkId = requestInfo.Trunk;
-            //model.Volumn = requestInfo.Volumn/10.0f;
-            //model.Time = requestInfo.Created;
-            //model.Kind = 1;
-            //model.Address = DicDal.Instance.GetWhere(new { Code = requestInfo.Address }).FirstOrDefault().Title;
-            //model.Potency = requestInfo.Potency;
-            //model.Status = 1;
-            //model.Memo = "";
 
-            //SanitationDispatchBll.Instance.Add(model);
-        }
 
-        private static void App_NewSessionConnected(MySession session)
-        {
-            Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}，与客户端建立连接。", DateTime.Now);
-        }
+
+        //static void Main(string[] args)
+        //{
+        //    Console.WriteLine("启动服务器...");
+
+        //    var app = new MyAppServer();
+        //    if (!app.Setup(3001))
+        //    {
+        //        Console.WriteLine("服务器端口被占用。");
+        //        return;
+        //    }
+
+        //    Console.WriteLine("服务器创建成功。");
+
+        //    if (!app.Start())
+        //    {
+        //        Console.WriteLine("服务器启动失败。");
+        //        return;
+        //    }
+
+        //    Console.WriteLine("服务器启动成功。");
+        //    Console.WriteLine("停止服务请按‘Q’键。");
+
+        //    app.NewSessionConnected += App_NewSessionConnected;
+        //    app.NewRequestReceived += App_NewRequestReceived;
+
+        //    while (Console.ReadKey().KeyChar != 'Q')
+        //    {
+        //        Console.WriteLine("停止服务请按‘Q’键。");
+        //    }
+
+        //    app.Stop();
+        //    Console.WriteLine("服务器已经停止。");
+        //}
+
+        //private static void App_NewRequestReceived(MySession session, UploadDataRequestInfo requestInfo)
+        //{
+        //    //SanitationDispatchModel model = new SanitationDispatchModel();
+        //    //model.DriverId = requestInfo.Person;
+        //    //model.TrunkId = requestInfo.Trunk;
+        //    //model.Volumn = requestInfo.Volumn/10.0f;
+        //    //model.Time = requestInfo.Created;
+        //    //model.Kind = 1;
+        //    //model.Address = DicDal.Instance.GetWhere(new { Code = requestInfo.Address }).FirstOrDefault().Title;
+        //    //model.Potency = requestInfo.Potency;
+        //    //model.Status = 1;
+        //    //model.Memo = "";
+
+        //    //SanitationDispatchBll.Instance.Add(model);
+        //}
+
+        //private static void App_NewSessionConnected(MySession session)
+        //{
+        //    Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}，与客户端建立连接。", DateTime.Now);
+        //}
     }
 
-    class MySession: AppSession<MySession, UploadDataRequestInfo>
-    {
-        private Timer timer;
-        private byte[] command = new byte[] { 0x00, 0x01, 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x03, 0x00, 0x0a };
+    //class MySession: AppSession<MySession, UploadDataRequestInfo>
+    //{
+    //    private Timer timer;
+    //    private byte[] command = new byte[] { 0x00, 0x01, 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x03, 0x00, 0x0a };
 
-        protected override void OnSessionStarted()
-        {
-            base.OnSessionStarted();
+    //    protected override void OnSessionStarted()
+    //    {
+    //        base.OnSessionStarted();
 
-            timer = new Timer(1000);
-            timer.Elapsed += Timer_Elapsed;
-            timer.Start();
+    //        timer = new Timer(1000);
+    //        timer.Elapsed += Timer_Elapsed;
+    //        timer.Start();
 
-        }
+    //    }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            
-            Send(command, 0, command.Length);
-        }
+    //    private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+    //    {
 
-        protected override void OnSessionClosed(CloseReason reason)
-        {
-            base.OnSessionClosed(reason);
-            timer.Stop();
-            timer.Elapsed -= Timer_Elapsed;
-        }
-    }
+    //        Send(command, 0, command.Length);
+    //    }
 
-    class MyAppServer: AppServer<MySession, UploadDataRequestInfo>
-    {
-        public MyAppServer() : base(new DefaultReceiveFilterFactory<FixedLengthDataReceiverFilter, UploadDataRequestInfo>())
-        {
-        }
-    }
+    //    protected override void OnSessionClosed(CloseReason reason)
+    //    {
+    //        base.OnSessionClosed(reason);
+    //        timer.Stop();
+    //        timer.Elapsed -= Timer_Elapsed;
+    //    }
+    //}
 
-    class BeginEndMarkDataReceiverFilter : BeginEndMarkReceiveFilter<UploadDataRequestInfo>
-    {
-        private readonly static byte[] BeginMark = new byte[]{ (byte)'A', (byte)'A' };
-        private readonly static byte[] EndMark = new byte[] { (byte)'B', (byte)'B' };
+    //class MyAppServer: AppServer<MySession, UploadDataRequestInfo>
+    //{
+    //    public MyAppServer() : base(new DefaultReceiveFilterFactory<FixedLengthDataReceiverFilter, UploadDataRequestInfo>())
+    //    {
+    //    }
+    //}
 
-        public BeginEndMarkDataReceiverFilter() : base(BeginMark, EndMark)
-        {
+    //class BeginEndMarkDataReceiverFilter : BeginEndMarkReceiveFilter<UploadDataRequestInfo>
+    //{
+    //    private readonly static byte[] BeginMark = new byte[]{ (byte)'A', (byte)'A' };
+    //    private readonly static byte[] EndMark = new byte[] { (byte)'B', (byte)'B' };
 
-        }
+    //    public BeginEndMarkDataReceiverFilter() : base(BeginMark, EndMark)
+    //    {
 
-        protected override UploadDataRequestInfo ProcessMatchedRequest(byte[] readBuffer, int offset, int length)
-        {
-            string data = Encoding.UTF8.GetString(readBuffer, offset, length);
-            data = data.Substring(2);
-            data = data.Substring(0, data.Length - 2);
+    //    }
 
-            Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}，获取请求数据：\"{1}\"。",DateTime.Now, data);
+    //    protected override UploadDataRequestInfo ProcessMatchedRequest(byte[] readBuffer, int offset, int length)
+    //    {
+    //        string data = Encoding.UTF8.GetString(readBuffer, offset, length);
+    //        data = data.Substring(2);
+    //        data = data.Substring(0, data.Length - 2);
 
-            string[] datas = data.Split(',');
+    //        Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}，获取请求数据：\"{1}\"。",DateTime.Now, data);
 
-            UploadDataRequestInfo requestInfo = new UploadDataRequestInfo();
-            requestInfo.Address = datas[0];
-            requestInfo.Created = DateTime.ParseExact(datas[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
-            requestInfo.Person = Convert.ToInt32(datas[2]);
-            requestInfo.Trunk = Convert.ToInt32(datas[3]);
-            requestInfo.Volumn = Convert.ToInt32(datas[4]);
-            requestInfo.Potency = Convert.ToInt32(datas[5]);
+    //        string[] datas = data.Split(',');
 
-            return requestInfo;
-        }
-    }
+    //        UploadDataRequestInfo requestInfo = new UploadDataRequestInfo();
+    //        requestInfo.Address = datas[0];
+    //        requestInfo.Created = DateTime.ParseExact(datas[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
+    //        requestInfo.Person = Convert.ToInt32(datas[2]);
+    //        requestInfo.Trunk = Convert.ToInt32(datas[3]);
+    //        requestInfo.Volumn = Convert.ToInt32(datas[4]);
+    //        requestInfo.Potency = Convert.ToInt32(datas[5]);
 
-    class FixedLengthDataReceiverFilter : FixedSizeReceiveFilter<UploadDataRequestInfo>
-    {
-        public FixedLengthDataReceiverFilter() : base(29)
-        {
+    //        return requestInfo;
+    //    }
+    //}
 
-        }
+    //class FixedLengthDataReceiverFilter : FixedSizeReceiveFilter<UploadDataRequestInfo>
+    //{
+    //    public FixedLengthDataReceiverFilter() : base(29)
+    //    {
 
-        protected override UploadDataRequestInfo ProcessMatchedRequest(byte[] buffer, int offset, int length, bool toBeCopied)
-        {
-            for(int i = offset; i < offset + length; i++)
-            {
-                Console.Write("{0:x2} ", buffer[i]);
-            }
+    //    }
 
-
+    //    protected override UploadDataRequestInfo ProcessMatchedRequest(byte[] buffer, int offset, int length, bool toBeCopied)
+    //    {
+    //        for(int i = offset; i < offset + length; i++)
+    //        {
+    //            Console.Write("{0:x2} ", buffer[i]);
+    //        }
 
 
-            string data = ""; Encoding.UTF8.GetString(buffer, offset, length);
-            //data = data.Substring(2);
-            //data = data.Substring(0, data.Length - 2);
 
-            Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}，获取请求数据：\"{1}\"。", DateTime.Now, data);
 
-            string[] datas = data.Split(',');
+    //        string data = ""; Encoding.UTF8.GetString(buffer, offset, length);
+    //        //data = data.Substring(2);
+    //        //data = data.Substring(0, data.Length - 2);
 
-            UploadDataRequestInfo requestInfo = new UploadDataRequestInfo();
-            //requestInfo.Address = datas[0];
-            //requestInfo.Created = DateTime.ParseExact(datas[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
-            //requestInfo.Person = Convert.ToInt32(datas[2]);
-            //requestInfo.Trunk = Convert.ToInt32(datas[3]);
-            //requestInfo.Volumn = Convert.ToInt32(datas[4]);
-            //requestInfo.Potency = Convert.ToInt32(datas[5]);
+    //        Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}，获取请求数据：\"{1}\"。", DateTime.Now, data);
 
-            return requestInfo;
-        }
-    }
+    //        string[] datas = data.Split(',');
 
-    class UploadDataRequestInfo : IRequestInfo
-    {
-        public string Key { get; set; }
+    //        UploadDataRequestInfo requestInfo = new UploadDataRequestInfo();
+    //        //requestInfo.Address = datas[0];
+    //        //requestInfo.Created = DateTime.ParseExact(datas[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
+    //        //requestInfo.Person = Convert.ToInt32(datas[2]);
+    //        //requestInfo.Trunk = Convert.ToInt32(datas[3]);
+    //        //requestInfo.Volumn = Convert.ToInt32(datas[4]);
+    //        //requestInfo.Potency = Convert.ToInt32(datas[5]);
 
-        public DateTime Created { get; set; }
-        public int Person { get; set; }
-        public int Trunk { get; set; }
-        public int Volumn { get; set; }
-        public string Address { get; set; }
-        public int Potency { get; set; }
-    }
+    //        return requestInfo;
+    //    }
+    //}
+
+    //class UploadDataRequestInfo : IRequestInfo
+    //{
+    //    public string Key { get; set; }
+
+    //    public DateTime Created { get; set; }
+    //    public int Person { get; set; }
+    //    public int Trunk { get; set; }
+    //    public int Volumn { get; set; }
+    //    public string Address { get; set; }
+    //    public int Potency { get; set; }
+    //}
 }

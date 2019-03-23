@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{400174
 		文档\使用说明.docx = 文档\使用说明.docx
 		文档\电路板外壳-15.6.12.rar = 文档\电路板外壳-15.6.12.rar
 		文档\绘图1.vsdx = 文档\绘图1.vsdx
+		文档\虚拟com口 读出数据.docx = 文档\虚拟com口 读出数据.docx
 		文档\串口屏幕\设置.docx = 文档\串口屏幕\设置.docx
 		文档\通讯协议.docx = 文档\通讯协议.docx
 		文档\需求分析.docx = 文档\需求分析.docx
@@ -33,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{400174
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanitationServer", "SanitationServer\SanitationServer.csproj", "{699E4AEB-69FF-485C-8C7D-4BFC9A1418E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanitationServer2", "SanitationServer2\SanitationServer2.csproj", "{F1E405A6-A06C-450B-A37B-F40C113D9A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -362,6 +365,46 @@ Global
 		{699E4AEB-69FF-485C-8C7D-4BFC9A1418E6}.SingleImage|Win32.Build.0 = Release|Any CPU
 		{699E4AEB-69FF-485C-8C7D-4BFC9A1418E6}.SingleImage|x64.ActiveCfg = Release|Any CPU
 		{699E4AEB-69FF-485C-8C7D-4BFC9A1418E6}.SingleImage|x64.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|Win32.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|Win32.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|x64.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.CD_ROM|x64.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|Win32.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Debug|x64.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|Win32.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|Win32.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.DVD-5|x64.Build.0 = Debug|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|Win32.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|x64.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.Release|x64.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|Win32.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|Win32.Build.0 = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|x64.ActiveCfg = Release|Any CPU
+		{F1E405A6-A06C-450B-A37B-F40C113D9A90}.SingleImage|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
