@@ -72,20 +72,20 @@ namespace SanitationServer2
                             (((buffer[9] + 256) % 256) << 8) + ((buffer[10] + 256) % 256),
                             0);
 
-                        string trunk = string.Format("{0}{1}{2}{3}{4}{5}",
+                        string plate = string.Format("{0}{1}{2}{3}{4}{5}",
                             (char)buffer[11], (char)buffer[12], (char)buffer[13], (char)buffer[14], (char)buffer[15], (char)buffer[16]);
 
                         float water1 = ((((buffer[17] + 256) % 256) << 8) + ((buffer[18] + 256) % 256)) / 100f;
                         float water2 = ((((buffer[19] + 256) % 256) << 8) + ((buffer[20] + 256) % 256)) / 10f;
 
-                        string driver = string.Format("{0}{1}{2}{3}",
+                        string code = string.Format("{0}{1}{2}{3}",
                             (char)buffer[21], (char)buffer[22], (char)buffer[23], (char)buffer[24]);
 
 
                         ListViewItem lvi = new ListViewItem();
                         lvi.Text = time.ToString("yyyy/MM/dd HH:mm:ss");
-                        lvi.SubItems.Add(driver);
-                        lvi.SubItems.Add(trunk);
+                        lvi.SubItems.Add(code);
+                        lvi.SubItems.Add(plate);
                         lvi.SubItems.Add(water1 + "");
                         lvi.SubItems.Add(water2 + "");
 
@@ -94,15 +94,43 @@ namespace SanitationServer2
                             recordCount += 1;
                             SetRecordCount();
 
-                            string current = string.Format("{0:yyyyMMddHHmmss}|{1}|{2}|{3}|{4}", time, driver, trunk, water1, water2);
+                            string current = string.Format("{0:yyyyMMddHHmmss}|{1}|{2}|{3}|{4}", time, code, plate, water1, water2);
                             if (cbRepeat.Checked || lastRecord != current)
                             {
+                                if (lastRecord != current)
+                                {
+                                    #region 数据保存到数据库
+                                    try
+                                    {
+                                        DataClasses1DataContext db = new DataClasses1DataContext();
+                                        var driver = (from d in db.Sanitation_Driver where d.Code == code select new { Id = d.KeyId }).FirstOrDefault();
+                                        var trunk = (from t in db.Sanitation_Trunk where t.Plate == plate select new { Id = t.KeyId }).FirstOrDefault();
+
+                                        if (driver != null && trunk != null)
+                                        {
+                                            Sanitation_Dispatch dispatch = new Sanitation_Dispatch();
+                                            dispatch.Time = DateTime.Now;
+                                            dispatch.DriverId = driver.Id;
+                                            dispatch.TrunkId = trunk.Id;
+                                            dispatch.Address = tbAddress.Text;
+                                            dispatch.Kind = 1;
+                                            dispatch.Potency = (int)(water1 * 100);
+                                            dispatch.Volumn = (int)(water2 * 10);
+                                            dispatch.Status = 1;
+                                            dispatch.Memo = "";
+
+                                            db.Sanitation_Dispatch.InsertOnSubmit(dispatch);
+                                            db.SubmitChanges();
+                                        }
+                                    }catch(Exception ee)
+                                    {
+                                        Console.WriteLine(ee.Message);
+                                    }
+                                    #endregion
+                                }
+
                                 lastRecord = current;
                                 AddItemToListView(lvi);
-
-                                #region 数据保存到数据库
-
-                                #endregion
                             }
                         }                        
                     }

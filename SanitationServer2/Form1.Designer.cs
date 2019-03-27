@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbSerial = new System.Windows.Forms.TextBox();
+            this.tbAddress = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.tbBaud = new System.Windows.Forms.TextBox();
@@ -58,7 +58,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.tbSerial);
+            this.groupBox1.Controls.Add(this.tbAddress);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(228, 107);
@@ -73,15 +73,15 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 12);
             this.label1.TabIndex = 3;
-            this.label1.Text = "设备编号：";
+            this.label1.Text = "设备地址：";
             // 
-            // tbSerial
+            // tbAddress
             // 
-            this.tbSerial.Location = new System.Drawing.Point(77, 20);
-            this.tbSerial.Name = "tbSerial";
-            this.tbSerial.Size = new System.Drawing.Size(145, 21);
-            this.tbSerial.TabIndex = 2;
-            this.tbSerial.Text = "A001";
+            this.tbAddress.Location = new System.Drawing.Point(77, 20);
+            this.tbAddress.Name = "tbAddress";
+            this.tbAddress.Size = new System.Drawing.Size(145, 21);
+            this.tbAddress.TabIndex = 2;
+            this.tbAddress.Text = "南二路加注站";
             // 
             // groupBox2
             // 
@@ -149,6 +149,7 @@
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader5});
+            this.lvData.FullRowSelect = true;
             this.lvData.GridLines = true;
             this.lvData.Location = new System.Drawing.Point(12, 125);
             this.lvData.Name = "lvData";
@@ -258,7 +259,7 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbSerial;
+        private System.Windows.Forms.TextBox tbAddress;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;

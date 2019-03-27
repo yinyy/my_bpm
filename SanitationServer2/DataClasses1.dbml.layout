@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.875, 8.5" name="DataClasses1">
+  <DataContextMoniker Name="/DataClasses1DataContext" />
+  <nestedChildShapes>
+    <classShape Id="aaf739ca-695a-42a2-8cbf-7a1e36cbf025" absoluteBounds="4.5, 2.625, 2, 3.3852461751302081">
+      <DataClassMoniker Name="/DataClasses1DataContext/Sanitation_Dispatch" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1d374394-18fb-4986-827d-bbd8dfe69323" absoluteBounds="4.515, 3.085, 1.9700000000000002, 2.825246175130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0bb99318-ab8b-4721-9675-04a25d2c94fa" absoluteBounds="9.75, 3, 2, 1.9068933105468751">
+      <DataClassMoniker Name="/DataClasses1DataContext/Sanitation_Driver" />
+      <nestedChildShapes>
+        <elementListCompartment Id="03eb2a57-7357-4eef-9e2f-5214a69836f5" absoluteBounds="9.765, 3.46, 1.9700000000000002, 1.346893310546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="81802b40-d3c0-4562-a5bb-a83272533f7b" absoluteBounds="12.625, 3, 2, 2.4612756347656251">
+      <DataClassMoniker Name="/DataClasses1DataContext/Sanitation_Trunk" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fa52b9fe-5474-4f3a-9af1-a90e3935fb34" absoluteBounds="12.64, 3.46, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
