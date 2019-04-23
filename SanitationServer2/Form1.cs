@@ -115,8 +115,10 @@ namespace SanitationServer2
                                             dispatch.Address = tbAddress.Text;
                                             dispatch.Kind = 1;
                                             dispatch.Potency = (int)(water1 * 100);
-                                            dispatch.Volumn = (int)(water2 * 10);
-                                            dispatch.Status = 1;
+                                            dispatch.Volumn = Convert.ToDecimal(water2);
+                                            dispatch.Status = 0;
+                                            dispatch.Region = 0;
+                                            dispatch.Working = 0;
                                             dispatch.Memo = "";
 
                                             db.Sanitation_Dispatch.InsertOnSubmit(dispatch);
