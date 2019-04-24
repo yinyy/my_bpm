@@ -50,6 +50,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tssbCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.cbRepeat = new System.Windows.Forms.CheckBox();
+            this.rtbError = new System.Windows.Forms.RichTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -153,7 +154,7 @@
             this.lvData.GridLines = true;
             this.lvData.Location = new System.Drawing.Point(12, 125);
             this.lvData.Name = "lvData";
-            this.lvData.Size = new System.Drawing.Size(455, 432);
+            this.lvData.Size = new System.Drawing.Size(455, 292);
             this.lvData.TabIndex = 4;
             this.lvData.UseCompatibleStateImageBehavior = false;
             this.lvData.View = System.Windows.Forms.View.Details;
@@ -230,11 +231,20 @@
             this.cbRepeat.Text = "接收重复数据";
             this.cbRepeat.UseVisualStyleBackColor = true;
             // 
+            // rtbError
+            // 
+            this.rtbError.Location = new System.Drawing.Point(12, 423);
+            this.rtbError.Name = "rtbError";
+            this.rtbError.Size = new System.Drawing.Size(455, 134);
+            this.rtbError.TabIndex = 8;
+            this.rtbError.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 611);
+            this.Controls.Add(this.rtbError);
             this.Controls.Add(this.cbRepeat);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnClear);
@@ -278,6 +288,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel tssbCount;
         private System.Windows.Forms.CheckBox cbRepeat;
+        private System.Windows.Forms.RichTextBox rtbError;
     }
 }
 

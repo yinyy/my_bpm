@@ -55,31 +55,31 @@ namespace SanitationServer2
 
         private void SerialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            byte[] buffer = new byte[serialPort1.BytesToRead];
-            serialPort1.Read(buffer, 0, buffer.Length);
-
-            if ((buffer[0] == 0xaa) && (buffer[buffer.Length - 1] == 0xbb))
+            try
             {
-                #region 把分析数据的任务放到线程池去做
-                ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
+                byte[] buffer = new byte[serialPort1.BytesToRead];
+                serialPort1.Read(buffer, 0, buffer.Length);
+
+                if ((buffer[0] == 0xaa) && (buffer[buffer.Length - 1] == 0xbb))
                 {
-                    try
+                    #region 把分析数据的任务放到线程池去做
+                    ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
                     {
                         DateTime time = new DateTime(2000 + ((((buffer[1] + 256) % 256) << 8) + ((buffer[2] + 256) % 256)),
-                            (((buffer[3] + 256) % 256) << 8) + ((buffer[4] + 256) % 256),
-                            (((buffer[5] + 256) % 256) << 8) + ((buffer[6] + 256) % 256),
-                            (((buffer[7] + 256) % 256) << 8) + ((buffer[8] + 256) % 256),
-                            (((buffer[9] + 256) % 256) << 8) + ((buffer[10] + 256) % 256),
-                            0);
+                        (((buffer[3] + 256) % 256) << 8) + ((buffer[4] + 256) % 256),
+                        (((buffer[5] + 256) % 256) << 8) + ((buffer[6] + 256) % 256),
+                        (((buffer[7] + 256) % 256) << 8) + ((buffer[8] + 256) % 256),
+                        (((buffer[9] + 256) % 256) << 8) + ((buffer[10] + 256) % 256),
+                        0);
 
                         string plate = string.Format("{0}{1}{2}{3}{4}{5}",
-                            (char)buffer[11], (char)buffer[12], (char)buffer[13], (char)buffer[14], (char)buffer[15], (char)buffer[16]);
+                        (char)buffer[11], (char)buffer[12], (char)buffer[13], (char)buffer[14], (char)buffer[15], (char)buffer[16]);
 
                         float water1 = ((((buffer[17] + 256) % 256) << 8) + ((buffer[18] + 256) % 256)) / 100f;
                         float water2 = ((((buffer[19] + 256) % 256) << 8) + ((buffer[20] + 256) % 256)) / 10f;
 
                         string code = string.Format("{0}{1}{2}{3}",
-                            (char)buffer[21], (char)buffer[22], (char)buffer[23], (char)buffer[24]);
+                        (char)buffer[21], (char)buffer[22], (char)buffer[23], (char)buffer[24]);
 
 
                         ListViewItem lvi = new ListViewItem();
@@ -99,8 +99,8 @@ namespace SanitationServer2
                             {
                                 if (lastRecord != current)
                                 {
-                                    #region 数据保存到数据库
-                                    try
+                                #region 数据保存到数据库
+                                try
                                     {
                                         DataClasses1DataContext db = new DataClasses1DataContext();
                                         var driver = (from d in db.Sanitation_Driver where d.Code == code select new { Id = d.KeyId }).FirstOrDefault();
@@ -113,7 +113,7 @@ namespace SanitationServer2
                                             dispatch.DriverId = driver.Id;
                                             dispatch.TrunkId = trunk.Id;
                                             dispatch.Address = tbAddress.Text;
-                                            dispatch.Kind = 1;
+                                            dispatch.Kind = 0;
                                             dispatch.Potency = (int)(water1 * 100);
                                             dispatch.Volumn = Convert.ToDecimal(water2);
                                             dispatch.Status = 0;
@@ -124,24 +124,25 @@ namespace SanitationServer2
                                             db.Sanitation_Dispatch.InsertOnSubmit(dispatch);
                                             db.SubmitChanges();
                                         }
-                                    }catch(Exception ee)
+                                    }
+                                    catch (Exception ee)
                                     {
                                         Console.WriteLine(ee.Message);
                                     }
-                                    #endregion
-                                }
+                                #endregion
+                            }
 
                                 lastRecord = current;
                                 AddItemToListView(lvi);
                             }
-                        }                        
-                    }
-                    catch
-                    {
-
-                    }
-                }));
-                #endregion
+                        }
+                    }));
+                    #endregion
+                }
+            }
+            catch(Exception exp)
+            {
+                rtbError.AppendText(string.Format("【{0:yyyy/MM/dd HH:mm:ss}】{1}\n", DateTime.Now, exp.Message));
             }
         }
 
