@@ -32,6 +32,7 @@ namespace Washer.Model
 
         [DbField(false)]
         public string Vcode { get; set; }
+
         public string Setting { get; set; }
     }
 }

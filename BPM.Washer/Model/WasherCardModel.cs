@@ -30,5 +30,11 @@ namespace Washer.Model
         public int Coins { get; set; }
         public string Memo { get; set; }
         public DateTime? Locked { get; set; }
+
+
+        [DbField(false)]
+        public string EmpName { get; set; }
+        [DbField(false)]
+        public string Phone { get; set; }
     }
 }

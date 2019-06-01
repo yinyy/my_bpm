@@ -28,7 +28,7 @@ namespace BPM.Admin
             var isWeixinDebug = true;//设置微信 Debug 状态
             var senparcWeixinSetting = SenparcWeixinSetting.BuildFromWebConfig(isWeixinDebug);
             register.UseSenparcWeixin(senparcWeixinSetting, senparcSetting);////微信全局注册，必须！
-
+           
             //注册所有的公众号的appid和secret
             foreach (Department d in DepartmentBll.Instance.GetAll())
             {

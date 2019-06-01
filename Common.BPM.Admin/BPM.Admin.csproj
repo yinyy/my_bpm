@@ -148,7 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationError.aspx" />
-    <Content Include="App_Data\combres.xml" />
+    <Content Include="App_Data\combres.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
     <Content Include="ashx\ExportExcel.aspx" />
@@ -2932,6 +2934,7 @@
     <Content Include="Shopping\ShoppingCommodity.aspx" />
     <Content Include="Test.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
+    <Content Include="Washer\html\WasherCardEmp.html" />
     <Content Include="Washer\html\WasherExportTime.html" />
     <Content Include="Washer\html\WasherCardBatch.html" />
     <Content Include="Washer\html\WasherOutsider.html" />

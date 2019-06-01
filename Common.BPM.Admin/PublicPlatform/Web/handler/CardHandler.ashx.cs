@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BPM.Common;
+using BPM.Core.Bll;
+using BPM.Core.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Web;
+using System.Web.SessionState;
 using Washer.Bll;
 using Washer.Model;
-using BPM.Common;
-using Newtonsoft.Json.Linq;
-using BPM.Core.Model;
-using BPM.Core.Bll;
-using Newtonsoft.Json;
-using System.Web.SessionState;
-using Washer.Extension;
-using System.Net.WebSockets;
 using Washer.Toolkit;
-using System.Threading;
 
 namespace BPM.Admin.PublicPlatform.Web.handler
 {

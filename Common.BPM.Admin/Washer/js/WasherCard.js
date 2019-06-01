@@ -17,6 +17,7 @@ $(function () {
     $('#a_delete').click(CRUD.del);
     $('#a_batch_create').click(CRUD.batch);
     $('#a_export').click(CRUD.exp);
+    $('#a_emp_card').click(CRUD.emp);
 
     //高级查询
     $('#a_search').click(function () {
@@ -369,5 +370,37 @@ var CRUD = {
         }
 
         window.open(actionURL + '?' + query);
-    }
+    },
+    emp: function () {
+        var hDialog = top.jQuery.hDialog({
+            title: '添加员工洗车卡', width: 450, height: 360, href: '/Washer/html/WasherCardEmp.html', iconCls: 'icon-add', submit: function () {
+                if (top.$('#uiform').form('validate')) {
+                    var query = createParam('empCard', '0');
+                    jQuery.ajaxjson(actionURL, query, function (d) {
+                        if (parseInt(d) > 0) {
+                            msg.ok('添加成功！');
+                            //hDialog.dialog('close');
+                            grid.reload();
+                        } else if (parseInt(d) == -1) {
+                            msg.warning('卡号已经存在！');
+                        } else {
+                            MessageOrRedirect(d);
+                        }
+                    });
+                }
+                return false;
+            }, onLoad: function () {
+                top.$('#txt_ValidateFrom').datebox({
+                    required: true,
+                    editable: false
+                });
+                top.$('#txt_ValidateEnd').datebox({
+                    required: true,
+                    editable: false
+                });
+            }
+        });
+
+        top.$('#uiform').validate();
+    },
 };

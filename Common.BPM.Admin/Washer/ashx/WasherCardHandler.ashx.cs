@@ -150,6 +150,42 @@ namespace BPM.Admin.Washer.ashx
                         GridViewExportUtil.Export(DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".xls", WasherCardBll.Instance.Export(filter, rpm.Sort, rpm.Order));
                     }
                     break;
+                case "empCard":
+                    WasherConsumeModel washerConsume = new WasherConsumeModel();
+                    washerConsume.DepartmentId = departmentId;
+                    washerConsume.Gender = "未知";
+                    washerConsume.Memo = "";
+                    washerConsume.Name = rpm.Entity.EmpName;
+                    washerConsume.Password = "000000";
+                    washerConsume.Points = 0;
+                    washerConsume.Telphone = rpm.Entity.Phone;
+
+                    Department department = DepartmentBll.Instance.Get(departmentId);
+                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(department.Setting);
+                    washerConsume.Setting = JSONhelper.ToJson(new { MaxPayCoins = setting.PayWashCar.MaxPayCoins });
+
+                    if ((washerConsume.KeyId = WasherConsumeBll.Instance.Add(washerConsume)) <= 0)
+                    {
+                        context.Response.Write("-1");
+                        break;
+                    }
+                    
+                    model = rpm.Entity;
+                    WasherCardModel c3 = WasherCardBll.Instance.Get(departmentId, model.CardNo);
+                    if (c3 == null)
+                    {
+                        model.DepartmentId = departmentId;
+                        model.BinderId = washerConsume.KeyId;
+                        model.Binded = DateTime.Now;
+                        model.Memo = "";
+
+                        context.Response.Write(WasherCardBll.Instance.Add(model));
+                    }
+                    else
+                    {
+                        context.Response.Write("-1");
+                    }
+                    break;
                 default:
                     if (user.IsAdmin)
                     {
