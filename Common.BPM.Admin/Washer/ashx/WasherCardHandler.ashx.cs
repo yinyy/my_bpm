@@ -151,40 +151,100 @@ namespace BPM.Admin.Washer.ashx
                     }
                     break;
                 case "empCard":
-                    WasherConsumeModel washerConsume = new WasherConsumeModel();
-                    washerConsume.DepartmentId = departmentId;
-                    washerConsume.Gender = "未知";
-                    washerConsume.Memo = "";
-                    washerConsume.Name = rpm.Entity.EmpName;
-                    washerConsume.Password = "000000";
-                    washerConsume.Points = 0;
-                    washerConsume.Telphone = rpm.Entity.Phone;
+                    {
+                        WasherConsumeModel washerConsume = new WasherConsumeModel();
+                        washerConsume.DepartmentId = departmentId;
+                        washerConsume.Gender = "未知";
+                        washerConsume.Memo = "";
+                        washerConsume.Name = rpm.Entity.EmpName;
+                        washerConsume.Password = "000000";
+                        washerConsume.Points = 0;
+                        washerConsume.Telphone = rpm.Entity.Phone;
 
-                    Department department = DepartmentBll.Instance.Get(departmentId);
-                    WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(department.Setting);
-                    washerConsume.Setting = JSONhelper.ToJson(new { MaxPayCoins = setting.PayWashCar.MaxPayCoins });
+                        Department department = DepartmentBll.Instance.Get(departmentId);
+                        WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(department.Setting);
+                        washerConsume.Setting = JSONhelper.ToJson(new { MaxPayCoins = setting.PayWashCar.MaxPayCoins });
 
-                    if ((washerConsume.KeyId = WasherConsumeBll.Instance.Add(washerConsume)) <= 0)
+                        if ((washerConsume.KeyId = WasherConsumeBll.Instance.Add(washerConsume)) <= 0)
+                        {
+                            context.Response.Write("-1");
+                            break;
+                        }
+
+                        model = rpm.Entity;
+                        WasherCardModel c3 = WasherCardBll.Instance.Get(departmentId, model.CardNo);
+                        if (c3 == null)
+                        {
+                            model.DepartmentId = departmentId;
+                            model.BinderId = washerConsume.KeyId;
+                            model.Binded = DateTime.Now;
+                            model.Memo = "";
+
+                            context.Response.Write(WasherCardBll.Instance.Add(model));
+                        }
+                        else
+                        {
+                            context.Response.Write("-1");
+                        }
+                    }
+                    break;
+                case "batchEmpCard":
+                    if (string.IsNullOrEmpty(rpm.Entity.Memo))
                     {
                         context.Response.Write("-1");
-                        break;
-                    }
-                    
-                    model = rpm.Entity;
-                    WasherCardModel c3 = WasherCardBll.Instance.Get(departmentId, model.CardNo);
-                    if (c3 == null)
-                    {
-                        model.DepartmentId = departmentId;
-                        model.BinderId = washerConsume.KeyId;
-                        model.Binded = DateTime.Now;
-                        model.Memo = "";
-
-                        context.Response.Write(WasherCardBll.Instance.Add(model));
                     }
                     else
                     {
-                        context.Response.Write("-1");
+                        Department department = DepartmentBll.Instance.Get(departmentId);
+                        WasherDepartmentSetting setting = JsonConvert.DeserializeObject<WasherDepartmentSetting>(department.Setting);
+
+                        string[] datas = rpm.Entity.Memo.Split(';');
+                        foreach(String data in datas)
+                        {
+                            if (string.IsNullOrEmpty(data))
+                            {
+                                continue;
+                            }
+
+                            string[] ds = data.Split(',');
+                            //      0           1       2           3       4       5       6
+                            //财务部-张三,12345678901,1234567890,000000,20190604,20200603,100000
+                            WasherConsumeModel washerConsume = new WasherConsumeModel();
+                            washerConsume.DepartmentId = departmentId;
+                            washerConsume.Gender = "未知";
+                            washerConsume.Memo = "";
+                            washerConsume.Name = ds[0];
+                            washerConsume.Password = "000000";
+                            washerConsume.Points = 0;
+                            washerConsume.Telphone = ds[1];
+                            washerConsume.Setting = JSONhelper.ToJson(new { MaxPayCoins = setting.PayWashCar.MaxPayCoins });
+
+                            if ((washerConsume.KeyId = WasherConsumeBll.Instance.Add(washerConsume)) <= 0)
+                            {
+                                continue;
+                            }
+
+                            WasherCardModel c3 = WasherCardBll.Instance.Get(departmentId, ds[2]);
+                            if (c3 == null)
+                            {
+                                c3 = new WasherCardModel();
+                                c3.DepartmentId = departmentId;
+                                c3.BinderId = washerConsume.KeyId;
+                                c3.Binded = DateTime.Now;
+                                c3.Memo = "";
+                                c3.CardNo = ds[2];
+                                c3.Password = ds[3];
+                                c3.ValidateFrom = DateTime.Parse(ds[4]);
+                                c3.ValidateEnd = DateTime.Parse(ds[5]);
+                                c3.Coins = Convert.ToInt32(ds[6]);
+                                c3.Kind = "Inner";
+
+                                WasherCardBll.Instance.Add(c3);
+                            }
+                        }
                     }
+
+                    context.Response.Write(1);
                     break;
                 default:
                     if (user.IsAdmin)

@@ -39,7 +39,7 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-		    { title: '姓名', field: 'Name', width: 130, align: 'center' },
+		    { title: '姓名', field: 'Name', width: 400, align: 'center' },
             { title: '性别', field: 'Gender', width: 60, align: 'center' },
             {
                 title: '微信ID', field: 'OpenId', width: 250, align: 'center', formatter(v, r, i) {

@@ -18,6 +18,7 @@ $(function () {
     $('#a_batch_create').click(CRUD.batch);
     $('#a_export').click(CRUD.exp);
     $('#a_emp_card').click(CRUD.emp);
+    $('#a_batch_emp_card').click(CRUD.batch_emp);
 
     //高级查询
     $('#a_search').click(function () {
@@ -72,7 +73,7 @@ var grid = {
                 }
             },
                 {
-                    title: '持卡人姓名', field: 'Name', width: 100, align: 'center', formatter(v, r, i) {
+                    title: '持卡人姓名', field: 'Name', width: 400, align: 'center', formatter(v, r, i) {
                         if (v == null) {
                             return '无姓名';
                         } else {
@@ -403,4 +404,25 @@ var CRUD = {
 
         top.$('#uiform').validate();
     },
+    batch_emp: function () {
+        var hDialog = top.jQuery.hDialog({
+            title: '批量添加员工洗车卡', width: 684, height:550, href: '/Washer/html/WasherCardBatchEmp.html', iconCls: 'icon-add', submit: function () {
+                if (top.$('#uiform').form('validate')) {
+                    var query = createParam('batchEmpCard', '0');
+                    jQuery.ajaxjson(actionURL, query, function (d) {
+                        if (parseInt(d) > 0) {
+                            msg.ok('添加成功！');
+                            hDialog.dialog('close');
+                            grid.reload();
+                        } else {
+                            MessageOrRedirect(d);
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+
+        top.$('#uiform').validate();
+    }
 };
