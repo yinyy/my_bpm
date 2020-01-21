@@ -106,6 +106,7 @@
     <Compile Include="Bll\WasherDeviceLogBll.cs" />
     <Compile Include="Bll\WasherDeviceBll.cs" />
     <Compile Include="Bll\WasherOutsiderBll.cs" />
+    <Compile Include="Bll\WasherReply2Bll.cs" />
     <Compile Include="Bll\WasherReplyBll.cs" />
     <Compile Include="Bll\WasherOrderBll.cs" />
     <Compile Include="Bll\WasherReceivedMessageBll.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Dal\WasherDeviceLogDal.cs" />
     <Compile Include="Dal\WasherDeviceDal.cs" />
     <Compile Include="Dal\WasherOutsiderDal.cs" />
+    <Compile Include="Dal\WasherReply2Dal.cs" />
     <Compile Include="Dal\WasherReplyDal.cs" />
     <Compile Include="Dal\WasherOrderDal.cs" />
     <Compile Include="Dal\WasherRewardDal.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Model\WasherDeviceLogModel.cs" />
     <Compile Include="Model\WasherDeviceModel.cs" />
     <Compile Include="Model\WasherOutsiderModel.cs" />
+    <Compile Include="Model\WasherReply2Model.cs" />
     <Compile Include="Model\WasherReplyModel.cs" />
     <Compile Include="Model\WasherOrderModel.cs" />
     <Compile Include="Model\WasherRewardModel.cs" />

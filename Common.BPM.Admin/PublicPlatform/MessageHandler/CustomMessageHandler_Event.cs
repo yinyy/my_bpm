@@ -87,19 +87,36 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
         public override IResponseMessageBase OnEvent_ClickRequest(RequestMessageEvent_Click requestMessage)
         {
             IResponseMessageBase reponseMessage = null;
-            //菜单点击，需要跟创建菜单时的Key匹配
-            switch (requestMessage.EventKey)
+            
+            WasherReply2Model model = WasherReply2Bll.Instance.Get(deptId, requestMessage.EventKey);
+            if (model == null)
             {
-                default:
-                    {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
-                        strongResponseMessage.Content = "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fCard%2fList.aspx&response_type=code&scope=snsapi_base&state=danis001#wechat_redirect'>这是个超链接，测试一下！</a>";
-                        reponseMessage = strongResponseMessage;
-                    }
-                    break;
+                var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
+                strongResponseMessage.Content = "......";
+                reponseMessage = strongResponseMessage;
+            }
+            else
+            {
+                var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
+                strongResponseMessage.Content = model.Message;
+                reponseMessage = strongResponseMessage;
             }
 
             return reponseMessage;
+
+
+            ////菜单点击，需要跟创建菜单时的Key匹配
+            //switch (requestMessage.EventKey)
+            //{
+
+            //    default:
+            //        {
+            //            var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
+            //            strongResponseMessage.Content = "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6dc74da9d1ac4ea4&redirect_uri=http%3a%2f%2f139.129.43.203%2fPublicPlatform%2fWeb%2fCard%2fList.aspx&response_type=code&scope=snsapi_base&state=danis001#wechat_redirect'>这是个超链接，测试一下！</a>";
+            //            reponseMessage = strongResponseMessage;
+            //        }
+            //        break;
+            //}
         }
 
         public override IResponseMessageBase OnEvent_EnterRequest(RequestMessageEvent_Enter requestMessage)

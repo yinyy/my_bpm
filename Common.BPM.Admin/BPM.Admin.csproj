@@ -2939,6 +2939,7 @@
     <Content Include="Washer\html\WasherExportTime.html" />
     <Content Include="Washer\html\WasherCardBatch.html" />
     <Content Include="Washer\html\WasherOutsider.html" />
+    <Content Include="Washer\html\WasherReply2.html" />
     <Content Include="Washer\html\WasherReply.html" />
     <Content Include="PublicPlatform\Test.aspx" />
     <Content Include="PublicPlatform\Web\Card2.aspx" />
@@ -3488,6 +3489,7 @@
     <Content Include="Washer\html\WasherCard.html" />
     <Content Include="Washer\html\WasherDeviceSet.html" />
     <Content Include="Washer\html\WasherDeviceAdd.html" />
+    <Content Include="Washer\js\WasherReply2.js" />
     <Content Include="Washer\js\WasherReward.js" />
     <Content Include="Washer\js\WasherOutsider.js" />
     <Content Include="Washer\js\WasherReply.js" />
@@ -3510,6 +3512,7 @@
     <Content Include="Washer\WasherOrder.aspx" />
     <Content Include="Washer\WasherOutsider.aspx" />
     <Content Include="Washer\WasherReply.aspx" />
+    <Content Include="Washer\WasherReply2.aspx" />
     <Content Include="Washer\WasherReward.aspx" />
     <Content Include="Washer\WasherSendNews.aspx" />
     <Content Include="Washer\WasherSetting.aspx" />
@@ -3756,6 +3759,7 @@
     <Content Include="scripts\uploadify\check-exists.php" />
     <Content Include="scripts\uploadify\index.php" />
     <Content Include="scripts\uploadify\uploadify.php" />
+    <Content Include="Washer\ashx\WasherReply2Handler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationError.aspx.cs">
@@ -4085,6 +4089,9 @@
     <Compile Include="Washer\ashx\WasherOutsiderHandler.ashx.cs">
       <DependentUpon>WasherOutsiderHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Washer\ashx\WasherReply2Handler.ashx.cs">
+      <DependentUpon>WasherReply2Handler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Washer\ashx\WasherRewardHandler.ashx.cs">
       <DependentUpon>WasherRewardHandler.ashx</DependentUpon>
     </Compile>
@@ -4159,6 +4166,13 @@
     </Compile>
     <Compile Include="Washer\WasherReply.aspx.designer.cs">
       <DependentUpon>WasherReply.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Washer\WasherReply2.aspx.cs">
+      <DependentUpon>WasherReply2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Washer\WasherReply2.aspx.designer.cs">
+      <DependentUpon>WasherReply2.aspx</DependentUpon>
     </Compile>
     <Compile Include="Washer\WasherReward.aspx.cs">
       <DependentUpon>WasherReward.aspx</DependentUpon>

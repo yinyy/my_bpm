@@ -154,4 +154,5 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
-/.vs/Common.BPM/v15/Server/sqlite3
+.vs/Common.BPM/v15/Server/sqlite3
+.vs/Common.BPM/v16/Server/sqlite3

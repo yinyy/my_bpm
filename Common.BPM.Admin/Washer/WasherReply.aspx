@@ -134,7 +134,7 @@
         </div>  
         <div title="其它图文消息" data-options="iconCls:'icon-reload',closable:false" style="padding:20px;">  
                
-        </div>  
+        </div> 
     </div>  
 
     <script src="../scripts/fine-uploader/fine-uploader.min.js"></script>

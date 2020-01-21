@@ -11,7 +11,7 @@
 				{
 					"type":"view",
 					"name":"查看网点",
-					"url":"http://xc.senlanjidian.com/PublicPlatform/Web/Outlets.aspx?appid=81"
+					"url":"http://xc.senlanjidian.com/PublicPlatform/Web/Outlets.aspx?appid=83"
 				}
 			]
 		},
@@ -21,17 +21,17 @@
                 {
                     "type": "view", 
                     "name": "我的账户", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=81&next=Profile.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=83&next=Profile.aspx"
                 }, 
                 {
                     "type": "view", 
                     "name": "注册/充值", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=81&next=Card2.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=83&next=Card2.aspx"
                 }, 
                 {
                     "type": "view", 
                     "name": "推荐有礼", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=81&next=Promote.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=83&next=Promote.aspx"
                 }
             ]
         }, 
@@ -41,7 +41,7 @@
                 {
                     "type": "view", 
                     "name": "优惠活动", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Promotion.aspx?appid=81"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Promotion.aspx?appid=83"
                 }, 
                 {
                     "type": "view", 
@@ -51,7 +51,7 @@
                 {
                     "type": "view", 
                     "name": "大转盘", 
-                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=81&next=Luck.aspx"
+                    "url": "http://xc.senlanjidian.com/PublicPlatform/Web/Authorize.aspx?appid=83&next=Luck.aspx"
                 }
             ]
         }
