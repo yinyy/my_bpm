@@ -139,27 +139,27 @@ namespace BPM.Admin.Extra
                 context.Response.Write(message);
 
                 #region 如果是外部服务，则需要根据设置判断是否需要回调
-                if (balance.Kind.StartsWith("外部服务"))
-                {
-                    //var o2 = new { Desc = "", Tag = "", Echostr = "", Rid = "" };
-                    //o2 = JsonConvert.DeserializeAnonymousType(balance.Memo, o2);
+                //if (balance.Kind.StartsWith("外部服务"))
+                //{
+                //    //var o2 = new { Desc = "", Tag = "", Echostr = "", Rid = "" };
+                //    //o2 = JsonConvert.DeserializeAnonymousType(balance.Memo, o2);
 
-                    //outsider = WasherOutsiderBll.Instance.Get(device.DepartmentId, o2.Tag);
-                    if (!string.IsNullOrEmpty(outsider.Url))
-                    {
-                        new Thread(() =>
-                        {
-                            string url = string.Format("{0}{1}echostr={2}&rid={3}", outsider.Url, outsider.Url.IndexOf('?') == -1 ? "?" : "&", echostr, rid);
+                //    //outsider = WasherOutsiderBll.Instance.Get(device.DepartmentId, o2.Tag);
+                //    if (!string.IsNullOrEmpty(outsider.Url))
+                //    {
+                //        new Thread(() =>
+                //        {
+                //            string url = string.Format("{0}{1}echostr={2}&rid={3}", outsider.Url, outsider.Url.IndexOf('?') == -1 ? "?" : "&", echostr, rid);
 
-                            System.Net.WebRequest wReq = System.Net.WebRequest.Create(url);
-                            System.Net.WebResponse wResp = wReq.GetResponse();
-                            System.IO.Stream respStream = wResp.GetResponseStream();
+                //            System.Net.WebRequest wReq = System.Net.WebRequest.Create(url);
+                //            System.Net.WebResponse wResp = wReq.GetResponse();
+                //            System.IO.Stream respStream = wResp.GetResponseStream();
 
-                            respStream.Close();
-                            wResp.Close();
-                        }).Start();
-                    }
-                }
+                //            respStream.Close();
+                //            wResp.Close();
+                //        }).Start();
+                //    }
+                //}
                 #endregion
             }
         }

@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "ef262566-58be-42bf-a243-8809678430f7",
+		"name": "洗车机调试",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "3.4 通知洗车机开始工作",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://139.129.43.203/Extra/StandardHandler2.ashx?signature=93b7f652d9eb2295e097a3a5f2fbb6ae7618f5fe&timestamp=1595942465&nonce=12345678&echostr=echo1234&money=1&tag=sdpicc&itag=Senlan&board=100001&rid=XPIDD001",
+					"protocol": "http",
+					"host": [
+						"139",
+						"129",
+						"43",
+						"203"
+					],
+					"path": [
+						"Extra",
+						"StandardHandler2.ashx"
+					],
+					"query": [
+						{
+							"key": "signature",
+							"value": "93b7f652d9eb2295e097a3a5f2fbb6ae7618f5fe",
+							"description": "加密签名"
+						},
+						{
+							"key": "timestamp",
+							"value": "1595942465",
+							"description": "unix时间戳"
+						},
+						{
+							"key": "nonce",
+							"value": "12345678",
+							"description": "随机数"
+						},
+						{
+							"key": "echostr",
+							"value": "echo1234",
+							"description": "随机字符串"
+						},
+						{
+							"key": "money",
+							"value": "1",
+							"description": "洗车金额，单位为分"
+						},
+						{
+							"key": "tag",
+							"value": "sdpicc",
+							"description": "固定"
+						},
+						{
+							"key": "itag",
+							"value": "Senlan",
+							"description": "固定"
+						},
+						{
+							"key": "board",
+							"value": "100001",
+							"description": "虚拟洗车机编号，如果有洗车机，请使用该机器的编号"
+						},
+						{
+							"key": "rid",
+							"value": "XPIDD001",
+							"description": "业务系统ID"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

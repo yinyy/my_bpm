@@ -97,7 +97,7 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '编辑', width: 450, height: 387, href: addDeviceUrl, iconCls: 'icon-edit',
+                title: '编辑', width: 450, height: 250, href: formURL, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_MenuKey').val(row.MenuKey);
                     top.$('#txt_Message').val(row.Message);

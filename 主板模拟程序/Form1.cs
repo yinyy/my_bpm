@@ -238,5 +238,52 @@ namespace 主板模拟程序
             Match match = Regex.Match(msg, @"<return_msg><\!\[CDATA\[(\S+)\]\]></return_msg>");
             Console.WriteLine(match.Success + "    " + match.Groups[1].Value);
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            button9.Enabled = false;
+            Receive();
+        }
+
+        private void Receive()
+        {
+            byte[] data = new byte[1024];
+            try
+            {
+                socket.BeginReceive(data, 0, data.Length, SocketFlags.None,
+                    asyncResult =>
+                    {
+                        try
+                        {
+                            int length = socket.EndReceive(asyncResult);
+                            OnReceived(data, length);
+                            Receive();
+                        }
+                        catch (Exception exp)
+                        {
+                            Console.WriteLine(exp.Message);
+                        }
+                    }, null);
+            }
+            catch (Exception ex)
+            {
+                Receive();
+            }
+        }
+
+        private void OnReceived(byte[] data, int length)
+        {
+            Console.WriteLine("获取数据：");
+            for(int i =0;i<length * 2;i++)
+            {
+                Console.Write("{0:X} ", (data[i] + 256) % 256);
+            }
+            Console.WriteLine();
+
+            if(data[4]==00 && data[5] == 0x65)
+            {
+                MessageBox.Show("启动洗车机");
+            }
+        }
     }
 }

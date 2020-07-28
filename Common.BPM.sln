@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPM.Common", "Common\BPM.Common.csproj", "{16183C27-23BE-4335-AE94-F12BB57421FF}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "主板模拟程序", "主板模拟程序\主板模拟程序.csproj", "{F35DECD0-C0F2-401E-AF1B-0CDC63EEED0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasherBusiness", "WasherBusiness\WasherBusiness.csproj", "{DE2EE870-610D-4CBF-A8FD-9E3243998F3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "主板模拟程序2", "主板模拟程序2\主板模拟程序2.csproj", "{044D7259-3B24-4254-BB55-D9D421EAE747}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -270,6 +272,36 @@ Global
 		{DE2EE870-610D-4CBF-A8FD-9E3243998F3D}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{DE2EE870-610D-4CBF-A8FD-9E3243998F3D}.SingleImage|Win32.ActiveCfg = Release|Any CPU
 		{DE2EE870-610D-4CBF-A8FD-9E3243998F3D}.SingleImage|Win32.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.CD_ROM|Win32.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.CD_ROM|Win32.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Debug|Win32.Build.0 = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.DVD-5|Win32.ActiveCfg = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.DVD-5|Win32.Build.0 = Debug|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Release|Win32.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.Release|Win32.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.SingleImage|Win32.ActiveCfg = Release|Any CPU
+		{044D7259-3B24-4254-BB55-D9D421EAE747}.SingleImage|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

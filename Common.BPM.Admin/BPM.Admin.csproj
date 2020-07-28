@@ -3524,6 +3524,8 @@
     <Content Include="Config\log4net.config" />
     <Content Include="Extra\接入方式.docx" />
     <Content Include="Extra\StandardHandler.ashx" />
+    <Content Include="Extra\StandardHandler2.ashx" />
+    <Content Include="Extra\洗车机调试.postman_collection.json" />
     <None Include="Properties\PublishProfiles\本地.pubxml" />
     <Content Include="PublicPlatform\Index.ashx" />
     <None Include="Properties\PublishProfiles\测试.pubxml" />
@@ -3774,6 +3776,9 @@
     </Compile>
     <Compile Include="Extra\StandardHandler.ashx.cs">
       <DependentUpon>StandardHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Extra\StandardHandler2.ashx.cs">
+      <DependentUpon>StandardHandler2.ashx</DependentUpon>
     </Compile>
     <Compile Include="Extra\Test2.aspx.cs">
       <DependentUpon>Test2.aspx</DependentUpon>
