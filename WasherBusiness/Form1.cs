@@ -43,7 +43,6 @@ namespace WasherBusiness
         {
             public int Compare(object x, object y)
             {
-
                 string v1 = string.Format("{0}-{1}", ((ListViewItem)x).SubItems[5], ((ListViewItem)x).SubItems[2]);
                 string v2 = string.Format("{0}-{1}", ((ListViewItem)y).SubItems[5], ((ListViewItem)y).SubItems[2]);
 
@@ -215,6 +214,32 @@ namespace WasherBusiness
                 };
                 boardAppServer.NewRequestReceived += (session, request) =>
                 {
+                    if (request.BoardNumber != null)
+                    {
+                        #region 验证主板是否在有效期
+                        WasherDeviceModel device = WasherDeviceBll.Instance.Get(deptId, request.BoardNumber);
+                        if (device == null)
+                        {
+                            return;
+                        }
+
+                        if (device.ValidateDate != null)
+                        {
+                            if (DateTime.Now.Date.CompareTo(device.ValidateDate.Value.Date) > 0)
+                            {
+                                //超过有效期，强行关闭连接
+                                PrintLogger(string.Format("【{0}】主板编号：{1}，所属公司：{2}，超过有效期，强行断开连接。", deptId, request.BoardNumber, dept.DepartmentName), false);
+                                session.Close();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            //未设置ValidateDate则表示长期有效
+                        }
+                        #endregion
+                    }
+
                     switch (request.Command)
                     {
                         case RequestCommand.Balance:

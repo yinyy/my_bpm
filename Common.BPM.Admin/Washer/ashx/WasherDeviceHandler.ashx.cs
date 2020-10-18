@@ -222,7 +222,7 @@ namespace BPM.Admin.Washer.ashx
                     context.Response.Write(WasherDeviceBll.Instance.Update(model));
                     break;
                 default:
-                    if (user.IsAdmin)
+                    if (user.IsAdmin || user.Department==null)
                     {
                         context.Response.Write(WasherDeviceBll.Instance.GetJson(rpm.Pageindex, rpm.Pagesize, rpm.Filter, rpm.Sort, rpm.Order));
                     }
