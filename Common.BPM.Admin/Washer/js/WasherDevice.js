@@ -1,6 +1,7 @@
 ﻿var actionURL = '/Washer/ashx/WasherDeviceHandler.ashx';
 var addDeviceUrl = '/Washer/html/WasherDeviceAdd.html';
 var setDeviceUrl = '/Washer/html/WasherDeviceSet.html';
+var validateDateUrl = '/Washer/html/WasherDeviceValidateDate.html';
 
 var province = city = area = null;
 
@@ -15,6 +16,7 @@ $(function () {
     $('#a_consume').click(CRUD.consume);
     $('#a_qrcode').click(CRUD.qrcode);
     $('#a_downloadparams').click(CRUD.downloadparams);
+    $('#a_validate_date').click(CRUD.validateDate);
 
     //高级查询
     $('#a_search').click(function () {
@@ -38,56 +40,68 @@ var grid = {
             singleSelect: true, //单选
             frozenColumns: [[]],
             columns: [[
-		    {title: '序列号', field: 'SerialNumber', width: 120, align: 'center'},
-		    { title: '主板号', field: 'BoardNumber', width: 120, align: 'center' },
-            {
-                title: '安装地点', field: 'Address', width: 200, align: 'center', formatter: function (v, r, i) {
-                    if (r.Province == '') {
-                        return '未安装';
-                    } else {
-                        return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
+                { title: '序列号', field: 'SerialNumber', width: 120, align: 'center' },
+                { title: '主板号', field: 'BoardNumber', width: 120, align: 'center' },
+                {
+                    title: '安装地点', field: 'Address', width: 200, align: 'center', formatter: function (v, r, i) {
+                        if (r.Province === '') {
+                            return '未安装';
+                        } else {
+                            return r.Province + ' - ' + r.City + ' - ' + r.Region + '<br/>' + r.Address;
+                        }
                     }
-                }},
-            {
-                title: '地理坐标', field: 'Coordinate', width: 150, align: 'center'},
-            { title: '联机时间', field: 'UpdateTime', width: 110, align: 'center' },
-            { title: 'IP地址', field: 'IpAddress', width: 110, align: 'center' },
-            {
-                title: '当前状态', field: 'Field0', width: 80, align: 'center', formatter(v, r, i) {
-                    var t = new Date();
-                    t = (t.getTime() - (new Date(r.UpdateTime)).getTime()) / 60 / 1000;
+                },
+                {
+                    title: '地理坐标', field: 'Coordinate', width: 150, align: 'center'
+                },
+                { title: '联机时间', field: 'UpdateTime', width: 110, align: 'center' },
+                { title: 'IP地址', field: 'IpAddress', width: 110, align: 'center' },
+                {
+                    title: '当前状态', field: 'Field0', width: 80, align: 'center', formatter(v, r, i) {
+                        var t = new Date();
+                        t = (t.getTime() - (new Date(r.UpdateTime)).getTime()) / 60 / 1000;
 
-                    if (t > 5) {
-                        return '<font color="red">离线</font>';
-                    } else {
-                        return '在线';
+                        if (t > 5) {
+                            return '<font color="red">离线</font>';
+                        } else {
+                            return '在线';
+                        }
                     }
-                }},
-            {
-                title: '生产时间', field: 'ProductionTime', width: 90, align: 'center', formatter: function (v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
+                },
+                {
+                    title: '生产时间', field: 'ProductionTime', width: 90, align: 'center', formatter: function (v, r, i) {
+                        if (v === null) {
+                            return '';
+                        } else {
+                            return v.substring(0, 10);
+                        }
+                    }
+                },
+                {
+                    title: '出厂时间', field: 'DeliveryTime', width: 90, align: 'center', formatter: function (v, r, i) {
+                        if (v === null) {
+                            return '';
+                        } else {
+                            return v.substring(0, 10);
+                        }
+                    }
+                },
+                {
+                    title: '有效期', field: 'ValidateDate', width: 90, align: 'center', formatter: function (v, r, i) {
+                        if (v === undefined || v === null) {
+                            return '长期有效';
+                        }
+
                         return v.substring(0, 10);
                     }
-                }
-            },
-            {
-                title: '出厂时间', field: 'DeliveryTime', width: 90, align: 'center', formatter: function (v, r, i) {
-                    if (v == null) {
-                        return '';
-                    } else {
-                        return v.substring(0, 10);
+                },
+                { title: '出厂备注', field: 'Memo', width: 180, align: 'left' },
+                { title: '客户备注', field: 'Memo2', width: 180, align: 'left' },
+                {
+                    title: '运营商', field: 'DepartmentId', width: 130, align: 'center', formatter: function (v, r, i) {
+                        return r.DepartmentName;
                     }
                 }
-            },
-            { title: '出厂备注', field: 'Memo', width: 180, align: 'left' },
-            { title: '客户备注', field: 'Memo2', width: 180, align: 'left' },
-            {
-                title: '运营商', field: 'DepartmentId', width: 130, align: 'center', formatter: function (v, r, i) {
-                    return r.DepartmentName;
-                }
-            }
             ]],
             pagination: true,
             pageSize: PAGESIZE,
@@ -120,7 +134,7 @@ var CRUD = {
         var hDialog = top.jQuery.hDialog({
             title: '添加', width: 450, height: 387, href: addDeviceUrl, iconCls: 'icon-add', submit: function () {
                 if (top.$('#uiform').form('validate')) {
-                    top.$('#chk_Enabled').val(top.$('#chk_Enabled').attr('checked')=='checked');
+                    top.$('#chk_Enabled').val(top.$('#chk_Enabled').attr('checked')==='checked');
 
                     var query = createParam('add', '0');
                     jQuery.ajaxjson(actionURL, query, function (d) {
@@ -128,9 +142,9 @@ var CRUD = {
                             msg.ok('添加成功！');
                             hDialog.dialog('close');
                             grid.reload();
-                        } else if (parseInt(d) == -1) {
+                        } else if (parseInt(d) === -1) {
                             msg.warning('主板编号重复。');
-                        } else if (parseInt(d) == -2) {
+                        } else if (parseInt(d) === -2) {
                             msg.warning('序列号重复。');
                         } else {
                             MessageOrRedirect(d);
@@ -195,7 +209,7 @@ var CRUD = {
                 },
                 submit: function () {
                     if (top.$('#uiform').form('validate')) {
-                        top.$('#chk_Enabled').val(top.$('#chk_Enabled').attr('checked') == 'checked');
+                        top.$('#chk_Enabled').val(top.$('#chk_Enabled').attr('checked') === 'checked');
 
                         var query = createParam('edit', row.KeyId);;
                         jQuery.ajaxjson(actionURL, query, function (d) {
@@ -203,9 +217,9 @@ var CRUD = {
                                 msg.ok('修改成功！');
                                 hDialog.dialog('close');
                                 grid.reload();
-                            } else if (parseInt(d) == -1) {
+                            } else if (parseInt(d) === -1) {
                                 msg.warning('主板编号重复。');
-                            } else if (parseInt(d) == -2) {
+                            } else if (parseInt(d) === -2) {
                                 msg.warning('序列号重复。');
                             } else {
                                 MessageOrRedirect(d);
@@ -241,7 +255,7 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             var hDialog = top.jQuery.hDialog({
-                title: '设置', width: 800, height: 410, href: setDeviceUrl, iconCls: 'icon-edit',
+                title: '设置', width: 800, height: 500, href: setDeviceUrl, iconCls: 'icon-edit',
                 onLoad: function () {
                     top.$('#txt_Province').combobox({
                         url: "/Washer/ashx/WasherDistrictHandler.ashx?action=province",
@@ -289,13 +303,13 @@ var CRUD = {
                         top.$('#txt_City').combobox('reload', "/Washer/ashx/WasherDistrictHandler.ashx?action=city&pid=" + data.pid);
                         top.$('#txt_Region').combobox('reload', "/Washer/ashx/WasherDistrictHandler.ashx?action=region&cid=" + data.cid);
 
-                        if (data.pid != -1) {
+                        if (data.pid !== -1) {
                             top.$('#txt_Province').combobox('setValue', data.pid + '_' + row.Province);
                         }
-                        if (data.cid != -1) {
+                        if (data.cid !== -1) {
                             top.$('#txt_City').combobox('setValue', data.cid + '_' + row.City);
                         }
-                        if (data.rid != -1) {
+                        if (data.rid !== -1) {
                             top.$('#txt_Region').combobox('setValue', data.rid + '_' + row.Region);
                         }
                     });
@@ -310,34 +324,47 @@ var CRUD = {
                     });
 
                     var value = ps[31];
-                    if (value%2 == 0) {
+                    if (value % 2 === 0) {
                         top.$('#paramsbit_1').attr('checked', 'checked');
                     }
-                    value = parseInt(value/2);
-                    if ( value%2== 1) {
+                    value = parseInt(value / 2);
+                    if (value % 2 === 1) {
                         top.$('#paramsbit_2').attr('checked', 'checked');
                     }
                     value = parseInt(value / 2);
-                    if (value % 2 == 1) {
+                    if (value % 2 === 1) {
                         top.$('#paramsbit_3').attr('checked', 'checked');
                     }
 
                     if (!row.Enabled) {
                         top.$('#paramsbit_1, #paramsbit_2, #paramsbit_3').attr('disabled', 'disabled');
                     }
+
+                    var deadline = setting.Deadline;
+                    if (deadline === undefined || deadline === null) {
+                        top.$('#txt_WxStart').timespinner('setValue', '00:00:00');
+                        top.$('#txt_WxEnd').timespinner('setValue', '23:59:59');
+                        top.$('#txt_MbStart').timespinner('setValue', '00:00:00');
+                        top.$('#txt_MbEnd').timespinner('setValue', '23:59:59');
+                    } else {
+                        top.$('#txt_WxStart').timespinner('setValue', deadline.Wechat.Start);
+                        top.$('#txt_WxEnd').timespinner('setValue', deadline.Wechat.End);
+                        top.$('#txt_MbStart').timespinner('setValue', deadline.Member.Start);
+                        top.$('#txt_MbEnd').timespinner('setValue', deadline.Member.End);
+                    }
                 },
-                buttons:[{
-                    text:'下载参数',
-                    iconCls:'icon-email_go',
-                    handler:function(){
+                buttons: [{
+                    text: '下载参数',
+                    iconCls: 'icon-email_go',
+                    handler: function () {
                         var query = createParam('send_params', row.KeyId);
                         jQuery.ajaxjson(actionURL, query, function (d) {
                             alert('参数已经下载。');
                         });
                     }
-                },{
-                    text:'保存',
-                    iconCls:'icon-save',
+                }, {
+                    text: '保存',
+                    iconCls: 'icon-save',
                     handler: function () {
                         if (top.$('#uiform').form('validate')) {
                             var ps = [];
@@ -345,11 +372,23 @@ var CRUD = {
                                 ps[ps.length] = parseInt($(this).val());
                             });
                             ps[ps.length] = 0;
-                            ps[ps.length] = parseInt((top.$('#paramsbit_3').attr('checked') == 'checked' ? "1" : "0") +
-                                (top.$('#paramsbit_2').attr('checked') == 'checked' ? "1" : "0") +
-                                (top.$('#paramsbit_1').attr('checked') == 'checked' ? "0" : "1"), 2);
+                            ps[ps.length] = parseInt((top.$('#paramsbit_3').attr('checked') === 'checked' ? "1" : "0") +
+                                (top.$('#paramsbit_2').attr('checked') === 'checked' ? "1" : "0") +
+                                (top.$('#paramsbit_1').attr('checked') === 'checked' ? "0" : "1"), 2);
 
-                            top.$('#txt_Setting').val(JSON.stringify({ Coin: 0, Params: ps }));
+                            top.$('#txt_Setting').val(JSON.stringify({
+                                Coin: 0, Params: ps,
+                                Deadline: {
+                                    Wechat: {
+                                        Start: top.$('#txt_WxStart').timespinner('getValue'),
+                                        End: top.$('#txt_WxEnd').timespinner('getValue')
+                                    },
+                                    Member: {
+                                        Start: top.$('#txt_MbStart').timespinner('getValue'),
+                                        End: top.$('#txt_MbEnd').timespinner('getValue')
+                                    }
+                                }
+                            }));
                             var query = createParam('set', row.KeyId);
                             jQuery.ajaxjson(actionURL, query, function (d) {
                                 if (parseInt(d) > 0) {
@@ -450,10 +489,49 @@ var CRUD = {
         var row = grid.getSelectedRow();
         if (row) {
             $.get('/Washer/ashx/WasherHandler.ashx', { action: 'SendSetting', keyid: row.KeyId }, function (d) {
-                if (d=='success') {
+                if (d==='success') {
                     msg.ok('设置下载成功。');
                 } else {
                     msg.warning('参数下载失败。');
+                }
+            });
+        } else {
+            msg.warning('请选择设备。');
+        }
+    },
+    validateDate: function () {
+        var row = grid.getSelectedRow();
+        if (row) {
+            var hDialog = top.jQuery.hDialog({
+                title: '设置有效期',
+                width: 450,
+                height: 120,
+                href: validateDateUrl,
+                iconCls: 'icon-setting',
+                onLoad: function () {
+                    top.$('#txt_ValidateDate').datebox({
+                        required: true,
+                        editable: false
+                    });
+
+                    if (row.ValidateDate !== null && row.ValidateDate !== undefined) {
+                        top.$('#txt_ValidateDate').datebox('setValue', row.ValidateDate.substring(0, 10));
+                    }
+                },
+                submit: function () {
+                    if (top.$('#uiform').form('validate')) {
+                        var query = createParam('validate_date', row.KeyId);
+                        jQuery.ajaxjson(actionURL, query, function (d) {
+                            if (parseInt(d) > 0) {
+                                msg.ok('修改成功！');
+                                hDialog.dialog('close');
+                                grid.reload();
+                            } else {
+                                MessageOrRedirect(d);
+                            }
+                        });
+                    }
+                    return false;
                 }
             });
         } else {

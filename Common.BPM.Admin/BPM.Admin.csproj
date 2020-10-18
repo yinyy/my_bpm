@@ -2935,6 +2935,7 @@
     <Content Include="Test.aspx" />
     <Content Include="Washer\html\WasherBalance.html" />
     <Content Include="Washer\html\WasherCardBatchEmp.html" />
+    <Content Include="Washer\html\WasherDeviceValidateDate.html" />
     <Content Include="Washer\html\WasherCardEmp.html" />
     <Content Include="Washer\html\WasherExportTime.html" />
     <Content Include="Washer\html\WasherCardBatch.html" />

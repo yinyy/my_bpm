@@ -7,14 +7,14 @@ var actionUrl = "/Washer/ashx/WasherHandler.ashx";
 
 function onBridgeReady() {
     var ts = Common.getQueryString('ts');
-    $.post(actionUrl, { action: 'Validate', ts: ts == null || ts == '' ? 0 : ts }, function (res) {
-        if (res == 1) {
-            var useCard = Common.getQueryString('card');
-            if (useCard != null) {
-                var board = Common.getQueryString('board');
+    var useCard = Common.getQueryString('card');
+    var board = Common.getQueryString('board');
 
+    $.post(actionUrl, { action: 'Validate', ts: ts === null || ts === '' ? 0 : ts, card: useCard === true, board: board }, function (res) {
+        if (res === 1) {
+            if (useCard !== null) {
                 $.post(actionUrl, { action: 'PayCoins', board: board }, function (res) {
-                    if (res.Success == false) {
+                    if (res.Success === false) {
                         alert('洗车机启动失败！');
                     } else {
                         alert('洗车机已经启动。');
@@ -28,7 +28,7 @@ function onBridgeReady() {
                 $('div.card_kind_area > ul.card_kind_list > li').click(function () {
                     $('div.card_kind_area > ul.card_kind_list > li').removeClass('selected');
                     $(this).addClass('selected');
-                })
+                });
 
                 $('#pay_button').click(function () {
                     if ($('#pay_button.weui_btn_disabled').size() > 0) {
@@ -37,7 +37,7 @@ function onBridgeReady() {
 
                     var money = 0;
 
-                    if ($('div.card_kind_area > ul.card_kind_list > li').size() == 0) {
+                    if ($('div.card_kind_area > ul.card_kind_list > li').size() === 0) {
                         money = $.trim($('#pay_money').val());
                         var reg = new RegExp("^[0-9]+[\.]?[0-9]*$");
                         if (!reg.test(money)) {
@@ -83,14 +83,14 @@ function onBridgeReady() {
                 });
             }
         } else {
-            alert('请求已过期，请重新扫码。');
+            //alert('请求已过期，请重新扫码。');
             wx.closeWindow();
         }
     }, 'json');
 };
 
 $(document).ready(function () {
-    if (typeof WeixinJSBridge == "undefined") {
+    if (typeof WeixinJSBridge === "undefined") {
         if (document.addEventListener) {
             document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
         } else if (document.attachEvent) {

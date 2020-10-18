@@ -125,27 +125,105 @@ namespace BPM.Admin.Washer.ashx
                             try { webSocket.Close(); } catch { }
                         };
                         webSocket.Open();
-                        
+
                         context.Response.Write(JSONhelper.ToJson(new { Success = true }));
                     }
                 }
-            }else if (action == "Validate")
+            }
+            else if (action == "Validate")
             {
-                double scanTime = Convert.ToDouble(context.Request.Params["ts"]);
-                double overTime = (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now.AddMinutes(-5)) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds;
-                if (overTime <= scanTime)
+                bool passed = true;
+
+                int deptId = 0;
+                string openid;
+                string boardNumber = context.Request.Params["board"];
+
+                if (context.Session["deptId"] == null)
                 {
-                    context.Response.Write(1);
+                    deptId = 70;
                 }
                 else
                 {
-                    int deptId = Convert.ToInt16(context.Session["deptId"].ToString());
-                    string openid = context.Session["openid"].ToString();
-                    Department dept = DepartmentBll.Instance.Get(deptId);
+                    deptId = Convert.ToInt32(context.Session["deptId"].ToString());
+                }
+                if (context.Session["openid"] == null)
+                {
+                    openid = "oiVK2uH3zgJLC6iGMoB6iuDKDW1M";
+                }
+                else
+                {
+                    openid = context.Session["openid"].ToString();
+                }
 
-                    CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, "请求已过期，请重新扫码。");
+                Department dept = DepartmentBll.Instance.Get(deptId);
 
-                    context.Response.Write(0);
+                #region 验证微信或洗车卡使用时间
+                //获取设备参数
+                WasherDeviceModel device = WasherDeviceBll.Instance.Get(deptId, boardNumber);
+
+                var setting = new
+                {
+                    Deadline = new
+                    {
+                        Wechat = new
+                        {
+                            Start = "08:00:00",
+                            End = "20:59:59"
+                        },
+                        Member = new
+                        {
+                            Start = "00:00:00",
+                            End = "23:59:59"
+                        }
+                    }
+                };
+                setting = JsonConvert.DeserializeAnonymousType(device.Setting, setting);
+
+                if (setting != null && setting.Deadline != null)
+                {
+                    DateTime now = DateTime.Now;
+                    string nowStr = now.ToString("HH:mm:ss");
+
+                    bool useCard = Convert.ToBoolean(context.Request.Params["card"]);
+                    if (useCard)
+                    {
+                        if (nowStr.CompareTo(setting.Deadline.Member.Start) < 0 || nowStr.CompareTo(setting.Deadline.Member.End) > 0)
+                        {
+                            CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("当前不在会员支付洗车时间。会员支付洗车时间为：{0} - {1}。", setting.Deadline.Member.Start, setting.Deadline.Member.End));
+                            context.Response.Write(-1);
+
+                            passed = false;
+                        }
+                    }
+                    else
+                    {
+                        if (nowStr.CompareTo(setting.Deadline.Wechat.Start) < 0 || nowStr.CompareTo(setting.Deadline.Wechat.End) > 0)
+                        {
+                            CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, string.Format("当前不在微信支付洗车时间。微信支付洗车时间为：{0} - {1}。", setting.Deadline.Wechat.Start, setting.Deadline.Wechat.End));
+                            context.Response.Write(-2);
+
+                            passed = false;
+                        }
+                    }
+                }
+                #endregion
+
+                if (passed)
+                {
+                    #region 验证时间戳
+                    double scanTime = Convert.ToDouble(context.Request.Params["ts"]);
+                    double overTime = (TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now.AddMinutes(-5)) - TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1))).TotalSeconds;
+                    if (overTime <= scanTime)
+                    {
+                        context.Response.Write(1);
+                    }
+                    else
+                    {
+                        CustomApi.SendText(AccessTokenContainer.TryGetAccessToken(dept.Appid, dept.Secret), openid, "请求已过期，请重新扫码。");
+
+                        context.Response.Write(0);
+                    }
+                    #endregion
                 }
             }
 
@@ -167,7 +245,7 @@ namespace BPM.Admin.Washer.ashx
             if (ip.IndexOf(':') != -1)
             {
                 port = Convert.ToInt32(ip.Substring(ip.IndexOf(':') + 1));
-                ip = ip.Substring(0, ip.IndexOf(':'));   
+                ip = ip.Substring(0, ip.IndexOf(':'));
             }
 
             new Thread(() =>

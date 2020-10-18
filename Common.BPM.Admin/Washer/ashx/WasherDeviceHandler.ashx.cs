@@ -215,6 +215,12 @@ namespace BPM.Admin.Washer.ashx
                     webSocket.Open();
 
                     break;
+                case "validate_date":
+                    model = WasherDeviceBll.Instance.Get(rpm.KeyId);
+                    model.ValidateDate = rpm.Entity.ValidateDate;
+
+                    context.Response.Write(WasherDeviceBll.Instance.Update(model));
+                    break;
                 default:
                     if (user.IsAdmin)
                     {

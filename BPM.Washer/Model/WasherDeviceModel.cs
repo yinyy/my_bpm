@@ -63,5 +63,8 @@ namespace Washer.Model
         public string ListenerIp { get; set; }
 
         public string Coordinate { get; set; }
+
+        [Description("设备有效期")]
+        public DateTime ValidateDate { get; set; }
     }
 }
