@@ -39,6 +39,9 @@ namespace WasherBusiness
 
         private bool isAutoRoll = false;
 
+        private Dictionary<string, DateTime> boardValidateDates = new Dictionary<string, DateTime>();
+
+
         private class DeviceComparator : IComparer
         {
             public int Compare(object x, object y)
@@ -67,6 +70,12 @@ namespace WasherBusiness
 
         private void 启动服务器SToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //加载设备有效期
+            InitBoardValidateDate();
+
+            //定时器开始工作
+            timer1.Enabled = true;
+
             #region 启动检查线程
             sessionCheckThread = new WasherBusiness.SessionCheckThread();
             sessionCheckThread.Start();
@@ -214,32 +223,19 @@ namespace WasherBusiness
                 };
                 boardAppServer.NewRequestReceived += (session, request) =>
                 {
-                    if (request.BoardNumber != null)
+                    #region 验证主板是否在有效期
+                    if (request.BoardNumber != null && boardValidateDates.ContainsKey(string.Format("{0}-{1}", deptId, request.BoardNumber)))
                     {
-                        #region 验证主板是否在有效期
-                        WasherDeviceModel device = WasherDeviceBll.Instance.Get(deptId, request.BoardNumber);
-                        if (device == null)
+                        if (DateTime.Now.Date.CompareTo(boardValidateDates[string.Format("{0}-{1}", deptId, request.BoardNumber)]) > 0)
                         {
+                            //超过有效期，强行关闭连接
+                            PrintLogger(string.Format("【{0}】主板编号：{1}，所属公司：{2}，超过有效期，强行断开连接。", deptId, request.BoardNumber, dept.DepartmentName), false);
+                            session.Close();
                             return;
                         }
-
-                        if (device.ValidateDate != null)
-                        {
-                            if (DateTime.Now.Date.CompareTo(device.ValidateDate.Value.Date) > 0)
-                            {
-                                //超过有效期，强行关闭连接
-                                PrintLogger(string.Format("【{0}】主板编号：{1}，所属公司：{2}，超过有效期，强行断开连接。", deptId, request.BoardNumber, dept.DepartmentName), false);
-                                session.Close();
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            //未设置ValidateDate则表示长期有效
-                        }
-                        #endregion
                     }
-
+                    #endregion
+                    
                     switch (request.Command)
                     {
                         case RequestCommand.Balance:
@@ -978,6 +974,9 @@ namespace WasherBusiness
 
         private void 关闭服务器CToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //定时器停止
+            timer1.Enabled = false;
+
             if (this.boardAppServers != null)
             {
                 foreach(var svr in this.boardAppServers)
@@ -1050,6 +1049,29 @@ namespace WasherBusiness
 
                 return a + " " + b;
             }).Trim();
+        }
+
+        private void 自动滚动ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            isAutoRoll = 自动滚动ToolStripMenuItem.Checked;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            InitBoardValidateDate();
+        }
+
+        private void InitBoardValidateDate()
+        {
+            boardValidateDates.Clear();
+
+            foreach (WasherDeviceModel device in WasherDeviceBll.Instance.GetAll())
+            {
+                if (device.ValidateDate != null)
+                {
+                    boardValidateDates.Add(string.Format("{0}-{1}", device.DepartmentId, device.BoardNumber), device.ValidateDate.Value.Date);
+                }
+            }
         }
     }
 }

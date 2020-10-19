@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.系统ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.启动服务器SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +53,7 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -122,32 +124,33 @@
             // 清空CToolStripMenuItem
             // 
             this.清空CToolStripMenuItem.Name = "清空CToolStripMenuItem";
-            this.清空CToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.清空CToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.清空CToolStripMenuItem.Text = "清空(&C)";
             this.清空CToolStripMenuItem.Click += new System.EventHandler(this.清空CToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(121, 6);
             // 
             // 自动滚动ToolStripMenuItem
             // 
             this.自动滚动ToolStripMenuItem.CheckOnClick = true;
             this.自动滚动ToolStripMenuItem.Name = "自动滚动ToolStripMenuItem";
-            this.自动滚动ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.自动滚动ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.自动滚动ToolStripMenuItem.Text = "自动滚动";
             this.自动滚动ToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.自动滚动ToolStripMenuItem_CheckStateChanged);
+            this.自动滚动ToolStripMenuItem.Click += new System.EventHandler(this.自动滚动ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(121, 6);
             // 
             // 测试ToolStripMenuItem
             // 
             this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
-            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.测试ToolStripMenuItem.Text = "测试";
             this.测试ToolStripMenuItem.Click += new System.EventHandler(this.测试ToolStripMenuItem_Click);
             // 
@@ -186,6 +189,7 @@
             this.lvDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvDevices.FullRowSelect = true;
             this.lvDevices.GridLines = true;
+            this.lvDevices.HideSelection = false;
             this.lvDevices.Location = new System.Drawing.Point(3, 3);
             this.lvDevices.MultiSelect = false;
             this.lvDevices.Name = "lvDevices";
@@ -254,6 +258,12 @@
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 36000000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -301,6 +311,7 @@
         private System.Windows.Forms.ToolStripMenuItem 测试ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 自动滚动ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
