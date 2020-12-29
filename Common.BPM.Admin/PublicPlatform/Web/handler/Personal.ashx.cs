@@ -19,7 +19,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
         public void ProcessRequest(HttpContext context)
         {
             string action = context.Request.Params["action"];
-            int consumeId = Convert.ToInt32(context.Session["consumeId"]);
+            int consumeId = 2;// Convert.ToInt32(context.Session["consumeId"]);
 
             WasherConsumeModel consume = WasherConsumeBll.Instance.Get(consumeId);
             switch (action)
@@ -36,7 +36,7 @@ namespace BPM.Admin.PublicPlatform.Web.handler
             }
 
             context.Response.Flush();
-            context.Response.Close();
+            context.Response.End();
         }
 
         public bool IsReusable

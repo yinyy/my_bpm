@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Personal.aspx.cs" Inherits="BPM.Admin.PublicPlatform.Web.Personal" %>
 
+
 <!DOCTYPE html>
 
 <html>

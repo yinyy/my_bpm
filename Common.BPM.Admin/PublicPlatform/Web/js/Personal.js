@@ -2,6 +2,9 @@
 
 $(document).ready(function () {
     $.getJSON(actionUrl, function (json) {
+        alert('adfasdfasdfsd');
+        alert(json);
+
         $('#max_pay_coins').val((json.MaxPayCoins / 100).toFixed(0));
     });
 
@@ -14,7 +17,7 @@ $(document).ready(function () {
             return;
         }
 
-        $.getJSON(actionUrl, { action: 'save', max_pay_coins: maxPayCoins }, function (data) {
+        $.post(actionUrl, { action: 'save', max_pay_coins: maxPayCoins }, function (data) {
             if (data > 0) {
                 $('#dialog2 div.weui_dialog div.weui_dialog_bd').text('设置保存成功。');
                 $('#dialog2').show();
